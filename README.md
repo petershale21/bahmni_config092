@@ -1,0 +1,1 @@
+# bahmni_config_release
