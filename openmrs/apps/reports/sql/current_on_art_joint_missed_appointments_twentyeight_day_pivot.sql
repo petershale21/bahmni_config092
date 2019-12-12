@@ -56,6 +56,31 @@ FROM
 												having Num_Days > 0 and Num_Days <= 28
 											) AS Defauled
 									)
+									AND o.person_id not in (																		 
+												select distinct os.person_id 
+													from obs os
+													where (os.concept_id = 4155 and os.value_coded = 2146 and obs_datetime < '#endDate#' and person_id not in 
+													(select person_id from
+														(select person_id who, max(value_datetime) latest
+														from obs 
+														where concept_ID = 2266
+																			group by person_id) one,
+														
+														 (
+														select person_id,obs_datetime 
+														from obs 
+														where concept_id = 3843 ) two
+														
+														where who = person_id
+														and DATE(obs_datetime) > DATE(latest))
+														)													  														 							 
+												)
+									AND o.person_id not in (
+												select person_id 
+												from person 
+												where death_date <= '#endDate#' 
+												and dead = 1
+															)
 									 INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
 									 INNER JOIN person_name ON person.person_id = person_name.person_id
 									 INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 5
@@ -129,6 +154,31 @@ FROM
 												having Num_Days > 0 and Num_Days <= 28
 											) AS Defauled
 									)
+									AND o.person_id not in (																		 
+												select distinct os.person_id 
+													from obs os
+													where (os.concept_id = 4155 and os.value_coded = 2146 and obs_datetime < '#endDate#' and person_id not in 
+													(select person_id from
+														(select person_id who, max(value_datetime) latest
+														from obs 
+														where concept_ID = 2266
+																			group by person_id) one,
+														
+														 (
+														select person_id,obs_datetime 
+														from obs 
+														where concept_id = 3843 ) two
+														
+														where who = person_id
+														and DATE(obs_datetime) > DATE(latest))
+														)													  														 							 
+												)
+									AND o.person_id not in (
+												select person_id 
+												from person 
+												where death_date <= '#endDate#' 
+												and dead = 1
+															)
 									 INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
 									 INNER JOIN person_name ON person.person_id = person_name.person_id
 									 INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 5
