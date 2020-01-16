@@ -66,8 +66,6 @@
         	]
 	},
         "obsIgnoreList": [
-            "REGISTRATION FEES",
-            "COMMENTS",
             "Patient file"
         ],
         "otherInvestigationsMap": {
@@ -86,80 +84,6 @@
                 "nonCodedConceptName":"Non-Coded Chief Complaint",
                 "durationRequired": false,
                 "allowAddMore": true
-            },
-	    "ANC, History of Past Pregnancies": {
-                "autocomplete":true,
-                "codedConceptName":"ANC, Place of Birth",
-		"codedConceptName":"Mode of Delivery",
-                "allowAddMore": true
-            },
-	    "ANC, Family History": {
-                "multiSelect": true
-            },
-		"ANC, High Risk Pregnancy": {
-                "multiSelect": true
-			},
-                "ANC, Drug History": {
-                "multiSelect": true
-            },
-		"Addiction": {
-                "multiSelect": true
-            },	
-		"ANC, Family Planning Method": {
-                "multiSelect": true
-            },
-		"ANC, Medical History": {
-                "multiSelect": true
-            },
-		"ANC, High Risk Pregnancy": {
-                "multiSelect": true
-            },
-
-                "Other underlying health conditions": {
-                "multiSelect": true
-            },
-            "Program, Facility of Enrollment" : {
-                "dropdown": true,
-               "autocomplete":true
-            },
-	    "Cervical Cancer Screening" : {
-                "required": true
-            },
-            "PNC, HIV Status Known Before Visit" : {
-                "required": true
-            },
-            "Tested in PNC" : {
-                "required": true
-            },
-            "PNC, Micro-Nutrient supplement" : {
-                "required": true
-            },
-            "Delivery Note, Delivery location" : {
-                "required": false
-            },
-	    "Mode of Delivery" : {
-                "required": true
-            },
-	    "Cervical Cancer Assessment Method" : {
-                "required": true
-            },
-	    "PNC, Initiated on Family Planning" : {
-                "required": true
-            },
-            "HEI, HIV Status at 24 Months" : {
-                "dropdown": true
-            },
-	    "Family Planing Counselling" : {
-                "required": true
-            },
-	    "FP, Family Planning Method" : {
-                "required": true
-            },
-	    "VIA" : {
-                "required": true
-            },
-	    "Pap Smear" : {
-                "required": true
             },
             "Tuberculosis, Adverse Effects" :{
                 "multiSelect" : true,
@@ -181,10 +105,6 @@
                 "allowFutureDates": true,
 		"required": true
             },
-            "ANC, Estimated Date of Delivery" : {
-                "allowFutureDates": true,
-                "required": true
-            },
             "EIM, Follow up date" : {
                 "allowFutureDates": true
             },
@@ -197,20 +117,10 @@
                 "multiSelect" : true
             },
 
-	    "Other TB Management" : {
-		"multiSelect" : true
-	    },
-
             "TB Treatment, TB Regimen":{
                 "multiSelect" : true
             },
-            "Other TB Management":{
-                "multiSelect" : true
-            },
-
-            "TB, HIV Management":{
-                "multiSelect" : true
-            },	    
+	    
 	    "ARV drugs No. of days dispensed" : {
                 "required": false
             },
@@ -236,7 +146,11 @@
             },
 
 	    "HIVTC, Viral load blood results return date" : {
-                "required": true
+                "required" : true
+            },
+
+            "Pregnancy Estimated Date of Delivery" : {
+                "allowFutureDates": true
             },
             "Posture": {
                 "buttonSelect": true
@@ -281,9 +195,6 @@
             },
             "HIVTC, Reason for treatment substitution":{
                  "required" : false
-            },
-            "HIVTC, Pregnancy Estimated Date of Delivery":{
-             "allowFutureDate": true
             },           
             "ART treatment interruption stopped reason":{
                  "required" : false
@@ -394,9 +305,6 @@
 	    "HTC, Condom Type Dispensed": {
 		"required": true
 	    },
-                "HTC, Condom Type Dispensed": {
-                "multiSelect": true
-            },
 	    "HTC, Final Result Given": {
 		"required": true
 	    },

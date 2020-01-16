@@ -85,7 +85,6 @@
             },
 
 
-
             "hivcareandtreatment": {
                 "title": "HIV Care and Treatment Follow Up",
                 "type": "hivcareandtreatment",
@@ -168,11 +167,8 @@
                     "showDetailsButton":true
                 }
             },
-            "programs":{  
-                "translationKey":"DASHBOARD_TITLE_PROGRAMS_KEY",
-                "type":"programs",
-                "displayOrder":6
-            },
+            
+
             "nutritionalValues":{  
                 "translationKey":"DASHBOARD_TITLE_NUTRITIONAL_VALUES_KEY",
                 "type":"nutritionalValues",
@@ -436,7 +432,7 @@
 		"hideEmptyDisplayControl": true,
                 "dashboardConfig": {
                     "title": null,
-                    "maximumNoOfVisits": 100
+                    "maximumNoOfVisits": 10
                 },
                 "formGroup": [ ],
                 "translationKey": "DASHBOARD_TITLE_FORMS_DISPLAY_CONTROL_KEY"

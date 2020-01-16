@@ -50,7 +50,7 @@
       "forwardUrl": "#/default/patient/{{patientUuid}}/dashboard"
     },
     "label": "Active",
-    "order": 3,
+    "order": 1,
     "requiredPrivilege": "app:clinical"
   },
 
@@ -109,6 +109,54 @@
         "order": 5,
         "requiredPrivilege": "app:clinical"
     },
+
+
+    "bahmniClinicalPatientsSearchANCPatients": {
+        "id": "bahmni.clinical.patients.search.ANCPatients",
+        "extensionPointId": "org.bahmni.patient.search",
+        "type": "config",
+        "extensionParams": {
+                "searchHandler": "emrapi.sqlSearch.anc",
+                "translationKey": "MODULE_LABEL_ANC",
+                "forwardUrl": "#/default/patient/{{patientUuid}}/dashboard"
+        },
+        "label": "ANC",
+        "order": 5,
+        "requiredPrivilege": "app:clinical"
+    },
+
+
+    "bahmniClinicalPatientsSearchPNCPatients": {
+        "id": "bahmni.clinical.patients.search.PNCPatients",
+        "extensionPointId": "org.bahmni.patient.search",
+        "type": "config",
+        "extensionParams": {
+                "searchHandler": "emrapi.sqlSearch.pnc",
+                "translationKey": "MODULE_LABEL_PNC",
+                "forwardUrl": "#/default/patient/{{patientUuid}}/dashboard"
+        },
+        "label": "PNC",
+        "order": 6,
+        "requiredPrivilege": "app:clinical"
+    },
+
+
+    "bahmniClinicalPatientsSearchHEIPatients": {
+        "id": "bahmni.clinical.patients.search.HEIPatients",
+        "extensionPointId": "org.bahmni.patient.search",
+        "type": "config",
+        "extensionParams": {
+                "searchHandler": "emrapi.sqlSearch.hei",
+                "translationKey": "MODULE_LABEL_HEI",
+                "forwardUrl": "#/default/patient/{{patientUuid}}/dashboard"
+        },
+        "label": "HEI",
+        "order": 6,
+        "requiredPrivilege": "app:clinical"
+    },
+
+
+
     "bahmniClinicalPatientsSearchTBIntakeOrFollUpPatients": {
         "id": "bahmni.clinical.patients.search.TBIntakeOrFollUpPatients",
         "extensionPointId": "org.bahmni.patient.search",
@@ -145,11 +193,11 @@
         "type": "config",
         "extensionParams": {
                 "searchHandler": "emrapi.sqlSearch.htspositivelinkedtocare",
-                "translationKey": "Linked to HIV Care",
+                "translationKey": "Linkage",
                 "forwardUrl": "#/default/patient/{{patientUuid}}/dashboard"
         },
-        "label": "Linked to HIV Care",
-        "order": 1,
+        "label": "Linkage",
+        "order": 3,
         "requiredPrivilege": "view:linkedtocare"
     },
 
@@ -191,6 +239,18 @@
     "order": 2,
     "requiredPrivilege": "app:clinical"
   },
+
+  "bahmniClinicalOrdersPending": {
+    "id": "bahmni.clinical.orders.pending",
+    "extensionPointId": "org.bahmni.clinical.orders",
+    "type": "link",
+    "label": "Pending Orders",
+    "url": "pendingOrders",
+    "icon": "fa-user-md",
+    "order": 5,
+    "requiredPrivilege": "app:radiologyOrders"
+  },
+
   "bahmniClinicalConceptSetGroupObservationsSecondVitals": {
     "id": "bahmni.clinical.conceptSetGroup.observations.secondVitals",
     "extensionPointId": "org.bahmni.clinical.conceptSetGroup.observations",
@@ -226,6 +286,17 @@
     },
     "order": 5,
     "requiredPrivilege": "app:clinical"
+  },
+  "bahmniClinicalConsultationOrders": {
+    "id": "bahmni.clinical.consultation.orders",
+    "extensionPointId": "org.bahmni.clinical.consultation.board",
+    "type": "link",
+    "label": "Orders",
+    "translationKey":"ORDERS_BOARD_LABEL_KEY",
+    "url": "orders",
+    "icon": "icon-user-md",
+    "order": 6,
+    "requiredPrivilege": "app:clinical:ordersTab"
   },
   "bahmniClinicalConceptSetGroupObservationsDischargeSummary": {
     "id": "bahmni.clinical.conceptSetGroup.observations.dischargeSummary",
