@@ -82,7 +82,7 @@ Bahmni.ConceptSet.FormConditions.rules = {
                         	if(daysDispensed >= 11 && daysDispensed < 21) {
                                 	// Providing 2 days slack from 2 weeks, in case of weekends or other reasons
                                 	drugSupplyPeriod = "HIVTC, Two weeks supply";
-                        	} else if (daysDispensed >= 30  && daysDispensed < 60) {
+                        	} else if (daysDispensed >= 25  && daysDispensed < 60) {
                                 	drugSupplyPeriod = "HIVTC, One month supply";
                         	} else if (daysDispensed >= 60 && daysDispensed < 90 ) {
                                 	drugSupplyPeriod = "HIVTC, Two months supply";
@@ -589,29 +589,443 @@ Bahmni.ConceptSet.FormConditions.rules = {
         }
 },
 
-'HTC, Linked To Care' : function (formName, formFieldValues) {
+'HTS, Referral' : function (formName, formFieldValues) {
 
         if((formName=="HIV Testing and Counseling Intake Template") || (formName=="HIV Testing Services Retesting Template") ) {
+                var careLink = formFieldValues['HTS, Referral'];
+                var conditions = {show: [], hide: [], enable: [], disable: []};
+
+                if(careLink == "Referred") {
+			conditions.show.push("HTC, Referred Facility");
+                } else {
+			conditions.hide.push("HTC, Referred Facility");
+		}
+                return conditions;
+        }
+},
+
+
+        /*--------------------------MCH Programme------------------------------*/
+        'Delivery Note, Delivery location': function (formName, formFieldValues) {
+                var DeliveryPlace = formFieldValues['Delivery Note, Delivery location'];
+
+                if ((formName == "PostNatal Care Register") || (formName == "Delivery Information") || (formName == "Lesotho Obstetric Record")) {
+                        var conditions = { show: [], hide: [] };
+
+                        if ((DeliveryPlace == "Institutional Delivery") || (DeliveryPlace == "Home Delivery")) {
+                                conditions.show.push("Mode of Delivery");
+                        } else {
+                                conditions.hide.push("Mode of Delivery");
+                        }
+                }
+                //return conditions;
+        },
+        'ANC, Parity': function (formName, formFieldValues) {
+                var ANCGravida1 = formFieldValues['ANC, Gravida'];
+                var ANCParity = formFieldValues['ANC, Parity'];
+                var conditions = { show: [], hide: [], disable: [], enable: [] };
+                if (formName == "ANC, Obstetric History") {
+
+                        if (ANCParity >= ANCGravida1) {
+                                alert("Parity should be less than Gravida");
+                                conditions.disable.push("ANC, Alive");
+                                conditions.disable.push("ANC, Number of Miscarriages");
+                                return conditions;
+                        }
+                        if (ANCParity < ANCGravida1) {
+
+                                conditions.enable.push("ANC, Alive");
+                                conditions.enable.push("ANC, Number of Miscarriages");
+                                return conditions;
+
+                        }
+                }
+
+        },
+        'ANC, Alive': function (formName, formFieldValues) {
+                var ANCAlive = formFieldValues['ANC, Alive'];
+                var ANCParity = formFieldValues['ANC, Parity'];
+                var conditions = { show: [], hide: [], disable: [], enable: [] };
+                if (formName == "ANC, Obstetric History") {
+
+                        if (ANCAlive > ANCParity) {
+                                alert("Children alive should be less or equal to number of parities");
+                                conditions.disable.push("ANC, Number of Miscarriages");
+                                return conditions;
+                        }
+                        if (ANCParity >= ANCAlive) {
+
+                                conditions.enable.push("ANC, Number of Miscarriages");
+                                return conditions;
+
+                        }
+                }
+
+        },
+
+        'ANC, Gravida': function (formName, formFieldValues) {
+                var ANCGravida = formFieldValues['ANC, Gravida'];
+
+                if (formName == "ANC, Obstetric History") {
+                        var conditions = { show: [], hide: [], disable: [] };
+
+                        if (ANCGravida < "2") {
+                                conditions.hide.push("ANC, Alive");
+
+                        }
+                        if (ANCGravida < "2") {
+                                conditions.hide.push("ANC, Number of Miscarriages");
+
+                        }
+                        if (ANCGravida < "2") {
+                                conditions.hide.push("ANC, Parity");
+
+                        } else {
+                                conditions.show.push("ANC, Parity");
+                                conditions.show.push("ANC, Alive");
+                                conditions.show.push("ANC, Number of Miscarriages");
+                        }
+                }
+                //return conditions;
+        },
+
+        'ANC, Family Planning Ever Used': function (formName, formFieldValues) {
+                var FPUsed = formFieldValues['ANC, Family Planning Ever Used'];
+
+                if (formName == "ANC, Gynaecological History") {
+                        var conditions = { show: [], hide: [] };
+
+                        if (FPUsed == "Yes") {
+                                conditions.show.push("ANC, Family Planning Method")
+                                conditions.show.push("ANC, Date Family Planning Stopped");
+                        }
+                        else {
+                                conditions.hide.push("ANC, Family Planning Method");
+                                conditions.hide.push("ANC, Date Family Planning Stopped");
+                        }
+                }
+                //return conditions;
+        },
+
+        'ANC, History of STI': function (formName, formFieldValues) {
+                var STIScreening = formFieldValues['ANC, History of STI'];
+
+                if (formName == "ANC, Gynaecological History") {
+                        var conditions = { show: [], hide: [] };
+
+                        if (STIScreening == "Yes") {
+                                conditions.show.push("STI Treated");
+                                conditions.show.push("ANC, Date STI Treated");
+                        }
+
+                        else {
+                                conditions.hide.push("STI Treated");
+                                conditions.hide.push("ANC, Date STI Treated");
+                        }
+                }
+                //return conditions;
+        },
+
+        'ANC, History of Miscarriages': function (formName, formFieldValues) {
+                var HistoryMis = formFieldValues['ANC, History of Miscarriages'];
+
+                if (formName == "ANC, Gynaecological History") {
+                        var conditions = { show: [], hide: [] };
+
+                        if (HistoryMis == "Yes") {
+                                conditions.show.push("ANC, When")
+                                conditions.show.push("Delivery Note, Gestation period");
+                                conditions.show.push("Dilation and Curettage");
+                        }
+                        else {
+                                conditions.hide.push("ANC, When");
+                                conditions.hide.push("Delivery Note, Gestation period");
+                                conditions.hide.push("Dilation and Curettage");
+                        }
+                }
+                //return conditions;
+        },
+
+        'ANC, TB': function (formName, formFieldValues) {
+                var TBHistory = formFieldValues['ANC, TB'];
+
+                if (formName == "ANC, Previous Medical History") {
+                        var conditions = { show: [], hide: [] };
+
+                        if (TBHistory == "Yes") {
+                                conditions.show.push("ANC, Year");
+                                conditions.show.push("ANC, TB Treatment Completed");
+                                conditions.show.push("ANC, Date Completed");
+                        }
+                        else {
+                                conditions.hide.push("ANC, Year");
+                                conditions.hide.push("ANC, TB Treatment Completed");
+                                conditions.hide.push("ANC, Date Completed");
+                        }
+                }
+                //return conditions;
+        },
+
+
+        'ANC, Came together': function (formName, formFieldValues) {
+                var MalePartner = formFieldValues['ANC, Came together'];
+
+                if (formName == "Male Partner Involvement") {
+                        var conditions = { show: [], hide: [] };
+
+                        if (MalePartner == "Yes") {
+                                conditions.show.push("ANC, Partner HIV Status");
+                        }
+
+                        else {
+                                conditions.hide.push("ANC, Partner HIV Status");
+                        }
+                }
+                return conditions;
+        },
+
+        'ANC, Tested as Couple': function (formName, formFieldValues) {
+                var CoupleTest = formFieldValues['ANC, Tested as Couple'];
+ 		var conditions = { show: [], hide: [] };
+                
+		if (formName == "LOR, PMTCT") {
+
+                        if (CoupleTest == "Yes") {
+                                conditions.show.push("ANC, Partner HIV Status");
+                        }
+
+                        else {
+                                conditions.hide.push("ANC, Partner HIV Status");
+                        }
+                }
+                return conditions;
+        },
+
+        'ANC, Syphilis Screening Results': function (formName, formFieldValues) {
+                var SyphilisScreening = formFieldValues['ANC, Syphilis Screening Results'];
+
+                if (formName == "ANC, Investigations and Immunisations") {
+                        var conditions = { show: [], hide: [] };
+
+                        if (SyphilisScreening == "Reactive") {
+                                conditions.show.push("ANC, Syphilis Screening Treatment");
+                        }
+
+                        else {
+                                conditions.hide.push("ANC, Syphilis Screening Treatment");
+                        }
+                }
+                return conditions;
+        },
+
+        'ANC, Ever Had Pap Smear': function (formName, formFieldValues) {
+                var PapSmear = formFieldValues['ANC, Ever Had Pap Smear'];
+
+                if (formName == "ANC, Gynaecological History") {
+                        var conditions = { show: [], hide: [] };
+
+                        if (PapSmear == "Yes") {
+                                conditions.show.push("Results of Pap Smear");
+                                conditions.show.push("ANC, Pap Smear Date");
+                        }
+
+                        else {
+                                conditions.hide.push("Results of Pap Smear");
+                                conditions.hide.push("ANC, Pap Smear Date");
+                        }
+                }
+                return conditions;
+        },
+
+        'ANC, Type of Mother Baby Pack': function (formName, formFieldValues) {
+                var MBPack = formFieldValues['ANC, Type of Mother Baby Pack'];
+
+                if (formName == "ANC Register") {
+                        var conditions = { show: [], hide: [] };
+
+                        if (MBPack == "ANC, No Pack Given") {
+                                conditions.hide.push("ANC, Adherence level to MBP");
+                        } else {
+                                conditions.show.push("ANC, Pack for HIV-")
+                                conditions.show.push("ANC, Pack for women on ART");
+                        }
+                }
+                return conditions;
+        },
+
+        'Tested in PNC': function (formName, formFieldValues) {
+                var TestedInPNC = formFieldValues['Tested in PNC'];
+
+                if ((formName == "PostNatal Care Register") || (formName == "HIV Prevention, Care, and Treatment")) {
+                        var conditions = { show: [], hide: [] };
+
+                        if (TestedInPNC == "Positive") {
+                                conditions.show.push("PMTCT, WHO clinical staging")
+                                conditions.show.push("PNC, On ART Treatment");
+                        } else {
+                                conditions.hide.push("PMTCT, WHO clinical staging")
+                                conditions.hide.push("PNC, On ART Treatment");
+                        }
+                }
+                return conditions;
+        },
+
+        'ANC, Visit Types': function (formName, formFieldValues) {
+                var AncVisits = formFieldValues['ANC, Visit Types'];
+
+                if (formName == "ANC, ANC Program") {
+                        var conditions = { show: [], hide: [], disable: [] };
+
+                        if (AncVisits == "ANC, First Visit") {
+                                conditions.show.push("Lesotho Obstetric Record")
+                                conditions.hide.push("ANC Register");
+                                conditions.disable.push("ANC, Estimated Date of Delivery");
+                                return conditions;
+                        }
+                        else if (AncVisits == "ANC, Subsequent Visit") {
+                                conditions.show.push("ANC Register")
+                                conditions.hide.push("Lesotho Obstetric Record");
+                                return conditions;
+                        }
+                        else {
+                                conditions.hide.push("Lesotho Obstetric Record")
+                                conditions.hide.push("ANC Register");
+                                return conditions;
+                        }
+                }
+
+        },
+
+        'PNC, HIV Status Known Before Visit': function (formName, formFieldValues) {
+                var knownStatus = formFieldValues['PNC, HIV Status Known Before Visit'];
+
+                if (formName == "LOR, PMTCT") {
+                        var conditions = { show: [], hide: [] };
+
+                        if (knownStatus == "Positive") {
+                                conditions.hide.push("HTC, Final HIV status");
+                        }
+
+                        else {
+                                conditions.show.push("HTC, Final HIV status");
+                        }
+                }
+                return conditions;
+        },
+
+        'HTC, Final HIV status': function (formName, formFieldValues) {
+                var finalStatus = formFieldValues['HTC, Final HIV status'];
+
+                if (formName == "LOR, PMTCT") {
+                        var conditions = { show: [], hide: [] };
+
+                        if (finalStatus == "Negative") {
+                                conditions.hide.push("ANC, CD4 Count Date")
+                                conditions.hide.push("PMTCT, ART Regimen")
+                                conditions.hide.push("PMTCT, ART start date");
+                        }
+
+                        else {
+                                conditions.show.push("ANC, CD4 Count Date")
+                                conditions.show.push("PMTCT, ART Regimen")
+                                conditions.show.push("PMTCT, ART start date");
+                        }
+                }
+                return conditions;
+        },
+        /*-----
+                'HTC, Partner Testing and Counseling' : function (formName, formFieldValues) {
+                 var coupleTest = formFieldValues['HTC, Partner Testing and Counseling'];
+        
+                if(formName == "LOR, PMTCT") {
+                        var conditions = {show: [], hide: [], enable: [], disable: []};
+        
+                        if(coupleTest == "Yes") {
+                                conditions.show.push("Partner HIV Status");
+                        }
+                        else {
+                                conditions.hide.push("Partner HIV Status");
+        
+                        }
+                        return conditions;
+                              },
+        -----*/
+
+        'PNC, Initiated on Family Planning': function (formName, formFieldValues) {
+                var InitiatedFP = formFieldValues['PNC, Initiated on Family Planning'];
+
+                if (formName == "PostNatal Care Register") {
+                        var conditions = { show: [], hide: [] };
+
+                        if (InitiatedFP == "Yes") {
+                                conditions.show.push("FP, Family Planning Method");
+                        } else {
+                                conditions.hide.push("FP, Family Planning Method");
+                        }
+                }
+                return conditions;
+        },
+
+        'Cervical Cancer Screening': function (formName, formFieldValues) {
+                var CancerScreened = formFieldValues['Cervical Cancer Screening'];
+
+                if (formName == "PostNatal Care Register") {
+                        var conditions = { show: [], hide: [] };
+
+                        if (CancerScreened == "Yes") {
+                                conditions.show.push("Cervical Cancer Assessment Method");
+                        } else {
+                                conditions.hide.push("Cervical Cancer Assessment Method")
+                                conditions.hide.push("VIA Test")
+                                conditions.hide.push("Results of Pap Smear");
+                        }
+                }
+                return conditions;
+        },
+
+        'Cervical Cancer Assessment Method': function (formName, formFieldValues) {
+                var CancerAssessment = formFieldValues['Cervical Cancer Assessment Method'];
+
+                if (formName == "PostNatal Care Register") {
+                        var conditions = { show: [], hide: [] };
+
+                        if (CancerAssessment == "VIA") {
+                                conditions.show.push("VIA Test")
+                                conditions.hide.push("Results of Pap Smear");
+                        }
+                        else if (CancerAssessment == "Pap Smear") {
+                                conditions.show.push("Results of Pap Smear")
+                                conditions.hide.push("VIA Test");
+                        }
+                        else {
+                                conditions.hide.push("VIA Test")
+                                conditions.hide.push("Results of Pap Smear");
+                        }
+                }
+                return conditions;
+        },
+
+
+'HTC, Linked To Care' : function (formName, formFieldValues) {
+
+        if (formName=="HIV Testing Services Retesting Template") {
                 var careLink = formFieldValues['HTC, Linked To Care'];
                 var conditions = {show: [], hide: [], enable: [], disable: []};
 
-                if(careLink == "Yes") {
+                if (careLink == "Yes") {
                         conditions.show.push("HTC, Date Linked To Care");
+                } else if (careLink == "Referred"){
+                        conditions.show.push("HTC, Referred Facility");
+			conditions.hide.push("HTC, Date Linked To Care");
+                } else {
 			conditions.hide.push("HTC, Referred Facility");
-                }
-		else if(careLink == "Referred") {
-			conditions.show.push("HTC, Referred Facility");
 			conditions.hide.push("HTC, Date Linked To Care");
 		}
-                else{
-                        conditions.hide.push("HTC, Date Linked To Care")
-			conditions.hide.push("HTC, Referred Facility");
-                }
                 return conditions;
         }
-},                           
+},
 
-//
+
 'HIVTC, Adult 2nd Line Regimen' : function (formName, formFieldValues) {
     var subDate = formFieldValues['HIVTC, Adult 2nd Line Regimen']; 
 
