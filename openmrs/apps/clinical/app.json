@@ -244,9 +244,12 @@
             "Set2": {
                 "allowAddMore": true
             },
-	    "HIVTC, History of TB": {
-		"allowAddMore": true
-	    },
+			"HIVTC, History of TB": {
+				"allowAddMore": true
+			},
+            "ANC, History of Past Pregnancies": {
+                "allowAddMore": true
+            },
             "Coded3": {
                 "multiSelect": true
             },
