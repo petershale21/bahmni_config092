@@ -1011,13 +1011,11 @@ Bahmni.ConceptSet.FormConditions.rules = {
                 var PreviousCancer = formFieldValues['Previous Screening for CACX'];
                 var conditions = { show: [], hide: [] };
 
-                if (formName == "Cervical Cancer Screening Register") {
-                      
-
+                if (formName == "Previous Cancer Screening") {
                         if (PreviousCancer == "Yes") {
                                 conditions.show.push("CACX Screening Date");
                                 conditions.show.push("CACX Screening Results");
-                        } 
+                        }
                         else {
                                 conditions.hide.push("CACX Screening Date");
                                 conditions.hide.push("CACX Screening Results"); 
