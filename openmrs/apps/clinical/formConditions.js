@@ -1033,7 +1033,7 @@ Bahmni.ConceptSet.FormConditions.rules = {
 
              if (formName == "Cervical Cancer Screening Register") {
                         
-                  if (CancerAssessment == "Cervical VIA Test") {
+                  if (CancerAssessment == "VIA Test") {
                      conditions.show.push("VIA Test");
                      conditions.hide.push("Results of Pap Smear");
                                
