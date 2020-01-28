@@ -965,12 +965,15 @@ Bahmni.ConceptSet.FormConditions.rules = {
                 }
                 return conditions;
         },
+		
+		/*-----CERVICAL CANCER SCREENING SECTION------*/
 
         'Cervical Cancer Screening': function (formName, formFieldValues) {
                 var CancerScreened = formFieldValues['Cervical Cancer Screening'];
+                var conditions = { show: [], hide: [] };
 
                 if (formName == "PostNatal Care Register") {
-                        var conditions = { show: [], hide: [] };
+                      
 
                         if (CancerScreened == "Yes") {
                                 conditions.show.push("Cervical Cancer Assessment Method");
@@ -982,28 +985,123 @@ Bahmni.ConceptSet.FormConditions.rules = {
                 }
                 return conditions;
         },
+        'Cervical Cancer Screening Register': function (formName, formFieldValues, patient) {
+                if (formName == "Cervical Cancer Screening Register") {
+                        //var conditionConcept = formFieldValues['HTC, Pregnancy Status'];
+                        var patientAge = patient['age'];
+                        var patientGender = patient['gender'];
 
-        'Cervical Cancer Assessment Method': function (formName, formFieldValues) {
-                var CancerAssessment = formFieldValues['Cervical Cancer Assessment Method'];
+                        var conditions = { show: [], hide: [], enable: [], disable: [] };
 
-                if (formName == "PostNatal Care Register") {
-                        var conditions = { show: [], hide: [] };
-
-                        if (CancerAssessment == "VIA") {
-                                conditions.show.push("VIA Test")
-                                conditions.hide.push("Results of Pap Smear");
+                        if (patientGender == "F" && patientAge > 12) {
+                               
+                                conditions.enable.push("Cervical Cancer Screening Register");
                         }
-                        else if (CancerAssessment == "Pap Smear") {
-                                conditions.show.push("Results of Pap Smear")
-                                conditions.hide.push("VIA Test");
-                        }
+                      
                         else {
-                                conditions.hide.push("VIA Test")
-                                conditions.hide.push("Results of Pap Smear");
+                              
+                                conditions.hide.push("Level of Education");   
+                        }
+                        return conditions;
+                }
+        },
+
+
+        'Previous Screening for CACX': function (formName, formFieldValues) {
+                var PreviousCancer = formFieldValues['Previous Screening for CACX'];
+                var conditions = { show: [], hide: [] };
+
+                if (formName == "Cervical Cancer Screening Register") {
+                      
+
+                        if (PreviousCancer == "Yes") {
+                                conditions.show.push("CACX Screening Date");
+                                conditions.show.push("CACX Screening Results");
+                        } 
+                        else {
+                                conditions.hide.push("CACX Screening Date");
+                                conditions.hide.push("CACX Screening Results"); 
                         }
                 }
                 return conditions;
         },
+
+        'Type of Screening Offered': function (formName, formFieldValues) {
+                var CancerAssessment = formFieldValues['Type of Screening Offered'];
+                var conditions = { show: [], hide: [] };
+                
+
+             if (formName == "Cervical Cancer Screening Register") {
+                        
+                  if (CancerAssessment == "Cervical VIA Test") {
+                     conditions.show.push("VIA Test");
+                     conditions.hide.push("Results of Pap Smear");
+                               
+                   }
+                else if (CancerAssessment == "Pap Smear") {
+                     conditions.show.push("Results of Pap Smear");
+                     conditions.hide.push("VIA Test");
+                                
+                }
+        
+                else if (CancerAssessment == "Both") {
+                     conditions.show.push("Results of Pap Smear");
+                     conditions.show.push("VIA Test");
+                        
+                 }
+                
+                else {
+                        conditions.hide.push("VIA Test");
+                        conditions.hide.push("Results of Pap Smear");
+                }
+                }
+                return conditions;
+        },
+
+        'HIV Status': function (formName, formFieldValues) {
+                var Cancerhivstatusresults = formFieldValues['HIV Status'];
+                var conditions = { show: [], hide: [] };
+
+                if (formName == "Cervical Cancer Screening Register") {
+                       
+
+                        if (Cancerhivstatusresults == "Positive") {
+                                conditions.hide.push("PITC Offered");
+                                conditions.hide.push("PITC Results");
+                        }
+                
+                        
+                        else {
+                                conditions.show.push("PITC Offered");
+                                conditions.show.push("PITC Results");
+                        }
+                }
+                return conditions;
+        },
+
+
+        'Cervical Cancer Assessment Method': function (formName, formFieldValues) {
+                var CancerAssessment = formFieldValues['Cervical Cancer Assessment Method'];
+                var conditions = { show: [], hide: [] };
+
+                if (formName == "PostNatal Care Register") {
+                       
+
+                        if (CancerAssessment == "VIA") {
+                                conditions.show.push("VIA Test");
+                                conditions.hide.push("Results of Pap Smear");
+                        }
+                        else if (CancerAssessment == "Pap Smear") {
+                                conditions.show.push("Results of Pap Smear");
+                                conditions.hide.push("VIA Test");
+                        }
+                        else {
+                                conditions.hide.push("VIA Test");
+                                conditions.hide.push("Results of Pap Smear");
+                        }
+                }
+                return conditions;
+        },		
 
 
 'HTC, Linked To Care' : function (formName, formFieldValues) {
