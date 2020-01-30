@@ -97,8 +97,7 @@
             },
 
 	    "HIVTC, ART Regimen" : {
-		"required": true,
-		"dropdown": true
+			"dropdown": true
 	    },
 
 	    "ART, Follow-up date" : {

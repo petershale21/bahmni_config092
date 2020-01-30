@@ -921,13 +921,13 @@ Bahmni.ConceptSet.FormConditions.rules = {
 
                         if (finalStatus == "Negative") {
                                 conditions.hide.push("ANC, CD4 Count Date")
-                                conditions.hide.push("PMTCT, ART Regimen")
+                                conditions.hide.push("HIVTC, ART Regimen")
                                 conditions.hide.push("PMTCT, ART start date");
                         }
 
                         else {
                                 conditions.show.push("ANC, CD4 Count Date")
-                                conditions.show.push("PMTCT, ART Regimen")
+                                conditions.show.push("HIVTC, ART Regimen")
                                 conditions.show.push("PMTCT, ART start date");
                         }
                 }
