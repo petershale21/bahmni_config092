@@ -839,15 +839,16 @@ Bahmni.ConceptSet.FormConditions.rules = {
 
         'ANC, Type of Mother Baby Pack': function (formName, formFieldValues) {
                 var MBPack = formFieldValues['ANC, Type of Mother Baby Pack'];
+                var conditions = { show: [], hide: [] };
 
                 if (formName == "ANC Register") {
-                        var conditions = { show: [], hide: [] };
 
                         if (MBPack == "ANC, No Pack Given") {
                                 conditions.hide.push("ANC, Adherence level to MBP");
                         } else {
-                                conditions.show.push("ANC, Pack for HIV-")
-                                conditions.show.push("ANC, Pack for women on ART");
+                                conditions.show.push("ANC, Adherence level to MBP");
+								// conditions.show.push("ANC, Pack for HIV-")
+                                // conditions.show.push("ANC, Pack for women on ART");
                         }
                 }
                 return conditions;
