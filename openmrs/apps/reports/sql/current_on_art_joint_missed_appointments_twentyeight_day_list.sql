@@ -9,7 +9,9 @@ FROM
 											   person.gender AS Gender,
 											   'Defaulted' AS App_Status
 			FROM obs o
-									INNER JOIN patient ON o.person_id = patient.patient_id and o.concept_id = 3752 and o.value_datetime in
+									INNER JOIN patient ON o.person_id = patient.patient_id and o.concept_id = 3752 
+									
+									and o.value_datetime in
 									(				
 										select latestFU
 										from
@@ -23,7 +25,8 @@ FROM
 												group by os.person_id
 												having Num_Days > 0 and Num_Days <= 28
 											) AS Defauled
-									)									
+									)
+									
 									and o.person_id in
 									(				
 										select person_id
@@ -39,6 +42,7 @@ FROM
 												having Num_Days > 0 and Num_Days <= 28
 											) AS Defauled
 									)
+									
 									 INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
 									 INNER JOIN person_name ON person.person_id = person_name.person_id
 									 INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 5			
