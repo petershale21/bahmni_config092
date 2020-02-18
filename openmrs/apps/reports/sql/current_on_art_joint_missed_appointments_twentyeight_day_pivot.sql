@@ -26,7 +26,9 @@ FROM
 											   'Defaulted' AS App_Status,
 											   observed_age_group.sort_order AS sort_order
 			FROM obs o
-									INNER JOIN patient ON o.person_id = patient.patient_id and o.concept_id = 3752 and o.value_datetime in
+									INNER JOIN patient ON o.person_id = patient.patient_id and o.concept_id = 3752 
+									
+									and o.value_datetime in
 									(				
 										select latestFU
 										from
@@ -80,7 +82,8 @@ FROM
 												from person 
 												where death_date <= '#endDate#' 
 												and dead = 1
-															)
+									)
+									
 									 INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
 									 INNER JOIN person_name ON person.person_id = person_name.person_id
 									 INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 5
