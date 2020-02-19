@@ -104,7 +104,7 @@ ORDER BY Clients_Seen.Age)
 UNION
 
 -- INCLUDE MISSED APPOINTMENTS WITHIN 28 DAYS ACCORDING TO THE NEW PEPFAR GUIDELINE
-(SELECT patientIdentifier AS "Patient Identifier", patientName AS "Patient Name", Age, Gender, age_group, 'MissedWithin28Days' AS 'Program_Status', sort_order
+(SELECT distinct patientIdentifier AS "Patient Identifier", patientName AS "Patient Name", Age, Gender, age_group, 'MissedWithin28Days' AS 'Program_Status', sort_order
 FROM
                 (select distinct patient.patient_id AS Id,
 									   patient_identifier.identifier AS patientIdentifier,
@@ -179,21 +179,27 @@ FROM
 									from person 
 									where death_date <= '#endDate#' 
 									and dead = 1
-						)
+						)						
 
-					-- HAVE TO FIND A BETTER SOLUTION FOR THIS INNER QUERY (STORED PROC OR STORED FUNCTION)
-					 AND o.person_id not in
-					 (
-							select patient.patient_id
-
-									from obs os
-											-- CAME IN PREVIOUS 1 MONTH AND WAS GIVEN (2, 3, 4, 5, 6 MONHTS SUPPLY OF DRUGS)
-											 INNER JOIN patient ON os.person_id = patient.patient_id 
-											  AND MONTH(os.obs_datetime) = MONTH(DATE_ADD(CAST('#endDate#' AS DATE), INTERVAL -1 MONTH)) and YEAR(os.obs_datetime) = YEAR(DATE_ADD(CAST('#endDate#' AS DATE), INTERVAL -1 MONTH))
-											  AND patient.voided = 0 AND os.voided = 0 
-											  AND (os.concept_id = 4174 and (os.value_coded = 4176 or os.value_coded = 4177 or os.value_coded = 4245 or os.value_coded = 4246 or os.value_coded = 4247))
-							UNION
-
+						 INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
+						 INNER JOIN person_name ON person.person_id = person_name.person_id
+						 INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3
+						 INNER JOIN reporting_age_group AS observed_age_group ON
+						 CAST('#endDate#' AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
+						 AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
+                   WHERE observed_age_group.report_group_name = 'Modified_Ages' AND
+				   
+							o.person_id not in (
+							-- HAVE TO FIND A BETTER SOLUTION FOR THIS INNER QUERY (STORED PROC OR STORED FUNCTION)
+						    select patient.patient_id
+										from obs os
+												-- CAME IN PREVIOUS 1 MONTH AND WAS GIVEN (2, 3, 4, 5, 6 MONHTS SUPPLY OF DRUGS)
+												 INNER JOIN patient ON os.person_id = patient.patient_id
+												  AND MONTH(os.obs_datetime) = MONTH(DATE_ADD(CAST('#endDate#' AS DATE), INTERVAL -1 MONTH)) and YEAR(os.obs_datetime) = YEAR(DATE_ADD(CAST('#endDate#' AS DATE), INTERVAL -1 MONTH))
+												  AND patient.voided = 0 AND os.voided = 0 
+												  AND (os.concept_id = 4174 and (os.value_coded = 4176 or os.value_coded = 4177 or os.value_coded = 4245 or os.value_coded = 4246 or os.value_coded = 4247)))
+						    AND 
+							o.person_id not in (
 							select patient.patient_id
 											from obs os
 											-- CAME IN PREVIOUS 2 MONTHS AND WAS GIVEN (3, 4, 5, 6 MONHTS SUPPLY OF DRUGS)
@@ -201,9 +207,10 @@ FROM
 												 AND MONTH(os.obs_datetime) = MONTH(DATE_ADD(CAST('#endDate#' AS DATE), INTERVAL -2 MONTH)) 
 												 AND YEAR(os.obs_datetime) = YEAR(DATE_ADD(CAST('#endDate#' AS DATE), INTERVAL -2 MONTH)) 
 												 AND patient.voided = 0 AND os.voided = 0
-												 AND os.concept_id = 4174 and (os.value_coded = 4177 or os.value_coded = 4245 or os.value_coded = 4246 or os.value_coded = 4247)
-							UNION
+												 AND os.concept_id = 4174 and (os.value_coded = 4177 or os.value_coded = 4245 or os.value_coded = 4246 or os.value_coded = 4247))
 
+						    AND
+							o.person_id not in (						  
 							select patient.patient_id
 											from obs os
 											-- CAME IN PREVIOUS 3 MONTHS AND WAS GIVEN (4, 5, 6 MONHTS SUPPLY OF DRUGS)
@@ -211,9 +218,10 @@ FROM
 												 AND MONTH(os.obs_datetime) = MONTH(DATE_ADD(CAST('#endDate#' AS DATE), INTERVAL -3 MONTH)) 
 												 AND YEAR(os.obs_datetime) = YEAR(DATE_ADD(CAST('#endDate#' AS DATE), INTERVAL -3 MONTH)) 
 												 AND patient.voided = 0 AND os.voided = 0 
-												 AND os.concept_id = 4174 and (os.value_coded = 4245 or os.value_coded = 4246 or os.value_coded = 4247)
-							UNION
+												 AND os.concept_id = 4174 and (os.value_coded = 4245 or os.value_coded = 4246 or os.value_coded = 4247))
 
+							AND
+							o.person_id not in (
 							select patient.patient_id
 
 											from obs os
@@ -222,9 +230,9 @@ FROM
 												 AND MONTH(os.obs_datetime) = MONTH(DATE_ADD(CAST('#endDate#' AS DATE), INTERVAL -4 MONTH)) 
 												 AND YEAR(os.obs_datetime) = YEAR(DATE_ADD(CAST('#endDate#' AS DATE), INTERVAL -4 MONTH)) 
 												 AND patient.voided = 0 AND os.voided = 0 
-												 AND os.concept_id = 4174 and (os.value_coded = 4246 or os.value_coded = 4247)
-							UNION
-
+												 AND os.concept_id = 4174 and (os.value_coded = 4246 or os.value_coded = 4247))
+							AND
+							o.person_id not in (
 							select patient.patient_id
 
 											from obs os
@@ -233,17 +241,8 @@ FROM
 												 AND MONTH(os.obs_datetime) = MONTH(DATE_ADD(CAST('#endDate#' AS DATE), INTERVAL -5 MONTH)) 
 												 AND YEAR(os.obs_datetime) = YEAR(DATE_ADD(CAST('#endDate#' AS DATE), INTERVAL -5 MONTH)) 
 												 AND patient.voided = 0 AND os.voided = 0 
-												 AND os.concept_id = 4174 and os.value_coded = 4247
-						)
-					-- HAVE TO FIND A BETTER SOLUTION FOR THIS INNER QUERY (STORED PROC OR STORED FUNCTION)							
-
-						 INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
-						 INNER JOIN person_name ON person.person_id = person_name.person_id
-						 INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3
-						 INNER JOIN reporting_age_group AS observed_age_group ON
-						 CAST('#endDate#' AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
-						 AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
-                   WHERE observed_age_group.report_group_name = 'Modified_Ages') AS TwentyEightDayDefaulters
+												 AND os.concept_id = 4174 and os.value_coded = 4247)
+			) AS TwentyEightDayDefaulters
 ORDER BY TwentyEightDayDefaulters.Age)
 
 UNION

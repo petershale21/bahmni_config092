@@ -4,6 +4,6 @@
         "extensionPoints": [],
         "config": {
             "paperSize": "A4",
-            "enableReportQueue": false
+            "enableReportQueue": true
         }
 }
