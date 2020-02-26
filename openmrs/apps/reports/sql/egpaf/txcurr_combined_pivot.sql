@@ -5,8 +5,8 @@ SELECT Total_Aggregated_TxCurr.AgeGroup
 		, Total_Aggregated_TxCurr.Seen_Females
 		, Total_Aggregated_TxCurr.SeenPrev_Males
 		, Total_Aggregated_TxCurr.SeenPrev_Females
-		, Total_Aggregated_TxCurr.Missed28Days_Males
-		, Total_Aggregated_TxCurr.Missed28Days_Females
+		, Total_Aggregated_TxCurr.Missed_28Days_Males As 'Missed<28Days_Males'
+		, Total_Aggregated_TxCurr.Missed_28Days_Females As 'Missed<28Days_Females'
 		, Total_Aggregated_TxCurr.Total
 
 FROM
@@ -19,8 +19,8 @@ FROM
 			, IF(TXCURR_DETAILS.Id IS NULL, 0, SUM(IF(TXCURR_DETAILS.Program_Status = 'Seen' AND TXCURR_DETAILS.Gender = 'F', 1, 0))) AS Seen_Females
 			, IF(TXCURR_DETAILS.Id IS NULL, 0, SUM(IF(TXCURR_DETAILS.Program_Status = 'Seen_Prev_Months' AND TXCURR_DETAILS.Gender = 'M', 1, 0))) AS SeenPrev_Males
 			, IF(TXCURR_DETAILS.Id IS NULL, 0, SUM(IF(TXCURR_DETAILS.Program_Status = 'Seen_Prev_Months' AND TXCURR_DETAILS.Gender = 'F', 1, 0))) AS SeenPrev_Females
-			, IF(TXCURR_DETAILS.Id IS NULL, 0, SUM(IF(TXCURR_DETAILS.Program_Status = 'MissedWithin28Days' AND TXCURR_DETAILS.Gender = 'M', 1, 0))) AS Missed28Days_Males
-			, IF(TXCURR_DETAILS.Id IS NULL, 0, SUM(IF(TXCURR_DETAILS.Program_Status = 'MissedWithin28Days' AND TXCURR_DETAILS.Gender = 'F', 1, 0))) AS Missed28Days_Females
+			, IF(TXCURR_DETAILS.Id IS NULL, 0, SUM(IF(TXCURR_DETAILS.Program_Status = 'MissedWithin28Days' AND TXCURR_DETAILS.Gender = 'M', 1, 0))) AS Missed_28Days_Males
+			, IF(TXCURR_DETAILS.Id IS NULL, 0, SUM(IF(TXCURR_DETAILS.Program_Status = 'MissedWithin28Days' AND TXCURR_DETAILS.Gender = 'F', 1, 0))) AS Missed_28Days_Females
 			, IF(TXCURR_DETAILS.Id IS NULL, 0, SUM(1)) as 'Total'
 			, TXCURR_DETAILS.sort_order
 			
@@ -723,8 +723,8 @@ UNION ALL
 		, IF(Totals.Id IS NULL, 0, SUM(IF(Totals.Program_Status = 'Seen' AND Totals.Gender = 'F', 1, 0))) AS 'Seen_Females'
 		, IF(Totals.Id IS NULL, 0, SUM(IF(Totals.Program_Status = 'Seen_Prev_Months' AND Totals.Gender = 'M', 1, 0))) AS 'SeenPrev_Males'
 		, IF(Totals.Id IS NULL, 0, SUM(IF(Totals.Program_Status = 'Seen_Prev_Months' AND Totals.Gender = 'F', 1, 0))) AS 'SeenPrev_Females'
-		, IF(Totals.Id IS NULL, 0, SUM(IF(Totals.Program_Status = 'MissedWithin28Days' AND Totals.Gender = 'M', 1, 0))) AS 'Missed28Days_Males'
-		, IF(Totals.Id IS NULL, 0, SUM(IF(Totals.Program_Status = 'MissedWithin28Days' AND Totals.Gender = 'F', 1, 0))) AS 'Missed28Days_Females'
+		, IF(Totals.Id IS NULL, 0, SUM(IF(Totals.Program_Status = 'MissedWithin28Days' AND Totals.Gender = 'M', 1, 0))) AS 'Missed_28Days_Males'
+		, IF(Totals.Id IS NULL, 0, SUM(IF(Totals.Program_Status = 'MissedWithin28Days' AND Totals.Gender = 'F', 1, 0))) AS 'Missed_28Days_Females'
 		, IF(Totals.Id IS NULL, 0, SUM(1)) as 'Total'
 		, 99 AS 'sort_order'
 		
