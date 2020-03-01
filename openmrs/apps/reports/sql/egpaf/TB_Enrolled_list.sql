@@ -20,9 +20,9 @@
 				
 				AND o.person_id not in (
 				select distinct os.person_id 
-				from obs os
-			-- Patient must not be a tranfer in	
-				where os.concept_id = 	3772 and os.value_coded =2095
+					from obs os
+		-- Patient must not be a tranfer in	
+					where os.concept_id = 	3772 and os.value_coded =2095
 				AND (os.obs_datetime BETWEEN CAST('#startDate#' AS DATE) AND CAST('#endDate#' AS DATE))
 				AND patient.voided = 0 AND os.voided = 0
 				)
@@ -57,10 +57,10 @@ UNION
 				AND patient.voided = 0 AND o.voided = 0
 				AND (o.obs_datetime BETWEEN CAST('#startDate#' AS DATE) AND CAST('#endDate#' AS DATE))
 				AND o.person_id not in (
-				select distinct os.person_id 
-				from obs os
+					select distinct os.person_id 
+					from obs os
 		-- Client must not be a transfer in
-				where os.concept_id = 3772 and os.value_coded =2095
+					where os.concept_id = 3772 and os.value_coded =2095
 				AND (os.obs_datetime BETWEEN CAST('#startDate#' AS DATE) AND CAST('#endDate#' AS DATE))
 				AND patient.voided = 0 AND os.voided = 0
 				)
