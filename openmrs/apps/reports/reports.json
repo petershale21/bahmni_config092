@@ -503,10 +503,24 @@
      "config": {
        "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/TB_Enrolled_list.sql"
       }
-     }
+     },
 
- 
-   
+  "tb_art_list": {
+  "name": "DSD TB_ART (List)",
+  "type": "MRSGeneric",
+  "config": {
+    "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/TB_Enrolled_list.sql"
+    }
+  },
+
+  "tb_art_pivot": {
+    "name": "DSD TB_ART (PIVOT)",
+    "type": "MRSGeneric",
+    "config": {
+      "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/TB_Enrolled_list.sql"
+      }
+    }
+    
  
 
 
