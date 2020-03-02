@@ -1,2 +1,2 @@
 # bahmni_config_release
-# eRegister Config Files
+## eRegister Config Files
