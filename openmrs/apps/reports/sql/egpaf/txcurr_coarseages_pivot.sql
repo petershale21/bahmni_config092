@@ -68,7 +68,7 @@ FROM
 						 INNER JOIN reporting_age_group AS observed_age_group ON
 						  CAST('#endDate#' AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
 						  AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
-                   WHERE observed_age_group.report_group_name = 'Modified_Ages') AS Newly_Initiated_ART_Clients
+                   WHERE observed_age_group.report_group_name = 'Coarse_Ages') AS Newly_Initiated_ART_Clients
 				   ORDER BY Newly_Initiated_ART_Clients.Age)
 
 UNION
@@ -95,7 +95,7 @@ select distinct patient.patient_id AS Id,
 								 INNER JOIN reporting_age_group AS observed_age_group ON
 									  CAST('#endDate#' AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
 									  AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
-           WHERE observed_age_group.report_group_name = 'Modified_Ages'
+           WHERE observed_age_group.report_group_name = 'Coarse_Ages'
 
 ) AS Clients_Seen
 
@@ -210,7 +210,7 @@ FROM
 						 INNER JOIN reporting_age_group AS observed_age_group ON
 						 CAST('#endDate#' AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
 						 AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
-                   WHERE 	observed_age_group.report_group_name = 'Modified_Ages' AND
+                   WHERE 	observed_age_group.report_group_name = 'Coarse_Ages' AND
 							o.person_id not in (
 							-- HAVE TO FIND A BETTER SOLUTION FOR THIS INNER QUERY (STORED PROC OR STORED FUNCTION)
 						    select patient.patient_id
@@ -388,7 +388,7 @@ FROM (
                  INNER JOIN reporting_age_group AS observed_age_group ON
 						  CAST('#endDate#' AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
 						  AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
-           WHERE observed_age_group.report_group_name = 'Modified_Ages')
+           WHERE observed_age_group.report_group_name = 'Coarse_Ages')
 
 UNION
 
@@ -413,7 +413,7 @@ UNION
 					 INNER JOIN reporting_age_group AS observed_age_group ON
 							  CAST('#endDate#' AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
 							  AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
-           WHERE observed_age_group.report_group_name = 'Modified_Ages')
+           WHERE observed_age_group.report_group_name = 'Coarse_Ages')
 	   
 UNION
 
@@ -438,7 +438,7 @@ UNION
 					 INNER JOIN reporting_age_group AS observed_age_group ON
 							  CAST('#endDate#' AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
 							  AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
-           WHERE observed_age_group.report_group_name = 'Modified_Ages')
+           WHERE observed_age_group.report_group_name = 'Coarse_Ages')
 
 UNION
 
@@ -463,7 +463,7 @@ UNION
 					 INNER JOIN reporting_age_group AS observed_age_group ON
 							  CAST('#endDate#' AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
 							  AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
-           WHERE observed_age_group.report_group_name = 'Modified_Ages')
+           WHERE observed_age_group.report_group_name = 'Coarse_Ages')
 
 
 
@@ -490,7 +490,7 @@ UNION
 					 INNER JOIN reporting_age_group AS observed_age_group ON
 							  CAST('#endDate#' AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
 							  AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
-           WHERE observed_age_group.report_group_name = 'Modified_Ages')
+           WHERE observed_age_group.report_group_name = 'Coarse_Ages')
 		
 
 UNION
@@ -522,7 +522,7 @@ UNION
 					 INNER JOIN reporting_age_group AS observed_age_group ON
 							  CAST('#endDate#' AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
 							  AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
-           WHERE observed_age_group.report_group_name = 'Modified_Ages')
+           WHERE observed_age_group.report_group_name = 'Coarse_Ages')
 		   
 UNION
 
@@ -554,7 +554,7 @@ UNION
 					 INNER JOIN reporting_age_group AS observed_age_group ON
 							  CAST('#endDate#' AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
 							  AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
-           WHERE observed_age_group.report_group_name = 'Modified_Ages')
+           WHERE observed_age_group.report_group_name = 'Coarse_Ages')
 		   
 UNION
 
@@ -586,7 +586,7 @@ UNION
 					 INNER JOIN reporting_age_group AS observed_age_group ON
 							  CAST('#endDate#' AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
 							  AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
-           WHERE observed_age_group.report_group_name = 'Modified_Ages')
+           WHERE observed_age_group.report_group_name = 'Coarse_Ages')
 		   
 UNION
 
@@ -618,7 +618,7 @@ UNION
 					 INNER JOIN reporting_age_group AS observed_age_group ON
 							  CAST('#endDate#' AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
 							  AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
-           WHERE observed_age_group.report_group_name = 'Modified_Ages')
+           WHERE observed_age_group.report_group_name = 'Coarse_Ages')
 
 
 
@@ -652,7 +652,7 @@ UNION
 					 INNER JOIN reporting_age_group AS observed_age_group ON
 							  CAST('#endDate#' AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
 							  AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
-           WHERE observed_age_group.report_group_name = 'Modified_Ages')
+           WHERE observed_age_group.report_group_name = 'Coarse_Ages')
 
 
 
@@ -686,7 +686,7 @@ UNION
 					 INNER JOIN reporting_age_group AS observed_age_group ON
 							  CAST('#endDate#' AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
 							  AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
-           WHERE observed_age_group.report_group_name = 'Modified_Ages')		   
+           WHERE observed_age_group.report_group_name = 'Coarse_Ages')		   
 		   
 ) AS ARTCurrent_PrevMonths
  
