@@ -503,133 +503,20 @@
      "config": {
        "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/TB_Enrolled_list.sql"
       }
-     },
+     }
 
-  "tb_art_list": {
-  "name": "DSD TB_ART (List)",
-  "type": "MRSGeneric",
-  "config": {
-    "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/TB_Enrolled_list.sql"
-    }
-  },
+ 
+   
+ 
 
-  "tb_art_pivot": {
-    "name": "DSD TB_ART (PIVOT)",
-    "type": "MRSGeneric",
-    "config": {
-      "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/TB_Enrolled_list.sql"
-      }
-    },
 
-  "txnew_list": {
-      "name": "TX_NEW (List)",
-      "type": "MRSGeneric",
-      "config": {
-          "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/TX_NEW.sql"
-      }
-  },
 
-  "txnew_pivot": {
-       "name": "TX_NEW (PIVOT)",
-       "type": "MRSGeneric",
-       "config": {
-           "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/TX_NEW_Pivot.sql"
-       }
-  },	
-	
-  "txcurrcombinedpivot_pepfar": {
-      "name": "TX_CURR (Pivot)",
-      "type": "MRSGeneric",
-      "config": {
-          "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/txcurr_combined_pivot.sql"
-      }
-  },
-  
-  "txcurrcombinedlist_perfar": {
-      "name": "TX_CURR (List)",
-      "type": "MRSGeneric",
-      "config": {
-          "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/txcurr_combined_list.sql"
-      }
-  },
 
-  "txcurrmmd_list": {
-      "name": "TX_CURR MMD (List)",
-      "type": "MRSGeneric",
-      "config": {
-          "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/txcurr_mmd_list.sql"
-      }
-  },
 
-  "txcurrmmd_pivot": {
-      "name": "TX_CURR MMD (PIVOT)",
-      "type": "MRSGeneric",
-      "config": {
-          "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/txcurr_mmd_pivot.sql"
-      }
-  },
 
-  "txcurrcoarse_list": {
-      "name": "TX_CURR Coarse Ages (List)",
-      "type": "MRSGeneric",
-      "config": {
-          "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/txcurr_coarseages_list.sql"
-      }
-  },
 
-  "txcurrcoarse_pivot": {
-      "name": "TX_CURR Coarse Ages (Pivot)",
-      "type": "MRSGeneric",
-      "config": {
-          "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/txcurr_coarseages_pivot.sql"
-      }
-  },
-  
-  "txrtt_list": {
-      "name": "TX_RTT (List)",
-      "type": "MRSGeneric",
-      "config": {
-          "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/txrtt_restart_list.sql"
-      }
-  },
 
-  "txrtt_pivot": {
-      "name": "TX_RTT (PIVOT)",
-      "type": "MRSGeneric",
-      "config": {
-          "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/txrtt_restart_pivot.sql"
-      }
-  },
 
-  "txpvlsnum_list": {
-      "name": "TX_PVLS Numerator (List)",
-      "type": "MRSGeneric",
-      "config": {
-          "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/txpvls_numerator_list.sql"
-      }
-  },
 
-  "txpvlsnum_pivot": {
-      "name": "TX_PVLS Numerator (Pivot)",
-      "type": "MRSGeneric",
-      "config": {
-          "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/txpvls_numerator_pivot.sql"
-      }
-  },
 
-  "txpvlsdenom_list": {
-      "name": "TX_PVLS Denominator (List)",
-      "type": "MRSGeneric",
-      "config": {
-          "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/txpvls_denominator_list.sql"
-      }
-  },
-
-  "txpvlsdenom_pivot": {
-      "name": "TX_PVLS Denominator (Pivot)",
-      "type": "MRSGeneric",
-      "config": {
-          "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/txpvls_denominator_pivot.sql"
-      }
-  }
 }

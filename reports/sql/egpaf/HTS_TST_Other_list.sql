@@ -1,8 +1,8 @@
-SELECT distinct Patient_Identifier, Patient_Name, Gender, Age, age_group,  HIV_Status
+SELECT Patient_Identifier, Patient_Name, Age, Gender, age_group, HIV_Testing_Initiation, Mode_of_entry, Testing_History , HIV_Status
 FROM (
 
-		(SELECT patientIdentifier AS "Patient_Identifier", patientName AS "Patient_Name", Age, Gender, age_group, 'PITC' AS 'HIV_Testing_Initiation','STI' AS 'Mode_of_Entry'
-				, 'Repeat' AS 'Testing_History' , HIV_Status, sort_order
+		(SELECT patientIdentifier AS "Patient_Identifier", patientName AS "Patient_Name", Age, Gender, age_group, 'PITC' AS 'HIV_Testing_Initiation',
+		'Other' AS 'Mode_of_entry', 'Repeat' AS 'Testing_History' , HIV_Status, sort_order
 		FROM
 						(select distinct patient.patient_id AS Id,
 											   patient_identifier.identifier AS patientIdentifier,
@@ -15,33 +15,38 @@ FROM (
 
 						from obs o
 								-- HTS CLIENTS WITH HIV STATUS BY SEX AND AGE
-								 INNER JOIN patient ON o.person_id = patient.patient_id
-								 -- HIV STATUS
-								 AND o.concept_id = 2165
-
+								 INNER JOIN patient ON o.person_id = patient.patient_id 
+								 AND o.concept_id = 2165  
 								 AND patient.voided = 0 AND o.voided = 0
 								 AND o.obs_datetime BETWEEN CAST('#startDate#' AS DATE) AND CAST('#endDate#' AS DATE)
-
-								 -- PROVIDER INITIATED TESTING AND COUNSELING
+								 
+								 -- CLIENT  INITIATED TESTING AND COUNSELING
 								 AND o.person_id in (
-									select distinct os.person_id
+									select distinct os.person_id 
 									from obs os
 									where os.concept_id = 4228 and os.value_coded = 4227
 									AND os.obs_datetime BETWEEN CAST('#startDate#' AS DATE) AND CAST('#endDate#' AS DATE)
 									AND patient.voided = 0 AND o.voided = 0
 								 )
-
-								 -- Mode of entry i.e STI
-
+								 
 								 -- REPEAT TESTER, HAS A HISTORY OF PREVIOUS TESTING
 								 AND o.person_id in (
 									select distinct os.person_id
 									from obs os
-									where os.concept_id = 4238 and os.value_coded = 4790
+									where os.concept_id = 2137 and os.value_coded = 2146
 									AND os.obs_datetime BETWEEN CAST('#startDate#' AS DATE) AND CAST('#endDate#' AS DATE)
 									AND patient.voided = 0 AND o.voided = 0
 								 )
-
+								  -- CHECK FOR MODE OF ENTRY
+								 AND o.person_id in (
+									select distinct os.person_id
+									from obs os
+									where os.concept_id = 4238 and os.value_coded = 2143
+									AND os.obs_datetime BETWEEN CAST('#startDate#' AS DATE) AND CAST('#endDate#' AS DATE)
+									AND patient.voided = 0 AND o.voided = 0
+								 ) 
+								  
+								 
 								 INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
 								 INNER JOIN person_name ON person.person_id = person_name.person_id
 								 INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3
@@ -58,8 +63,8 @@ FROM (
 
 		UNION
 
-		(SELECT patientIdentifier AS "Patient_Identifier", patientName AS "Patient_Name", Age, Gender, age_group, 'PITC' AS 'HIV_Testing_Initiation', 'STI' AS 'Mode_of_Entry'
-				, 'New' AS 'Testing_History' , HIV_Status, sort_order
+		(SELECT patientIdentifier AS "Patient_Identifier", patientName AS "Patient_Name", Age, Gender, age_group, 'PITC' AS 'HIV_Testing_Initiation',
+				'Other' AS 'Mode_of_entry', 'New' AS 'Testing_History' , HIV_Status, sort_order
 		FROM
 						(select distinct patient.patient_id AS Id,
 											   patient_identifier.identifier AS patientIdentifier,
@@ -72,31 +77,37 @@ FROM (
 
 						from obs o
 								-- HTS CLIENTS WITH HIV STATUS BY SEX AND AGE
-								 INNER JOIN patient ON o.person_id = patient.patient_id
+								 INNER JOIN patient ON o.person_id = patient.patient_id 
 								 AND o.concept_id = 2165
 								 AND patient.voided = 0 AND o.voided = 0
 								 AND o.obs_datetime BETWEEN CAST('#startDate#' AS DATE) AND CAST('#endDate#' AS DATE)
-
+								 
 								 -- PROVIDER INITIATED TESTING AND COUNSELING
 								 AND o.person_id in (
-									select distinct os.person_id
+									select distinct os.person_id 
 									from obs os
 									where os.concept_id = 4228 and os.value_coded = 4227
 									AND os.obs_datetime BETWEEN CAST('#startDate#' AS DATE) AND CAST('#endDate#' AS DATE)
 									AND patient.voided = 0 AND o.voided = 0
 								 )
-
-
-
+								 
 								 -- NEW TESTER, DOES NOT HAVE A HISTORY OF PREVIOUS TESTING
 								 AND o.person_id in (
 									select distinct os.person_id
 									from obs os
-									where os.concept_id = 4238 and os.value_coded = 4790
+									where os.concept_id = 2137 and os.value_coded = 2147
 									AND os.obs_datetime BETWEEN CAST('#startDate#' AS DATE) AND CAST('#endDate#' AS DATE)
 									AND patient.voided = 0 AND o.voided = 0
 								 )
-
+								 -- CHECK FOR MODE OF ENTRY
+								 AND o.person_id in (
+									select distinct os.person_id
+									from obs os
+									where os.concept_id = 4238 and os.value_coded = 2143
+									AND os.obs_datetime BETWEEN CAST('#startDate#' AS DATE) AND CAST('#endDate#' AS DATE)
+									AND patient.voided = 0 AND o.voided = 0
+								 )
+								 
 								 INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
 								 INNER JOIN person_name ON person.person_id = person_name.person_id
 								 INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3
@@ -109,10 +120,7 @@ FROM (
 									select og.obs_id from obs og where og.concept_id = 2385
 								 )) AS HTSClients_HIV_Status
 		ORDER BY HTSClients_HIV_Status.HIV_Status, HTSClients_HIV_Status.Age)
-
-
-
-
+		
 
 ) AS HTS_Status_Detailed
 
@@ -121,3 +129,4 @@ ORDER BY HTS_Status_Detailed.HIV_Testing_Initiation
 			, HTS_Status_Detailed.sort_order
 			, HTS_Status_Detailed.Gender
 			, HTS_Status_Detailed.HIV_Status
+

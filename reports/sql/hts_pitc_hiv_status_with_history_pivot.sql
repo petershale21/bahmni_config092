@@ -1,26 +1,29 @@
-SELECT distinct HTS_TOTALS_COLS_ROWS.AgeGroup
-        	, HTS_TOTALS_COLS_ROWS.Gender
-		    , HTS_TOTALS_COLS_ROWS.Positives
-	    	, HTS_TOTALS_COLS_ROWS.Negatives
-			, HTS_TOTALS_COLS_ROWS.Total
+SELECT HTS_TOTALS_COLS_ROWS.AgeGroup
+		, HTS_TOTALS_COLS_ROWS.Gender
+		, HTS_TOTALS_COLS_ROWS.New_Positives
+		, HTS_TOTALS_COLS_ROWS.New_Negatives
+		, HTS_TOTALS_COLS_ROWS.Rep_Positives
+		, HTS_TOTALS_COLS_ROWS.Rep_Negatives
+		, HTS_TOTALS_COLS_ROWS.Total
 
 FROM (
 
 			(SELECT HTS_STATUS_DRVD_ROWS.age_group AS 'AgeGroup'
 					, HTS_STATUS_DRVD_ROWS.Gender
 						, IF(HTS_STATUS_DRVD_ROWS.Id IS NULL, 0, SUM(IF(HTS_STATUS_DRVD_ROWS.HIV_Testing_Initiation = 'PITC' 
-							AND HTS_STATUS_DRVD_ROWS.HIV_Status = 'Positive', 1, 0))) AS Positives
+							AND HTS_STATUS_DRVD_ROWS.HIV_Status = 'Positive' AND HTS_STATUS_DRVD_ROWS.Testing_History = 'New', 1, 0))) AS New_Positives
 						, IF(HTS_STATUS_DRVD_ROWS.Id IS NULL, 0, SUM(IF(HTS_STATUS_DRVD_ROWS.HIV_Testing_Initiation = 'PITC'			
-							AND HTS_STATUS_DRVD_ROWS.HIV_Status = 'Negative', 1, 0))) AS Negatives
-							
-
-					
+							AND HTS_STATUS_DRVD_ROWS.HIV_Status = 'Negative' AND HTS_STATUS_DRVD_ROWS.Testing_History = 'New', 1, 0))) AS New_Negatives
+						, IF(HTS_STATUS_DRVD_ROWS.Id IS NULL, 0, SUM(IF(HTS_STATUS_DRVD_ROWS.HIV_Testing_Initiation = 'PITC' 
+							AND HTS_STATUS_DRVD_ROWS.HIV_Status = 'Positive' AND HTS_STATUS_DRVD_ROWS.Testing_History = 'Repeat', 1, 0))) AS Rep_Positives				
+						, IF(HTS_STATUS_DRVD_ROWS.Id IS NULL, 0, SUM(IF(HTS_STATUS_DRVD_ROWS.HIV_Testing_Initiation = 'PITC'
+							AND HTS_STATUS_DRVD_ROWS.HIV_Status = 'Negative' AND HTS_STATUS_DRVD_ROWS.Testing_History = 'Repeat', 1, 0))) AS Rep_Negatives
 						, IF(HTS_STATUS_DRVD_ROWS.Id IS NULL, 0, SUM(IF(HTS_STATUS_DRVD_ROWS.HIV_Testing_Initiation = 'PITC', 1, 0))) as 'Total'
 						, HTS_STATUS_DRVD_ROWS.sort_order
 			FROM (
 
 					(SELECT Id, patientIdentifier AS "Patient Identifier", patientName AS "Patient Name", Age, Gender, age_group, HIV_Status, 'PITC' AS 'HIV_Testing_Initiation'
-							, 'INPATIENT' AS 'ENTRY', sort_order
+							, 'Repeat' AS 'Testing_History' , sort_order
 					FROM
 									(select distinct patient.patient_id AS Id,
 														   patient_identifier.identifier AS patientIdentifier,
@@ -47,11 +50,11 @@ FROM (
 												AND patient.voided = 0 AND o.voided = 0
 											 )
 											 
-											 -- INPATIENT, MODE OF ENTRY POINT
+											 -- REPEAT TESTER, HAS A HISTORY OF PREVIOUS TESTING
 											 AND o.person_id in (
 												select distinct os.person_id
 												from obs os
-												where os.concept_id = 4238 and os.value_coded = 4233
+												where os.concept_id = 2137 and os.value_coded = 2146
 												AND os.obs_datetime BETWEEN CAST('#startDate#' AS DATE) AND CAST('#endDate#' AS DATE)
 												AND patient.voided = 0 AND o.voided = 0
 											 )
@@ -69,7 +72,7 @@ FROM (
 					UNION
 
 					(SELECT Id, patientIdentifier AS "Patient Identifier", patientName AS "Patient Name", Age, Gender, age_group, HIV_Status, 'PITC' AS 'HIV_Testing_Initiation'
-							, 'INPATIENT' AS 'ENRTY' , sort_order
+							, 'New' AS 'Testing_History' , sort_order
 					FROM
 									(select distinct patient.patient_id AS Id,
 														   patient_identifier.identifier AS patientIdentifier,
@@ -96,11 +99,11 @@ FROM (
 												AND patient.voided = 0 AND o.voided = 0
 											 )
 											 
-											 -- INPATIENT, MODE OF ENTRY POINT
+											 -- NEW TESTER, DOES NOT HAVE A HISTORY OF PREVIOUS TESTING
 											 AND o.person_id in (
 												select distinct os.person_id
 												from obs os
-												where os.concept_id = 4238 and os.value_coded = 4233
+												where os.concept_id = 2137 and os.value_coded = 2147
 												AND os.obs_datetime BETWEEN CAST('#startDate#' AS DATE) AND CAST('#endDate#' AS DATE)
 												AND patient.voided = 0 AND o.voided = 0
 											 )
@@ -118,7 +121,7 @@ FROM (
 					UNION
 
 					(SELECT Id, patientIdentifier AS "Patient Identifier", patientName AS "Patient Name", Age, Gender, age_group, HIV_Status, 'CITC' AS 'HIV_Testing_Initiation'
-							, 'INPATIENT' AS 'ENRTY' , sort_order
+							, 'Repeat' AS 'Testing_History' , sort_order
 					FROM
 									(select distinct patient.patient_id AS Id,
 														   patient_identifier.identifier AS patientIdentifier,
@@ -145,11 +148,11 @@ FROM (
 												AND patient.voided = 0 AND o.voided = 0
 											 )
 											 
-											 -- INPATIENT, MODE OF ENTRY
+											 -- REPEAT TESTER, HAS A HISTORY OF PREVIOUS TESTING
 											 AND o.person_id in (
 												select distinct os.person_id
 												from obs os
-												where os.concept_id = 4238 and os.value_coded = 4233
+												where os.concept_id = 2137 and os.value_coded = 2146
 												AND os.obs_datetime BETWEEN CAST('#startDate#' AS DATE) AND CAST('#endDate#' AS DATE)
 												AND patient.voided = 0 AND o.voided = 0
 											 )						 
@@ -166,7 +169,7 @@ FROM (
 					UNION
 
 					(SELECT Id, patientIdentifier AS "Patient Identifier", patientName AS "Patient Name", Age, Gender, age_group, HIV_Status, 'CITC' AS 'HIV_Testing_Initiation'
-							, 'INPATIENT' AS 'ENRTY', sort_order
+							, 'New' AS 'Testing_History' , sort_order
 					FROM
 									(select distinct patient.patient_id AS Id,
 														   patient_identifier.identifier AS patientIdentifier,
@@ -193,11 +196,11 @@ FROM (
 												AND patient.voided = 0 AND o.voided = 0
 											 )
 											 
-											 -- INPATIENT, DOES NOT HAVE A HISTORY OF PREVIOUS TESTING
+											 -- NEW TESTER, DOES NOT HAVE A HISTORY OF PREVIOUS TESTING
 											 AND o.person_id in (
 												select distinct os.person_id
 												from obs os
-												where os.concept_id = 4238 and os.value_coded = 4233
+												where os.concept_id = 2137 and os.value_coded = 2147
 												AND os.obs_datetime BETWEEN CAST('#startDate#' AS DATE) AND CAST('#endDate#' AS DATE)
 												AND patient.voided = 0 AND o.voided = 0
 											 )						 
@@ -222,10 +225,13 @@ FROM (
 			(SELECT 'Total' AS 'AgeGroup'
 					, 'All' AS 'Gender'
 						, IF(HTS_STATUS_DRVD_COLS.Id IS NULL, 0, SUM(IF(HTS_STATUS_DRVD_COLS.HIV_Testing_Initiation = 'PITC' 
-							AND HTS_STATUS_DRVD_COLS.HIV_Status = 'Positive', 1, 0))) AS Positives
+							AND HTS_STATUS_DRVD_COLS.HIV_Status = 'Positive' AND HTS_STATUS_DRVD_COLS.Testing_History = 'New', 1, 0))) AS New_Positives
 						, IF(HTS_STATUS_DRVD_COLS.Id IS NULL, 0, SUM(IF(HTS_STATUS_DRVD_COLS.HIV_Testing_Initiation = 'PITC'			
-							AND HTS_STATUS_DRVD_COLS.HIV_Status = 'Negative', 1, 0))) AS Negatives
-						
+							AND HTS_STATUS_DRVD_COLS.HIV_Status = 'Negative' AND HTS_STATUS_DRVD_COLS.Testing_History = 'New', 1, 0))) AS New_Negatives
+						, IF(HTS_STATUS_DRVD_COLS.Id IS NULL, 0, SUM(IF(HTS_STATUS_DRVD_COLS.HIV_Testing_Initiation = 'PITC' 
+							AND HTS_STATUS_DRVD_COLS.HIV_Status = 'Positive' AND HTS_STATUS_DRVD_COLS.Testing_History = 'Repeat', 1, 0))) AS Rep_Positives				
+						, IF(HTS_STATUS_DRVD_COLS.Id IS NULL, 0, SUM(IF(HTS_STATUS_DRVD_COLS.HIV_Testing_Initiation = 'PITC'
+							AND HTS_STATUS_DRVD_COLS.HIV_Status = 'Negative' AND HTS_STATUS_DRVD_COLS.Testing_History = 'Repeat', 1, 0))) AS Rep_Negatives
 						, IF(HTS_STATUS_DRVD_COLS.Id IS NULL, 0, SUM(IF(HTS_STATUS_DRVD_COLS.HIV_Testing_Initiation = 'PITC', 1, 0))) as 'Total'
 						, 99 AS sort_order
 			FROM (
@@ -255,11 +261,11 @@ FROM (
 												AND patient.voided = 0 AND o.voided = 0
 											 )
 											 
-											 -- INPATIENT, MODE OF ENTRY POINT
+											 -- REPEAT TESTER, HAS A HISTORY OF PREVIOUS TESTING
 											 AND o.person_id in (
 												select distinct os.person_id
 												from obs os
-												where os.concept_id = 4238 and os.value_coded = 4233
+												where os.concept_id = 2137 and os.value_coded = 2146
 												AND os.obs_datetime BETWEEN CAST('#startDate#' AS DATE) AND CAST('#endDate#' AS DATE)
 												AND patient.voided = 0 AND o.voided = 0
 											 )
@@ -273,7 +279,7 @@ FROM (
 					UNION
 
 					(SELECT Id, patientIdentifier AS "Patient Identifier", patientName AS "Patient Name", HIV_Status, 'PITC' AS 'HIV_Testing_Initiation'
-							, 'Repeat' AS 'Testing_History'
+							, 'New' AS 'Testing_History'
 					FROM
 									(select distinct patient.patient_id AS Id,
 														   patient_identifier.identifier AS patientIdentifier,
@@ -301,7 +307,7 @@ FROM (
 											 AND o.person_id in (
 												select distinct os.person_id
 												from obs os
-												where os.concept_id = 4238 and os.value_coded = 4233
+												where os.concept_id = 2137 and os.value_coded = 2147
 												AND os.obs_datetime BETWEEN CAST('#startDate#' AS DATE) AND CAST('#endDate#' AS DATE)
 												AND patient.voided = 0 AND o.voided = 0
 											 )
@@ -315,7 +321,7 @@ FROM (
 					UNION
 
 					(SELECT Id, patientIdentifier AS "Patient Identifier", patientName AS "Patient Name", HIV_Status, 'CITC' AS 'HIV_Testing_Initiation'
-							, 'INPATIENT' AS 'ENTRY'
+							, 'Repeat' AS 'Testing_History'
 					FROM
 									(select distinct patient.patient_id AS Id,
 														   patient_identifier.identifier AS patientIdentifier,
@@ -339,11 +345,11 @@ FROM (
 												AND patient.voided = 0 AND o.voided = 0
 											 )
 											 
-											 -- INPATIENT, MODE OF ENTRY POINT
+											 -- REPEAT TESTER, HAS A HISTORY OF PREVIOUS TESTING
 											 AND o.person_id in (
 												select distinct os.person_id
 												from obs os
-												where os.concept_id = 4238 and os.value_coded = 4233
+												where os.concept_id = 2137 and os.value_coded = 2146
 												AND os.obs_datetime BETWEEN CAST('#startDate#' AS DATE) AND CAST('#endDate#' AS DATE)
 												AND patient.voided = 0 AND o.voided = 0
 											 )						 
@@ -357,7 +363,7 @@ FROM (
 					UNION
 
 					(SELECT Id, patientIdentifier AS "Patient Identifier", patientName AS "Patient Name", HIV_Status, 'CITC' AS 'HIV_Testing_Initiation'
-							, 'INPATIENT' AS 'ENTRY'
+							, 'New' AS 'Testing_History'
 					FROM
 									(select distinct patient.patient_id AS Id,
 														   patient_identifier.identifier AS patientIdentifier,
@@ -385,7 +391,7 @@ FROM (
 											 AND o.person_id in (
 												select distinct os.person_id
 												from obs os
-												where os.concept_id = 4238 and os.value_coded =4233
+												where os.concept_id = 2137 and os.value_coded = 2147
 												AND os.obs_datetime BETWEEN CAST('#startDate#' AS DATE) AND CAST('#endDate#' AS DATE)
 												AND patient.voided = 0 AND o.voided = 0
 											 )						 
