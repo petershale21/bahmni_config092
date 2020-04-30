@@ -170,7 +170,7 @@ ORDER BY INDEX_CLIENTS.Age)
 UNION
 
 -- CLIENTS TESTED POSITIVE AND NOT LINKED TO CARE
-(SELECT Id,patientIdentifier AS "Patient Identifier", patientName AS "Patient Name",  Age, Gender, age_group, 'Not Linked' AS 'Patient_Health_Status','HTS' as 'Client Enrollment Status', sort_order
+(SELECT Id,patientIdentifier AS "Patient Identifier", patientName AS "Patient Name",  Age, Gender, age_group, 'Not_Linked' AS 'Patient_Health_Status','HTS' as 'Client Enrollment Status', sort_order
 FROM
                 (select distinct patient.patient_id AS Id,
 									   patient_identifier.identifier AS patientIdentifier,
@@ -397,7 +397,7 @@ FROM
 UNION
 
 -- CLIENTS TESTED POSITIVE AND NOT LINKED TO CARE
-(SELECT Id,patientIdentifier AS "Patient Identifier", patientName AS "Patient Name",  Age, Gender, 'Not Linked' AS 'Patient_Health_Status','HTS' as 'Client Enrollment Status'
+(SELECT Id,patientIdentifier AS "Patient Identifier", patientName AS "Patient Name",  Age, Gender, 'Not_Linked' AS 'Patient_Health_Status','HTS' as 'Client Enrollment Status'
 FROM
                 (select distinct patient.patient_id AS Id,
 									   patient_identifier.identifier AS patientIdentifier,
@@ -424,7 +424,7 @@ FROM
 						 INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
 						 INNER JOIN person_name ON person.person_id = person_name.person_id
 						 INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3
-						 ) AS INDEX_CLIENTS_COLS)
+						 ) AS INDEX_CLIENTS_COLS) 
 
 UNION
 
