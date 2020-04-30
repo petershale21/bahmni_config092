@@ -13,21 +13,8 @@
      "config": {
        "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/txcurr_combined_pivot.sql"
     }
-   },
- "txcurrcombinedpivot_pepfar": {
-     "name": "PEPFAR Current on ART Detailed (Pivot)",
-     "type": "MRSGeneric",
-     "config": {
-       "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/txcurr_combined_pivot.sql"
-    }
-   },
- "txcurrcombinedlist_perfar": {
-     "name": "PEPFAR Current on ART Detailed (List)",
-     "type": "MRSGeneric",
-     "config": {
-       "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/txcurr_combined_pivot.sql"
-    }
-   },
+   }, 
+   
  "currentonart_jointmissedListSQL": {
      "name": "ART clients with Appointment Status (List)",
      "type": "MRSGeneric",
@@ -467,18 +454,18 @@
       }
      },
      "clientsofferedindex": {
-      "name": "Clients offered index (List)",
+      "name": "Clients offered indexing (List)",
       "type": "MRSGeneric",
       "config": {
-        "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/index_cases_offered_index_list.sql"
+        "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/index_cases_offered_indexing_list.sql"
      }
     },
  
  "clientsofferedindex_pivot": {
-     "name": "Clients indexing ( Pivot )",
+     "name": "Clients offered indexing ( Pivot )",
      "type": "MRSGeneric",
      "config": {
-       "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/index_cases_offered_pivot.sql"
+       "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/index_cases_offered_indexing_pivot.sql"
      }
     },
  
@@ -486,14 +473,14 @@
      "name": "Clients accepted indexing (List)",
      "type": "MRSGeneric",
      "config": {
-       "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/index_cases_accepted_index_list.sql"
+       "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/index_cases_accepted_indexing_list.sql"
      }
     },
  "hts_tst_accepted_index_pivot": {
      "name": "Clients accepted indexing (Pivot)",
      "type": "MRSGeneric",
      "config": {
-            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/index_cases_accepted_index_pivot.sql"
+            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/index_cases_accepted_indexing_pivot.sql"
      }
     },
 
