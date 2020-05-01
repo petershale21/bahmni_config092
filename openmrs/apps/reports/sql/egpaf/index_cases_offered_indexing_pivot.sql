@@ -1,19 +1,25 @@
-SELECT TOTALS_COLS_ROWS.AgeGroup
-		, TOTALS_COLS_ROWS.Gender
-		, TOTALS_COLS_ROWS.Detectable_VL
-		, TOTALS_COLS_ROWS.Linked
-		, TOTALS_COLS_ROWS.Not_Linked
-		, TOTALS_COLS_ROWS.Reffered
+SELECT TOTALS_COLS_ROWS.AgeGroup 
+		, TOTALS_COLS_ROWS.Detectable_VL_Males as 'Detectable VL Males'
+		, TOTALS_COLS_ROWS.Detectable_VL_Females as 'Detectable VL Females'
+		, TOTALS_COLS_ROWS.Linked_Males as 'Linked Males'
+		, TOTALS_COLS_ROWS.Linked_Females as 'Linked Females'		
+		, TOTALS_COLS_ROWS.Not_Linked_Males	as 'Not Linked Males'
+		, TOTALS_COLS_ROWS.Not_Linked_Females as 'Not linked Females'
+		, TOTALS_COLS_ROWS.Reffered_Males as 'Reffered Males'
+		, TOTALS_COLS_ROWS.Reffered_Females as 'Reffered Females'
         , TOTALS_COLS_ROWS.Total
 
 FROM (
 
-(SELECT INDEX_STATUS_DRVD_ROWS.age_group AS 'AgeGroup'
-					, INDEX_STATUS_DRVD_ROWS.Gender 
-						, IF(INDEX_STATUS_DRVD_ROWS.Id IS NULL, 0, SUM(IF(INDEX_STATUS_DRVD_ROWS.Patient_Health_Status > 20, 1, 0))) AS Detectable_VL                      
-						, IF(INDEX_STATUS_DRVD_ROWS.Id IS NULL, 0, SUM(IF(INDEX_STATUS_DRVD_ROWS.Patient_Health_Status = 'Linked', 1, 0))) AS Linked					
-						, IF(INDEX_STATUS_DRVD_ROWS.Id IS NULL, 0, SUM(IF(INDEX_STATUS_DRVD_ROWS.Patient_Health_Status = 'Not_Linked', 1, 0))) AS Not_Linked							
-						, IF(INDEX_STATUS_DRVD_ROWS.Id IS NULL, 0, SUM(IF(INDEX_STATUS_DRVD_ROWS.Patient_Health_Status = 'Referred', 1, 0))) AS Reffered					
+(SELECT INDEX_STATUS_DRVD_ROWS.age_group AS 'AgeGroup' 
+						, IF(INDEX_STATUS_DRVD_ROWS.Id IS NULL, 0, SUM(IF(INDEX_STATUS_DRVD_ROWS.Patient_Health_Status > 20 AND INDEX_STATUS_DRVD_ROWS.gender = 'M', 1, 0))) AS Detectable_VL_Males 
+						, IF(INDEX_STATUS_DRVD_ROWS.Id IS NULL, 0, SUM(IF(INDEX_STATUS_DRVD_ROWS.Patient_Health_Status > 20 AND INDEX_STATUS_DRVD_ROWS.gender = 'F', 1, 0))) AS Detectable_VL_Females                      
+						, IF(INDEX_STATUS_DRVD_ROWS.Id IS NULL, 0, SUM(IF(INDEX_STATUS_DRVD_ROWS.Patient_Health_Status = 'Linked' AND INDEX_STATUS_DRVD_ROWS.gender = 'M', 1, 0))) AS Linked_Males                      
+						, IF(INDEX_STATUS_DRVD_ROWS.Id IS NULL, 0, SUM(IF(INDEX_STATUS_DRVD_ROWS.Patient_Health_Status = 'Linked' AND INDEX_STATUS_DRVD_ROWS.gender = 'F', 1, 0))) AS Linked_Females					
+						, IF(INDEX_STATUS_DRVD_ROWS.Id IS NULL, 0, SUM(IF(INDEX_STATUS_DRVD_ROWS.Patient_Health_Status = 'Not_Linked' AND INDEX_STATUS_DRVD_ROWS.gender = 'M', 1, 0))) AS Not_Linked_Males					
+						, IF(INDEX_STATUS_DRVD_ROWS.Id IS NULL, 0, SUM(IF(INDEX_STATUS_DRVD_ROWS.Patient_Health_Status = 'Not_Linked' AND INDEX_STATUS_DRVD_ROWS.gender = 'F', 1, 0))) AS Not_Linked_Females							
+						, IF(INDEX_STATUS_DRVD_ROWS.Id IS NULL, 0, SUM(IF(INDEX_STATUS_DRVD_ROWS.Patient_Health_Status = 'Referred' AND INDEX_STATUS_DRVD_ROWS.gender = 'M', 1, 0))) AS Reffered_Males								
+						, IF(INDEX_STATUS_DRVD_ROWS.Id IS NULL, 0, SUM(IF(INDEX_STATUS_DRVD_ROWS.Patient_Health_Status = 'Referred' AND INDEX_STATUS_DRVD_ROWS.gender = 'F', 1, 0))) AS Reffered_Females					
 						, IF(INDEX_STATUS_DRVD_ROWS.Id IS NULL, 0,  SUM(1)) as 'Total' 
 						, INDEX_STATUS_DRVD_ROWS.sort_order
 			FROM (  
@@ -278,16 +284,18 @@ ORDER BY INDEX_STATUS_DRVD_ROWS.sort_oeder)
 
 UNION ALL
 
-	(SELECT 'Total' AS 'AgeGroup'
-					, 'All' AS 'Gender'                
-						, IF(CLIENTS_OFFERED_INDEXING_COLS.Id IS NULL, 0, SUM(IF(CLIENTS_OFFERED_INDEXING_COLS.Patient_Health_Status > 20, 1, 0))) AS Detectable_VL                      
-						, IF(CLIENTS_OFFERED_INDEXING_COLS.Id IS NULL, 0, SUM(IF(CLIENTS_OFFERED_INDEXING_COLS.Patient_Health_Status = 'Linked', 1, 0))) AS Linked                      
-						, IF(CLIENTS_OFFERED_INDEXING_COLS.Id IS NULL, 0, SUM(IF(CLIENTS_OFFERED_INDEXING_COLS.Patient_Health_Status = 'Not_Linked', 1, 0))) AS Not_Linked									
-						, IF(CLIENTS_OFFERED_INDEXING_COLS.Id IS NULL, 0, SUM(IF(CLIENTS_OFFERED_INDEXING_COLS.Patient_Health_Status = 'Referred', 1, 0))) AS Reffered						
-						, IF(CLIENTS_OFFERED_INDEXING_COLS.Id IS NULL, 0, SUM(1)) as 'Total'
+	(SELECT 'Total' AS 'AgeGroup'              
+						, IF(CLIENTS_OFFERED_INDEXING_COLS.Id IS NULL, 0, SUM(IF(CLIENTS_OFFERED_INDEXING_COLS.Patient_Health_Status > 20 AND CLIENTS_OFFERED_INDEXING_COLS.Gender = 'M', 1, 0))) AS Detectable_VL_Males 
+						, IF(CLIENTS_OFFERED_INDEXING_COLS.Id IS NULL, 0, SUM(IF(CLIENTS_OFFERED_INDEXING_COLS.Patient_Health_Status > 20 AND CLIENTS_OFFERED_INDEXING_COLS.Gender = 'F', 1, 0))) AS Detectable_VL_Females                      
+						, IF(CLIENTS_OFFERED_INDEXING_COLS.Id IS NULL, 0, SUM(IF(CLIENTS_OFFERED_INDEXING_COLS.Patient_Health_Status = 'Linked' AND CLIENTS_OFFERED_INDEXING_COLS.Gender = 'M', 1, 0))) AS Linked_Males                      
+						, IF(CLIENTS_OFFERED_INDEXING_COLS.Id IS NULL, 0, SUM(IF(CLIENTS_OFFERED_INDEXING_COLS.Patient_Health_Status = 'Linked' AND CLIENTS_OFFERED_INDEXING_COLS.Gender = 'F', 1, 0))) AS Linked_Females					
+						, IF(CLIENTS_OFFERED_INDEXING_COLS.Id IS NULL, 0, SUM(IF(CLIENTS_OFFERED_INDEXING_COLS.Patient_Health_Status = 'Not_Linked' AND CLIENTS_OFFERED_INDEXING_COLS.Gender = 'M', 1, 0))) AS Not_Linked_Males					
+						, IF(CLIENTS_OFFERED_INDEXING_COLS.Id IS NULL, 0, SUM(IF(CLIENTS_OFFERED_INDEXING_COLS.Patient_Health_Status = 'Not_Linked' AND CLIENTS_OFFERED_INDEXING_COLS.Gender = 'F', 1, 0))) AS Not_Linked_Females							
+						, IF(CLIENTS_OFFERED_INDEXING_COLS.Id IS NULL, 0, SUM(IF(CLIENTS_OFFERED_INDEXING_COLS.Patient_Health_Status = 'Referred' AND CLIENTS_OFFERED_INDEXING_COLS.Gender = 'M', 1, 0))) AS Reffered_Males								
+						, IF(CLIENTS_OFFERED_INDEXING_COLS.Id IS NULL, 0, SUM(IF(CLIENTS_OFFERED_INDEXING_COLS.Patient_Health_Status = 'Referred' AND CLIENTS_OFFERED_INDEXING_COLS.Gender = 'F', 1, 0))) AS Reffered_Females					
+						, IF(CLIENTS_OFFERED_INDEXING_COLS.Id IS NULL, 0,  SUM(1)) as 'Total'  
 						, 99 AS sort_order
-			FROM (
-				
+			FROM (				
 
 -- CLIENTS WITH DETECTABLE VL
 (SELECT Id,patientIdentifier AS "Patient Identifier", patientName AS "Patient Name", Age, Gender, vl_result AS 'Patient_Health_Status','High VL Routine' as 'Client Enrollment Status'
@@ -501,7 +509,7 @@ FROM
 							AND os.voided = 0
 							AND os.obs_datetime BETWEEN CAST('#startDate#' AS DATE) AND CAST('#endDate#' AS DATE)							 
 						 )
-						 
+
 						 INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
 						 INNER JOIN person_name ON person.person_id = person_name.person_id
 						 INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3
