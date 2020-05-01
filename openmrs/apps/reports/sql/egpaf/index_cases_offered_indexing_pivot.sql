@@ -1,12 +1,12 @@
 SELECT TOTALS_COLS_ROWS.AgeGroup 
-		, TOTALS_COLS_ROWS.Detectable_VL_Males as 'Detectable VL Males'
-		, TOTALS_COLS_ROWS.Detectable_VL_Females as 'Detectable VL Females'
-		, TOTALS_COLS_ROWS.Linked_Males as 'Linked Males'
-		, TOTALS_COLS_ROWS.Linked_Females as 'Linked Females'		
-		, TOTALS_COLS_ROWS.Not_Linked_Males	as 'Not Linked Males'
-		, TOTALS_COLS_ROWS.Not_Linked_Females as 'Not linked Females'
-		, TOTALS_COLS_ROWS.Reffered_Males as 'Reffered Males'
-		, TOTALS_COLS_ROWS.Reffered_Females as 'Reffered Females'
+		, TOTALS_COLS_ROWS.Detectable_VL_Males 
+		, TOTALS_COLS_ROWS.Detectable_VL_Females 
+		, TOTALS_COLS_ROWS.Linked_Males 
+		, TOTALS_COLS_ROWS.Linked_Females 	
+		, TOTALS_COLS_ROWS.Not_Linked_Males	
+		, TOTALS_COLS_ROWS.Not_Linked_Females 
+		, TOTALS_COLS_ROWS.Reffered_Males 
+		, TOTALS_COLS_ROWS.Reffered_Females 
         , TOTALS_COLS_ROWS.Total
 
 FROM (
