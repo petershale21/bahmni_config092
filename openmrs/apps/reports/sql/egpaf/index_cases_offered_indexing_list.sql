@@ -95,8 +95,8 @@ FROM
 												and oss.obs_datetime BETWEEN DATE(DATE_ADD(CAST('#endDate#' AS DATE), INTERVAL -12 MONTH)) AND CAST('#endDate#' AS DATE)
 												group by p.person_id
 										)
-										-- TARGETED VL MONITORING TYPE TARGETED
-										and os.value_coded = 4282
+										-- TARGETED VL MONITORING TYPE TARGETED 
+										and os.value_coded = 4282 
 								)
 								AND o.obs_datetime BETWEEN DATE(DATE_ADD(CAST('#endDate#' AS DATE), INTERVAL -12 MONTH)) AND CAST('#endDate#' AS DATE)
 								INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
@@ -136,6 +136,15 @@ FROM
 							where os.concept_id = 4239 and os.value_coded = 2146
 							AND os.voided = 0
 							AND os.obs_datetime BETWEEN CAST('#startDate#' AS DATE) AND CAST('#endDate#' AS DATE)
+						 )
+						 
+						 -- EXCLUDE PATIENT THAT HAS TESTED NEGATIVE
+						 AND o.person_id not in(
+							 select distinct os.person_id
+							from obs os
+							where os.concept_id = 2165 and os.value_coded = 1016
+							AND os.voided = 0
+							AND os.obs_datetime BETWEEN CAST('#startDate#' AS DATE) AND CAST('#endDate#' AS DATE)							 
 						 )
 						  
  						 
@@ -177,6 +186,15 @@ FROM
 							AND os.obs_datetime BETWEEN CAST('#startDate#' AS DATE) AND CAST('#endDate#' AS DATE)
 						 )						 
 						 
+						 -- EXCLUDE PATIENT THAT HAS TESTED NEGATIVE
+						 AND o.person_id not in(
+							 select distinct os.person_id
+							from obs os
+							where os.concept_id = 2165 and os.value_coded = 1016
+							AND os.voided = 0
+							AND os.obs_datetime BETWEEN CAST('#startDate#' AS DATE) AND CAST('#endDate#' AS DATE)							 
+						 )
+
 						 INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
 						 INNER JOIN person_name ON person.person_id = person_name.person_id
 						 INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3
@@ -216,6 +234,15 @@ FROM
 							AND os.obs_datetime BETWEEN CAST('#startDate#' AS DATE) AND CAST('#endDate#' AS DATE)
 						 ) 
 						 
+						 -- EXCLUDE PATIENT THAT HAS TESTED NEGATIVE
+						 AND o.person_id not in(
+							 select distinct os.person_id
+							from obs os
+							where os.concept_id = 2165 and os.value_coded = 1016
+							AND os.voided = 0
+							AND os.obs_datetime BETWEEN CAST('#startDate#' AS DATE) AND CAST('#endDate#' AS DATE)							 
+						 )
+						 						 
 						 INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
 						 INNER JOIN person_name ON person.person_id = person_name.person_id
 						 INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3
