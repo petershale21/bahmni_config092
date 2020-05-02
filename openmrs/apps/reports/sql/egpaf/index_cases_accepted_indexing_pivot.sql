@@ -8,8 +8,8 @@ SELECT TOTALS_COLS_ROWS.AgeGroup
 		, TOTALS_COLS_ROWS.Targeted_VL_Accepted_Females 
 		, TOTALS_COLS_ROWS.Targeted_VL_Denied_Males 
 		, TOTALS_COLS_ROWS.Targeted_VL_Denied_Females  
-		,TOTALS_COLS_ROWS.Linked_Accepted_Males 
-		,TOTALS_COLS_ROWS.Linked_Accepted_Females  
+		, TOTALS_COLS_ROWS.Linked_Accepted_Males 
+		, TOTALS_COLS_ROWS.Linked_Accepted_Females  
 		, TOTALS_COLS_ROWS.Linked_Denied_Males 
 		, TOTALS_COLS_ROWS.Linked_Denied_Females   
 		, TOTALS_COLS_ROWS.Not_Linked_Accepted_Males 
