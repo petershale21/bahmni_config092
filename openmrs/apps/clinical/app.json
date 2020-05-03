@@ -321,7 +321,8 @@
 		"required": true
 	    },
         "HTSIDX, Index Contact Information": {
-         "allowAddMore" :true}
+         "allowAddMore" :true
+         }
          ,
             "defaults": {
                 "Number of living children": 1,
