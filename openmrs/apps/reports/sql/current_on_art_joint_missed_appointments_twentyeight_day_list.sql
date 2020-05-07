@@ -45,7 +45,7 @@ FROM
 									
 									 INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
 									 INNER JOIN person_name ON person.person_id = person_name.person_id
-									 INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 5			
+									 INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1			
 		) AS Patient_MissedAppointments
 
 ORDER BY Patient_MissedAppointments.Gender, Patient_MissedAppointments.App_Status;
