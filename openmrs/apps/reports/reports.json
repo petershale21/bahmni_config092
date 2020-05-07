@@ -522,7 +522,72 @@
        "config": {
            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/TX_NEW_Pivot.sql"
        }
-  },	
+  },
+
+"txnew_coarseages": {
+     "name": "Tx new Coarse Ages",
+     "type": "MRSGeneric",
+     "config": {
+       "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/txnew_coarseages.sql"
+    }
+   },
+   
+   "txnew_coarse_ages_pivot": {
+     "name": "Tx new Coarse Ages(Pivot)",
+     "type": "MRSGeneric",
+     "config": {
+       "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/txnew_coarseages_pivot.sql"
+    }
+   },
+ 
+ "cxca_txpivot": {
+     "name": "CXCA_TX (Pivot)",
+     "type": "MRSGeneric",
+     "config": {
+       "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/cxca_treatment_pivot.sql"
+      }
+     },
+
+  "cxca_txlist": {
+     "name": "CXCA_TX (List)",
+     "type": "MRSGeneric",
+     "config": {
+       "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/cxca_treatment_list.sql"
+      }
+     },
+
+ "tx_tb_diagnostic": {
+     "name": "TX TB Diagnostic",
+     "type": "MRSGeneric",
+     "config": {
+       "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/TX_TB_diagnostic.sql"
+      }
+     },
+ 
+ "tx_tb_numerator": {
+     "name": "TX TB Numerator",
+     "type": "MRSGeneric",
+     "config": {
+       "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/TX_TB_Numerator.sql"
+      }
+     },
+
+
+"tx_tb_result_combined": {
+     "name": "TX TB Screen Combined (Pivot)",
+     "type": "MRSGeneric",
+     "config": {
+       "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/tx_tb_nume_pivot.sql"
+      }
+     },
+ "tx_tb_diagnostic_pos": {
+     "name": "TX TB Diagnostic Test Positive",
+     "type": "MRSGeneric",
+     "config": {
+       "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/TX_TB_diagnostic.sql"
+      }
+     },
+	
 	
   "txcurrcombinedpivot_pepfar": {
       "name": "TX_CURR (Pivot)",
