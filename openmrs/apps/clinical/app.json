@@ -320,6 +320,9 @@
 	    "HTC, Final HIV status": {
 		"required": true
 	    },
+            "HTSIDX, Index Contact Information": {
+               "allowAddMore" :true
+            },
             "defaults": {
                 "Number of living children": 1,
                 "Accepted Family Planning methods": [

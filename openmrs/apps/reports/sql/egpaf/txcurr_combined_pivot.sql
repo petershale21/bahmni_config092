@@ -5,8 +5,8 @@ SELECT Total_Aggregated_TxCurr.AgeGroup
 		, Total_Aggregated_TxCurr.Seen_Females
 		, Total_Aggregated_TxCurr.SeenPrev_Males
 		, Total_Aggregated_TxCurr.SeenPrev_Females
-		, Total_Aggregated_TxCurr.Missed28Days_Males
-		, Total_Aggregated_TxCurr.Missed28Days_Females
+		, Total_Aggregated_TxCurr.Missed_28Days_Males As 'Missed<28Days_Males'
+		, Total_Aggregated_TxCurr.Missed_28Days_Females As 'Missed<28Days_Females'
 		, Total_Aggregated_TxCurr.Total
 
 FROM
@@ -19,8 +19,8 @@ FROM
 			, IF(TXCURR_DETAILS.Id IS NULL, 0, SUM(IF(TXCURR_DETAILS.Program_Status = 'Seen' AND TXCURR_DETAILS.Gender = 'F', 1, 0))) AS Seen_Females
 			, IF(TXCURR_DETAILS.Id IS NULL, 0, SUM(IF(TXCURR_DETAILS.Program_Status = 'Seen_Prev_Months' AND TXCURR_DETAILS.Gender = 'M', 1, 0))) AS SeenPrev_Males
 			, IF(TXCURR_DETAILS.Id IS NULL, 0, SUM(IF(TXCURR_DETAILS.Program_Status = 'Seen_Prev_Months' AND TXCURR_DETAILS.Gender = 'F', 1, 0))) AS SeenPrev_Females
-			, IF(TXCURR_DETAILS.Id IS NULL, 0, SUM(IF(TXCURR_DETAILS.Program_Status = 'MissedWithin28Days' AND TXCURR_DETAILS.Gender = 'M', 1, 0))) AS Missed28Days_Males
-			, IF(TXCURR_DETAILS.Id IS NULL, 0, SUM(IF(TXCURR_DETAILS.Program_Status = 'MissedWithin28Days' AND TXCURR_DETAILS.Gender = 'F', 1, 0))) AS Missed28Days_Females
+			, IF(TXCURR_DETAILS.Id IS NULL, 0, SUM(IF(TXCURR_DETAILS.Program_Status = 'MissedWithin28Days' AND TXCURR_DETAILS.Gender = 'M', 1, 0))) AS Missed_28Days_Males
+			, IF(TXCURR_DETAILS.Id IS NULL, 0, SUM(IF(TXCURR_DETAILS.Program_Status = 'MissedWithin28Days' AND TXCURR_DETAILS.Gender = 'F', 1, 0))) AS Missed_28Days_Females
 			, IF(TXCURR_DETAILS.Id IS NULL, 0, SUM(1)) as 'Total'
 			, TXCURR_DETAILS.sort_order
 			
@@ -64,7 +64,7 @@ FROM
 						)
 						 INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
 						 INNER JOIN person_name ON person.person_id = person_name.person_id
-						 INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3						 
+						 INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1						 
 						 INNER JOIN reporting_age_group AS observed_age_group ON
 						  CAST('#endDate#' AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
 						  AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
@@ -91,7 +91,7 @@ select distinct patient.patient_id AS Id,
                                  AND patient.voided = 0 AND o.voided = 0
                                  INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
                                  INNER JOIN person_name ON person.person_id = person_name.person_id
-                                 INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3								 
+                                 INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1								 
 								 INNER JOIN reporting_age_group AS observed_age_group ON
 									  CAST('#endDate#' AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
 									  AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
@@ -206,7 +206,7 @@ FROM
 						 
 						 INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
 						 INNER JOIN person_name ON person.person_id = person_name.person_id
-						 INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3						 
+						 INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1						 
 						 INNER JOIN reporting_age_group AS observed_age_group ON
 						 CAST('#endDate#' AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
 						 AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
@@ -384,7 +384,7 @@ FROM (
 				  AND (o.concept_id = 4174 and (o.value_coded = 4176 or o.value_coded = 4177 or o.value_coded = 4245 or o.value_coded = 4246 or o.value_coded = 4247))
                  INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
 				 INNER JOIN person_name ON person.person_id = person_name.person_id
-				 INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3				 
+				 INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1				 
                  INNER JOIN reporting_age_group AS observed_age_group ON
 						  CAST('#endDate#' AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
 						  AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
@@ -409,7 +409,7 @@ UNION
 					 AND o.concept_id = 4174 and (o.value_coded = 4177 or o.value_coded = 4245 or o.value_coded = 4246 or o.value_coded = 4247)
 					 INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
 					 INNER JOIN person_name ON person.person_id = person_name.person_id
-					 INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3					 
+					 INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1					 
 					 INNER JOIN reporting_age_group AS observed_age_group ON
 							  CAST('#endDate#' AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
 							  AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
@@ -434,7 +434,7 @@ UNION
 					 AND o.concept_id = 4174 and (o.value_coded = 4245 or o.value_coded = 4246 or o.value_coded = 4247)
 					 INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
 					 INNER JOIN person_name ON person.person_id = person_name.person_id
-					 INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3
+					 INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1
 					 INNER JOIN reporting_age_group AS observed_age_group ON
 							  CAST('#endDate#' AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
 							  AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
@@ -459,7 +459,7 @@ UNION
 					 AND o.concept_id = 4174 and (o.value_coded = 4246 or o.value_coded = 4247)
 					 INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
 					 INNER JOIN person_name ON person.person_id = person_name.person_id
-					 INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3					 
+					 INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1					 
 					 INNER JOIN reporting_age_group AS observed_age_group ON
 							  CAST('#endDate#' AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
 							  AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
@@ -486,7 +486,7 @@ UNION
 					 AND o.concept_id = 4174 and o.value_coded = 4247
 					 INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
 					 INNER JOIN person_name ON person.person_id = person_name.person_id
-					 INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3					 
+					 INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1					 
 					 INNER JOIN reporting_age_group AS observed_age_group ON
 							  CAST('#endDate#' AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
 							  AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
@@ -518,7 +518,7 @@ UNION
 					 )
 					 INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
 					 INNER JOIN person_name ON person.person_id = person_name.person_id
-					 INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3					 
+					 INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1					 
 					 INNER JOIN reporting_age_group AS observed_age_group ON
 							  CAST('#endDate#' AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
 							  AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
@@ -550,7 +550,7 @@ UNION
 					 )
 					 INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
 					 INNER JOIN person_name ON person.person_id = person_name.person_id
-					 INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3					 
+					 INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1					 
 					 INNER JOIN reporting_age_group AS observed_age_group ON
 							  CAST('#endDate#' AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
 							  AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
@@ -582,7 +582,7 @@ UNION
 					 )
 					 INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
 					 INNER JOIN person_name ON person.person_id = person_name.person_id
-					 INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3					 
+					 INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1					 
 					 INNER JOIN reporting_age_group AS observed_age_group ON
 							  CAST('#endDate#' AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
 							  AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
@@ -614,7 +614,7 @@ UNION
 					 )
 					 INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
 					 INNER JOIN person_name ON person.person_id = person_name.person_id
-					 INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3					 
+					 INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1					 
 					 INNER JOIN reporting_age_group AS observed_age_group ON
 							  CAST('#endDate#' AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
 							  AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
@@ -648,7 +648,7 @@ UNION
 					 )
 					 INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
 					 INNER JOIN person_name ON person.person_id = person_name.person_id
-					 INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3					 
+					 INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1					 
 					 INNER JOIN reporting_age_group AS observed_age_group ON
 							  CAST('#endDate#' AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
 							  AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
@@ -682,7 +682,7 @@ UNION
 					 )
 					 INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
 					 INNER JOIN person_name ON person.person_id = person_name.person_id
-					 INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3					 
+					 INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1					 
 					 INNER JOIN reporting_age_group AS observed_age_group ON
 							  CAST('#endDate#' AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
 							  AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
@@ -723,8 +723,8 @@ UNION ALL
 		, IF(Totals.Id IS NULL, 0, SUM(IF(Totals.Program_Status = 'Seen' AND Totals.Gender = 'F', 1, 0))) AS 'Seen_Females'
 		, IF(Totals.Id IS NULL, 0, SUM(IF(Totals.Program_Status = 'Seen_Prev_Months' AND Totals.Gender = 'M', 1, 0))) AS 'SeenPrev_Males'
 		, IF(Totals.Id IS NULL, 0, SUM(IF(Totals.Program_Status = 'Seen_Prev_Months' AND Totals.Gender = 'F', 1, 0))) AS 'SeenPrev_Females'
-		, IF(Totals.Id IS NULL, 0, SUM(IF(Totals.Program_Status = 'MissedWithin28Days' AND Totals.Gender = 'M', 1, 0))) AS 'Missed28Days_Males'
-		, IF(Totals.Id IS NULL, 0, SUM(IF(Totals.Program_Status = 'MissedWithin28Days' AND Totals.Gender = 'F', 1, 0))) AS 'Missed28Days_Females'
+		, IF(Totals.Id IS NULL, 0, SUM(IF(Totals.Program_Status = 'MissedWithin28Days' AND Totals.Gender = 'M', 1, 0))) AS 'Missed_28Days_Males'
+		, IF(Totals.Id IS NULL, 0, SUM(IF(Totals.Program_Status = 'MissedWithin28Days' AND Totals.Gender = 'F', 1, 0))) AS 'Missed_28Days_Females'
 		, IF(Totals.Id IS NULL, 0, SUM(1)) as 'Total'
 		, 99 AS 'sort_order'
 		
@@ -773,7 +773,7 @@ FROM
 								)						 
 								 INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
 								 INNER JOIN person_name ON person.person_id = person_name.person_id
-								 INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3)
+								 INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1)
 
 		UNION
 
@@ -795,7 +795,7 @@ FROM
 										 AND patient.voided = 0 AND o.voided = 0
 										 INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
 										 INNER JOIN person_name ON person.person_id = person_name.person_id
-										 INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3					 
+										 INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1					 
 										 
 		) AS Total_ClientsSeen
 
@@ -904,7 +904,7 @@ FROM
 
 					 INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
 					 INNER JOIN person_name ON person.person_id = person_name.person_id
-					 INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3					 
+					 INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1					 
                 WHERE 
 							o.person_id not in (
 							-- HAVE TO FIND A BETTER SOLUTION FOR THIS INNER QUERY (STORED PROC OR STORED FUNCTION)
@@ -1079,7 +1079,7 @@ FROM
 						  AND (o.concept_id = 4174 and (o.value_coded = 4176 or o.value_coded = 4177 or o.value_coded = 4245 or o.value_coded = 4246 or o.value_coded = 4247))
 						 INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
 						 INNER JOIN person_name ON person.person_id = person_name.person_id
-						 INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3)
+						 INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1)
 
 		UNION
 
@@ -1098,7 +1098,7 @@ FROM
 							 AND o.concept_id = 4174 and (o.value_coded = 4177 or o.value_coded = 4245 or o.value_coded = 4246 or o.value_coded = 4247)
 							 INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
 							 INNER JOIN person_name ON person.person_id = person_name.person_id
-							 INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3)
+							 INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1)
 			   
 		UNION
 
@@ -1117,7 +1117,7 @@ FROM
 							 AND o.concept_id = 4174 and (o.value_coded = 4245 or o.value_coded = 4246 or o.value_coded = 4247)
 							 INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
 							 INNER JOIN person_name ON person.person_id = person_name.person_id
-							 INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3)
+							 INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1)
 
 		UNION
 
@@ -1136,7 +1136,7 @@ FROM
 							 AND o.concept_id = 4174 and (o.value_coded = 4246 or o.value_coded = 4247)
 							 INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
 							 INNER JOIN person_name ON person.person_id = person_name.person_id
-							 INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3)
+							 INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1)
 
 		UNION
 
@@ -1155,7 +1155,7 @@ FROM
 							 AND o.concept_id = 4174 and o.value_coded = 4247
 							 INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
 							 INNER JOIN person_name ON person.person_id = person_name.person_id
-							 INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3)
+							 INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1)
 
 		UNION
 
@@ -1181,7 +1181,7 @@ FROM
 							 )
 							 INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
 							 INNER JOIN person_name ON person.person_id = person_name.person_id
-							 INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3)
+							 INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1)
 				   
 		UNION
 
@@ -1207,7 +1207,7 @@ FROM
 							 )
 							 INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
 							 INNER JOIN person_name ON person.person_id = person_name.person_id
-							 INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3)
+							 INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1)
 				   
 		UNION
 
@@ -1233,7 +1233,7 @@ FROM
 							 )
 							 INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
 							 INNER JOIN person_name ON person.person_id = person_name.person_id
-							 INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3)
+							 INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1)
 				   
 		UNION
 
@@ -1259,7 +1259,7 @@ FROM
 							 )
 							 INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
 							 INNER JOIN person_name ON person.person_id = person_name.person_id
-							 INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3)
+							 INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1)
 
 		UNION
 
@@ -1285,7 +1285,7 @@ FROM
 							 )
 							 INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
 							 INNER JOIN person_name ON person.person_id = person_name.person_id
-							 INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3)
+							 INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1)
 
 		UNION
 
@@ -1310,7 +1310,7 @@ FROM
 							 )
 							 INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
 							 INNER JOIN person_name ON person.person_id = person_name.person_id
-							 INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3)   
+							 INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1)   
 				   
 		) AS ARTCurrent_PrevMonths
 		 
