@@ -21,11 +21,13 @@ FROM (
 										from obs os
 										where os.concept_id=2254
 										and os.obs_datetime BETWEEN DATE(DATE_ADD(CAST('#endDate#' AS DATE), INTERVAL -12 MONTH)) AND CAST('#endDate#' AS DATE)
-										and os.obs_datetime in (
-												select max(oss.obs_datetime)
+										and os.obs_id in (
+											select observation_id
+											from 
+												(select SUBSTRING(MAX(CONCAT(oss.obs_datetime, oss.obs_id)), 20) AS observation_id, max(oss.obs_datetime)
 												from obs oss inner join person p on oss.person_id=p.person_id and oss.concept_id = 2254 and oss.voided=0
 												and oss.obs_datetime BETWEEN DATE(DATE_ADD(CAST('#endDate#' AS DATE), INTERVAL -12 MONTH)) AND CAST('#endDate#' AS DATE)
-												group by p.person_id
+												group by p.person_id) as latest_vl_observations
 										)
 								)
 								AND person_id in (
@@ -33,11 +35,13 @@ FROM (
 										from obs os
 										where os.concept_id=4280
 										and os.obs_datetime BETWEEN DATE(DATE_ADD(CAST('#endDate#' AS DATE), INTERVAL -12 MONTH)) AND CAST('#endDate#' AS DATE)
-										and os.obs_datetime in (
-												select max(oss.obs_datetime)
+										and os.obs_id in (
+											select observation_id
+											from 
+												(select SUBSTRING(MAX(CONCAT(oss.obs_datetime, oss.obs_id)), 20) AS observation_id, max(oss.obs_datetime)
 												from obs oss inner join person p on oss.person_id=p.person_id and oss.concept_id = 4280 and oss.voided=0
 												and oss.obs_datetime BETWEEN DATE(DATE_ADD(CAST('#endDate#' AS DATE), INTERVAL -12 MONTH)) AND CAST('#endDate#' AS DATE)
-												group by p.person_id
+												group by p.person_id) as latest_vl_observations
 										)
 										-- ROUTINE VL MONITORING TYPE
 										and os.value_coded = 4281
@@ -45,7 +49,7 @@ FROM (
 								AND o.obs_datetime BETWEEN DATE(DATE_ADD(CAST('#endDate#' AS DATE), INTERVAL -12 MONTH)) AND CAST('#endDate#' AS DATE)
 								INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
 								INNER JOIN person_name ON person.person_id = person_name.person_id
-								INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3
+								INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1
 								INNER JOIN reporting_age_group AS observed_age_group ON
 									CAST('#endDate#' AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
 									AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
@@ -74,12 +78,14 @@ FROM (
 										from obs os
 										where os.concept_id=4266
 										and os.obs_datetime BETWEEN DATE(DATE_ADD(CAST('#endDate#' AS DATE), INTERVAL -12 MONTH)) AND CAST('#endDate#' AS DATE)
-										and os.obs_datetime in (
-												select max(oss.obs_datetime)
+										and os.obs_id in (
+											select observation_id
+											from 
+												(select SUBSTRING(MAX(CONCAT(oss.obs_datetime, oss.obs_id)), 20) AS observation_id, max(oss.obs_datetime)
 												from obs oss inner join person p on oss.person_id=p.person_id and oss.concept_id = 4266 and oss.voided=0
 												and oss.obs_datetime BETWEEN DATE(DATE_ADD(CAST('#endDate#' AS DATE), INTERVAL -12 MONTH)) AND CAST('#endDate#' AS DATE)
-												group by p.person_id
-										)
+												group by p.person_id) as latest_vl_observations
+										)										
 										and os.value_coded in (4264, 4263)
 								)
 								AND person_id in (
@@ -87,19 +93,21 @@ FROM (
 										from obs os
 										where os.concept_id=4280
 										and os.obs_datetime BETWEEN DATE(DATE_ADD(CAST('#endDate#' AS DATE), INTERVAL -12 MONTH)) AND CAST('#endDate#' AS DATE)
-										and os.obs_datetime in (
-												select max(oss.obs_datetime)
+										and os.obs_id in (
+											select observation_id
+											from 
+												(select SUBSTRING(MAX(CONCAT(oss.obs_datetime, oss.obs_id)), 20) AS observation_id, max(oss.obs_datetime)
 												from obs oss inner join person p on oss.person_id=p.person_id and oss.concept_id = 4280 and oss.voided=0
 												and oss.obs_datetime BETWEEN DATE(DATE_ADD(CAST('#endDate#' AS DATE), INTERVAL -12 MONTH)) AND CAST('#endDate#' AS DATE)
-												group by p.person_id
-										)
+												group by p.person_id) as latest_vl_observations
+										)										
 										-- ROUTINE VL MONITORING TYPE
 										and os.value_coded = 4281
-								)			
+								)
 								AND o.obs_datetime BETWEEN DATE(DATE_ADD(CAST('#endDate#' AS DATE), INTERVAL -12 MONTH)) AND CAST('#endDate#' AS DATE)
 								INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
 								INNER JOIN person_name ON person.person_id = person_name.person_id
-								INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3
+								INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1
 								INNER JOIN reporting_age_group AS observed_age_group ON
 									CAST('#endDate#' AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
 									AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
@@ -132,11 +140,13 @@ FROM (
 										from obs os
 										where os.concept_id=2254
 										and os.obs_datetime BETWEEN DATE(DATE_ADD(CAST('#endDate#' AS DATE), INTERVAL -12 MONTH)) AND CAST('#endDate#' AS DATE)
-										and os.obs_datetime in (
-												select max(oss.obs_datetime)
+										and os.obs_id in (
+											select observation_id
+											from 
+												(select SUBSTRING(MAX(CONCAT(oss.obs_datetime, oss.obs_id)), 20) AS observation_id, max(oss.obs_datetime)
 												from obs oss inner join person p on oss.person_id=p.person_id and oss.concept_id = 2254 and oss.voided=0
 												and oss.obs_datetime BETWEEN DATE(DATE_ADD(CAST('#endDate#' AS DATE), INTERVAL -12 MONTH)) AND CAST('#endDate#' AS DATE)
-												group by p.person_id
+												group by p.person_id) as latest_vl_observations
 										)
 								)
 								AND person_id in (
@@ -144,11 +154,13 @@ FROM (
 										from obs os
 										where os.concept_id=4280
 										and os.obs_datetime BETWEEN DATE(DATE_ADD(CAST('#endDate#' AS DATE), INTERVAL -12 MONTH)) AND CAST('#endDate#' AS DATE)
-										and os.obs_datetime in (
-												select max(oss.obs_datetime)
+										and os.obs_id in (
+											select observation_id
+											from 
+												(select SUBSTRING(MAX(CONCAT(oss.obs_datetime, oss.obs_id)), 20) AS observation_id, max(oss.obs_datetime)
 												from obs oss inner join person p on oss.person_id=p.person_id and oss.concept_id = 4280 and oss.voided=0
 												and oss.obs_datetime BETWEEN DATE(DATE_ADD(CAST('#endDate#' AS DATE), INTERVAL -12 MONTH)) AND CAST('#endDate#' AS DATE)
-												group by p.person_id
+												group by p.person_id) as latest_vl_observations
 										)
 										-- TARGETED VL MONITORING TYPE
 										and os.value_coded = 4282
@@ -156,7 +168,7 @@ FROM (
 								AND o.obs_datetime BETWEEN DATE(DATE_ADD(CAST('#endDate#' AS DATE), INTERVAL -12 MONTH)) AND CAST('#endDate#' AS DATE)
 								INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
 								INNER JOIN person_name ON person.person_id = person_name.person_id
-								INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3
+								INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1
 								INNER JOIN reporting_age_group AS observed_age_group ON
 									CAST('#endDate#' AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
 									AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
@@ -185,11 +197,13 @@ FROM (
 										from obs os
 										where os.concept_id=4266
 										and os.obs_datetime BETWEEN DATE(DATE_ADD(CAST('#endDate#' AS DATE), INTERVAL -12 MONTH)) AND CAST('#endDate#' AS DATE)
-										and os.obs_datetime in (
-												select max(oss.obs_datetime)
+										and os.obs_id in (
+											select observation_id
+											from 
+												(select SUBSTRING(MAX(CONCAT(oss.obs_datetime, oss.obs_id)), 20) AS observation_id, max(oss.obs_datetime)
 												from obs oss inner join person p on oss.person_id=p.person_id and oss.concept_id = 4266 and oss.voided=0
 												and oss.obs_datetime BETWEEN DATE(DATE_ADD(CAST('#endDate#' AS DATE), INTERVAL -12 MONTH)) AND CAST('#endDate#' AS DATE)
-												group by p.person_id
+												group by p.person_id) as latest_vl_observations
 										)
 										and os.value_coded in (4264, 4263)
 								)
@@ -198,11 +212,13 @@ FROM (
 										from obs os
 										where os.concept_id=4280
 										and os.obs_datetime BETWEEN DATE(DATE_ADD(CAST('#endDate#' AS DATE), INTERVAL -12 MONTH)) AND CAST('#endDate#' AS DATE)
-										and os.obs_datetime in (
-												select max(oss.obs_datetime)
+										and os.obs_id in (
+											select observation_id
+											from 
+												(select SUBSTRING(MAX(CONCAT(oss.obs_datetime, oss.obs_id)), 20) AS observation_id, max(oss.obs_datetime)
 												from obs oss inner join person p on oss.person_id=p.person_id and oss.concept_id = 4280 and oss.voided=0
 												and oss.obs_datetime BETWEEN DATE(DATE_ADD(CAST('#endDate#' AS DATE), INTERVAL -12 MONTH)) AND CAST('#endDate#' AS DATE)
-												group by p.person_id
+												group by p.person_id) as latest_vl_observations
 										)
 										-- TARGETED VL MONITORING TYPE
 										and os.value_coded = 4282
@@ -210,7 +226,7 @@ FROM (
 								AND o.obs_datetime BETWEEN DATE(DATE_ADD(CAST('#endDate#' AS DATE), INTERVAL -12 MONTH)) AND CAST('#endDate#' AS DATE)
 								INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
 								INNER JOIN person_name ON person.person_id = person_name.person_id
-								INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3
+								INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1
 								INNER JOIN reporting_age_group AS observed_age_group ON
 									CAST('#endDate#' AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
 									AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
