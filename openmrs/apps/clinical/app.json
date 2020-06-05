@@ -443,7 +443,6 @@
         "Test For HIV" : {
             "required": true
         },
-        ,
          "HTSIDX, Index Contact Information":{
             "allowAddMore":true
          },
