@@ -104,7 +104,7 @@
             },
 		"Addiction": {
                 "multiSelect": true
-            },
+            },	
 		"ANC, Family Planning Method": {
                 "multiSelect": true
             },
@@ -114,11 +114,8 @@
 		"ANC, High Risk Pregnancy": {
                 "multiSelect": true
             },
-		"ANC, Complications during pregnancy": {
-                "multiSelect": true
-            },
 
-        "Other underlying health conditions": {
+                "Other underlying health conditions": {
                 "multiSelect": true
             },
             "Program, Facility of Enrollment" : {
@@ -136,9 +133,6 @@
             },
             "PNC, Micro-Nutrient supplement" : {
                 "required": true
-            },
-			"Breast Condition": {
-                "multiSelect": true
             },
             "Delivery Note, Delivery location" : {
                 "required": false
@@ -179,7 +173,7 @@
             },
 
 	    "HIVTC, ART Regimen" : {
-		"required": true,
+		"required": false,
 		"dropdown": true
 	    },
 
@@ -216,7 +210,7 @@
 
             "TB, HIV Management":{
                 "multiSelect" : true
-            },
+            },	    
 	    "ARV drugs No. of days dispensed" : {
                 "required": false
             },
@@ -272,11 +266,11 @@
             },
             "HIVTC, Regimen when transferred out": {
                 "required" : true
-            },
+            },      
             "HIVTC, Date of transferred out": {
                  "required" : true
             },
-
+            
             "ART treatment interruption Date": {
                  "required" : true
             },
@@ -293,8 +287,8 @@
                  "required" : false
             },
             "HIVTC, Pregnancy Estimated Date of Delivery":{
-             "allowFutureDates": true
-            },
+             "allowFutureDate": true
+            },           
             "ART treatment interruption stopped reason":{
                  "required" : false
             },
@@ -404,7 +398,7 @@
 	    "HTC, Condom Type Dispensed": {
 		"required": true
 	    },
-        "HTC, Condom Type Dispensed": {
+                "HTC, Condom Type Dispensed": {
                 "multiSelect": true
             },
 	    "HTC, Final Result Given": {
@@ -420,69 +414,43 @@
 	    "HTC, Final HIV status": {
 		"required": true
         },
-        "Testing Eligibility, Tested For HIV": {
-            "required": true
-        },
-        "Testing Eligibility, Last Test Results": {
-            "required": true
-        },
+        
+    
+    "HTC, Mode of Entry Point": {
+    "required": true
+    },
+    "HTC, Referred Facility": {
+    "required": true,
+    "dropdown": true
+    },
+    "HTC, Final HIV status": {
+    "required": true
+    },
+    "Testing Eligibility, Tested For HIV": {
+        "required": true
+    },
+    "Testing Eligibility, Last Test Results": {
+        "required": true
+    },
 
-        "Testing Eligibility, On ART Treatment" : {
-            "required": true
-        },
-      
-        "Testing Eligibility, Counselled & linked to Treatment" : {
-            "required": true
-        },
-        "Testing Eligibility, Time Last Test Done" : {
-            "required": true
-        },
-        "Testing Eligibility, Reinforced Prevention Counselling" : {
-            "required": true
-        },
-        "Test For HIV" : {
-            "required": true
-        },
-         "HTSIDX, Index Contact Information":{
-            "allowAddMore":true
-         },
-         "HTSIDX, Contact Firstname":{
-            "required":true
-         },
-         "HTSIDX, Contact Surname":{
-            "required":true
-         },
-         "HTSIDX, Relationship to Index":{
-            "required":true
-         },
-         "HTSIDX, Age of Partner/Child":{
-            "required":true
-         },
-         "HTSIDX, Sex of Partner/Child":{
-            "required":true
-         },
-         "HTSIDX, Prior Tested Before Status":{
-            "required":true
-         },
-         "HTSIDX,Tested": {
-             "required" : true
-         },
-         "HTSIDX, IF No, why":  {
-             "required" : true
-         },
-         "HTSIDX,Date partner/child tested": {
-             "required" : true
-         },
-         "HTSIDX,Partner/ Child Test Result": {
-             "required" : true
-         },
-         "HTSIDX,Linked to care and treatment": {
-             "required" : true
-         },
-         "HTSIDX, Index accepted Index Testing Service": {
-            "required" : true
-         },
-         "defaults": {
+    "Testing Eligibility, On ART Treatment" : {
+        "required": true
+    },
+  
+    "Testing Eligibility, Counselled & linked to Treatment" : {
+        "required": true
+    },
+    "Testing Eligibility, Time Last Test Done" : {
+        "required": true
+    },
+    "Testing Eligibility, Reinforced Prevention Counselling" : {
+        "required": true
+    },
+    
+
+
+        
+            "defaults": {
                 "Number of living children": 1,
                 "Accepted Family Planning methods": [
                     "Condoms",
