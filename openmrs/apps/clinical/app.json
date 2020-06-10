@@ -414,7 +414,9 @@
 	    "HTC, Final HIV status": {
 		"required": true
         },
-        
+        "HIVTC, Pregnancy Estimated Date of Delivery" : {
+            "allowFutureDates": true
+        },
     
     "HTC, Mode of Entry Point": {
     "required": true
