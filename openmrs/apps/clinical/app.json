@@ -431,9 +431,7 @@
     "Testing Eligibility, Tested For HIV": {
         "required": true
     },
-    "Testing Eligibility, Last Test Results": {
-        "required": true
-    },
+    
 
     "Testing Eligibility, On ART Treatment" : {
         "required": true
