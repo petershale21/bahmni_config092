@@ -732,43 +732,43 @@ Bahmni.ConceptSet.FormConditions.rules = {
                 var conditionConcept = formFieldValues['HIVTC, Action to Record Viral Load Results'];
                 var patientAge = patient['age'];
                 var patientGender = patient['gender'];
-
                 var conditions = { show: [], hide: [], enable: [], disable: [] };
-
-
-
-                if (conditionConcept == 'Viral Load Result') {
+                if (conditionConcept.includes('Viral Load Result') && !conditionConcept.includes('HIVTC, Draw Blood for VL Test')) {
                         // Visible fields
                         conditions.show.push("HIVTC, Viral Load Result");
                         conditions.show.push("HIVTC, Viral Load Data");
                         conditions.show.push("HIVTC, Viral load blood results return date");
                         conditions.show.push("HIVTC, Date VL Result given to patient");
-
                         // Hidden fields
                         conditions.hide.push("HIVTC, Viral Load Blood drawn date");
                         conditions.hide.push("HIVTC, VL Pregnancy Status");
                         conditions.hide.push("HIVTC, VL Breastfeeding Status");
                         conditions.hide.push("HIVTC, Viral Load Monitoring Type");
-
-                } else if (conditionConcept == 'HIVTC, Draw Blood for VL Test') {
+                } else if (conditionConcept.includes('HIVTC, Draw Blood for VL Test') && !conditionConcept.includes('Viral Load Result')) {
                         conditions.show.push("HIVTC, Viral Load Blood drawn date");
                         conditions.show.push("HIVTC, VL Pregnancy Status");
                         conditions.show.push("HIVTC, VL Breastfeeding Status");
                         conditions.show.push("HIVTC, Viral Load Monitoring Type");
-
                         // Hidden fields
                         conditions.hide.push("HIVTC, Viral Load Result");
                         conditions.hide.push("HIVTC, Viral Load Data");
                         conditions.hide.push("HIVTC, Viral load blood results return date");
                         conditions.hide.push("HIVTC, Date VL Result given to patient");
-
-
                         // Hide Pregnancy and Breastfeeding fields for Males and Young children
                         if (patientAge < 12 || patientAge > 49 || patientGender == "M") {
                                 conditions.hide.push("HIVTC, VL Pregnancy Status");
                                 conditions.hide.push("HIVTC, VL Breastfeeding Status");
                         }
-
+                } else if (conditionConcept.includes('HIVTC, Draw Blood for VL Test') && conditionConcept.includes('Viral Load Result')) {
+                        // Visible fields
+                        conditions.show.push("HIVTC, Viral Load Result");
+                        conditions.show.push("HIVTC, Viral Load Data");
+                        conditions.show.push("HIVTC, Viral load blood results return date");
+                        conditions.show.push("HIVTC, Date VL Result given to patient");
+                        conditions.show.push("HIVTC, Viral Load Blood drawn date");
+                        conditions.show.push("HIVTC, VL Pregnancy Status");
+                        conditions.show.push("HIVTC, VL Breastfeeding Status");
+                        conditions.show.push("HIVTC, Viral Load Monitoring Type");
                 } else {
                         // Hide everything except Record Viral Load Results field
                         conditions.hide.push("HIVTC, Viral Load Data");
@@ -779,12 +779,11 @@ Bahmni.ConceptSet.FormConditions.rules = {
                         conditions.hide.push("HIVTC, VL Breastfeeding Status");
                         conditions.hide.push("HIVTC, Viral Load Monitoring Type");
                         conditions.hide.push("HIVTC, Viral Load Result");
-
                 }
                 return conditions;
+
         },
-
-
+        
         'HTC, Pregnancy Status': function (formName, formFieldValues, patient) {
                 if ((formName == "HIV Treatment and Care Progress Template") || (formName == "HIVTC, Patient Register")) {
                         var conditionConcept = formFieldValues['HTC, Pregnancy Status'];
