@@ -467,6 +467,9 @@
             "observationDisplay": {
                 "conceptNames": []
             }
+        },
+        "HIVTC, Action to Record Viral Load Results": {
+            "multiSelect": true
         }
     }
 }
