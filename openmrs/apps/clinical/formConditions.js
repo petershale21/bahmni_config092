@@ -744,6 +744,11 @@ Bahmni.ConceptSet.FormConditions.rules = {
                         conditions.hide.push("HIVTC, VL Pregnancy Status");
                         conditions.hide.push("HIVTC, VL Breastfeeding Status");
                         conditions.hide.push("HIVTC, Viral Load Monitoring Type");
+                        // Hide Pregnancy and Breastfeeding fields for Males and Young children
+                        if (patientAge < 12 || patientAge > 49 || patientGender == "M") {
+                                conditions.hide.push("HIVTC, VL Pregnancy Status");
+                                conditions.hide.push("HIVTC, VL Breastfeeding Status");
+                        }						
                 } else if (conditionConcept.includes('HIVTC, Draw Blood for VL Test') && !conditionConcept.includes('Viral Load Result')) {
                         conditions.show.push("HIVTC, Viral Load Blood drawn date");
                         conditions.show.push("HIVTC, VL Pregnancy Status");
@@ -769,6 +774,11 @@ Bahmni.ConceptSet.FormConditions.rules = {
                         conditions.show.push("HIVTC, VL Pregnancy Status");
                         conditions.show.push("HIVTC, VL Breastfeeding Status");
                         conditions.show.push("HIVTC, Viral Load Monitoring Type");
+                        // Hide Pregnancy and Breastfeeding fields for Males and Young children
+                        if (patientAge < 12 || patientAge > 49 || patientGender == "M") {
+                                conditions.hide.push("HIVTC, VL Pregnancy Status");
+                                conditions.hide.push("HIVTC, VL Breastfeeding Status");
+                        }					
                 } else {
                         // Hide everything except Record Viral Load Results field
                         conditions.hide.push("HIVTC, Viral Load Data");
