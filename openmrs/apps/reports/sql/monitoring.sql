@@ -1,15 +1,16 @@
-select distinct Patient_Identifier,Patient_Name, Age, Gender, age_group,Program_Status,
+select distinct Patient_Identifier,Patient_Name, Age,DOB, Gender, age_group,Program_Status,
 regimen_name,encounter_date,follow_up,drug_duration,intake_regimen,ART_Start
 from obs o
 left outer join
 
 (
-	(SELECT Id,patientIdentifier AS "Patient_Identifier", patientName AS "Patient_Name", Age, Gender, age_group, 'Initiated' AS 'Program_Status'
+	(SELECT Id,patientIdentifier AS "Patient_Identifier", patientName AS "Patient_Name", Age,DOB, Gender, age_group, 'Initiated' AS 'Program_Status'
 	FROM
                 (select distinct patient.patient_id AS Id,
 									   patient_identifier.identifier AS patientIdentifier,
 									   concat(person_name.given_name, ' ', person_name.family_name) AS patientName,
 									   floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age,
+									   person.birthdate DOB,
 									   person.gender AS Gender,
 									   observed_age_group.name AS age_group
 									  
@@ -45,13 +46,14 @@ ORDER BY Newly_Initiated_ART_Clients.Age)
 
 UNION
 
-(SELECT Id,patientIdentifier AS "Patient_Identifier", patientName AS "Patient_Name", Age, Gender, age_group, 'Seen' AS 'Program_Status'
+(SELECT Id,patientIdentifier AS "Patient_Identifier", patientName AS "Patient_Name", Age,DOB, Gender, age_group, 'Seen' AS 'Program_Status'
 FROM (
 
 select distinct patient.patient_id AS Id,
                                    patient_identifier.identifier AS patientIdentifier,
                                    concat(person_name.given_name, ' ', person_name.family_name) AS patientName,
                                    floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age,
+								   person.birthdate DOB,
                                    person.gender AS Gender,
                                    observed_age_group.name AS age_group
 								  
@@ -97,12 +99,13 @@ ORDER BY Clients_Seen.Age)
 
 UNION
 
-(SELECT Id,patientIdentifier AS "Patient_Identifier", patientName AS "Patient_Name", Age, Gender, age_group, 'Seen_Prev_Months' AS 'Program_Status'
+(SELECT Id,patientIdentifier AS "Patient_Identifier", patientName AS "Patient_Name", Age,DOB, Gender, age_group, 'Seen_Prev_Months' AS 'Program_Status'
 FROM (
 (select distinct patient.patient_id AS Id,
                                    patient_identifier.identifier AS patientIdentifier,
                                    concat(person_name.given_name, ' ', person_name.family_name) AS patientName,
                                    floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age,
+								   person.birthdate DOB,
                                    person.gender AS Gender,
                                    observed_age_group.name AS age_group
 
@@ -125,6 +128,7 @@ UNION
                                    patient_identifier.identifier AS patientIdentifier,
                                    concat(person_name.given_name, ' ', person_name.family_name) AS patientName,
                                    floor(datediff(o.obs_datetime, person.birthdate)/365) AS Age,
+								   person.birthdate DOB,
                                    person.gender AS Gender,
                                    observed_age_group.name AS age_group
 
@@ -149,6 +153,7 @@ UNION
                                    patient_identifier.identifier AS patientIdentifier,
                                    concat(person_name.given_name, ' ', person_name.family_name) AS patientName,
                                    floor(datediff(o.obs_datetime, person.birthdate)/365) AS Age,
+								   person.birthdate DOB,
                                    person.gender AS Gender,
                                    observed_age_group.name AS age_group
 
@@ -173,6 +178,7 @@ UNION
                                    patient_identifier.identifier AS patientIdentifier,
                                    concat(person_name.given_name, ' ', person_name.family_name) AS patientName,
                                    floor(datediff(o.obs_datetime, person.birthdate)/365) AS Age,
+								   person.birthdate DOB,
                                    person.gender AS Gender,
                                    observed_age_group.name AS age_group
 
@@ -199,6 +205,7 @@ UNION
                                    patient_identifier.identifier AS patientIdentifier,
                                    concat(person_name.given_name, ' ', person_name.family_name) AS patientName,
                                    floor(datediff(o.obs_datetime, person.birthdate)/365) AS Age,
+								   person.birthdate DOB,
                                    person.gender AS Gender,
                                    observed_age_group.name AS age_group
 
@@ -224,6 +231,7 @@ UNION
                                    patient_identifier.identifier AS patientIdentifier,
                                    concat(person_name.given_name, ' ', person_name.family_name) AS patientName,
                                    floor(datediff(o.obs_datetime, person.birthdate)/365) AS Age,
+								   person.birthdate DOB,
                                    person.gender AS Gender,
                                    observed_age_group.name AS age_group
 
@@ -255,6 +263,7 @@ UNION
                                    patient_identifier.identifier AS patientIdentifier,
                                    concat(person_name.given_name, ' ', person_name.family_name) AS patientName,
                                    floor(datediff(o.obs_datetime, person.birthdate)/365) AS Age,
+								   person.birthdate DOB,
                                    person.gender AS Gender,
                                    observed_age_group.name AS age_group
 
@@ -286,6 +295,7 @@ UNION
                                    patient_identifier.identifier AS patientIdentifier,
                                    concat(person_name.given_name, ' ', person_name.family_name) AS patientName,
                                    floor(datediff(o.obs_datetime, person.birthdate)/365) AS Age,
+								   person.birthdate DOB,
                                    person.gender AS Gender,
                                    observed_age_group.name AS age_group
 
@@ -317,6 +327,7 @@ UNION
                                    patient_identifier.identifier AS patientIdentifier,
                                    concat(person_name.given_name, ' ', person_name.family_name) AS patientName,
                                    floor(datediff(o.obs_datetime, person.birthdate)/365) AS Age,
+								   person.birthdate DOB,
                                    person.gender AS Gender,
                                    observed_age_group.name AS age_group
 
@@ -350,6 +361,7 @@ UNION
                                    patient_identifier.identifier AS patientIdentifier,
                                    concat(person_name.given_name, ' ', person_name.family_name) AS patientName,
                                    floor(datediff(o.obs_datetime, person.birthdate)/365) AS Age,
+								   person.birthdate DOB,
                                    person.gender AS Gender,
                                    observed_age_group.name AS age_group
 
@@ -382,6 +394,7 @@ UNION
                                    patient_identifier.identifier AS patientIdentifier,
                                    concat(person_name.given_name, ' ', person_name.family_name) AS patientName,
                                    floor(datediff(o.obs_datetime, person.birthdate)/365) AS Age,
+								   person.birthdate DOB,
                                    person.gender AS Gender,
                                    observed_age_group.name AS age_group
 
@@ -495,6 +508,7 @@ inner join
 		(select o.person_id,max(obs_datetime) maxdate 
 		from obs o 
 		where obs_datetime <= '#endDate#'
+		and o.concept_id = 2250
 		group by o.person_id 
 		)latest 
 		on latest.person_id = a.person_id
@@ -512,6 +526,7 @@ inner join
 		(select person_id,max(obs_datetime) maxdate 
 		from obs a
 		where obs_datetime <= '#endDate#'
+		and concept_id = 3752
 		group by person_id 
 		)latest 
 	on latest.person_id = o.person_id
@@ -532,12 +547,13 @@ case
  when value_coded = 4246 then "5 Months"
  when value_coded = 4247 then "6 Months"
 else "other" 
-end AS drug_duration,obs_datetime
+end AS drug_duration,maxdate
 from obs o
 inner join 
 		(select a.person_id,max(obs_datetime) maxdate 
 		from obs a
 		where obs_datetime <= '#endDate#'
+		and concept_id = 4174
 		group by a.person_id 
 		)latest 
 		on latest.person_id = o.person_id
@@ -587,7 +603,7 @@ when a.value_coded = 4694 THEN "2o"
 when a.value_coded = 4695 THEN "2p"
 when a.value_coded = 4696 THEN "5c"
 when a.value_coded = 4697 THEN "5d"
-when a.value_coded = 4698 THEN "5e"
+when a.value_coded = 4698 THEN "5e" 
 when a.value_coded = 4699 THEN "5f"
 when a.value_coded = 4700 THEN "5g"
 when a.value_coded = 4701 THEN "5h"
