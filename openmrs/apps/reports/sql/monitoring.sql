@@ -1,5 +1,5 @@
 select distinct Patient_Identifier,Patient_Name, Age,DOB, Gender, age_group,Program_Status,
-regimen_name,encounter_date,follow_up,drug_duration,intake_regimen,ART_Start
+regimen_name,encounter_date,follow_up,drug_duration,intake_regimen,ART_Start,Blood_drawn,Results_received,VL_result,Patient_received_results
 from obs o
 left outer join
 
@@ -633,3 +633,75 @@ else 'New Regimen' end as intake_regimen
 	)intake_date
 	on previous.Id = intake_date.person_id
 
+-- date blood drawn
+	left outer join
+	(select o.person_id,CAST(value_datetime AS DATE) as Blood_drawn
+	from obs o 
+	inner join 
+		(select person_id,max(obs_datetime) maxdate 
+		from obs a
+		where obs_datetime <= '#endDate#'
+		and concept_id = 4267
+		group by person_id 
+		)latest 
+	on latest.person_id = o.person_id
+	where concept_id = 4267
+	and  o.obs_datetime = maxdate	
+	)blood
+ON previous.Id = blood.person_id
+
+-- date results received
+left outer join
+(select o.person_id,CAST(value_datetime AS DATE) as Results_received
+from obs o 
+inner join 
+		(select person_id,max(obs_datetime) maxdate 
+		from obs a
+		where obs_datetime <= '#endDate#'
+		and concept_id = 4268
+		group by person_id 
+		)latest 
+	on latest.person_id = o.person_id
+	where concept_id = 4268
+	and  o.obs_datetime = maxdate	
+	)results_rece
+ON previous.Id = results_rece.person_id
+
+-- results
+left outer join
+(select o.person_id,case 
+ when value_coded = 4263 then "Undetectale"
+ when value_coded = 4264 then "less than 20"
+ when value_coded = 4265 then "Greater or equal to 20"
+else "other" 
+end AS VL_result
+from obs o
+inner join 
+		(select person_id,max(obs_datetime) maxdate 
+		from obs a
+		where obs_datetime <= '#endDate#'
+		and concept_id = 4266
+		group by person_id 
+		)latest 
+	on latest.person_id = o.person_id
+	where concept_id = 4266
+	and  o.obs_datetime = maxdate	
+	)results
+ON previous.Id = results.person_id
+
+-- date results given to patient
+left outer join
+(select o.person_id,CAST(value_datetime AS DATE) as Patient_received_results
+from obs o 
+inner join 
+		(select person_id,max(obs_datetime) maxdate 
+		from obs a
+		where obs_datetime <= '#endDate#'
+		and concept_id = 4274
+		group by person_id 
+		)latest 
+	on latest.person_id = o.person_id
+	where concept_id = 4274
+	and  o.obs_datetime = maxdate	
+	)patients
+ON previous.Id = patients.person_id
