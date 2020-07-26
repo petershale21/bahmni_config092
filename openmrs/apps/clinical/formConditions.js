@@ -873,9 +873,16 @@ Bahmni.ConceptSet.FormConditions.rules = {
                  var followUpDate = formFieldValues['ART, Follow-up date'];
                  var conditions = { assignedValues: [], error: [] };
                  var dateUtil = Bahmni.Common.Util.DateUtil;
+				 var retrospectiveDate = $.cookie(Bahmni.Common.Constants.retrospectiveEntryEncounterDateCookieName);
 
                  if(followUpDate) {
-                         var daysDispensed = dateUtil.diffInDaysRegardlessOfTime(dateUtil.now(), followUpDate);
+                         var daysDispesed;
+
+                         if(!retrospectiveDate) {
+                                daysDispensed = dateUtil.diffInDaysRegardlessOfTime(dateUtil.now(), followUpDate);
+                         } else {
+                                daysDispensed = dateUtil.diffInDaysRegardlessOfTime(dateUtil.parse(retrospectiveDate.substr(1, 10)), followUpDate);
+                         }
 
                          // if(daysDispensed <= 0) {
                                  // conditions.error.push("Invalid input for Follow-up Date, must be a date in the future. Please correct.");
