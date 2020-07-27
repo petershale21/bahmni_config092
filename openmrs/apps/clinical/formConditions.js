@@ -893,21 +893,24 @@ Bahmni.ConceptSet.FormConditions.rules = {
                                  if(daysDispensed >= 11 && daysDispensed < 21) {
                                          // Providing 2 days slack from 2 weeks, in case of weekends or other reasons
                                          drugSupplyPeriod = "HIVTC, Two weeks supply";
-                                 } else if (daysDispensed >= 25  && daysDispensed < 60) {
+                                 } else if (daysDispensed >= 25  && daysDispensed < 55) {
                                          drugSupplyPeriod = "HIVTC, One month supply";
-                                 } else if (daysDispensed >= 60 && daysDispensed < 90 ) {
+                                 } else if (daysDispensed >= 55 && daysDispensed < 85 ) {
                                          drugSupplyPeriod = "HIVTC, Two months supply";
-                                 } else if (daysDispensed >= 90 && daysDispensed < 120) {
+                                 } else if (daysDispensed >= 85 && daysDispensed < 115) {
                                          drugSupplyPeriod = "HIVTC, Three months supply";
-                                 } else if (daysDispensed >= 120 && daysDispensed < 150) {
+                                 } else if (daysDispensed >= 115 && daysDispensed < 145) {
                                          drugSupplyPeriod = "HIVTC, Four months supply";
-                                 } else if (daysDispensed >= 150 && daysDispensed < 180) {
+                                 } else if (daysDispensed >= 145 && daysDispensed < 175) {
                                          drugSupplyPeriod = "HIVTC, Five months supply";
-                                 } else if (daysDispensed >= 180 && daysDispensed < 210) {
+                                 } else if (daysDispensed >= 175 && daysDispensed < 205) {
                                          drugSupplyPeriod = "HIVTC, Six months supply";
+                                 } else if (daysDispensed >= 205) {
+                                         drugSupplyPeriod = "HIVTC, Seven+ months supply";
                                  } else {
-                                         // Nothing for now
+                                        // No action
                                  }
+
                                  conditions.assignedValues.push({ field: "ARV drugs No. of days dispensed", fieldValue: daysDispensed });
                                  conditions.assignedValues.push({ field: "HIVTC, ARV drugs supply duration", fieldValue: drugSupplyPeriod });
                          // }
