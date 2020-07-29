@@ -103,8 +103,9 @@ ORDER BY Clients_Seen.Age)
 
 UNION
 
+
 -- INCLUDE MISSED APPOINTMENTS WITHIN 28 DAYS ACCORDING TO THE NEW PEPFAR GUIDELINE
-(SELECT distinct patientIdentifier AS "Patient Identifier", patientName AS "Patient Name", Age, Gender, age_group, 'MissedWithin28Days' AS 'Program_Status', sort_order
+(SELECT patientIdentifier AS "Patient Identifier", patientName AS "Patient Name", Age, Gender, age_group, 'MissedWithin28Days' AS 'Program_Status', sort_order
 FROM
                 (select distinct patient.patient_id AS Id,
 									   patient_identifier.identifier AS patientIdentifier,
@@ -116,68 +117,63 @@ FROM
 
                 from obs o
 						-- PATIENTS WHO HAVE NOT RECEIVED ARV's WITHIN 4 WEEKS (i.e. 28 days) OF THIER LAST MISSED DRUG PICK-UP
-						 INNER JOIN patient ON o.person_id = patient.patient_id
-						 AND patient.voided = 0 AND o.voided = 0
-						 AND o.concept_id = 3752 and o.value_datetime in
-						 (				
-								select latestFU
-								from
-									(
-										select distinct os.person_id, given_name, family_name, max(os.value_datetime) AS latestFU, datediff(CAST('#endDate#' AS DATE), max(value_datetime)) AS Num_Days
-										from obs os
-										inner join person_name pn on os.person_id = pn.person_id
-										inner join patient p  on pn.person_id = p.patient_id and pn.voided = 0
-										inner join person ps on ps.person_id = p.patient_id and ps.voided = 0
-										where os.concept_id = 3752 
-										group by os.person_id
-										having Num_Days > 0 and Num_Days <= 28
-									) AS Defauled
-						 )
-						 AND o.person_id in (
-								select person_id
+						 inner join patient on o.person_id = patient.patient_id
+						 and patient.voided = 0 AND o.voided = 0
+						 and o.concept_id = 3752
+						 and o.obs_id in (
+								select followup_obs.obs_id
 								from (
-										select distinct os.person_id, given_name, family_name, max(os.value_datetime) AS latestFU, datediff(CAST('#endDate#' AS DATE), max(value_datetime)) AS Num_Days
-										from obs os
-										inner join person_name pn on os.person_id = pn.person_id
-										inner join patient p  on pn.person_id = p.patient_id and pn.voided = 0
-										inner join person ps on ps.person_id = p.patient_id and ps.voided = 0
-										where os.concept_id = 3752 and os.value_datetime < CAST('#endDate#' AS DATE)
-										group by os.person_id
-										having Num_Days > 0 and Num_Days <= 28
-								) AS MissedAppointWithin28Days
+										(select max(os.obs_group_id) as max_id,
+												   os.person_id,
+												   os.concept_id
+											from obs os 
+											where os.concept_id=3752 and os.voided = 0
+											group by os.person_id, os.concept_id
+										 ) as latest_register_obs 
+										 inner join obs followup_obs on followup_obs.obs_group_id = latest_register_obs.max_id
+										 and followup_obs.concept_id = 3752 and followup_obs.value_datetime < cast('#endDate#' as date)
+										 and datediff(cast('#endDate#' as date), followup_obs.value_datetime) between 0 and 28
+										 and followup_obs.voided = 0
+								)
 						 )
-						 AND o.person_id not in (
+						 
+						 and o.person_id not in (
 								select distinct os.person_id
 								from obs os
 								where (os.concept_id = 3843 AND os.value_coded = 3841 OR os.value_coded = 3842)
 								AND os.obs_datetime BETWEEN CAST('#startDate#' AS DATE) AND CAST('#endDate#' AS DATE)
 						 )
 
-						AND o.person_id not in (																		 
-									select distinct os.person_id 
-										from obs os
-										where (os.concept_id = 4155 and os.value_coded = 2146 and obs_datetime < '#endDate#' and person_id not in 
-										(select person_id from
-											(select person_id who, max(value_datetime) latest
-											from obs 
-											where concept_ID = 2266
-																group by person_id) one,
-											
-											 (
-											select person_id,obs_datetime 
-											from obs 
-											where concept_id = 3843 ) two
-											
-											where who = person_id
-											and DATE(obs_datetime) > DATE(latest))
-											)													  														 							 
-									)
-						AND o.person_id not in (
+						 and o.person_id not in (
+							select os.person_id 
+							from obs os
+							where os.concept_id = 4155 and os.value_coded = 2146 and os.obs_datetime <= cast('#endDate#' as date)
+							and os.person_id not in (
+								select seen.person_id 
+								from (
+										select oss.person_id, max(oss.value_datetime) latest
+										from obs oss
+										where oss.concept_ID = 2266
+										and oss.value_datetime <= cast('#endDate#' as date)
+										group by oss.person_id
+									 ) tout,
+									 (
+										select oss.person_id, oss.obs_datetime 
+										from obs oss
+										where oss.concept_id = 3843
+										and oss.obs_datetime <= cast('#endDate#' as date)
+									 ) seen
+								 where tout.person_id = seen.person_id
+								 and date(seen.obs_datetime) > date(tout.latest)
+						   )
+						 )									
+
+						 and o.person_id not in (
 									select person_id 
 									from person 
-									where death_date <= '#endDate#' 
+									where death_date <= cast('#endDate#' as date)
 									and dead = 1
-						)
+						 )
 						 
 						 INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
 						 INNER JOIN person_name ON person.person_id = person_name.person_id
@@ -258,7 +254,7 @@ FROM
 											))
 							AND
 							o.person_id not in (
-							select patient.patient_id
+											select patient.patient_id
 											from obs o
 											 INNER JOIN patient ON o.person_id = patient.patient_id
 												 AND MONTH(o.obs_datetime) = MONTH(DATE_ADD(CAST('#endDate#' AS DATE), INTERVAL -2 MONTH)) 
@@ -266,7 +262,8 @@ FROM
 												 AND patient.voided = 0 AND o.voided = 0 
 												 AND o.concept_id = 4174 and o.value_coded = 4176
 												 AND o.person_id in (
-													select distinct os.person_id from obs os
+													select distinct os.person_id 
+													from obs os
 													where 
 														MONTH(os.obs_datetime) = MONTH(DATE_ADD(CAST('#endDate#' AS DATE), INTERVAL -2 MONTH)) 
 														AND YEAR(os.obs_datetime) = YEAR(DATE_ADD(CAST('#endDate#' AS DATE), INTERVAL -2 MONTH))
@@ -340,6 +337,7 @@ FROM
 														AND os.concept_id = 3752 AND DATEDIFF(os.value_datetime, CAST('#endDate#' AS DATE)) BETWEEN 0 AND 28
 											))
 				   ) AS TwentyEightDayDefaulters)
+		   
 
 UNION
 
@@ -691,3 +689,4 @@ AND ARTCurrent_PrevMonths.Id not in (
 			and dead = 1
 			)
 ORDER BY ARTCurrent_PrevMonths.Age)
+
