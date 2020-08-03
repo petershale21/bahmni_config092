@@ -121,20 +121,20 @@ FROM
 						 and patient.voided = 0 AND o.voided = 0
 						 and o.concept_id = 3752
 						 and o.obs_id in (
-								select followup_obs.obs_id
-								from (
-										(select max(os.obs_group_id) as max_id,
-												   os.person_id,
-												   os.concept_id
-											from obs os 
-											where os.concept_id=3752 and os.voided = 0
-											group by os.person_id, os.concept_id
-										 ) as latest_register_obs 
-										 inner join obs followup_obs on followup_obs.obs_group_id = latest_register_obs.max_id
-										 and followup_obs.concept_id = 3752 and followup_obs.value_datetime < cast('#endDate#' as date)
-										 and datediff(cast('#endDate#' as date), followup_obs.value_datetime) between 0 and 28
-										 and followup_obs.voided = 0
+								select os.obs_id
+								from obs os
+								where os.concept_id=3752
+								and os.obs_id in (
+									select observation_id
+									from
+										(select SUBSTRING(MAX(CONCAT(oss.obs_datetime, oss.obs_id)), 20) AS observation_id, max(oss.obs_datetime)
+										from obs oss 
+											inner join person p on oss.person_id=p.person_id and oss.concept_id = 3752 and oss.voided=0
+											and oss.value_datetime < cast('#endDate#' as date)
+										group by p.person_id) as latest_followup_obs
 								)
+								and os.value_datetime < cast('#endDate#' as date)
+								and datediff(cast('#endDate#' as date), os.value_datetime) between 0 and 28
 						 )
 						 
 						 and o.person_id not in (
