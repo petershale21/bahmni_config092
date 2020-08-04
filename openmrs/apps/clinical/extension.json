@@ -87,7 +87,7 @@
         "extensionPointId": "org.bahmni.patient.search",
         "type": "config",
         "extensionParams": {
-                "searchHandler": "emrapi.sqlSearch.neworpreart",
+                "searchHandler": "emrapi.sqlSearch.transferin",
                 "translationKey": "MODULE_LABEL_TRANSFER_IN",
                 "forwardUrl": "#/programs/patient/{{patientUuid}}/consultationContext"
         },
