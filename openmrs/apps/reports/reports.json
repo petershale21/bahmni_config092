@@ -62,6 +62,22 @@
        "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/includeregimen.sql"
     }
    },
+   
+ "viralloadresultsstatuslist": {
+     "name": "Viral Load Results Status, within 3 months (List)",
+     "type": "MRSGeneric",
+     "config": {
+       "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/viral_load_list.sql"
+    }
+   },
+
+ "viralloadresultsstatuspivot": {
+     "name": "Viral Load Results Status, within 3 months (Pivot)",
+     "type": "MRSGeneric",
+     "config": {
+       "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/viral_load_pivot.sql"
+    }
+   },   
 
  "Modified_ART": {
      "name": "Current on ART with Modified ages (pivot)",
@@ -70,6 +86,38 @@
        "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/modified_txcurr_pivot.sql"
     }
    },
+   
+ "substitutedclientslist": {
+     "name": "Substituted Clients (List)",
+     "type": "MRSGeneric",
+     "config": {
+       "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/substituted_clients_list.sql"
+    }
+   },
+
+ "substitutedclientspivot": {
+     "name": "Substituted Clients (Pivot)",
+     "type": "MRSGeneric",
+     "config": {
+       "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/substituted_clients_pivot.sql"
+    }
+   },
+
+ "switchedclientslist": {
+     "name": "Switched Clients (List)",
+     "type": "MRSGeneric",
+     "config": {
+       "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/switched_clients_list.sql"
+    }
+   },
+
+ "switchedclientspivot": {
+     "name": "Switched Clients (Pivot)",
+     "type": "MRSGeneric",
+     "config": {
+       "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/switched_clients_pivot.sql"
+    }
+   },   
 
  "htsfinalhivstatusbyservicepointlist": {
      "name": "HTS Final HIV Status (List)",

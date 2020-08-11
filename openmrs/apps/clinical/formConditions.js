@@ -930,22 +930,24 @@ Bahmni.ConceptSet.FormConditions.rules = {
                 }
                 return conditions;
         },
-
-
-        'HIVTC, HIV care IPT started': function (formName, formFieldValues) {
+		
+       'HIVTC, HIV care IPT started': function (formName, formFieldValues) {
                 var conditionConcept = formFieldValues['HIVTC, HIV care IPT started'];
                 var conditions = { show: [], hide: [] };
 
-                if (conditionConcept == "Yes") {
+                if (conditionConcept == "Treatment complete") {
+                        conditions.show.push("HIVTC, TPT completion Date");
+                }               
+                else if (conditionConcept == "Yes") {
                         conditions.show.push("IPT Adherence");
-                        conditions.show.push("IPT No. of days dispensed");
+                        conditions.show.push("IPT No. of days dispensed");                        
                 } else {
                         conditions.hide.push("IPT Adherence");
                         conditions.hide.push("IPT No. of days dispensed");
+                        conditions.hide.push("HIVTC, TPT completion Date");
                 }
                 return conditions;
-        },
-
+        },		
 
         'ARV Treatment Substituted': function (formName, formFieldValues) {
                 var conditionConcept = formFieldValues['ARV Treatment Substituted'];
