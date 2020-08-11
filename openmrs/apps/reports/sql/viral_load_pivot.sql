@@ -103,7 +103,7 @@ ORDER BY viral_load_clients_DRVD_rows.sort_order)
 
 UNION ALL
 
-(SELECT 'Total' AS 'AgeGroup'                                  
+(SELECT 'Total Blood Draws' AS 'AgeGroup'                                  
 						, IF(viral_load_clients.Id IS NULL, 0, SUM(IF(viral_load_clients.VL_Results_Status = 'Received' , 1, 0))) AS Received                      
 						, IF(viral_load_clients.Id IS NULL, 0, SUM(IF(viral_load_clients.VL_Results_Status = 'Pending' , 1, 0))) AS Pending							
 						, IF(viral_load_clients.Id IS NULL, 0,  SUM(1)) as 'Total'  
