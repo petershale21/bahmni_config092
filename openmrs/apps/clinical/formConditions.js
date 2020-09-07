@@ -1357,10 +1357,10 @@ Bahmni.ConceptSet.FormConditions.rules = {
                         var conditions = { show: [], hide: [], enable: [], disable: [] };
 
 
-                        if (entryPoint == "Anti Natal Care" || entryPoint == "Self Testing") {
+                        if (entryPoint) {
 
                                 conditions.show.push("Test For HIV");
-                                // conditions.hide.push("Testing Eligibility, Tested For HIV");
+                                conditions.hide.push("Testing Eligibility, Tested For HIV");
                                 conditions.hide.push("Testing Eligibility, Last Test Results");
                                 conditions.hide.push("HTC, Pre-test Counseling Set");
                                 conditions.hide.push("HTC, Post-test Counseling Set");
@@ -1383,7 +1383,7 @@ Bahmni.ConceptSet.FormConditions.rules = {
 
 
                         if (!entryPoint){
-                        //   conditions.hide.push("Testing Eligibility, Tested For HIV");
+                          conditions.hide.push("Testing Eligibility, Tested For HIV");
                           conditions.hide.push("Testing Eligibility, Last Test Results");
                           conditions.hide.push("HTC, Pre-test Counseling Set");
                           conditions.hide.push("HTC, Post-test Counseling Set");
@@ -1402,7 +1402,7 @@ Bahmni.ConceptSet.FormConditions.rules = {
                           conditions.hide.push("Test For HIV");
                         }
                           if (!(entryPoint == "Anti Natal Care" || entryPoint == "Self Testing")){
-                        //   conditions.hide.push("Testing Eligibility, Tested For HIV");
+                          conditions.hide.push("Testing Eligibility, Tested For HIV");
                           conditions.hide.push("Testing Eligibility, Last Test Results");
                           conditions.hide.push("HTC, Pre-test Counseling Set");
                           conditions.hide.push("HTC, Post-test Counseling Set");
