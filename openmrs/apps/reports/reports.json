@@ -694,12 +694,28 @@
   },
 
   "txrtt_pivot": {
-      "name": "TX_RTT (PIVOT)",
+      "name": "TX_RTT (Pivot)",
       "type": "MRSGeneric",
       "config": {
           "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/txrtt_restart_pivot.sql"
       }
   },
+  
+  "txml_list": {
+      "name": "TX_ML (List)",
+      "type": "MRSGeneric",
+      "config": {
+          "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/tx_ml_list.sql"
+      }
+  },
+
+  "txml_pivot": {
+      "name": "TX_ML (Pivot)",
+      "type": "MRSGeneric",
+      "config": {
+          "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/tx_ml_pivot.sql"
+      }
+  }, 
 
   "txpvlsnum_list": {
       "name": "TX_PVLS Numerator (List)",
