@@ -1045,19 +1045,20 @@ Bahmni.ConceptSet.FormConditions.rules = {
                         var TestingStrategies = formFieldValues['HIV, Testing Strategies'];
                         var conditions = { show: [], hide: [], disable: [] };
                         if (formName ==  "HIV Testing and Counseling Intake Template") {
-        
+                            
+
                                 if (TestingStrategies == "HIVTC, Rapid Test") {
-                                        conditions.hide.push("Testing Eligibility, Tested For HIV","HTC, Date Of Distribution", "HTC, Distribution channel", "HTC, Distribution Mode", "HTC, Kit Collected For", "HTC, Key Pop", "HTC, Tested for HIV in The Past 12 Months", "HTC, HIVST Results")
+                                        conditions.hide.push("Testing Eligibility, On ART Treatment","Testing Eligibility, Last Test Results","HTC, Date Of Distribution", "HTC, Distribution channel", "HTC, Distribution Mode", "HTC, Kit Collected For", "HTC, Key Pop", "HTC, Tested for HIV in The Past 12 Months", "HTC, HIVST Results")
                                         conditions.show.push("HTC, Pre-test Counseling Set", "HTC, HIV Test", "HTC, Post-test Counseling Set","HIVTC, TB Screened", "HTS, Referral", "ART, Condoms Dispensed", "HTC, Mode of Entry Point")
                 
                                         
         
                                 }else if (TestingStrategies == "HIVTC, Self Test") {
-                                        conditions.hide.push("HTC, Pre-test Counseling Set", "HTC, HIV Test", "HTC, Post-test Counseling Set","HIVTC, TB Screened", "HTS, Referral", "ART, Condoms Dispensed","HTC, Mode of Entry Point")
-                                        conditions.show.push("Testing Eligibility, Tested For HIV","HTC, Date Of Distribution", "HTC, Distribution channel", "HTC, Distribution Mode", "HTC, Kit Collected For", "HTC, Key Pop", "HTC, Tested for HIV in The Past 12 Months", "HTC, HIVST Results")
+                                        conditions.hide.push("Test For HIV","Offered prevention Counselling and or Linked to prevention services","Testing Eligibility, Last 12 Months","Testing Eligibility, Provided Adherence Counselling","Testing Eligibility, Last 12 Months","Testing Eligibility, Reinforced Prevention Counselling","Testing Eligibility, Time Last Test Done","Testing Eligibility, Counselled & linked to Treatment","Time Last Test Done","HTC, Pre-test Counseling Set", "HTC, HIV Test", "HTC, Post-test Counseling Set","HIVTC, TB Screened", "HTS, Referral", "ART, Condoms Dispensed","HTC, Mode of Entry Point")
+                                        conditions.show.push("HTC, Date Of Distribution", "HTC, Distribution channel", "HTC, Distribution Mode", "HTC, Kit Collected For", "HTC, Key Pop", "HTC, Tested for HIV in The Past 12 Months", "HTC, HIVST Results")
                                        
                                 }else {
-                                        conditions.hide.push("Testing Eligibility, Tested For HIV","HTC, Pre-test Counseling Set", "HTC, HIV Test", "HTC, Post-test Counseling Set","HIVTC, TB Screened", "HTS, Referral", "ART, Condoms Dispensed", "HTC, Date Of Distribution", "HTC, Distribution channel", "HTC, Distribution Mode", "HTC, Kit Collected For", "HTC, Key Pop", "HTC, Tested for HIV in The Past 12 Months", "HTC, HIVST Results", "HTC, Mode of Entry Point", "Testing Eligibility, Tested For HIV")  
+                                        conditions.hide.push("Test For HIV","Offered prevention Counselling and or Linked to prevention services","Testing Eligibility, Last 12 Months","Testing Eligibility, Provided Adherence Counselling","Testing Eligibility, Last 12 Months","Testing Eligibility, Reinforced Prevention Counselling","Testing Eligibility, Time Last Test Done","Testing Eligibility, Counselled & linked to Treatment","Testing Eligibility, On ART Treatment","Testing Eligibility, Last Test Results","HTC, Pre-test Counseling Set", "HTC, HIV Test", "HTC, Post-test Counseling Set","HIVTC, TB Screened", "HTS, Referral", "ART, Condoms Dispensed", "HTC, Date Of Distribution", "HTC, Distribution channel", "HTC, Distribution Mode", "HTC, Kit Collected For", "HTC, Key Pop", "HTC, Tested for HIV in The Past 12 Months", "HTC, HIVST Results", "HTC, Mode of Entry Point", "Testing Eligibility, Tested For HIV")  
                                 }
                                 
                         }
@@ -1352,12 +1353,12 @@ Bahmni.ConceptSet.FormConditions.rules = {
         /*--------------------- SCREENING TOOL FOR HIV TESTING ELIGIBILITY ----------------------*/
         'HTC, Mode of Entry Point': function (formName, formFieldValues) {
                 var strategy = formFieldValues['HIV, Testing Strategies'];
-                if (formName == "HIV Testing and Counseling Intake Template") {
+                if (formName == "HIV Testing and Counseling Intake Template" && strategy == 'HIVTC, Rapid Test') {
                         var entryPoint= formFieldValues['HTC, Mode of Entry Point'];
                         var conditions = { show: [], hide: [], enable: [], disable: [] };
 
 
-                        if (entryPoint) {
+                        if (entryPoint == "Anti Natal Care" || entryPoint == "Self Testing") {
 
                                 conditions.show.push("Test For HIV");
                                 conditions.hide.push("Testing Eligibility, Tested For HIV");
@@ -1402,7 +1403,7 @@ Bahmni.ConceptSet.FormConditions.rules = {
                           conditions.hide.push("Test For HIV");
                         }
                           if (!(entryPoint == "Anti Natal Care" || entryPoint == "Self Testing")){
-                          conditions.hide.push("Testing Eligibility, Tested For HIV");
+                          conditions.show.push("Testing Eligibility, Tested For HIV");
                           conditions.hide.push("Testing Eligibility, Last Test Results");
                           conditions.hide.push("HTC, Pre-test Counseling Set");
                           conditions.hide.push("HTC, Post-test Counseling Set");
