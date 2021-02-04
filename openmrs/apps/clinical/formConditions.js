@@ -1089,7 +1089,13 @@ Bahmni.ConceptSet.FormConditions.rules = {
                         conditions.hide.push("Number of days hospitalised");
 
                 } else {
-                        conditions.show.push("HTC, Pregnancy Status");
+                        //conditions.show.push("HTC, Pregnancy Status");
+                        /*-- Ensure that pregnancy status is only shown to females above 12 and below 50--*/
+                        if ((patientGender == "F") && (patientAge > 12 || patientAge < 50)) {
+                                conditions.show.push("HTC, Pregnancy Status");
+                        } else {
+                                conditions.hide.push("HTC, Pregnancy Status");
+                        }
                         conditions.show.push("Function");
                         conditions.show.push("HIVTC, HIV care WHO Staging");
                         conditions.show.push("HIVTC, Treatment Staging");
@@ -1100,13 +1106,10 @@ Bahmni.ConceptSet.FormConditions.rules = {
                         conditions.show.push("OI, Opportunistic infections");
                         conditions.show.push("Refer or Consult");
                         conditions.show.push("Number of days hospitalised");
+                        
                 }
 
-                if ((patientGender == "F") && (patientAge > 12 || patientAge < 50)) {
-                        conditions.show.push("HTC, Pregnancy Status");
-                } else {
-                        conditions.hide.push("HTC, Pregnancy Status");
-                }
+
 
                 return conditions;
         },
