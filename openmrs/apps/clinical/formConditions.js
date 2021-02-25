@@ -482,16 +482,13 @@ Bahmni.ConceptSet.FormConditions.rules = {
         /*-----
                 'HTC, Partner Testing and Counseling' : function (formName, formFieldValues) {
                  var coupleTest = formFieldValues['HTC, Partner Testing and Counseling'];
-
                 if(formName == "LOR, PMTCT") {
                         var conditions = {show: [], hide: [], enable: [], disable: []};
-
                         if(coupleTest == "Yes") {
                                 conditions.show.push("Partner HIV Status");
                         }
                         else {
                                 conditions.hide.push("Partner HIV Status");
-
                         }
                         return conditions;
                               },
@@ -665,7 +662,6 @@ Bahmni.ConceptSet.FormConditions.rules = {
            'HIVTC, Treatment substituted date' : function (formName, formFieldValues) {
                 var conditionConcept = formFieldValues['HIVTC, Treatment substituted date'];
                 var conditions = {enable: [], disable: [], show: [], hide: []};
-
                 if (conditionConcept){
                     conditions.enable.push("HIVTC, Adult 1st Line Regimen")
                     conditions.enable.push("HIVTC, Adult 2nd Line Regimen")
@@ -1089,13 +1085,7 @@ Bahmni.ConceptSet.FormConditions.rules = {
                         conditions.hide.push("Number of days hospitalised");
 
                 } else {
-                        //conditions.show.push("HTC, Pregnancy Status");
-                        /*-- Ensure that pregnancy status is only shown to females above 12 and below 50--*/
-                        if ((patientGender == "F") && (patientAge > 12 || patientAge < 50)) {
-                                conditions.show.push("HTC, Pregnancy Status");
-                        } else {
-                                conditions.hide.push("HTC, Pregnancy Status");
-                        }
+                        conditions.show.push("HTC, Pregnancy Status");
                         conditions.show.push("Function");
                         conditions.show.push("HIVTC, HIV care WHO Staging");
                         conditions.show.push("HIVTC, Treatment Staging");
@@ -1106,10 +1096,13 @@ Bahmni.ConceptSet.FormConditions.rules = {
                         conditions.show.push("OI, Opportunistic infections");
                         conditions.show.push("Refer or Consult");
                         conditions.show.push("Number of days hospitalised");
-                        
                 }
 
-
+                if ((patientGender == "F") && (patientAge > 12 || patientAge < 50)) {
+                        conditions.show.push("HTC, Pregnancy Status");
+                } else {
+                        conditions.hide.push("HTC, Pregnancy Status");
+                }
 
                 return conditions;
         },
@@ -1275,11 +1268,9 @@ Bahmni.ConceptSet.FormConditions.rules = {
         },
         /*-----
         'HTC, Linked To Care' : function (formName, formFieldValues) {
-
                 if((formName=="HIV Testing and Counseling Intake Template") || (formName=="HIV Testing Services Retesting Template") ) {
                         var careLink = formFieldValues['HTC, Linked To Care'];
                         var conditions = {show: [], hide: [], enable: [], disable: []};
-
                         if(careLink == "Yes") {
                                 conditions.show.push("HTC, Date Linked To Care");
                                 conditions.hide.push("HTC, Referred Facility");
@@ -1790,3 +1781,4 @@ Bahmni.ConceptSet.FormConditions.rules = {
 }
 
 };
+
