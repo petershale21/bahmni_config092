@@ -71,6 +71,31 @@ Bahmni.ConceptSet.FormConditions.rules = {
                 return conditions;
         },
 
+        //////////////////////////////////////////////new changes start///////////////////////////////////////
+        'Line Probe Assay results': function (formName, formFieldValues) {
+                var result = formFieldValues['Line Probe Assay results'];
+                var conditions = { show: [], hide: []};
+                if (!result || result != 'Positive') {
+                        conditions.hide.push("LPA Susceptibility result");
+                } else {
+                        conditions.show.push("LPA Susceptibility result");
+                }
+                return conditions;
+        },
+
+        'LPA Susceptibility result': function (formName, formFieldValues) {
+                var result = formFieldValues['LPA Susceptibility result'];
+                var conditions = { enable: [], disable: []};
+                if (result == 'RR') {
+                        conditions.disable.push("RS");
+                } 
+				else {
+                        conditions.enable.push("RS");
+                }
+                return conditions;
+        },
+        //////////////////////////////////////////////new changes end///////////////////////////////////////
+
         'HIVTC, TB Screened': function (formName, formFieldValues) {
                 var result = formFieldValues['HIVTC, TB Screened'];
                 var conditions = { show: [], hide: [] };
