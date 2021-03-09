@@ -62,6 +62,14 @@
        "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/includeregimen.sql"
     }
    },
+
+   "ART_report_regimen": {
+    "name": "Current on ART with regimens (Pivot)",
+    "type": "MRSGeneric",
+    "config": {
+      "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/includeregimen_with_weight_pivot.sql"
+   }
+  },
    
  "viralloadresultsstatuslist": {
      "name": "Viral Load Results Status, within 3 months (List)",
@@ -747,5 +755,28 @@
       "config": {
           "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/txpvls_denominator_pivot.sql"
       }
+  },
+
+  "arv_monthly_order": {
+    "name": "ARV's Ordered",
+    "type": "MRSGeneric",
+    "config": {
+        "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/arv_monthly_order.sql"
+    }
+},
+
+"odoo_arv": {
+  "name": "Informed push ARVs",
+  "type": "ERPGeneric",
+  "config": {
+      "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/ARVs.sql"
   }
+},
+"odoo_dispensing": {
+  "name": "Informed push ARV Dispensing Report",
+  "type": "ERPGeneric",
+  "config": {
+      "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/arv_dispensing.sql"
+  }
+}
 }
