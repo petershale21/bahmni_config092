@@ -442,6 +442,13 @@
 			"Testing Eligibility, Reinforced Prevention Counselling" : {
 				"required": true
 			},
+			"LPA Susceptibility result" : {
+				"required": true,
+				"multiSelect": true
+			},
+			"OI, Opportunistic infections" : {
+				"multiSelect": true
+			},
 			"defaults": {
 				"Number of living children": 1,
 				"Accepted Family Planning methods": [

@@ -71,7 +71,19 @@ Bahmni.ConceptSet.FormConditions.rules = {
                 return conditions;
         },
 
-        //////////////////////////////////////////////new changes start///////////////////////////////////////
+        'TB Treatment initiation': function (formName, formFieldValues) {
+                var result = formFieldValues['TB Treatment initiation'];
+                var conditions = { show: [], hide: [], enable: [], disable: [] };
+                if (!result || result != 'Died before treatment') {
+                        conditions.enable.push("HIVTC, TB Treatment start date");
+						conditions.hide.push("OST, Date of Death");
+                } else {
+                        conditions.disable.push("HIVTC, TB Treatment start date");
+						conditions.show.push("OST, Date of Death");
+                }
+                return conditions;
+        },
+
         'Line Probe Assay results': function (formName, formFieldValues) {
                 var result = formFieldValues['Line Probe Assay results'];
                 var conditions = { show: [], hide: []};
@@ -82,20 +94,7 @@ Bahmni.ConceptSet.FormConditions.rules = {
                 }
                 return conditions;
         },
-
-        'LPA Susceptibility result': function (formName, formFieldValues) {
-                var result = formFieldValues['LPA Susceptibility result'];
-                var conditions = { enable: [], disable: []};
-                if (result == 'RR') {
-                        conditions.disable.push("RS");
-                } 
-				else {
-                        conditions.enable.push("RS");
-                }
-                return conditions;
-        },
-        //////////////////////////////////////////////new changes end///////////////////////////////////////
-
+        
         'HIVTC, TB Screened': function (formName, formFieldValues) {
                 var result = formFieldValues['HIVTC, TB Screened'];
                 var conditions = { show: [], hide: [] };
@@ -911,7 +910,7 @@ Bahmni.ConceptSet.FormConditions.rules = {
                          // } else {
                                  var drugSupplyPeriod = "";
 
-                                 if(daysDispensed >= 10 && daysDispensed < 21) {
+                                 if(daysDispensed >= 10 && daysDispensed < 28) {
                                          // Providing 3 days slack from 2 weeks, in case of weekends or other reasons
                                          drugSupplyPeriod = "HIVTC, Two weeks supply";
                                  } else if (daysDispensed >= 28  && daysDispensed < 56) {
@@ -1110,7 +1109,7 @@ Bahmni.ConceptSet.FormConditions.rules = {
                         conditions.hide.push("Number of days hospitalised");
 
                 } else {
-                        conditions.show.push("HTC, Pregnancy Status");
+                        //conditions.show.push("HTC, Pregnancy Status");
                         conditions.show.push("Function");
                         conditions.show.push("HIVTC, HIV care WHO Staging");
                         conditions.show.push("HIVTC, Treatment Staging");
