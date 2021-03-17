@@ -772,6 +772,13 @@
       "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/ARVs.sql"
   }
 },
+"odoo_dispensing": {
+  "name": "Informed push ARV Dispensing Report",
+  "type": "ERPGeneric",
+  "config": {
+      "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/arv_dispensing.sql"
+  }
+},
 "DHIS_Pre_ART": {
   "name": "Informed push ARV Dispensing Report",
   "type": "MRSGeneric",
