@@ -780,7 +780,7 @@
   }
 },
 "DHIS_Pre_ART": {
-  "name": "Informed push ARV Dispensing Report",
+  "name": "Pre-ART",
   "type": "MRSGeneric",
   "config": {
       "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/SECTION1.sql"
@@ -788,7 +788,7 @@
 },
 
 "DHIS_ART_CARE_A": {
-  "name": "Informed push ARV Dispensing Report",
+  "name": "ART CARE - NEW AND CURRENT ON ART",
   "type": "MRSGeneric",
   "config": {
       "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/SECTION2.sql"
@@ -796,7 +796,7 @@
 },
 
 "DHIS_ART_CARE_B": {
-  "name": "Informed push ARV Dispensing Report",
+  "name": "ART CARE - NEW AND CURRENT ON ART_SECTION B",
   "type": "MRSGeneric",
   "config": {
       "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/SECTION2b.sql"
@@ -804,7 +804,7 @@
 },
 
 "DHIS_TB_SCREENING": {
-  "name": "Informed push ARV Dispensing Report",
+  "name": "TB SCREENING",
   "type": "MRSGeneric",
   "config": {
       "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/SECTION3.sql"
@@ -812,7 +812,7 @@
 },
 
 "DHIS_ADULT_Regimen": {
-  "name": "Informed push ARV Dispensing Report",
+  "name": "ADULT REGIMENS",
   "type": "MRSGeneric",
   "config": {
       "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/Regimen_Report_with_Age_Restrictions.sql"
@@ -820,7 +820,7 @@
 },
 
 "DHIS_Children_Regimen": {
-  "name": "Informed push ARV Dispensing Report",
+  "name": "CHILDREN REGIMENS",
   "type": "MRSGeneric",
   "config": {
       "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/Children_Regimen_Report_with_Weight.sql"
@@ -828,7 +828,7 @@
 },
 
 "DHIS_CTX": {
-  "name": "Informed push ARV Dispensing Report",
+  "name": "COTRIMOX PROPHYLAXIS/DAPSONE",
   "type": "MRSGeneric",
   "config": {
       "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/SECTION8.sql"
@@ -836,7 +836,7 @@
 },
 
 "DHIS_NUTRITIONAL_SUPPLEMENT": {
-  "name": "Informed push ARV Dispensing Report",
+  "name": "NUTRITIONAL SUPPLEMENT",
   "type": "MRSGeneric",
   "config": {
       "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/SECTION9.sql"
