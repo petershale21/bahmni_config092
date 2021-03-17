@@ -1,4 +1,4 @@
-SELECT ARV_regimen AS Regimen_Name,
+SELECT regimen_name AS Regimen_Name,
 	IF(Id is null, 0,SUM(IF(Weight_ >=0  and Weight_ <4.0 AND Age < 15,1,0))) AS "0-3.9kg",
     IF(Id is null, 0,SUM(IF(Weight_ >=4.0  and Weight_ <6.0 AND Age < 15,1,0))) AS "4-5.9kg",
     IF(Id is null, 0,SUM(IF(Weight_ >=6.0  and Weight_ <10.0 AND Age < 15,1,0))) AS "6-9.9kg",
@@ -10,7 +10,72 @@ SELECT ARV_regimen AS Regimen_Name,
 
 FROM (
 
-SELECT A.person_id as Id, ARV_regimen, Age, Weight_
+select Id, Age, Weight_,
+case 
+when ARV_regimen = 2201 then '1c=AZT-3TC-NVP'
+when ARV_regimen = 2202 then '4c=AZT-3TC-NVP'
+when ARV_regimen = 2203 then '1d=AZT-3TC-EFV'
+when ARV_regimen = 2204 then '4d=AZT-3TC-EFV'
+when ARV_regimen = 2205 then '1e=TDF-3TC-NVP'
+when ARV_regimen = 2207 then '1f=TDF-3TC-EFV'
+when ARV_regimen = 2209 then '2d=TDF-3TC-LPV/r'
+when ARV_regimen = 2210 then '2c=AZT-3TC-LPV/r'
+when ARV_regimen = 3672 then '1g=ABC-3TC-NVP'
+when ARV_regimen = 3673 then '1h=ABC-3TC-EFV'
+when ARV_regimen = 3674 then '2e=AZT-3TC-ATV/r'
+when ARV_regimen = 3675 then '2f=TDF-3TC-ATV/r'
+when ARV_regimen = 3676 then '2g=ABC-3TC-LPV/r'
+when ARV_regimen = 3677 then '2h=ABC-3TC-ATV/r'
+when ARV_regimen = 3678 then '2i=AZT-3TC-TDF-LPV/r'
+when ARV_regimen = 3679 then '4e=ABC-3TC-NVP'
+when ARV_regimen = 3680 then '4f=ABC-3TC-EFV'
+when ARV_regimen = 3681 then '5a=AZT-3TC-LPV/r'
+when ARV_regimen = 3682 then '5b=ABC-3TC-LPV/r'
+when ARV_regimen = 3683 then '3a=RAL-3TC-LPV/r'
+when ARV_regimen = 3684 then '3b=TDF-3TC-RAL-DRV/r'
+when ARV_regimen = 3685 then '3c=RAL-EFV-DRV/r'
+when ARV_regimen = 3686 then '6a=RAL-EFV-LPV/r'
+when ARV_regimen = 3687 then '6b=RAL-EFV-DRV/r'
+when ARV_regimen = 4678 then '1j=TDF-3TC-DTG'
+when ARV_regimen = 4679 then '1k=ABC-3TC-DTG'
+when ARV_regimen = 4680 then '1m=AZT-3TC-DTG'
+when ARV_regimen = 4681 then '1n=TDF-3TC-LPV/r'
+when ARV_regimen = 4682 then '1p=ABC-3TC-LPV/r'
+when ARV_regimen = 4683 then '1q=AZT-3TC-LPV/r'
+when ARV_regimen = 4684 then '4g=AZT-3TC-LPV/r'
+when ARV_regimen = 4685 then '4h=ABC-3TC-LPV/r'
+when ARV_regimen = 4686 then '4j=TDF-3TC-DTG (TLD)'
+when ARV_regimen = 4687 then '4k=ABC-3TC-DTG'
+when ARV_regimen = 4688 then '4l=AZT-3TC-DTG'
+when ARV_regimen = 4689 then '2j=TDF-3TC-DRV/r'
+when ARV_regimen = 4690 then '2k=ABC-3TC-DRV/r'
+when ARV_regimen = 4691 then '2l=AZT-3TC-DRV/r'
+when ARV_regimen = 4692 then '2m=TDF-3TC-RAL'
+when ARV_regimen = 4693 then '2n=ABC-3TC-RAL'
+when ARV_regimen = 4694 then '2o=AZT-3TC-RAL'
+when ARV_regimen = 4695 then '2p=TDF-3TC-DTG'
+when ARV_regimen = 4696 then '5c=ABC-3TC-DRV/r'
+when ARV_regimen = 4697 then '5d=AZT-3TC-DRV/r'
+when ARV_regimen = 4698 then '5e=AZT-3TC+ABC'
+when ARV_regimen = 4699 then '5f=AZT-3TC-DTG'
+when ARV_regimen = 4700 then '5g=AZT-3TC-ATV/r'
+when ARV_regimen = 4701 then '5h=ABC-3TC-ATV/r'
+when ARV_regimen = 4702 then '6c=RAL+ETV+DRV/r'
+when ARV_regimen = 4703 then '6d=TDF-3TC-DRV/r+RAL'
+when ARV_regimen = 4704 then '6e=RAL+DRV/r'
+when ARV_regimen = 4705 then '6f=AZT+3TC+DRV/r+ETV'
+when ARV_regimen = 4706 then '3d=TDF-DRV/r-RAL'
+when ARV_regimen = 4707 then '3e=RAL-ETV/r-DRV/r'
+when ARV_regimen = 4708 then '3f=DRV/r-DTG'
+when ARV_regimen = 4709 then '3g=DRV/r-RAL'
+when ARV_regimen = 4710 then '3h=LPV/r-RAL'
+when ARV_regimen = 4849 then '2q=AZT-3TC-DTG'
+when ARV_regimen = 4850 then '2r=ABC-3TC-DTG'
+when ARV_regimen = 4851 then '2s=AZT-3TC-TDF-DTG'
+when ARV_regimen = 2143 then 'Other'
+else 'NewRegimen' end as regimen_name
+FROM
+(SELECT A.person_id as Id, ARV_regimen, Age, Weight_
 FROM
 (SELECT currentreg.person_id,COALESCE(switch_regimen,substitute_regimen,current_regimen) as ARV_regimen, 'drug_count_1' as outcome, Age
 						FROM
@@ -3132,6 +3197,6 @@ LEFT OUTER JOIN
 			where concept_id = 119
 			and  o.obs_datetime = maxdate	
 			)weight
-		on A.person_id = weight.person_id
-	)X
-	Group by ARV_regimen
+		on A.person_id = weight.person_id)txcurr_with_weight
+)as Children_Regimen
+Group by regimen_name
