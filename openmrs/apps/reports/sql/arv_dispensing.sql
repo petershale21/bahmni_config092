@@ -2,7 +2,9 @@ select sm.name as Product_Description,pp.name as Pack_Size,sum(pp.qty) as Total_
 from stock_move sm
 LEFT OUTER JOIN sale_order_line so ON sm.product_id = so.product_id
 LEFT OUTER join product_packaging pp on so.product_packaging = pp.id  
-WHERE (DATE(sm.write_date) BETWEEN CAST('#startDate#' AS DATE) AND CAST('#endDate#' AS DATE))
+WHERE sm.write_date >= CAST('#startDate#' AS DATE)
+AND sm.write_date <= CAST('#endDate#' AS DATE)
+AND so.state = 'sale'
 AND sm.name in(
 'Abacavir (ABC) 300mg',
 'Abacavir/Lamivudine (ABC/3TC) - 600/300mg',

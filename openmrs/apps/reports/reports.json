@@ -772,11 +772,67 @@
       "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/ARVs.sql"
   }
 },
-"odoo_dispensing": {
+"DHIS_Pre_ART": {
   "name": "Informed push ARV Dispensing Report",
-  "type": "ERPGeneric",
+  "type": "MRSGeneric",
   "config": {
-      "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/arv_dispensing.sql"
+      "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/SECTION1.sql"
   }
+},
+
+"DHIS_ART_CARE_A": {
+  "name": "Informed push ARV Dispensing Report",
+  "type": "MRSGeneric",
+  "config": {
+      "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/SECTION2.sql"
+  }
+},
+
+"DHIS_ART_CARE_B": {
+  "name": "Informed push ARV Dispensing Report",
+  "type": "MRSGeneric",
+  "config": {
+      "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/SECTION2b.sql"
+  }
+},
+
+"DHIS_TB_SCREENING": {
+  "name": "Informed push ARV Dispensing Report",
+  "type": "MRSGeneric",
+  "config": {
+      "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/SECTION3.sql"
+  }
+},
+
+"DHIS_ADULT_Regimen": {
+  "name": "Informed push ARV Dispensing Report",
+  "type": "MRSGeneric",
+  "config": {
+      "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/Regimen_Report_with_Age_Restrictions.sql"
+  }
+},
+
+"DHIS_Children_Regimen": {
+  "name": "Informed push ARV Dispensing Report",
+  "type": "MRSGeneric",
+  "config": {
+      "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/Children_Regimen_Report_with_Weight.sql"
+  }
+},
+
+"DHIS_CTX": {
+  "name": "Informed push ARV Dispensing Report",
+  "type": "MRSGeneric",
+  "config": {
+      "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/SECTION8.sql"
+  }
+},
+
+"DHIS_NUTRITIONAL_SUPPLEMENT": {
+  "name": "Informed push ARV Dispensing Report",
+  "type": "MRSGeneric",
+  "config": {
+      "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/SECTION9.sql"
+  }   
 }
 }
