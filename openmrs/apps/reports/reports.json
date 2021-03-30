@@ -779,6 +779,13 @@
       "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/arv_dispensing.sql"
   }
 },
+"batch_numbers": {
+  "name": "Dispensing Orders report",
+  "type": "ERPGeneric",
+  "config": {
+      "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/batch.sql"
+  }
+},
 "DHIS_Pre_ART": {
   "name": "Pre-ART",
   "type": "MRSGeneric",
