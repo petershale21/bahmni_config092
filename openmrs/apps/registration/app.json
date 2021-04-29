@@ -24,12 +24,16 @@
                     "primaryContact",
                     "saphoneNumber",
                     "isUrban",
-                    "distanceFromCenter"
+                    "distanceFromCenter",
+                    "Age",
+                    "Sex"
                 ]
             },
             "hidden": {
                 "attributes": [
-                    "isUrban"
+                    "isUrban",
+                    "Age",
+                    "Sex"
                 ]
             },
             "defaults": {
