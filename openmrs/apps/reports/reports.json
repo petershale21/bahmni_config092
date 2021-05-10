@@ -821,6 +821,14 @@
     }   
   },
 
+  "arv_list": {
+    "name": "Pharmacy ARV Regimen",
+    "type": "ERPGeneric",
+    "config": {
+        "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/ARVs.sql"
+    }
+},
+
   "arv_dispensing_list": {
     "name": " Pharmacy ARV Dispensing Report",
     "type": "ERPGeneric",
