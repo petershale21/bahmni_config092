@@ -211,7 +211,12 @@
 
 			"TB, HIV Management":{
 				"multiSelect" : true
-			},	    
+			},	 
+			"Phase of TB Treatment" : {
+
+                "required" : true
+
+            },   
 			"ARV drugs No. of days dispensed" : {
 				"required": false
 			},
