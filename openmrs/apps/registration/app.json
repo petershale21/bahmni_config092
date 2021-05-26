@@ -26,14 +26,16 @@
                     "isUrban",
                     "distanceFromCenter",
                     "Age",
-                    "Sex"
+                    "Sex",
+                    "ART_Number"
                 ]
             },
             "hidden": {
                 "attributes": [
                     "isUrban",
                     "Age",
-                    "Sex"
+                    "Sex",
+                    "ART_Number"
                 ]
             },
             "defaults": {
