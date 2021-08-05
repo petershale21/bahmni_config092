@@ -23,6 +23,7 @@
         "visitUuid"
     ],
     "config": {
+		"readOnlyExtraIdentifiers": ["New HIV Program ID"],
         "hideConditions": false,
         "enableRadiologyOrderOptions":["Urgent","NeedsPrint"],
         "enableLabOrderOptions":["Urgent", "NeedsPrint"],

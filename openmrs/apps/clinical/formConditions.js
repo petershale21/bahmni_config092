@@ -960,6 +960,148 @@ Bahmni.ConceptSet.FormConditions.rules = {
                  return conditions;
          }
      },
+     
+     //-------------------------------- Pheko - Phenduka AutoFill Values & Forms -------------------------------------------------------
+
+        /**** AUTOFILL ANC PROGRAM REGISTER VALUES */
+        'ANC, Obstetric History': function (formName, formFieldValues) {
+                var conditions = { assignedValues: [] , disable: [] };
+                if (formName == "ANC, ANC Program" || formName=="ANC, Obstetric History" || formName=="Lesotho Obstetric Record" ){
+                        conditions.assignedValues.push(
+                        { field: "Delivery Note, Delivery location", fieldValue: "AutoFill"},
+                        { field: "ANC, Pregnancy History Date", fieldValue: "AutoFill"},
+                        { field: "ANC, Estimated Date of Delivery", fieldValue: "AutoFill"},
+                        { field: "ANC, Parity", fieldValue: "AutoFill"},
+                        { field: "ANC, Gravida", fieldValue: "AutoFill"},
+                        { field: "ANC, Alive", fieldValue: "AutoFill"}); }
+
+                return conditions;
+        },
+
+
+        /**** AUTOFILL UNDER 5 REGISTER VALUES */
+        'PMTCT, Date of Death': function (formName, formFieldValues) {
+                var conditions = { assignedValues: [] , disable: [] };
+                if (formName == "Under5, Personal Information" || formName=="under5 Register"){
+                        conditions.assignedValues.push(
+                        { field: "ANC, Unique Number", fieldValue: "AutoFill"},
+                        { field: "Under5 Number", fieldValue: "AutoFill"},
+                        { field: "Delivery Note, Delivery location", fieldValue: "AutoFill"},
+                        { field: "Mode of Delivery", fieldValue: "AutoFill"},
+                        { field: "PMTCT, Date of Death", fieldValue: "AutoFill"}); }
+                return conditions;
+        },  
+
+        /**** AUTOFILL PNC REGISTER VALUES */
+        'Delivery Information': function (formName, formFieldValues) {
+                var conditions = { assignedValues: [] , disable: [] };
+                if (formName == "PostNatal Care Register" || formName=="Delivery Information"){
+                        conditions.assignedValues.push(
+                        { field: "Delivery date and time", fieldValue: "AutoFill"},
+                        { field: "Delivery Note, Delivery location", fieldValue: "AutoFill"}); }
+                return conditions;
+        },  
+
+        //--------------------------------------------------------------------------------------------------------------------------------------------
+
+
+        //----------------Pheko Generic Date / Duaration Auto Calculation ----------------------------------------------------------------
+         /*--- ARV Drug days and drug supply duration generic autocalculations---- */
+        'ART, Follow-up date' : function (formName, formFieldValues) {
+                if(formName=="HIVTC, Patient Register") {
+                        var followUpDate = formFieldValues['ART, Follow-up date'];
+                        var conditions = { assignedValues: [], error: [] };
+                        var dateUtil = Bahmni.Common.Util.DateUtil;
+                                        var retrospectiveDate = $.cookie(Bahmni.Common.Constants.retrospectiveEntryEncounterDateCookieName);
+
+                        if(followUpDate) {
+                                var daysDispesed;
+
+                                if(!retrospectiveDate) {
+                                        daysDispensed = dateUtil.diffInDaysRegardlessOfTime(dateUtil.now(), followUpDate);
+                                } else {
+                                        daysDispensed = dateUtil.diffInDaysRegardlessOfTime(dateUtil.parse(retrospectiveDate.substr(1, 10)), followUpDate);
+                                }
+
+                                // if(daysDispensed <= 0) {
+                                        // conditions.error.push("Invalid input for Follow-up Date, must be a date in the future. Please correct.");
+                                        // conditions.assignedValues.push({ field: "ARV drugs No. of days dispensed", fieldValue: daysDispensed });
+                                // } else {
+                                        var drugSupplyPeriod = "";
+
+                                        if(daysDispensed >= 10 && daysDispensed < 21) {
+                                                // Providing 3 days slack from 2 weeks, in case of weekends or other reasons
+                                                drugSupplyPeriod = "HIVTC, Two weeks supply";
+                                        } else if (daysDispensed >= 28  && daysDispensed < 56) {
+                                                drugSupplyPeriod = "HIVTC, One month supply";
+                                        } else if (daysDispensed >= 56 && daysDispensed < 84 ) {
+                                                drugSupplyPeriod = "HIVTC, Two months supply";
+                                        } else if (daysDispensed >= 84 && daysDispensed < 112) {
+                                                drugSupplyPeriod = "HIVTC, Three months supply";
+                                        } else if (daysDispensed >= 112 && daysDispensed < 140) {
+                                                drugSupplyPeriod = "HIVTC, Four months supply";
+                                        } else if (daysDispensed >= 140 && daysDispensed < 168) {
+                                                drugSupplyPeriod = "HIVTC, Five months supply";
+                                        } else if (daysDispensed >= 168 && daysDispensed < 196) {
+                                                drugSupplyPeriod = "HIVTC, Six months supply";
+                                        } else if (daysDispensed >= 196) {
+                                                drugSupplyPeriod = "HIVTC, Seven+ months supply";
+                                        } else {
+                                                // No action
+                                        }
+
+                                        conditions.assignedValues.push({ field: "ARV drugs No. of days dispensed", fieldValue: daysDispensed, autocalculate:true });
+                                        conditions.assignedValues.push({ field: "HIVTC, ARV drugs supply duration", fieldValue: drugSupplyPeriod, autocalculate:true });
+                                // }
+                        }
+                        return conditions;
+                }
+        },
+
+        /*--- TB number of days dispensed generic autocalculation----*/
+                'TB, Next appointment/refill date' : function (formName, formFieldValues) {
+                        if(formName=="Tuberculosis Followup Template") {
+                                var followUpDate = formFieldValues['TB, Next appointment/refill date'];
+                                var conditions = { assignedValues: [], error: [] };
+                                var dateUtil = Bahmni.Common.Util.DateUtil;
+                                                var retrospectiveDate = $.cookie(Bahmni.Common.Constants.retrospectiveEntryEncounterDateCookieName);
+                
+                                if(followUpDate) {
+                                        var daysDispesed;
+                
+                                        if(!retrospectiveDate) {
+                                                daysDispensed = dateUtil.diffInDaysRegardlessOfTime(dateUtil.now(), followUpDate);
+                                        } else {
+                                                daysDispensed = dateUtil.diffInDaysRegardlessOfTime(dateUtil.parse(retrospectiveDate.substr(1, 10)), followUpDate);
+                                        }
+                
+                                                conditions.assignedValues.push({ field: "ARV drugs No. of days dispensed", fieldValue: daysDispensed,autocalculate:true });
+                                        
+                                }
+                                return conditions;
+                        }
+                },
+
+        /*--- EDD generic autocalculation----*/
+                'ANC, Last Normal Menstrual Period' : function (formName, formFieldValues) {
+                        if(formName=="ANC, Obstetric History") {
+                                var LNMP = formFieldValues['ANC, Last Normal Menstrual Period'];
+                                var conditions = { assignedValues: [], error: [] };
+                                var dateUtil = Bahmni.Common.Util.DateUtil;
+                                var LNMPDate = new Date(LNMP);
+                                var EDDWithTime = dateUtil.addMonths(LNMPDate,9);
+                                var EDDWithoutTime = dateUtil.getDateWithoutTime(EDDWithTime);
+                
+                                if(LNMP) {
+                
+                                conditions.assignedValues.push({ field: "ANC, Estimated Date of Delivery", fieldValue:EDDWithoutTime ,autocalculate:true});
+                                        
+                                }
+                                return conditions;
+                        }
+                },
+
+             //-------------------------------------------------------------------------------------------------------------------------------------------------
 
         'HIVTC, Enhanced adherence counseling done': function (formName, formFieldValues) {
                 var conditionConcept = formFieldValues['HIVTC, Enhanced adherence counseling done'];
