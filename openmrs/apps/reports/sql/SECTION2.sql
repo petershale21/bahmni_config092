@@ -1204,29 +1204,29 @@ from obs o
 											))
 )AS TwentyNineDayLost)				   
 union 
-select '','','1-4yrs','initiated_This_Month'	
+select '','','1-4yrs',''	
 union 
-select '','','10-14yrs','Came_For_Refill'
+select '','','10-14yrs',''
 union 
-select '','','15-19yrs','MMD'
+select '','','15-19yrs',''
 union 
-select '','','20-24yrs','defaulted29to89Days'
+select '','','20-24yrs',''
 union 
-select '','','25-29yrs','defaulted29to89Days'
+select '','','25-29yrs',''
 union 
-select '','','30-34yrs','defaulted29to89Days'
+select '','','30-34yrs',''
 union 
-select '','','35-39yrs','defaulted29to89Days'
+select '','','35-39yrs',''
 union 
-select '','','40-44yrs','defaulted29to89Days'
+select '','','40-44yrs',''
 union 
-select '','','45-50yrs','defaulted29to89Days'
+select '','','45-50yrs',''
 union 
-select '','','5-9yrs','defaulted29to89Days'
+select '','','5-9yrs',''
 union 
-select '','','50+yrs','defaulted29to89Days'
+select '','','50+yrs',''
 union 
-select '','','Under 1yr','defaulted29to89Days'	
+select '','','Under 1yr',''	
 		   
 
 ) ART) All_ART group by age_group
