@@ -541,8 +541,8 @@
             ]
         }
     },
-    "HIV Care and Treatment 2020a": {
-        "name": "ART-072 | HIV Care and Treatment 2020a",
+    "ART-072 HIV Care and Treatment 2020a": {
+        "name": "ART-072 HIV Care and Treatment 2020a",
         "DHISProgram": true,
         "type": "concatenated",
         "config": {
