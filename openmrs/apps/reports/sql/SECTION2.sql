@@ -1203,29 +1203,29 @@ from obs o
 														AND os.concept_id = 3752 AND DATEDIFF(os.value_datetime, CAST('#endDate#' AS DATE)) BETWEEN 0 AND 28
 											))
 )AS TwentyNineDayLost)				   
-union 
+union all 
 select '','','1-4yrs',''	
-union 
+union all  
 select '','','10-14yrs',''
-union 
+union all 
 select '','','15-19yrs',''
-union 
+union all 
 select '','','20-24yrs',''
-union 
+union all 
 select '','','25-29yrs',''
-union 
+union all 
 select '','','30-34yrs',''
-union 
+union all 
 select '','','35-39yrs',''
-union 
+union all 
 select '','','40-44yrs',''
-union 
+union all  
 select '','','45-50yrs',''
-union 
+union all 
 select '','','5-9yrs',''
-union 
+union all 
 select '','','50+yrs',''
-union 
+union all 
 select '','','Under 1yr',''	
 		   
 
