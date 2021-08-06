@@ -1,5 +1,6 @@
 -- drug
-SELECT sm.name  Drug,CAST(sum(sol.qty_delivered) AS INTEGER) "Units Dispensed this Month",CAST(sum(pol.qty_received) AS INTEGER) "Units Received this Month",stock_on_hand as "Stock on hand"
+SELECT sm.name  Drug,CAST(sum(sol.qty_delivered) AS INTEGER) "Units Dispensed this Month",-- CAST(sum(pol.qty_received) AS INTEGER) "Units Received this Month",
+stock_on_hand as "Stock on hand"
 FROM stock_move sm
 LEFT OUTER JOIN sale_order_line sol ON  sm.product_id = sol.product_id AND sol.state = 'sale'
 LEFT OUTER JOIN purchase_order_line pol ON sm.product_id = pol.product_id AND sol.state = 'purchase'
