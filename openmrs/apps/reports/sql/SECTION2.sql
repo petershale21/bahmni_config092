@@ -1232,4 +1232,4 @@ select '','','50+yrs',''
 
 ) ART) All_ART 
 GROUP BY age_group
-ORDER BY FIELD (age_group,'Under_1yr','1-4yrs','5-9yrs','10-14yrs','15-19yrs','20-24yrs','25-29yrs','30-34yrs','40-44yrs','45-50yrs','50+yrs') 
+ORDER BY FIELD (age_group,'Under_1yr','1-4yrs','5-9yrs','10-14yrs','15-19yrs','20-24yrs','25-29yrs','30-34yrs','35-39yrs','40-44yrs','45-50yrs','50+yrs') 
