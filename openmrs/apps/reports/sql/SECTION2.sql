@@ -1203,8 +1203,12 @@ from obs o
 														AND os.concept_id = 3752 AND DATEDIFF(os.value_datetime, CAST('#endDate#' AS DATE)) BETWEEN 0 AND 28
 											))
 )AS TwentyNineDayLost)				   
+union all  
+select '','','Under_1yr',''	
+union all
+select '','','1-4yrs',''
 union all 
-select '','','1-4yrs',''	
+select '','','5-9yrs',''	
 union all  
 select '','','10-14yrs',''
 union all 
@@ -1222,13 +1226,10 @@ select '','','40-44yrs',''
 union all  
 select '','','45-50yrs',''
 union all 
-select '','','5-9yrs',''
-union all 
 select '','','50+yrs',''
-union all 
-select '','','Under_1yr',''	
+
 		   
 
 ) ART) All_ART 
 GROUP BY age_group
-ORDER BY FIELD (age_group,'Under_1yr','1-4yrs','10-14yrs','15-19yrs','20-24yrs','25-29yrs','30-34yrs','40-44yrs','45-50yrs','50+yrs') 
+ORDER BY FIELD (age_group,'Under_1yr','1-4yrs','5-9yrs','10-14yrs','15-19yrs','20-24yrs','25-29yrs','30-34yrs','40-44yrs','45-50yrs','50+yrs') 
