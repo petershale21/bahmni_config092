@@ -1229,5 +1229,6 @@ union all
 select '','','Under 1yr',''	
 		   
 
-) ART) All_ART group by age_group
-ORDER BY FIELD (age_group,'Under 1yr','1-4yrs','10-14yrs','15-19yrs','20-24yrs','25-29yrs','30-34yrs','40-44yrs','45-50yrs','50+yrs') 
+) ART) All_ART 
+GROUP BY age_group
+ORDER BY FIELD (age_group,'Under_1yr','1-4yrs','10-14yrs','15-19yrs','20-24yrs','25-29yrs','30-34yrs','40-44yrs','45-50yrs','50+yrs') 

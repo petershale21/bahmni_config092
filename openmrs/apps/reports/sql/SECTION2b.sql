@@ -369,27 +369,16 @@ from obs o
         )lost)
 		
 		UNION ALL
-		
 		SELECT  '','Transfer_In_This_Month'
-		
 		UNION ALL
-		
 		SELECT  '','Transfer_Out_This_Month'
-		
 		UNION ALL
-		
 		SELECT  '','ART_Restart'
-		
 		UNION ALL
-		
 		SELECT  '','Dead'
-		
 		UNION ALL
-		
 		SELECT  '','Stopped'
-		
 		UNION ALL
-		
 		SELECT  '','Lost'
 	
     )all_lost
