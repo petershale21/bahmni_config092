@@ -461,128 +461,101 @@
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/SECTION9.sql"
         }
     },
-    "HIV Care - New and Current Number of Persons Enrolled on Pre-ART": {
-        "name": "ART-067 | HIV Care - New and Current Number of Persons Enrolled on Pre-ART",
+    "ART-067 HIV Care and Treatment 2020a": {
+		"name": "ART-067 HIV Care and Treatment 2020a", 
         "DHISProgram": true,
         "type": "concatenated",
         "config": {
             "reports": [
-                {
+				{
                     "name": "HIV Care - New and Current Number of Persons Enrolled on Pre-ART",
                     "type": "MRSGeneric",
                     "config": {
                         "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/SECTION1.sql"
                     }
                 }
-            ]
-        }
-    },
-    "ART Care - New and Current Number of Persons Started on ART": {
-        "name": "ART-068 | ART Care - New and Current Number of Persons Started on ART",
-        "DHISProgram": true,
-        "type": "concatenated",
-        "config": {
-            "reports": [
-                {
+				,
+				{
                     "name": "ART Care - New and Current Number of Persons Started on ART",
                     "type": "MRSGeneric",
                     "config": {
                         "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/SECTION2.sql"
                     }
                 }
-            ]
-        }
-    },
-    "ART CARE - NEW AND CURRENT ON ART_SECTION B": {
-        "name": "ART-069 | ART CARE - NEW AND CURRENT ON ART_SECTION B",
-        "DHISProgram": true,
-        "type": "concatenated",
-        "config": {
-            "reports": [
-                {
+				,
+				{
                     "name": "ART CARE - NEW AND CURRENT ON ART_SECTION B",
                     "type": "MRSGeneric",
                     "config": {
                         "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/SECTION2b.sql"
                     }
                 }
-            ]
-        }
-    },
-    "Clients Who Received Cotrimox Prophylaxis": {
-        "name": "ART-070 | Clients Who Received Cotrimox Prophylaxis",
-        "DHISProgram": true,
-        "type": "concatenated",
-        "config": {
-            "reports": [
-                {
-                    "name": "Clients Who Received Cotrimox Prophylaxis",
-                    "type": "MRSGeneric",
-                    "config": {
-                        "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/SECTION8.sql"
-                    }
-                }
-            ]
-        }
-    },
-    "Adult and Children on Nutritional Supplement": {
-        "name": "ART-071 | Adult and Children on Nutritional Supplement",
-        "DHISProgram": true,
-        "type": "concatenated",
-        "config": {
-            "reports": [
-                {
-                    "name": "Adult and Children on Nutritional Supplement",
-                    "type": "MRSGeneric",
-                    "config": {
-                        "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/SECTION9.sql"
-                    }
-                }
-            ]
-        }
-    },
-    "HIV Care and Treatment 2020a": {
-        "name": "ART-072 | HIV Care and Treatment 2020a",
-        "DHISProgram": true,
-        "type": "concatenated",
-        "config": {
-            "reports": [
-                {
-                    "name": "HIV Care - New and Current Number of Persons Enrolled on Pre-ART",
-                    "type": "MRSGeneric",
-                    "config": {
-                        "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/SECTION1.sql"
-                    }
-                },
-                {
-                    "name": "ART Care - New and Current Number of Persons Started on ART",
-                    "type": "MRSGeneric",
-                    "config": {
-                        "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/SECTION2.sql"
-                    }
-                },
-                {
+				,
+				{
                     "name": "TB Screening Among HIV Clients",
                     "type": "MRSGeneric",
                     "config": {
                         "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/SECTION3.sql"
                     }
-                },
+                }
+				,
                 {
-                    "name": "Adult ARV Regimen at the End of the Month",
+                    "name": "Adult ARV Regimen at the End of the Month - 1st Line",
                     "type": "MRSGeneric",
                     "config": {
-                        "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/Adult_Regimen_1stLine.sql"
+                        "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/SECTION4_1stLine.sql"
                     }
-                },
-                {
+                }
+				,
+				{
+                    "name": "Adult ARV Regimen 2nd Line",
+                    "type": "MRSGeneric",
+                    "config": {
+                        "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/SECTION4_2ndLine.sql"
+                    }
+                }
+				,
+				{
+                    "name": "Adult ARV Regimen 3rd Line",
+                    "type": "MRSGeneric",
+                    "config": {
+                        "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/SECTION4_3rdLine.sql"
+                    }
+                }
+				,
+				{
+                    "name": "Children ARV Regimen 1st Line",
+                    "type": "MRSGeneric",
+                    "config": {
+                        "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/SECTION5_1stLine.sql"
+                    }
+                }
+				,
+				{
+                    "name": "Children ARV Regimen 2nd Line",
+                    "type": "MRSGeneric",
+                    "config": {
+                        "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/SECTION5_2ndLine.sql"
+                    }
+                }
+				,
+				{
+                    "name": "Children ARV Regimen 3rd Line",
+                    "type": "MRSGeneric",
+                    "config": {
+                        "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/SECTION5_3rdLine.sql"
+                    }
+                }
+				,
+				{
                     "name": "Clients Who Received Cotrimox Prophylaxis",
                     "type": "MRSGeneric",
                     "config": {
                         "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/SECTION8.sql"
                     }
-                },
-                {
+                }
+				,
+				{
                     "name": "Adult and Children on Nutritional Supplement",
                     "type": "MRSGeneric",
                     "config": {
@@ -784,18 +757,64 @@
     },
     "DHIS_ADULT_Regimen": {
         "name": "PHARM-006 | ADULT REGIMENS",
-        "type": "MRSGeneric",
-        "DHISProgram": true,
+        "type": "concatenated",
         "config": {
-            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/Regimen_Report_with_Age_Restrictions.sql"
+            "reports": [
+                {
+                    "name": "Adult ARV Regimen at the End of the Month - 1st Line",
+                    "type": "MRSGeneric",
+                    "config": {
+                        "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/SECTION4_1stLine.sql"
+                    }
+                }
+				,
+				{
+                    "name": "Adult ARV Regimen 2nd Line",
+                    "type": "MRSGeneric",
+                    "config": {
+                        "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/SECTION4_2ndLine.sql"
+                    }
+                }
+				,
+				{
+                    "name": "Adult ARV Regimen 3rd Line",
+                    "type": "MRSGeneric",
+                    "config": {
+                        "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/SECTION4_3rdLine.sql"
+                    }
+                }
+            ]
         }
     },
     "DHIS_Children_Regimen": {
         "name": "PHARM-007 | CHILDREN REGIMENS",
-        "type": "MRSGeneric",
-        "DHISProgram": true,
+        "type": "concatenated",
         "config": {
-            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/Children_Regimen_Report_with_Weight.sql"
+            "reports": [
+                {
+                    "name": "Children ARV Regimen 1st Line",
+                    "type": "MRSGeneric",
+                    "config": {
+                        "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/SECTION5_1stLine.sql"
+                    }
+                }
+				,
+				{
+                    "name": "Children ARV Regimen 2nd Line",
+                    "type": "MRSGeneric",
+                    "config": {
+                        "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/SECTION5_2ndLine.sql"
+                    }
+                }
+				,
+				{
+                    "name": "Children ARV Regimen 3rd Line",
+                    "type": "MRSGeneric",
+                    "config": {
+                        "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/SECTION5_3rdLine.sql"
+                    }
+                }
+            ]
         }
     },
     "TB_Outcomes": {
@@ -884,7 +903,6 @@
     },
     "TB Screening Among HIV Clients": {
         "name": "TB-013 | TB Screening Among HIV Clients",
-        "DHISProgram": true,
         "type": "concatenated",
         "config": {
             "reports": [

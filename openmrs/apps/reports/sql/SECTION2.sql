@@ -1203,31 +1203,33 @@ from obs o
 														AND os.concept_id = 3752 AND DATEDIFF(os.value_datetime, CAST('#endDate#' AS DATE)) BETWEEN 0 AND 28
 											))
 )AS TwentyNineDayLost)				   
-union 
-select '','','1-4yrs','initiated_This_Month'	
-union 
-select '','','10-14yrs','Came_For_Refill'
-union 
-select '','','15-19yrs','MMD'
-union 
-select '','','20-24yrs','defaulted29to89Days'
-union 
-select '','','25-29yrs','defaulted29to89Days'
-union 
-select '','','30-34yrs','defaulted29to89Days'
-union 
-select '','','35-39yrs','defaulted29to89Days'
-union 
-select '','','40-44yrs','defaulted29to89Days'
-union 
-select '','','45-50yrs','defaulted29to89Days'
-union 
-select '','','5-9yrs','defaulted29to89Days'
-union 
-select '','','50+yrs','defaulted29to89Days'
-union 
-select '','','Under 1yr','defaulted29to89Days'	
+union all  
+select '','','Under 1yr',''	
+union all
+select '','','1-4yrs',''
+union all 
+select '','','5-9yrs',''	
+union all  
+select '','','10-14yrs',''
+union all 
+select '','','15-19yrs',''
+union all 
+select '','','20-24yrs',''
+union all 
+select '','','25-29yrs',''
+union all 
+select '','','30-34yrs',''
+union all 
+select '','','35-39yrs',''
+union all 
+select '','','40-44yrs',''
+union all  
+select '','','45-50yrs',''
+union all 
+select '','','50+yrs',''
+
 		   
 
-) ART) All_ART group by age_group
-ORDER BY FIELD (Heading,'Under 1yr','1-4yrs','10-14yrs','15-19yrs','20-24yrs','25-29yrs','30-34yrs','40-44yrs','45-50yrs','50+yrs') 
+) ART) All_ART 
+GROUP BY age_group
+ORDER BY FIELD (age_group,'Under 1yr','1-4yrs','5-9yrs','10-14yrs','15-19yrs','20-24yrs','25-29yrs','30-34yrs','35-39yrs','40-44yrs','45-50yrs','50+yrs') 
