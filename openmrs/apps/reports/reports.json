@@ -719,29 +719,22 @@
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/ARVs.sql"
         }
     },
-    "arv_dispensing_list": {
-        "name": " PHARM-002 | Pharmacy ARV Dispensing Report",
-        "type": "ERPGeneric",
-        "config": {
-            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/arv_dispensing.sql"
-        }
-    },
     "batch_numbers": {
-        "name": "PHARM-003 | Dispensing Orders report",
+        "name": "PHARM-002 | Dispensing Orders report",
         "type": "ERPGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/batch.sql"
         }
     },
     "tally_numbers": {
-        "name": "PHARM-004 | Daily Dispensing Tally Sheet",
+        "name": "PHARM-003 | Dispensing Summary Report",
         "type": "ERPGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/tally.sql"
         }
     },
     "Regimens List": {
-        "name": "PHARM-005 | Regimens List",
+        "name": "PHARM-004 | Regimens List",
         "type": "concatenated",
         "config": {
             "reports": [
@@ -756,7 +749,7 @@
         }
     },
     "DHIS_ADULT_Regimen": {
-        "name": "PHARM-006 | ADULT REGIMENS",
+        "name": "PHARM-005 | ADULT REGIMENS",
         "type": "concatenated",
         "config": {
             "reports": [
@@ -787,7 +780,7 @@
         }
     },
     "DHIS_Children_Regimen": {
-        "name": "PHARM-007 | CHILDREN REGIMENS",
+        "name": "PHARM-006 | CHILDREN REGIMENS",
         "type": "concatenated",
         "config": {
             "reports": [
