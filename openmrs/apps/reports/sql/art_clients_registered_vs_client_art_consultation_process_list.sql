@@ -65,7 +65,7 @@ FROM
 							JOIN patient_identifier pi on v.patient_id = pi.patient_id and pi.identifier_type=5
 							JOIN patient_identifier_type pit on pi.identifier_type = pit.patient_identifier_type_id
 							JOIN encounter en on en.visit_id = v.visit_id and en.voided=0 and en.encounter_type = 1
-							JOIN obs o on o.encounter_id=en.encounter_id and o.concept_id=3843
+							JOIN obs o on o.encounter_id=en.encounter_id and o.concept_id in (3843, 4276)
 							JOIN location l on v.location_id = l.location_id and l.retired=0
 					WHERE en.encounter_datetime >= CAST('#startDate#' AS DATE) and en.encounter_datetime <= CAST('#endDate#' AS DATE)) art_consultation
 					
@@ -135,7 +135,7 @@ FROM
 							JOIN patient_identifier pi on v.patient_id = pi.patient_id and pi.identifier_type=5
 							JOIN patient_identifier_type pit on pi.identifier_type = pit.patient_identifier_type_id
 							JOIN encounter en on en.visit_id = v.visit_id and en.voided=0 and en.encounter_type = 1
-							JOIN obs o on o.encounter_id=en.encounter_id and o.concept_id=3843
+							JOIN obs o on o.encounter_id=en.encounter_id and o.concept_id in (3843, 4276)
 							JOIN location l on v.location_id = l.location_id and l.retired=0
 					WHERE en.encounter_datetime >= CAST('#startDate#' AS DATE) and en.encounter_datetime <= CAST('#endDate#' AS DATE)) art_consultation
 					
