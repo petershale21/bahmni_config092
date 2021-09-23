@@ -621,6 +621,13 @@
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/self_test_confirmed_positives_pivot.sql"
         }
     },
+    "htsdqa": {
+        "name": "HTS-009 | HTS Data Quality Assessment Tool",
+        "type": "MRSGeneric",
+        "config": {
+           "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/hts_dqa.sql"
+                  }
+    },
     "hts_tst_emergency_list": {
         "name": "HTS-009 | HTS TST PITC Emergency Ward (List)",
         "type": "MRSGeneric",
