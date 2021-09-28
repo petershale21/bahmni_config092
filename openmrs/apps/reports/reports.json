@@ -14,14 +14,14 @@
         }
     },
     "currentonart_jointmissedListSQL": {
-        "name": "ART-003 | ART clients with Appointment Status (List)",
+        "name": "ART-003 | Missed Appointments Status Report (List)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/current_on_art_joint_missed_appointments_list.sql"
         }
     },
     "currentonart_jointmissedPivotSQL": {
-        "name": "ART-004 | ART clients with Appointment Status (Pivot)",
+        "name": "ART-004 | Missed Appointments Status Report (Pivot)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/current_on_art_joint_missed_appointments_pivot.sql"
