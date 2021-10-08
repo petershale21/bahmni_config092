@@ -1701,6 +1701,31 @@ Bahmni.ConceptSet.FormConditions.rules = {
 
         },
 
+        'AHD Client': function (formName, formFieldValues) {
+                var conditionConcept = formFieldValues['AHD Client'];
+                var conditions = { show: [], hide: [] };
+
+                if (conditionConcept == "Yes") {
+                        conditions.show.push("AHD Details");
+                } else {
+                        conditions.hide.push("AHD Details");
+                }
+                return conditions;
+        },
+
+        'Detailed TPT Information': function (formName, formFieldValues) {
+                var conditionConcept = formFieldValues['Detailed TPT Information'];
+                var conditions = { show: [], hide: [] };
+
+                if (conditionConcept == "Yes") {
+                        conditions.show.push("TPT Information");
+                } else {
+                        conditions.hide.push("TPT Information");
+                }
+                return conditions;
+        },
+
+
         'Testing Eligibility, Last Test Results': function (formName, formFieldValues) {
                 if ( formName == "HIV Testing and Counseling Intake Template") {
                         var lastTest= formFieldValues['Testing Eligibility, Last Test Results'];
