@@ -433,6 +433,36 @@
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/txpvls_denominator_pivot.sql"
         }
     },
+	  "dailyvlresult_list": {
+		  "name": "Daily Viral Load Results (List)",
+		  "type": "MRSGeneric",
+		  "config": {
+			  "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/daily_vlresult_list.sql"
+		  }
+	  },
+
+	  "dailyvlresult_pivot": {
+		  "name": "Daily Viral Load Results (Pivot)",
+		  "type": "MRSGeneric",
+		  "config": {
+			  "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/daily_vlresult_pivot.sql"
+		  }
+	  }, 
+	  "dailycd4result_list": {
+		  "name": "Daily CD4 Results (List)",
+		  "type": "MRSGeneric",
+		  "config": {
+			  "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/daily_cd4result_list.sql"
+		  }
+	  },
+
+	  "dailycd4result_pivot": {
+		  "name": "Daily CD4 Results (Pivot)",
+		  "type": "MRSGeneric",
+		  "config": {
+			  "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/daily_cd4result_pivot.sql"
+		  }
+	  }, 	  
     "DHIS_Pre_ART": {
         "name": "ART-063 | Pre-ART",
         "type": "MRSGeneric",
