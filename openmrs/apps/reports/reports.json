@@ -958,19 +958,5 @@
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/SECTION3.sql"
         }
-    },
-    "test": {
-        "name": " Test",
-        "type": "MRSGeneric",
-        "config": {
-            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/test.sql"
-        }
-    },
-    "test1": {
-        "name": " Test1",
-        "type": "MRSGeneric",
-        "config": {
-            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/test_.sql"
-        }
     }
 }
