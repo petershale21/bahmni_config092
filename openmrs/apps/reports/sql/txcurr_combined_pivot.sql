@@ -205,6 +205,7 @@ FROM
 									(select person_id, max(obs_datetime), SUBSTRING(MAX(CONCAT(obs_datetime, obs_id)), 20) AS observation_id
 									from obs where concept_id = 3753
 									and obs_datetime <= cast('#endDate#' as date)
+									and voided = 0
 									group by person_id) as A
 									on A.observation_id = B.obs_group_id
 									where concept_id = 3752
@@ -290,10 +291,13 @@ FROM
 									(select person_id, max(obs_datetime), SUBSTRING(MAX(CONCAT(obs_datetime, obs_id)), 20) AS observation_id
 									from obs where concept_id = 3753
 									and obs_datetime <= cast('#endDate#' as date)
+									and voided = 0
 									group by person_id) as A
 									on A.observation_id = B.obs_group_id
 									where concept_id = 3752
-									and A.observation_id = B.obs_group_id	
+									and A.observation_id = B.obs_group_id
+                                    and voided = 0	
+									group by B.person_id	
 								) as active_clients
 								where active_clients.latest_follow_up >= cast('#endDate#' as date)
 				
@@ -586,6 +590,7 @@ FROM
 									(select person_id, max(obs_datetime), SUBSTRING(MAX(CONCAT(obs_datetime, obs_id)), 20) AS observation_id
 									from obs where concept_id = 3753
 									and obs_datetime <= cast('#endDate#' as date)
+									and voided = 0
 									group by person_id) as A
 									on A.observation_id = B.obs_group_id
 									where concept_id = 3752
@@ -672,10 +677,13 @@ FROM
 									(select person_id, max(obs_datetime), SUBSTRING(MAX(CONCAT(obs_datetime, obs_id)), 20) AS observation_id
 									from obs where concept_id = 3753
 									and obs_datetime <= cast('#endDate#' as date)
+									and voided = 0
 									group by person_id) as A
 									on A.observation_id = B.obs_group_id
 									where concept_id = 3752
-									and A.observation_id = B.obs_group_id	
+									and A.observation_id = B.obs_group_id
+                                    and voided = 0	
+									group by B.person_id	
 								) as active_clients
 								where active_clients.latest_follow_up >= cast('#endDate#' as date)
 				
