@@ -94,12 +94,12 @@
 					"codedConceptName":"ANC, Place of Birth",
 					"codedConceptName":"Mode of Delivery",
 					"allowAddMore": true
-			},			
+			},
 
 			"HTSIDX, Index Contact Information" : {
 					"allowAddMore": true
 			},
-			
+
 			"ANC, Family History": {
 				"multiSelect": true
 			},
@@ -111,7 +111,7 @@
 			},
 			"Addiction": {
 				"multiSelect": true
-			},	
+			},
 			"ANC, Family Planning Method": {
 				"multiSelect": true
 			},
@@ -213,12 +213,12 @@
 
 			"TB, HIV Management":{
 				"multiSelect" : true
-			},	 
+			},
 			"Phase of TB Treatment" : {
 
                 "required" : true
 
-            },   
+            },
 			"ARV drugs No. of days dispensed" : {
 				"required": false
 			},
@@ -273,11 +273,11 @@
 			},
 			"HIVTC, Regimen when transferred out": {
 				"required" : true
-			},      
+			},
 			"HIVTC, Date of transferred out": {
 				 "required" : true
 			},
-			
+
 			"ART treatment interruption Date": {
 				 "required" : true
 			},
@@ -295,7 +295,7 @@
 			},
 			"HIVTC, Pregnancy Estimated Date of Delivery":{
 			 "allowFutureDate": true
-			},           
+			},
 			"ART treatment interruption stopped reason":{
 				 "required" : false
 			},
@@ -434,9 +434,6 @@
 			"HTC, Final HIV status": {
 				"required": true
 			},
-			"Testing Eligibility, Tested For HIV": {
-				"required": true
-			},
 			"Testing Eligibility, On ART Treatment" : {
 				"required": true
 			},
@@ -449,6 +446,15 @@
 			"Testing Eligibility, Reinforced Prevention Counselling" : {
 				"required": true
 			},
+      "HIV, Testing Strategies" : {
+        "required": true,
+        "multiSelect": true
+      },
+
+
+
+
+
 			"LPA Susceptibility result" : {
 				"required": true,
 				"multiSelect": true
