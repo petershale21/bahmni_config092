@@ -1788,13 +1788,14 @@ Bahmni.ConceptSet.FormConditions.rules = {
                         if (months == "Had sex with more than 1 sexual partner" ||
                             months == "Had unprotected sex with HIV+ partner" ||
                             months == "Had unprotected sex with partner of unknown HIV status" ||
-                            months == "Had /currently have genital sores and/ or discharge") {
+                            months == "Had /currently have genital sores and/ or discharge" ||
+                            months == "None") {
 
                               conditions.show.push("Test For HIV");
                               conditions.hide.push("Offered prevention Counselling and or Linked to prevention services")
 
                         }
-                        if (months == "None"){
+                    /*   if (months == "None"){
                           conditions.show.push("Offered prevention Counselling and or Linked to prevention services")
                           conditions.hide.push("HTC, Pre-test Counseling Set");
                           conditions.hide.push("HTC, HIV Test");
@@ -1804,7 +1805,7 @@ Bahmni.ConceptSet.FormConditions.rules = {
                           conditions.hide.push("HTS, Referral");
                           conditions.hide.push("Test For HIV");
                         }
-
+*/
 
                         return conditions;
                 }
