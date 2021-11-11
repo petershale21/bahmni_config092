@@ -440,9 +440,6 @@
 			"Testing Eligibility, Counselled & linked to Treatment" : {
 				"required": true
 			},
-			"Testing Eligibility, Time Last Test Done" : {
-				"required": true
-			},
 			"Testing Eligibility, Reinforced Prevention Counselling" : {
 				"required": true
 			},
