@@ -1439,7 +1439,7 @@ Bahmni.ConceptSet.FormConditions.rules = {
                           conditions.hide.push("Testing Eligibility, Counselled & linked to Treatment");
                           
                           conditions.hide.push("Testing Eligibility, Reinforced Prevention Counselling");
-                          conditions.hide.push("Testing Eligibility, Last 12 Months");
+                          
                           conditions.hide.push("Offered prevention Counselling and or Linked to prevention services");
                           
 
@@ -1447,7 +1447,7 @@ Bahmni.ConceptSet.FormConditions.rules = {
                         else if (!testedForHIV)    { 
                           
                           conditions.hide.push("HTC, Post-test Counseling Set");
-                         // conditions.hide.push("Testing Eligibility, Time Last Test Done");
+                          conditions.hide.push("Testing Eligibility, Time Last Test Done");
                           
                           conditions.hide.push("HIVTC, TB Screened","HIV, Testing Strategies");
                           conditions.hide.push("HTS, Referral");
