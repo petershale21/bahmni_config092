@@ -1447,8 +1447,7 @@ Bahmni.ConceptSet.FormConditions.rules = {
                         else if (!testedForHIV)    { 
                           
                           conditions.hide.push("HTC, Post-test Counseling Set");
-                          conditions.hide.push("Testing Eligibility, Time Last Test Done");
-                          
+                          conditions.hide.push("Testing Eligibility, Time Last Test Done");                        
                           conditions.hide.push("HIVTC, TB Screened","HIV, Testing Strategies");
                           conditions.hide.push("HTS, Referral");
                           conditions.hide.push("Testing Eligibility, Provided Adherence Counselling","Testing Eligibility, Last Test Results");
@@ -1561,9 +1560,7 @@ Bahmni.ConceptSet.FormConditions.rules = {
                   conditions.hide.push("HTC, Key Pop");
                   conditions.hide.push("HTC, Tested for HIV in The Past 12 Months");
                   conditions.hide.push("HTC, HIVST Results");
-                 
                   conditions.hide.push("HTC, Pre-test Counseling Set","HTC, Post-test Counseling Set");
-                  //conditions.hide.push("HTC, HIV Test");
                   conditions.hide.push("ART, Condoms Dispensed");
                   conditions.hide.push("HIVTC, TB Screened");
                   conditions.hide.push("HTS, Referral");
@@ -1612,25 +1609,14 @@ Bahmni.ConceptSet.FormConditions.rules = {
                                 conditions.show.push("Testing Eligibility, On ART Treatment");
                                 conditions.hide.push("Testing Eligibility, Provided Adherence Counselling");
                                 conditions.hide.push("Testing Eligibility, Counselled & linked to Treatment");
-                                
                                 conditions.hide.push("Testing Eligibility, Reinforced Prevention Counselling");
-                                
                                 conditions.hide.push("Offered prevention Counselling and or Linked to prevention services");
                                 conditions.hide.push("HTC, History of Previous Testing","HTC, Pre-test Counseling");
                                
 
                         }
 
-                        if (lastTest == "Negative") {
-                             conditions.hide.push("Testing Eligibility, On ART Treatment");
-                             conditions.hide.push("Testing Eligibility, Provided Adherence Counselling");
-                             conditions.hide.push("Testing Eligibility, Counselled & linked to Treatment");
-                             conditions.hide.push("Testing Eligibility, Reinforced Prevention Counselling");
-                             conditions.hide.push("Offered prevention Counselling and or Linked to prevention services");
-                             conditions.hide.push("HTC, History of Previous Testing","HTC, Pre-test Counseling");
-                        }
-
-                        if (lastTest == "Do Not Know") {
+                        if (lastTest == "Do Not Know" || lastTest == "Negative") {
 
                                 conditions.show.push("Testing Eligibility, Time Last Test Done");
                                 conditions.hide.push("Testing Eligibility, On ART Treatment");
