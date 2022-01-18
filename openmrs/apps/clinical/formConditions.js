@@ -37,6 +37,42 @@ Bahmni.ConceptSet.FormConditions.rules = {
         },
 
 
+
+        'HTC, Patient type': function (formName, formFieldValues) {
+                var conditionConcept = formFieldValues['HTC, Patient type'];
+                var conditions = { show: [], hide: [] };
+                console.log(conditionConcept);
+                if (conditionConcept == undefined){
+                        conditions.hide.push("HEIGHT");
+                        conditions.hide.push("WEIGHT");
+                        conditions.hide.push("TB Status");
+                        conditions.hide.push("Systolic Data");
+                        conditions.hide.push("Diastolic Data");
+                        conditions.hide.push("IMAM, MUAC");
+                }else if (conditionConcept == "HTC, Patient") {
+                        conditions.show.push("HEIGHT");
+                        conditions.show.push("WEIGHT");
+                        conditions.show.push("TB Status");
+                        conditions.show.push("Systolic Data");
+                        conditions.show.push("Diastolic Data");
+                        conditions.show.push("IMAM, MUAC");
+
+
+                } else if(conditionConcept == false) {
+                        console.log("Its Undefined my guy");
+                        conditions.hide.push("HEIGHT");
+                        conditions.hide.push("WEIGHT");
+                        conditions.hide.push("TB Status");
+                        conditions.hide.push("Systolic Data");
+                        conditions.hide.push("Diastolic Data");
+                        conditions.hide.push("IMAM, MUAC");
+
+                }
+
+                return conditions;
+        },
+
+
         'Phase of TB Treatment': function (formName, formFieldValues) {
 
                 var result = formFieldValues['Phase of TB Treatment'];
@@ -1446,6 +1482,7 @@ Bahmni.ConceptSet.FormConditions.rules = {
                         }
                         else if (!testedForHIV)    { 
                           
+                          conditions.hide.push("Self_Test_Buddy");
                           conditions.hide.push("HTC, Post-test Counseling Set");
                           conditions.hide.push("Testing Eligibility, Time Last Test Done");                        
                           conditions.hide.push("HIVTC, TB Screened","HIV, Testing Strategies");
@@ -1491,7 +1528,7 @@ Bahmni.ConceptSet.FormConditions.rules = {
                           
                           
                           conditions.hide.push("HTC, HIV Test");
-                          
+                          conditions.hide.push("Self_Test_Buddy");
                           conditions.hide.push("HIVTC, TB Screened");
                           conditions.hide.push("HTS, Referral");
                           conditions.hide.push("Testing Eligibility, Provided Adherence Counselling");
@@ -1514,6 +1551,8 @@ Bahmni.ConceptSet.FormConditions.rules = {
 
                 if (formName == "HIV Testing and Counseling Intake Template") {
                        var conditions = { show: [], hide: [] };
+                       conditions.hide.push("Self_Test_Buddy");
+                       conditions.hide.push("HTC, Kit Collected For");
 
                   if (testingStrategy.includes('HIVTC, Rapid Test') && !testingStrategy.includes('HIVTC, Self Test')){
                          
@@ -1532,12 +1571,13 @@ Bahmni.ConceptSet.FormConditions.rules = {
                           conditions.hide.push("HTC, Distribution channel");
                           conditions.hide.push("HTC, Distribution Mode");
                           conditions.hide.push("HTC, Kit Collected For");
+                          conditions.hide.push("Self_Test_Buddy");
                           conditions.hide.push("HTC, Key Pop");
                           conditions.hide.push("HTC, Tested for HIV in The Past 12 Months");
                           conditions.hide.push("HTC, HIVST Results");
                         }
                 else if (testingStrategy.includes('HIVTC, Self Test') && !testingStrategy.includes('HIVTC, Rapid Test')) {
-                        conditions.show.push("HTC, Date Of Distribution","HTC, Distribution Mode","HTC, Kit Collected For","HTC, Key Pop","HTC, Tested for HIV in The Past 12 Months","HTC, HIVST Results");
+                        conditions.show.push("HTC, Date Of Distribution","HTC, Distribution Mode","Self_Test_Buddy", "HTC, Kit Collected For","HTC, Key Pop","HTC, Tested for HIV in The Past 12 Months","HTC, HIVST Results");
                         conditions.hide.push("HTC, Pre-test Counseling Set","HTC, Post-test Counseling Set");
                        
                         conditions.hide.push("ART, Condoms Dispensed");
@@ -1547,7 +1587,7 @@ Bahmni.ConceptSet.FormConditions.rules = {
                 
                  if (testingStrategy.includes('HIVTC, Self Test') && testingStrategy.includes('HIVTC, Rapid Test')){
                   
-                  conditions.show.push("HTC, Date Of Distribution","HTC, Distribution Mode","HTC, Kit Collected For","HTC, Key Pop","HTC, Tested for HIV in The Past 12 Months","HTC, HIVST Results");
+                  conditions.show.push("HTC, Date Of Distribution","HTC, Distribution Mode", "Self_Test_Buddy", "HTC, Kit Collected For","HTC, Key Pop","HTC, Tested for HIV in The Past 12 Months","HTC, HIVST Results");
                   conditions.show.push("HTC, Pre-test Counseling Set","HTC, Post-test Counseling Set");
                   conditions.show.push("HTC, HIV Test","ART, Condoms Dispensed","HIVTC, TB Screened","HTS, Referral");
                   
@@ -1557,6 +1597,7 @@ Bahmni.ConceptSet.FormConditions.rules = {
                   conditions.hide.push("HTC, Distribution channel");
                   conditions.hide.push("HTC, Distribution Mode");
                   conditions.hide.push("HTC, Kit Collected For");
+                  conditions.hide.push("Self_Test_Buddy");
                   conditions.hide.push("HTC, Key Pop");
                   conditions.hide.push("HTC, Tested for HIV in The Past 12 Months");
                   conditions.hide.push("HTC, HIVST Results");
@@ -1594,6 +1635,17 @@ Bahmni.ConceptSet.FormConditions.rules = {
                         conditions.show.push("TPT Information");
                 } else {
                         conditions.hide.push("TPT Information");
+                }
+                return conditions;
+        },
+
+        'HTC, Distribution Mode': function (formName, formFieldValues) {
+                var conditionConcept = formFieldValues['HTC, Distribution Mode'];
+                var conditions = { show: [], hide: [] };
+
+                if (conditionConcept == "HTC, Secondary") {
+                        conditions.show.push("Self_Test_Buddy");
+                        conditions.show.push("HTC, Kit Collected For");
                 }
                 return conditions;
         },

@@ -90,7 +90,7 @@
                 "required": false
             },
             "TB Status": {
-                "required": true
+                "required": false
             },
             "TB Suspect signs": {
                 "multiSelect": true

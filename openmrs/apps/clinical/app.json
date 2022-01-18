@@ -100,6 +100,10 @@
 					"allowAddMore": true
 			},
 
+			"Self_Test_Buddy" : {
+				"allowAddMore": true
+			},
+
 			"ANC, Family History": {
 				"multiSelect": true
 			},
@@ -270,6 +274,9 @@
 			"HIVTC, Transferred out to": {
 				"required" : true,
 				"dropdown": true
+			},
+			"TB Status": {
+				"required" : false
 			},
 			"HIVTC, Regimen when transferred out": {
 				"required" : true
