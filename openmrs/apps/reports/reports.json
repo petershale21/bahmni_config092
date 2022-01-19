@@ -624,6 +624,13 @@
             ]
         }
     },
+    "USAID_DQA": {
+        "name": "ART-076 | PEADS Aging Out Analysis (List)",
+        "type": "MRSGeneric",
+        "config": {
+            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/monitoring1.sql"
+        }
+    },
     "htsfinalhivstatusbyservicepointlist": {
         "name": "HTS-001 | HTS Final HIV Status (List)",
         "type": "MRSGeneric",
