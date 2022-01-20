@@ -64,7 +64,8 @@ left outer join
 						  CAST('#endDate#' AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
 						  AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
                    WHERE observed_age_group.report_group_name = 'Modified_Ages') AS Newly_Initiated_ART_Clients
-ORDER BY Newly_Initiated_ART_Clients.Age)
+				   WHERE Age <=19
+				   ORDER BY Newly_Initiated_ART_Clients.Age)
 
 UNION
 
@@ -182,6 +183,10 @@ AND Clients_Seen.Id not in
 											and death_date <= CAST('#endDate#' AS DATE)		
 						)
 					)
+					
+AND Age <= 19					
+
+
 
 ORDER BY Clients_Seen.patientName)
 
@@ -270,6 +275,7 @@ FROM
 						  CAST('#endDate#' AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
 						  AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
                    WHERE observed_age_group.report_group_name = 'Modified_Ages') AS TwentyEightDayDefaulters
+				   WHERE Age <= 19
 				   order by TwentyEightDayDefaulters.patientName)
 
 UNION
@@ -378,10 +384,10 @@ FROM (
 						 INNER JOIN reporting_age_group AS observed_age_group ON
 						  CAST('#endDate#' AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
 						  AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
-                   WHERE observed_age_group.report_group_name = 'Modified_Ages')	   
+                   WHERE observed_age_group.report_group_name = 'Modified_Ages')
 		   
 ) AS ARTCurrent_PrevMonths
- 
+ WHERE Age <=19
 ORDER BY ARTCurrent_PrevMonths.Age)
 
 UNION
@@ -417,7 +423,8 @@ select distinct patient.patient_id AS Id,
 								 INNER JOIN reporting_age_group AS observed_age_group ON
 									  CAST('#endDate#' AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
 									  AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
-           WHERE observed_age_group.report_group_name = 'Modified_Ages')  AS TransferOut)
+           WHERE observed_age_group.report_group_name = 'Modified_Ages')  AS TransferOut
+		   WHERE Age <=19)
 
 UNION
 
@@ -452,7 +459,8 @@ select distinct patient.patient_id AS Id,
 								 INNER JOIN reporting_age_group AS observed_age_group ON
 									  CAST('#endDate#' AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
 									  AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
-           WHERE observed_age_group.report_group_name = 'Modified_Ages')  AS TransferIn)
+           WHERE observed_age_group.report_group_name = 'Modified_Ages')  AS TransferIn
+		   WHERE Age <=19)
 
 UNION
 
@@ -487,7 +495,8 @@ select distinct patient.patient_id AS Id,
 								 INNER JOIN reporting_age_group AS observed_age_group ON
 									  CAST('#endDate#' AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
 									  AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
-           WHERE observed_age_group.report_group_name = 'Modified_Ages')  AS ReinitiatingTreatment)
+           WHERE observed_age_group.report_group_name = 'Modified_Ages')  AS ReinitiatingTreatment
+		   WHERE Age <=19)
 
 UNION
 
@@ -528,7 +537,8 @@ select distinct patient.patient_id AS Id,
 								 INNER JOIN reporting_age_group AS observed_age_group ON
 									  CAST('#endDate#' AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
 									  AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
-           WHERE observed_age_group.report_group_name = 'Modified_Ages')  AS StoppedTreatment)
+           WHERE observed_age_group.report_group_name = 'Modified_Ages')  AS StoppedTreatment
+		   WHERE Age <=19)
 
 UNION
 
@@ -564,7 +574,8 @@ select distinct patient.patient_id AS Id,
 								 INNER JOIN reporting_age_group AS observed_age_group ON
 									  CAST('#endDate#' AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
 									  AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
-           WHERE observed_age_group.report_group_name = 'Modified_Ages')  AS Died)
+           WHERE observed_age_group.report_group_name = 'Modified_Ages')  AS Died
+		   WHERE Age <=19)
 
 Order by Program_Status) previous
 ON o.person_id = Id
