@@ -41,7 +41,6 @@ Bahmni.ConceptSet.FormConditions.rules = {
         'HTC, Patient type': function (formName, formFieldValues) {
                 var conditionConcept = formFieldValues['HTC, Patient type'];
                 var conditions = { show: [], hide: [] };
-                console.log(conditionConcept);
                 if (conditionConcept == undefined){
                         conditions.hide.push("HEIGHT");
                         conditions.hide.push("WEIGHT");
@@ -58,8 +57,7 @@ Bahmni.ConceptSet.FormConditions.rules = {
                         conditions.show.push("IMAM, MUAC");
 
 
-                } else if(conditionConcept == false) {
-                        console.log("Its Undefined my guy");
+                } else if(conditionConcept == "HTC, Buddy") {
                         conditions.hide.push("HEIGHT");
                         conditions.hide.push("WEIGHT");
                         conditions.hide.push("TB Status");
@@ -1646,6 +1644,9 @@ Bahmni.ConceptSet.FormConditions.rules = {
                 if (conditionConcept == "HTC, Secondary") {
                         conditions.show.push("Self_Test_Buddy");
                         conditions.show.push("HTC, Kit Collected For");
+                }else if(conditionConcept == "HTC, Primary" || conditionConcept == undefined){
+                        conditions.hide.push("Self_Test_Buddy");
+                        conditions.hide.push("HTC, Kit Collected For");
                 }
                 return conditions;
         },
