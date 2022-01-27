@@ -113,6 +113,11 @@
 			"ANC, Drug History": {
 				"multiSelect": true
 			},
+
+			"HTC, Distribution Mode": {
+				"multiSelect": true
+			},
+
 			"Addiction": {
 				"multiSelect": true
 			},
