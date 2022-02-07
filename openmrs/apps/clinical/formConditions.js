@@ -35,12 +35,22 @@ Bahmni.ConceptSet.FormConditions.rules = {
 
                 return conditions;
         },
-
-
-
+                /**** AUTOFILL UNDER WEIGHT VALUES */
+                'WEIGHT': function (formName, formFieldValues) {
+                        var conditions = { assignedValues: [] , disable: [] };
+                        if (formName == "Vitals" || formName == "HIV Treatment and Care Progress Template"){
+                                conditions.assignedValues.push(
+                                { field: "WEIGHT", fieldValue : {
+                                        isAutoFill: true,
+                                        scopedEncouter:0
+                                }});
+                        }
+                        return conditions;
+                },
+                
         'HTC, Patient type': function (formName, formFieldValues) {
                 var conditionConcept = formFieldValues['HTC, Patient type'];
-                var conditions = { show: [], hide: [] };
+                var conditions = { show: [], hide: [],   assignedValues: [] };
                 if (conditionConcept == undefined){
                         conditions.hide.push("HEIGHT");
                         conditions.hide.push("WEIGHT");
@@ -49,6 +59,9 @@ Bahmni.ConceptSet.FormConditions.rules = {
                         conditions.hide.push("Diastolic Data");
                         conditions.hide.push("IMAM, MUAC");
                 }else if (conditionConcept == "HTC, Patient") {
+                        conditions.assignedValues.push( { field: "HEIGHT", fieldValue : {
+                                isAutoFill: true,
+                                scopedEncouter:0}})
                         conditions.show.push("HEIGHT");
                         conditions.show.push("WEIGHT");
                         conditions.show.push("TB Status");
@@ -240,6 +253,9 @@ Bahmni.ConceptSet.FormConditions.rules = {
                 }
 
         },
+
+
+
 
         'ANC, Gravida': function (formName, formFieldValues) {
                 var ANCGravida = formFieldValues['ANC, Gravida'];
