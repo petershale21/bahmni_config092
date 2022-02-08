@@ -35,15 +35,18 @@ Bahmni.ConceptSet.FormConditions.rules = {
 
                 return conditions;
         },
-                /**** AUTOFILL UNDER WEIGHT VALUES */
+                /**** AUTOFILL WEIGHT VALUES */
                 'WEIGHT': function (formName, formFieldValues) {
                         var conditions = { assignedValues: [] , disable: [] };
                         if (formName == "Vitals" || formName == "HIV Treatment and Care Progress Template"){
                                 conditions.assignedValues.push(
-                                { field: "WEIGHT", fieldValue : {
-                                        isAutoFill: true,
-                                        scopedEncouter:0
-                                }});
+                                { field: "WEIGHT", 
+                                  fieldValue : 
+                                        {
+                                           isAutoFill: true,
+                                           scopedEncounter:0
+                                        }
+                                });
                         }
                         return conditions;
                 },
@@ -61,7 +64,8 @@ Bahmni.ConceptSet.FormConditions.rules = {
                 }else if (conditionConcept == "HTC, Patient") {
                         conditions.assignedValues.push( { field: "HEIGHT", fieldValue : {
                                 isAutoFill: true,
-                                scopedEncouter:0}})
+                                scopedEncounter:0}})
+
                         conditions.show.push("HEIGHT");
                         conditions.show.push("WEIGHT");
                         conditions.show.push("TB Status");
