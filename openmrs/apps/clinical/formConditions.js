@@ -1596,7 +1596,7 @@ Bahmni.ConceptSet.FormConditions.rules = {
                         }
                 else if (testingStrategy.includes('HIVTC, Self Test') && !testingStrategy.includes('HIVTC, Rapid Test')) {
                         conditions.show.push("HTC, Date Of Distribution","HTC, Distribution Mode","Self_Test_Buddy", "HTC, Kit Collected For","HTC, Key Pop","HTC, Tested for HIV in The Past 12 Months","HTC, HIVST Results");
-                        conditions.hide.push("HTC, Pre-test Counseling Set","HTC, Post-test Counseling Set");
+                        conditions.hide.push("HTC, Pre-test Counseling Set","HTC, HIV Test","HTC, Post-test Counseling Set");
                        
                         conditions.hide.push("ART, Condoms Dispensed");
                         conditions.hide.push("HIVTC, TB Screened");
@@ -1659,12 +1659,19 @@ Bahmni.ConceptSet.FormConditions.rules = {
 
         'HTC, Distribution Mode': function (formName, formFieldValues) {
                 var conditionConcept = formFieldValues['HTC, Distribution Mode'];
-                var conditions = { show: [], hide: [] };
-
-                if (conditionConcept == "HTC, Secondary") {
+                var conditions = { show: [], hide: [] };                
+                conditionConcept = conditionConcept.sort();
+                console.log(conditionConcept);
+                
+                if (JSON.stringify(conditionConcept) === JSON.stringify(['HTC, Secondary', 'HTC, Secondary'])) {
                         conditions.show.push("Self_Test_Buddy");
                         conditions.show.push("HTC, Kit Collected For");
-                }else if(conditionConcept == "HTC, Primary" || conditionConcept == undefined){
+
+                }else if(JSON.stringify(conditionConcept) === JSON.stringify(['HTC, Primary', 'HTC, Primary','HTC, Secondary', 'HTC, Secondary'])){
+                        conditions.show.push("Self_Test_Buddy");
+                        conditions.show.push("HTC, Kit Collected For");
+
+                }else if(JSON.stringify(conditionConcept) === JSON.stringify(['HTC, Primary', 'HTC, Primary']) || JSON.stringify(conditionConcept) === JSON.stringify([])){
                         conditions.hide.push("Self_Test_Buddy");
                         conditions.hide.push("HTC, Kit Collected For");
                 }
