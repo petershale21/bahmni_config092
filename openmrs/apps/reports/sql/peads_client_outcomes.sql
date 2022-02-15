@@ -1,4 +1,18 @@
-(SELECT Id,patientIdentifier AS "Patient_Identifier",ART_Number, patientName AS "Patient_Name", Age,DOB, Gender, 'Active' AS 'Program_Status'
+ SELECT distinct Patient_Identifier,
+				  Patient_Name,
+				  Age,
+				  DOB,
+				  Gender,
+				  Client_Outcome,
+				  Date_TransferedOut,
+				  Date_TransferedIn,
+				  Date_IIT,
+				  Date_Died,
+				  Date_Stopped
+
+FROM(
+	
+	(SELECT Id,patientIdentifier AS "Patient_Identifier",ART_Number, patientName AS "Patient_Name", Age,DOB, Gender, 'Active' AS 'Client_Outcome'
 FROM (
 
 select distinct patient.patient_id AS Id,
@@ -14,7 +28,7 @@ select distinct patient.patient_id AS Id,
 								-- CLIENTS SEEN FOR ART
                                  INNER JOIN patient ON o.person_id = patient.patient_id
                                  AND (o.concept_id = 3843 AND o.value_coded = 3841 OR o.value_coded = 3842)
-								 AND MONTH(o.obs_datetime) >= MONTH(CAST('2021-01-01' AS DATE)) 
+								 AND MONTH(o.obs_datetime) >= MONTH(CAST('#startDate#' AS DATE)) 
 								 AND MONTH(o.obs_datetime) <= MONTH(CAST('#endDate#' AS DATE))
 								 AND YEAR(o.obs_datetime) = YEAR(CAST('#endDate#' AS DATE))
                                  AND patient.voided = 0 AND o.voided = 0
@@ -147,7 +161,7 @@ ORDER BY Clients_Seen.patientName)
 
 UNION
 
-(SELECT Id,patientIdentifier AS "Patient_Identifier",ART_Number, patientName AS "Patient_Name", Age,DOB, Gender, 'Active' AS 'Program_Status'
+(SELECT Id,patientIdentifier AS "Patient_Identifier",ART_Number, patientName AS "Patient_Name", Age,DOB, Gender, 'Active' AS 'Client_Outcome'
 FROM (
 (select distinct patient.patient_id AS Id,
 									   patient_identifier.identifier AS patientIdentifier,
@@ -418,7 +432,7 @@ select distinct patient.patient_id AS Id,
 											INNER JOIN person ON patient.patient_id = person.person_id
 											INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1
 											where concept_id = 3634 and o.value_coded = 2095
-											and CAST(o.obs_datetime AS DATE) >= CAST('2021-01-01' AS DATE)
+											and CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
 											and CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 											and CAST(o.obs_datetime AS DATE) >= DATE_ADD(CAST('#endDate#' AS DATE), INTERVAL -3 MONTH)
 											and o.voided = 0)
@@ -764,4 +778,78 @@ select distinct patient.patient_id AS Id,
 									  AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
            WHERE observed_age_group.report_group_name = 'Modified_Ages')  AS Died
 		   WHERE Age <=19
-)
+))client_outcomes
+
+-- Date Transferred out
+left outer JOIN
+	   (
+		select os.person_id, CAST(max(os.value_datetime) AS DATE) as Date_TransferedOut
+		from obs os
+		where os.concept_id=2266 and os.voided = 0
+		 and os.value_datetime < cast('#endDate#' as date)
+		group by os.person_id
+	   )date_tout
+	   on client_outcomes.Id = date_tout.person_id
+
+-- Date Transferred In
+	left outer JOIN
+	   (
+		select os.person_id, CAST(max(os.value_datetime) AS DATE) as Date_TransferedIn
+		from obs os
+		where os.concept_id=2253 and os.voided = 0
+		-- and os.value_datetime < cast('#endDate#' as date)
+        and CAST(os.value_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+		and CAST(os.value_datetime AS DATE) <= CAST('#endDate#' AS DATE)
+		and CAST(os.value_datetime AS DATE) >= DATE_ADD(CAST('#endDate#' AS DATE), INTERVAL -3 MONTH) 
+		group by os.person_id
+	   )date_tin
+	   on client_outcomes.Id = date_tin.person_id
+
+-- Date Died 
+	left outer JOIN
+	   (
+			select distinct p.person_id, CAST(max(p.death_date) AS DATE) as Date_Died
+			from person p
+			where dead = 1
+			and death_date >= CAST('#startDate#' AS DATE) and death_date <= CAST('#endDate#' AS DATE)
+	   )date_died
+	   on client_outcomes.Id = date_died.person_id
+
+-- Date Interruption in Treatment 
+	left outer JOIN
+
+		(select oss.person_id, MAX(oss.obs_datetime) as max_observation, SUBSTRING(MAX(CONCAT(oss.obs_datetime, oss.value_datetime)), 20) AS latest_follow_up,
+		CAST(DATE_ADD(latest_follow_up, INTERVAL 29 DAY) AS DATE) as Date_IIT
+		from obs oss 
+		inner join 		
+				(select oss.person_id, MAX(oss.obs_datetime) as max_observation, SUBSTRING(MAX(CONCAT(oss.obs_datetime, oss.value_datetime)), 20) AS latest_follow_up
+				from obs oss 
+				inner join person p on oss.person_id=p.person_id and oss.concept_id = 3752 and oss.voided=0
+				and oss.obs_datetime <= cast('#endDate#' as DATE)
+				group by p.person_id
+				having datediff(CAST('#endDate#' AS DATE), latest_follow_up) > 28) IIT_
+				on IIT_.person_id = oss.person_id
+		and oss.concept_id = 3752 and oss.voided=0
+		and oss.obs_datetime <= cast('#endDate#' as DATE)
+		group by person_id
+		having datediff(CAST('#endDate#' AS DATE), latest_follow_up) > 28)Interruption_in_treatment
+		on client_outcomes.Id = Interruption_in_treatment.person_id
+
+-- Date Treatment Stopped
+left outer join
+(select o.person_id,CAST(o.value_datetime AS DATE) as Date_Stopped
+from obs o 
+	where concept_id = 3701 and o.voided = 0
+	and CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+	and CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
+	and CAST(o.obs_datetime AS DATE) >= DATE_ADD(CAST('#endDate#' AS DATE), INTERVAL -3 MONTH) 
+	and o.person_id in (
+			select os.person_id
+			from obs os
+			where os.concept_id=3767 and os.value_coded = 2297 and os.voided = 0	
+	
+	)	
+	)datestopped
+ON client_outcomes.Id = datestopped.person_id
+
+

@@ -6,10 +6,10 @@ select distinct Patient_Identifier,
 				Gender,
 				ART_Initiation_Date,
 				Visit_Date,
-				Appointment_Date,
-				Date_TransferedOut,
-				Date_TransferedIn,
-				Date_Died
+				Appointment_Date
+				-- Date_TransferedOut,
+				-- Date_TransferedIn,
+				-- Date_Died
 FROM
 (
 	(SELECT Id,patientIdentifier AS "Patient_Identifier",ART_Number, patientName AS "Patient_Name", Age,DOB, Gender, 'Initiated' AS 'Program_Status'
@@ -314,41 +314,3 @@ left outer JOIN
 		order by Visit_Date
 	)visit_date
 	on visit_date.person_id = previous.ID
-
--- Date Transferred out
-left outer JOIN
-	   (
-		select os.person_id, CAST(max(os.value_datetime) AS DATE) as Date_TransferedOut
-		from obs os
-		where os.concept_id=2266 and os.voided = 0
-        and CAST(os.value_datetime AS DATE) >= CAST('#startDate#' AS DATE)
-		and CAST(os.value_datetime AS DATE) <= CAST('#endDate#' AS DATE)
-		and CAST(os.value_datetime AS DATE) >= DATE_ADD(CAST('#endDate#' AS DATE), INTERVAL -3 MONTH) 
-		group by os.person_id
-	   )date_tout
-	   on previous.Id = date_tout.person_id
-
--- Date Transferred In
-	left outer JOIN
-	   (
-		select os.person_id, CAST(max(os.value_datetime) AS DATE) as Date_TransferedIn
-		from obs os
-		where os.concept_id=2253 and os.voided = 0
-        and CAST(os.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
-		and CAST(os.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
-		and CAST(os.obs_datetime AS DATE) >= DATE_ADD(CAST('#endDate#' AS DATE), INTERVAL -3 MONTH) 
-		group by os.person_id
-	   )date_tin
-	   on previous.Id = date_tin.person_id
-
--- Date Died 
-	left outer JOIN
-	   (
-			select distinct p.person_id, CAST(max(p.death_date) AS DATE) as Date_Died
-			from person p
-			where dead = 1
-			and death_date >= CAST('#startDate#' AS DATE) and death_date <= CAST('#endDate#' AS DATE)
-	   )date_reinitiated_treatment
-	   on previous.Id = date_reinitiated_treatment.person_id
-
-
