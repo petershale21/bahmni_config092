@@ -16,8 +16,7 @@ FROM
 						-- CLIENTS NEWLY INITIATED ON ART
 						 INNER JOIN patient ON o.person_id = patient.patient_id 
 						 AND (o.concept_id = 2249 
-						AND MONTH(o.value_datetime) >= MONTH(CAST('#startDate#' AS DATE)) 
-						AND MONTH(o.value_datetime) <= MONTH(CAST('#endDate#' AS DATE))
+						AND MONTH(o.value_datetime) = MONTH(CAST('#endDate#' AS DATE)) 
 						AND YEAR(o.value_datetime) = YEAR(CAST('#endDate#' AS DATE))
 						 )
 						 AND patient.voided = 0 AND o.voided = 0
@@ -59,9 +58,8 @@ select distinct patient.patient_id AS Id,
 								-- CLIENTS SEEN FOR ART
                                   INNER JOIN patient ON o.person_id = patient.patient_id
                                   AND (o.concept_id = 3843 AND o.value_coded = 3841 OR o.value_coded = 3842)
-								 AND CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
-								 AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
-								 AND CAST(o.obs_datetime AS DATE) >= DATE_ADD(CAST('#endDate#' AS DATE), INTERVAL -3 MONTH)
+								 AND MONTH(o.obs_datetime) = MONTH(CAST('#endDate#' AS DATE)) 
+								 AND YEAR(o.obs_datetime) = YEAR(CAST('#endDate#' AS DATE))
                                  AND patient.voided = 0 AND o.voided = 0
                                  INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
                                  INNER JOIN person_name ON person.person_id = person_name.person_id AND person_name.preferred = 1
@@ -80,8 +78,7 @@ WHERE Clients_Seen.Id not in (
 				-- CLIENTS NEWLY INITIATED ON ART
 				 INNER JOIN patient ON o.person_id = patient.patient_id
 				 AND (o.concept_id = 2249 
-						AND MONTH(o.value_datetime) >= MONTH(CAST('#startDate#' AS DATE)) 
-						AND MONTH(o.value_datetime) <= MONTH(CAST('#endDate#' AS DATE))
+						AND MONTH(o.value_datetime) = MONTH(CAST('#endDate#' AS DATE)) 
 						AND YEAR(o.value_datetime) = YEAR(CAST('#endDate#' AS DATE))
 						)		
 				 AND patient.voided = 0 AND o.voided = 0
@@ -99,9 +96,8 @@ AND Clients_Seen.Id not in (
 										from obs oss
 													where oss.voided=0 
 													and oss.concept_id=3752 
-													AND CAST(oss.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
-													AND CAST(oss.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
-													AND CAST(oss.obs_datetime AS DATE) >= DATE_ADD(CAST('#endDate#' AS DATE), INTERVAL -3 MONTH)
+													and CAST(oss.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
+													and CAST(oss.obs_datetime AS DATE) >= DATE_ADD(CAST('#endDate#' AS DATE), INTERVAL -13 MONTH)
 													group by oss.person_id) firstquery
 										inner join (
 													select os.person_id,datediff(CAST(max(os.value_datetime) AS DATE), CAST('#endDate#' AS DATE)) as last_ap
@@ -140,9 +136,8 @@ AND Clients_Seen.Id not in
 											from obs oss
 														where oss.voided=0 
 														and oss.concept_id=3752 
-														AND CAST(oss.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
-														AND CAST(oss.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
-														AND CAST(oss.obs_datetime AS DATE) >= DATE_ADD(CAST('#endDate#' AS DATE), INTERVAL -3 MONTH)
+														and CAST(oss.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
+														and CAST(oss.obs_datetime AS DATE) >= DATE_ADD(CAST('#endDate#' AS DATE), INTERVAL -13 MONTH)
 														group by oss.person_id) firstquery
 											inner join (
 														select os.person_id,datediff(CAST(max(os.value_datetime) AS DATE), CAST('#endDate#' AS DATE)) as last_ap
@@ -214,9 +209,8 @@ UNION
 							select distinct os.person_id
 							from obs os
 							where (os.concept_id = 3843 AND os.value_coded = 3841 OR os.value_coded = 3842)
-							AND CAST(os.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
-							AND CAST(os.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
-							AND CAST(os.obs_datetime AS DATE) >= DATE_ADD(CAST('#endDate#' AS DATE), INTERVAL -3 MONTH)
+							AND MONTH(os.obs_datetime) = MONTH(CAST('#endDate#' AS DATE)) 
+							AND YEAR(os.obs_datetime) = YEAR(CAST('#endDate#' AS DATE))
 							)						
 
 						
@@ -224,9 +218,8 @@ UNION
 							select distinct os.person_id
 							from obs os
 							where concept_id = 2249
-							AND MONTH(o.value_datetime) >= MONTH(CAST('#startDate#' AS DATE)) 
-							AND MONTH(o.value_datetime) <= MONTH(CAST('#endDate#' AS DATE))
-							AND YEAR(o.value_datetime) = YEAR(CAST('#endDate#' AS DATE))
+							AND MONTH(os.value_datetime) = MONTH(CAST('#endDate#' AS DATE)) 
+							AND YEAR(os.value_datetime) = YEAR(CAST('#endDate#' AS DATE))
 							)
 
 		and active_clients.person_id not in (
@@ -324,14 +317,21 @@ FROM
 								) as active_clients
 								where active_clients.latest_follow_up < cast('#endDate#' as date)
 								and DATEDIFF(CAST('#endDate#' AS DATE),latest_follow_up) <= 28
+
+				and active_clients.person_id not in (
+							select distinct os.person_id
+							from obs os
+							where (os.concept_id = 3843 AND os.value_coded = 3841 OR os.value_coded = 3842)
+							AND MONTH(os.obs_datetime) = MONTH(CAST('#endDate#' AS DATE)) 
+							AND YEAR(os.obs_datetime) = YEAR(CAST('#endDate#' AS DATE))
+							)				
 				
 				and active_clients.person_id not in (
 							select distinct os.person_id
 							from obs os
 							where concept_id = 2249 
-							AND MONTH(o.value_datetime) >= MONTH(CAST('#startDate#' AS DATE)) 
-							AND MONTH(o.value_datetime) <= MONTH(CAST('#endDate#' AS DATE))
-							AND YEAR(o.value_datetime) = YEAR(CAST('#endDate#' AS DATE))
+							AND MONTH(os.obs_datetime) = MONTH(CAST('#endDate#' AS DATE)) 
+							AND YEAR(os.obs_datetime) = YEAR(CAST('#endDate#' AS DATE))
 							)
 
 		and active_clients.person_id not in (
