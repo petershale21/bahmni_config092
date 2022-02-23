@@ -373,8 +373,9 @@ FROM
 -- ART START	
 	left outer join
 	(
-	select person_id,CAST(value_datetime AS DATE) as ART_Start
-	from obs where concept_id = 2249 and voided = 0
+	 select oss.person_id, MAX(oss.obs_datetime) as max_observation, CAST(SUBSTRING(MAX(CONCAT(oss.obs_datetime, oss.value_datetime)), 20)AS DATE) AS ART_Start
+	 from obs oss where oss.concept_id = 2249 and oss.voided = 0
+	 group by oss.person_id
 	)intake_date
 	on txcurr.Id = intake_date.person_id
 
