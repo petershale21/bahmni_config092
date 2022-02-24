@@ -72,7 +72,7 @@ Bahmni.ConceptSet.FormConditions.rules = {
                                         isAutoFill: true,
                                         scopedEncounter:"latestvisit",
                                         isFilledOnRetrospectiveMode: true,
-                                        enableDefaultValue:true,
+                                        enableDefaultValue:false,
                                         enableEditAfterAutoFill: true
                                         }
                                 });
