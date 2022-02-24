@@ -44,7 +44,10 @@ Bahmni.ConceptSet.FormConditions.rules = {
                                   fieldValue : 
                                         {
                                            isAutoFill: true,
-                                           scopedEncounter:0
+                                           scopedEncounter:"CurrentVisit",
+                                           isFilledOnRetrospectiveMode: false,
+                                           enableDefaultValue:false,
+                                           enableEditAfterAutoFill: false
                                         }
                                 });
                         }
@@ -61,13 +64,31 @@ Bahmni.ConceptSet.FormConditions.rules = {
                         conditions.hide.push("Systolic Data");
                         conditions.hide.push("Diastolic Data");
                         conditions.hide.push("IMAM, MUAC");
+
                 }else if (conditionConcept == "HTC, Patient") {
-                        conditions.assignedValues.push( { field: "HEIGHT", fieldValue : {
-                                isAutoFill: true,
-                                scopedEncounter:0}})
+                        conditions.assignedValues.push( {
+                                field: "HEIGHT", 
+                                fieldValue : {
+                                        isAutoFill: true,
+                                        scopedEncounter:"latestvisit",
+                                        isFilledOnRetrospectiveMode: true,
+                                        enableDefaultValue:true,
+                                        enableEditAfterAutoFill: true
+                                        }
+                                });
 
                         conditions.show.push("HEIGHT");
                         conditions.show.push("WEIGHT");
+                        conditions.assignedValues.push( {
+                                field: "WEIGHT", 
+                                fieldValue : {
+                                        isAutoFill: true,
+                                        scopedEncounter:"latestvisit",
+                                        isFilledOnRetrospectiveMode: true,
+                                        enableDefaultValue:true,
+                                        enableEditAfterAutoFill: true
+                                        }
+                                });
                         conditions.show.push("TB Status");
                         conditions.show.push("Systolic Data");
                         conditions.show.push("Diastolic Data");
