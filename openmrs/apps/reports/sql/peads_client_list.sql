@@ -1,4 +1,4 @@
-SELECT distinct Patient_Identifier, Patient_Name, Age,DOB, Sex, Program_Status, ART_Start, Date_Diagnosed
+SELECT distinct Patient_Identifier, Patient_Name, DOB, Sex, Program_Status, ART_Start, Date_Diagnosed
 FROM
 (
 (SELECT Id,patientIdentifier AS "Patient_Identifier", patientName AS "Patient_Name", Age,DOB, Sex, 'Initiated' AS 'Program_Status'
