@@ -475,7 +475,7 @@ left outer join
  
  UNION
  
-  (Select patientIdentifier, 'Tranfer_Out' AS Client_Outcome
+  (Select patientIdentifier, 'Transfer_Out' AS Client_Outcome
  FROM
  (
 	select distinct patient.patient_id AS Id,
@@ -589,16 +589,6 @@ select distinct patient.patient_id AS Id,
 										from obs o
 												INNER JOIN patient ON o.person_id = patient.patient_id
 												AND patient.voided = 0 AND o.voided = 0
-												AND o.person_id in (
-														select person_id
-														from 
-															(select oss.person_id, MAX(oss.obs_datetime) as max_observation, SUBSTRING(MAX(CONCAT(oss.obs_datetime, oss.value_datetime)), 20) AS latest_follow_up
-															from obs oss
-															inner join person p on oss.person_id=p.person_id and oss.concept_id = 3752 and oss.voided=0
-															and oss.obs_datetime < cast('#startDate#' as DATE)
-															group by p.person_id
-															having datediff(CAST(DATE_ADD(CAST('#startDate#' AS DATE), INTERVAL -1 DAY) AS DATE), latest_follow_up) < 29) as On_ART_Beginning_Quarter
-												)
 												AND o.person_id in (
 													select person_id
 													from 
