@@ -618,7 +618,7 @@ select distinct patient.patient_id AS Id,
 														inner join person p on oss.person_id=p.person_id and oss.concept_id = 3752 and oss.voided=0
 														and oss.obs_datetime <= cast('#endDate#' as DATE)
 														group by p.person_id
-														having datediff(CAST('#endDate#' AS DATE), latest_follow_up) > 28) as Missed_Greater_Than_28Days
+														having datediff(CAST('#endDate#' AS DATE), latest_follow_up) > 0) as NotActive_IIT
 												)
 												INNER JOIN patient_identifier ON patient_identifier.patient_id = patient.patient_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1
 										group by patient.patient_id
@@ -636,7 +636,7 @@ select distinct patient.patient_id AS Id,
 														inner join person p on oss.person_id=p.person_id and oss.concept_id = 3752 and oss.voided=0
 														and oss.obs_datetime <= cast('#endDate#' as DATE)
 														group by p.person_id
-														having datediff(CAST('#endDate#' AS DATE), latest_follow_up) > 28) as Missed_Greater_Than_28Days
+														having datediff(CAST('#endDate#' AS DATE), latest_follow_up) >0) as NotActive_IIT
 												)
 												INNER JOIN patient_identifier ON patient_identifier.patient_id = patient.patient_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1
 										group by patient.patient_id
@@ -897,5 +897,7 @@ select distinct patient.patient_id AS Id,
                                  INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1
 )reinitiating)
 
- )outcomes)A
- ON A.patientIdentifier = cohort_txcurr.Patient_Identifier
+ )outcomes)All_outcomes
+ ON All_outcomes.patientIdentifier = cohort_txcurr.Patient_Identifier
+
+ 
