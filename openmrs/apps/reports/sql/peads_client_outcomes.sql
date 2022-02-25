@@ -539,6 +539,17 @@ left outer join
 					where os.concept_id = 4155 and os.value_coded = 2146
 				AND os.obs_datetime <= CAST('#endDate#' AS DATE)						
 	 		)
+				-- 
+			AND touts.person_id in (
+					select person_id
+					 from(
+					select os.person_id,datediff(CAST(max(os.value_datetime) AS DATE), CAST('#endDate#' AS DATE)) as last_ap
+								from obs os
+								where concept_id = 3752
+								and CAST(os.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
+								group by os.person_id
+								having last_ap < 0)drug_supply_finished			
+	 		)
 	 		-- NOT DEAD
 	 		AND touts.person_id not in (
 				select distinct person_id 
@@ -554,7 +565,7 @@ left outer join
 
 UNION
 
-(SELECT patientIdentifier, 'TransferOut' as 'Client_Outcome'
+(SELECT patientIdentifier, 'TransferIn' as 'Client_Outcome'
 						FROM
 						(select distinct patient.patient_id AS Id,
                                    patient_identifier.identifier AS patientIdentifier
