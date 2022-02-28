@@ -976,15 +976,14 @@ UNION
 FROM
 (SELECT patientIdentifier, Date_IIT AS 'Date_of_Outcome'
 	FROM											
-	(select oss.person_id,patient_identifier.identifier AS patientIdentifier, SUBSTRING(CONCAT(oss.value_datetime, oss.obs_id), 20) AS observation_id, CAST(DATE_ADD(CAST(oss.value_datetime AS DATE), INTERVAL 29 DAY) as Date) as Date_IIT
+	(select oss.person_id,patient_identifier.identifier AS patientIdentifier, SUBSTRING(CONCAT(oss.value_datetime, oss.obs_id), 20) AS observation_id, CAST(DATE_ADD(CAST(MAX(oss.value_datetime) AS DATE), INTERVAL 29 DAY) as Date) as Date_IIT
 			from obs oss
 			INNER JOIN patient ON oss.person_id = patient.patient_id
 			INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
 			inner join patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1
 			where oss.voided=0 
 			and oss.concept_id=3752
-			-- and CAST(oss.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
-			having Date_IIT >= CAST('#startDate#' AS DATE) and Date_IIT <= CAST('#endDate#' AS DATE)
+			group by oss.person_id
 
 		)interrupted
 		where interrupted.person_id in (
@@ -1063,4 +1062,6 @@ FROM
 )outcomedates)dates_of_outcomes
 ON dates_of_outcomes.patientIdentifier = cohort_txcurr.Patient_Identifier
 
- 
+
+
+
