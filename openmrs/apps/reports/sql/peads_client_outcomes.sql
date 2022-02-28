@@ -983,6 +983,7 @@ FROM
 			inner join patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1
 			where oss.voided=0 
 			and oss.concept_id=3752
+			and oss.obs_datetime <= CAST('#endDate#' AS DATE)
 			group by oss.person_id
 			having Appointment_Date >= CAST('#startDate#' AS DATE) and Appointment_Date <= CAST('#endDate#' AS DATE)
 
