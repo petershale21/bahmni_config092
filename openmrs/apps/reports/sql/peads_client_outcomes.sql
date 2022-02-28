@@ -976,7 +976,7 @@ UNION
 FROM
 (SELECT patientIdentifier, Date_IIT AS 'Date_of_Outcome'
 	FROM											
-	(select oss.person_id,patient_identifier.identifier AS patientIdentifier, SUBSTRING(CONCAT(oss.value_datetime, oss.obs_id), 20) AS observation_id, CAST(DATE_ADD(CAST(MAX(oss.value_datetime) AS DATE), INTERVAL 29 DAY) as Date) as Date_IIT
+	(select oss.person_id,patient_identifier.identifier AS patientIdentifier, SUBSTRING(CONCAT(oss.value_datetime, oss.obs_id), 20) AS observation_id,CAST(MAX(oss.value_datetime) AS DATE) as Appointment_Date, CAST(DATE_ADD(CAST(MAX(oss.value_datetime) AS DATE), INTERVAL 29 DAY) as Date) as Date_IIT
 			from obs oss
 			INNER JOIN patient ON oss.person_id = patient.patient_id
 			INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
@@ -984,6 +984,7 @@ FROM
 			where oss.voided=0 
 			and oss.concept_id=3752
 			group by oss.person_id
+			having Appointment_Date >= CAST('#startDate#' AS DATE) and Appointment_Date <= CAST('#endDate#' AS DATE)
 
 		)interrupted
 		where interrupted.person_id in (
