@@ -84,8 +84,8 @@ WHERE Clients_Seen.Id not in (
 				-- CLIENTS NEWLY INITIATED ON ART
 				 INNER JOIN patient ON o.person_id = patient.patient_id
 				 AND (o.concept_id = 2249 
-						AND MONTH(o.obs_datetime) = MONTH(CAST('2020-09-30' AS DATE)) 
-						AND YEAR(o.obs_datetime) = YEAR(CAST('2020-09-30' AS DATE))
+						AND MONTH(o.value_datetime) = MONTH(CAST('2020-09-30' AS DATE)) 
+						AND YEAR(o.value_datetime) = YEAR(CAST('2020-09-30' AS DATE))
 						)		
 				 AND patient.voided = 0 AND o.voided = 0
 
@@ -224,8 +224,8 @@ ORDER BY Clients_Seen.patientName)
 							select distinct os.person_id
 							from obs os
 							where concept_id = 2249
-							AND MONTH(os.obs_datetime) = MONTH(CAST('2020-09-30' AS DATE)) 
-							AND YEAR(os.obs_datetime) = YEAR(CAST('2020-09-30' AS DATE))
+							AND MONTH(os.value_datetime) = MONTH(CAST('2020-09-30' AS DATE)) 
+							AND YEAR(os.value_datetime) = YEAR(CAST('2020-09-30' AS DATE))
 							)
 
 		and active_clients.person_id not in (
@@ -322,6 +322,14 @@ FROM
 								) as active_clients
 								where active_clients.latest_follow_up < cast('2020-09-30' as date)
 								and DATEDIFF(CAST('2020-09-30' AS DATE),latest_follow_up) <= 28
+
+				and active_clients.person_id not in (
+							select distinct os.person_id
+							from obs os
+							where (os.concept_id = 3843 AND os.value_coded = 3841 OR os.value_coded = 3842)
+							AND MONTH(os.obs_datetime) = MONTH(CAST('2020-09-30' AS DATE)) 
+							AND YEAR(os.obs_datetime) = YEAR(CAST('2020-09-30' AS DATE))
+							)				
 				
 				and active_clients.person_id not in (
 							select distinct os.person_id
