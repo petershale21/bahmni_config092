@@ -472,7 +472,7 @@ left outer join
 												inner join person p on oss.person_id=p.person_id and oss.concept_id = 3752 and oss.voided=0
 												and oss.obs_datetime < cast('#startDate#' as DATE)
 												group by p.person_id
-												having datediff(CAST(DATE_ADD(CAST('#startDate#' AS DATE), INTERVAL -1 DAY) AS DATE), latest_follow_up) > 28) as Missed_Greater_Than_28Days
+												having datediff(CAST(DATE_ADD(CAST('#startDate#' AS DATE), INTERVAL -1 DAY) AS DATE), latest_follow_up) > 0) as NotActive_IIT
 										)	
 						 )
 						 -- end
@@ -599,16 +599,6 @@ select distinct patient.patient_id AS Id,
 												AND patient.voided = 0 AND o.voided = 0
 												AND o.person_id in (
 														select person_id
-														from 
-															(select oss.person_id, MAX(oss.obs_datetime) as max_observation, SUBSTRING(MAX(CONCAT(oss.obs_datetime, oss.value_datetime)), 20) AS latest_follow_up
-															from obs oss
-															inner join person p on oss.person_id=p.person_id and oss.concept_id = 3752 and oss.voided=0
-															and oss.obs_datetime < cast('#startDate#' as DATE)
-															group by p.person_id
-															having datediff(CAST(DATE_ADD(CAST('#startDate#' AS DATE), INTERVAL -1 DAY) AS DATE), latest_follow_up) < 29) as On_ART_Beginning_Quarter
-												)
-												AND o.person_id in (
-													select person_id
 													from 
 														(select oss.person_id, MAX(oss.obs_datetime) as max_observation, SUBSTRING(MAX(CONCAT(oss.obs_datetime, oss.value_datetime)), 20) AS latest_follow_up
 														from obs oss
@@ -616,7 +606,8 @@ select distinct patient.patient_id AS Id,
 														and oss.obs_datetime <= cast('#endDate#' as DATE)
 														group by p.person_id
 														having datediff(CAST('#endDate#' AS DATE), latest_follow_up) > 0) as NotActive_IIT
-												)
+														)
+												
 												INNER JOIN patient_identifier ON patient_identifier.patient_id = patient.patient_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1
 										group by patient.patient_id
 										UNION
@@ -633,7 +624,7 @@ select distinct patient.patient_id AS Id,
 														inner join person p on oss.person_id=p.person_id and oss.concept_id = 3752 and oss.voided=0
 														and oss.obs_datetime <= cast('#endDate#' as DATE)
 														group by p.person_id
-														having datediff(CAST('#endDate#' AS DATE), latest_follow_up) >0) as NotActive_IIT
+														having datediff(CAST('#endDate#' AS DATE), latest_follow_up) > 0) as NotActive_IIT
 												)
 												INNER JOIN patient_identifier ON patient_identifier.patient_id = patient.patient_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1
 										group by patient.patient_id
@@ -816,7 +807,7 @@ select distinct patient.patient_id AS Id,
 
 										select distinct o.person_id
 										from obs o
-										-- PATIENTS WITH NO CLINICAL CONTACT OR ARV PICK-UP FOR GREATER THAN 28 DAYS
+										-- PATIENTS WITH NO CLINICAL CONTACT OR ARV PICK-UP 
 										-- SINCE THEIR LAST EXPECTED CONTACT WHO RESTARTED ARVs WITHIN THE REPORTING PERIOD
 										INNER JOIN patient ON o.person_id = patient.patient_id
 										AND patient.voided = 0 AND o.voided = 0
@@ -828,7 +819,7 @@ select distinct patient.patient_id AS Id,
 												inner join person p on oss.person_id=p.person_id and oss.concept_id = 3752 and oss.voided=0
 												and oss.obs_datetime < cast('#startDate#' as DATE)
 												group by p.person_id
-												having datediff(CAST(DATE_ADD(CAST('#startDate#' AS DATE), INTERVAL -1 DAY) AS DATE), latest_follow_up) > 28) as Missed_Greater_Than_28Days
+												having datediff(CAST(DATE_ADD(CAST('#startDate#' AS DATE), INTERVAL -1 DAY) AS DATE), latest_follow_up) > 0) as NotActive_IIT
 										)
 
 										-- Client Seen: As either patient OR Treatment Buddy
@@ -847,7 +838,7 @@ select distinct patient.patient_id AS Id,
 														where os.concept_id = 3708 AND os.value_datetime BETWEEN CAST('#startDate#' AS DATE) AND CAST('#endDate#' AS DATE)
 												)
 										)
-										-- Still on treatment at the end of the reporting period
+										-- Still on treatment at the end of the reporting period, do not include missed 28 days
 										AND o.person_id in (
 											select person_id
 											from 
@@ -856,7 +847,7 @@ select distinct patient.patient_id AS Id,
 												inner join person p on oss.person_id=p.person_id and oss.concept_id = 3752 and oss.voided=0
 												and oss.obs_datetime >= cast('#startDate#' as DATE) and oss.obs_datetime <= cast('#endDate#' as DATE)
 												group by p.person_id
-												having datediff(CAST('#endDate#' AS DATE), latest_follow_up) <= 28) as Still_On_Treatment_End_Period
+												having datediff(CAST('#endDate#' AS DATE), latest_follow_up) <= 0) as Still_On_Treatment_End_Period
 										)
 										
 										-- Transfered Out to Another Site during thier latest encounter before the start date
