@@ -496,29 +496,19 @@ left outer join
 				 INNER JOIN patient ON o.person_id = patient.patient_id
 				 AND patient.voided = 0 AND o.voided = 0
 				 AND o.person_id in (
+					 -- Consider as T/Out after drug supply is depleted
 						select person_id
 						from 
 							(select oss.person_id, MAX(oss.obs_datetime) as max_observation, SUBSTRING(MAX(CONCAT(oss.obs_datetime, oss.value_datetime)), 20) AS latest_follow_up
 							 from obs oss
 							 inner join person p on oss.person_id=p.person_id and oss.concept_id = 3752 and oss.voided=0
-							 and oss.obs_datetime < cast('#startDate#' as DATE)
-							 group by p.person_id
-							 having datediff(CAST(DATE_ADD(CAST('#startDate#' AS DATE), INTERVAL -1 DAY) AS DATE), latest_follow_up) < 29
-							 ) as On_ART_Beginning_Quarter
-				 )
-
-				 AND o.person_id in (
-						select person_id
-						from 
-							(select oss.person_id, MAX(oss.obs_datetime) as max_observation, SUBSTRING(MAX(CONCAT(oss.obs_datetime, oss.value_datetime)), 20) AS latest_follow_up
-							 from obs oss
-							 inner join person p on oss.person_id=p.person_id and oss.concept_id = 3752 and oss.voided=0
-							 and oss.obs_datetime < cast('#endDate#' as DATE)
+							 and oss.obs_datetime <= cast('#endDate#' as DATE)
 							 group by p.person_id
 							 having datediff(CAST(latest_follow_up as DATE), CAST('#endDate#' AS DATE)) < 0
 							 ) as IIT
 				 )
 
+				 
 				 AND o.person_id in (
 					 -- Transfered Out to Another Site
 						select distinct os.person_id 
@@ -671,16 +661,6 @@ inner join
 		from obs o
 				 INNER JOIN patient ON o.person_id = patient.patient_id
 				 AND patient.voided = 0 AND o.voided = 0
-				 AND o.person_id in (
-						select person_id
-						from 
-							(select oss.person_id, MAX(oss.obs_datetime) as max_observation, SUBSTRING(MAX(CONCAT(oss.obs_datetime, oss.value_datetime)), 20) AS latest_follow_up
-							 from obs oss
-							 inner join person p on oss.person_id=p.person_id and oss.concept_id = 3752 and oss.voided=0
-							 and oss.obs_datetime < cast('#startDate#' as DATE)
-							 group by p.person_id
-							 having datediff(CAST(DATE_ADD(CAST('#startDate#' AS DATE), INTERVAL -1 DAY) AS DATE), latest_follow_up) < 29) as On_ART_Beginning_Quarter
-				 )
 				 AND o.person_id in (
 					select person_id
 					from 
@@ -934,21 +914,33 @@ UNION
 
 	(SELECT patientIdentifier,Date_of_Outcome
 	FROM
-	(SELECT patientIdentifier, Date_TransferedOut AS 'Date_of_Outcome'
+	
+	(SELECT patientIdentifier, CAST(Date_TransferedOut AS DATE) AS 'Date_of_Outcome'
 	FROM
 	(
-		select os.person_id,  patient_identifier.identifier AS patientIdentifier,CAST(max(os.value_datetime) AS DATE) as Date_TransferedOut
+		select os.person_id, patient_identifier.identifier AS patientIdentifier, MAX(os.obs_datetime) as max_observation, SUBSTRING(MAX(CONCAT(os.obs_datetime, os.value_datetime)), 20) AS Date_TransferedOut
 		from obs os
 		INNER JOIN patient ON os.person_id = patient.patient_id
 		INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
 		inner join patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1
-		where os.concept_id=2266 and os.voided = 0
-       -- and CAST(os.value_datetime AS DATE) >= CAST('#startDate#' AS DATE)
-		-- and CAST(os.value_datetime AS DATE) <= CAST('#endDate#' AS DATE)
-		-- and CAST(os.value_datetime AS DATE) >= DATE_ADD(CAST('#endDate#' AS DATE), INTERVAL -3 MONTH) 
-		and CAST(os.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
+		where os.concept_id= 3752 and os.voided = 0
+		and os.obs_datetime <= cast('#endDate#' as DATE)
 		group by os.person_id
-	   )date_tout)tout)
+		having datediff(CAST(Date_TransferedOut as DATE), CAST('#endDate#' AS DATE)) < 0
+	   )date_tout
+	   
+	   where date_tout.person_id in (
+		   	select os.person_id
+				from obs os
+				INNER JOIN patient ON os.person_id = patient.patient_id
+				INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
+				inner join patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1
+				where os.concept_id=2264 and os.voided = 0
+				-- where os.concept_id=2266 and os.voided = 0
+				and CAST(os.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
+				group by os.person_id
+	   )
+	   )tout)
 
 UNION
 
@@ -975,7 +967,8 @@ UNION
 FROM
 (SELECT patientIdentifier, Date_IIT AS 'Date_of_Outcome'
 	FROM											
-	(select oss.person_id,patient_identifier.identifier AS patientIdentifier, SUBSTRING(CONCAT(oss.value_datetime, oss.obs_id), 20) AS observation_id,CAST(MAX(oss.value_datetime) AS DATE) as Appointment_Date, CAST(DATE_ADD(CAST(MAX(oss.value_datetime) AS DATE), INTERVAL 1 DAY) as Date) as Date_IIT
+	(select oss.person_id,patient_identifier.identifier AS patientIdentifier, SUBSTRING(MAX(CONCAT(oss.obs_datetime, oss.value_datetime)), 20) AS Date_TransferedOut,
+	CAST(MAX(oss.value_datetime) AS DATE) as Appointment_Date, CAST(DATE_ADD(CAST(MAX(oss.value_datetime) AS DATE), INTERVAL 1 DAY) as Date) as Date_IIT
 			from obs oss
 			INNER JOIN patient ON oss.person_id = patient.patient_id
 			INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
@@ -984,7 +977,7 @@ FROM
 			and oss.concept_id=3752
 			and oss.obs_datetime <= CAST('#endDate#' AS DATE)
 			group by oss.person_id
-			having Appointment_Date >= CAST('#startDate#' AS DATE) and Appointment_Date <= CAST('#endDate#' AS DATE)
+			-- having Appointment_Date >= CAST('#startDate#' AS DATE) and Appointment_Date <= CAST('#endDate#' AS DATE)
 
 		)interrupted
 		where interrupted.person_id in (
@@ -994,16 +987,6 @@ FROM
 										from obs o
 												INNER JOIN patient ON o.person_id = patient.patient_id
 												AND patient.voided = 0 AND o.voided = 0
-												AND o.person_id in (
-														select person_id
-														from 
-															(select oss.person_id, MAX(oss.obs_datetime) as max_observation, SUBSTRING(MAX(CONCAT(oss.obs_datetime, oss.value_datetime)), 20) AS latest_follow_up
-															from obs oss
-															inner join person p on oss.person_id=p.person_id and oss.concept_id = 3752 and oss.voided=0
-															and oss.obs_datetime < cast('#startDate#' as DATE)
-															group by p.person_id
-															having datediff(CAST(DATE_ADD(CAST('#startDate#' AS DATE), INTERVAL -1 DAY) AS DATE), latest_follow_up) < 29) as On_ART_Beginning_Quarter
-												)
 												AND o.person_id in (
 													select person_id
 													from 
@@ -1059,6 +1042,35 @@ FROM
 		)
 		)X
 )
+
+UNION
+
+(Select patientIdentifier, Date_of_Outcome
+	FROM
+	(SELECT patientIdentifier, Date_Reinitiated AS 'Date_of_Outcome'
+			FROM
+			(Select os.person_id, Cast(max(os.obs_datetime)as DATE) as Date_Reinitiated, patient_identifier.identifier AS patientIdentifier
+				from obs os 
+				INNER JOIN patient ON os.person_id = patient.patient_id
+				INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
+				inner join patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1
+				where os.concept_id = 3843 AND os.value_coded in (3841,3842)
+				AND os.obs_datetime >= CAST('#startDate#' AS DATE) 
+				AND os.obs_datetime <= CAST('#endDate#' AS DATE)
+				group by os.person_id 
+				and os.person_id in (
+						select person_id
+							from 
+								(select oss.person_id, MAX(oss.obs_datetime) as max_observation, SUBSTRING(MAX(CONCAT(oss.obs_datetime, oss.value_datetime)), 20) AS latest_follow_up
+								from obs oss
+								inner join person p on oss.person_id=p.person_id and oss.concept_id = 3752 and oss.voided=0
+								and oss.obs_datetime < cast('#startDate#' as DATE)
+								group by p.person_id
+								having datediff(CAST(DATE_ADD(CAST('#startDate#' AS DATE), INTERVAL -1 DAY) AS DATE), latest_follow_up) > 0) as NotActive_IIT_at_start_of_period
+				
+			)
+
+	)date_reinitiated)reinitiated)	
 	
 )outcomedates)dates_of_outcomes
 ON dates_of_outcomes.patientIdentifier = cohort_txcurr.Patient_Identifier
