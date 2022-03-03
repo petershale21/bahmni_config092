@@ -467,12 +467,20 @@ left outer join
 		AND active_clients.person_id not in  (
 											select person_id
 											from 
-												(select oss.person_id, MAX(oss.obs_datetime) as max_observation, SUBSTRING(MAX(CONCAT(oss.obs_datetime, oss.value_datetime)), 20) AS latest_follow_up
-												from obs oss
-												inner join person p on oss.person_id=p.person_id and oss.concept_id = 3752 and oss.voided=0
-												and oss.obs_datetime < cast('#startDate#' as DATE)
-												group by p.person_id
-												having datediff(CAST(DATE_ADD(CAST('#startDate#' AS DATE), INTERVAL -1 DAY) AS DATE), latest_follow_up) > 0) as NotActive_IIT
+												(select o.person_id, SUBSTRING(MAX(CONCAT(o.obs_datetime, o.value_datetime)), 20) AS latest_follow_up		
+													from obs o		
+													inner join 
+														(select oss.person_id, max(obs_datetime), SUBSTRING(MAX(CONCAT(obs_datetime, obs_id)), 20) AS observation_id
+															from obs oss where concept_id = 3753
+															and oss.obs_datetime <= cast('#startDate#' as date)
+															and oss.voided = 0
+															group by oss.person_id)followup_form
+													on followup_form.observation_id = o.obs_group_id
+													where o.concept_id = 3752
+													and followup_form.observation_id = o.obs_group_id
+													and o.obs_datetime < cast('#startDate#' as DATE)
+													group by person_id
+													having datediff(CAST(DATE_ADD(CAST('#startDate#' AS DATE), INTERVAL -1 DAY) AS DATE), latest_follow_up) > 0) as NotActive_IIT
 										)	
 						 )
 						 -- end
@@ -794,12 +802,20 @@ select distinct patient.patient_id AS Id,
 										AND o.person_id in (
 											select person_id
 											from 
-												(select oss.person_id, MAX(oss.obs_datetime) as max_observation, SUBSTRING(MAX(CONCAT(oss.obs_datetime, oss.value_datetime)), 20) AS latest_follow_up
-												from obs oss
-												inner join person p on oss.person_id=p.person_id and oss.concept_id = 3752 and oss.voided=0
-												and oss.obs_datetime < cast('#startDate#' as DATE)
-												group by p.person_id
-												having datediff(CAST(DATE_ADD(CAST('#startDate#' AS DATE), INTERVAL -1 DAY) AS DATE), latest_follow_up) > 0) as NotActive_IIT
+												(select o.person_id, SUBSTRING(MAX(CONCAT(o.obs_datetime, o.value_datetime)), 20) AS latest_follow_up		
+													from obs o		
+													inner join 
+														(select oss.person_id, max(obs_datetime), SUBSTRING(MAX(CONCAT(obs_datetime, obs_id)), 20) AS observation_id
+															from obs oss where concept_id = 3753
+															and oss.obs_datetime <= cast('#startDate#' as date)
+															and oss.voided = 0
+															group by oss.person_id)followup_form
+													on followup_form.observation_id = o.obs_group_id
+													where o.concept_id = 3752
+													and followup_form.observation_id = o.obs_group_id
+													and o.obs_datetime < cast('#startDate#' as DATE)
+													group by person_id
+													having datediff(CAST(DATE_ADD(CAST('#startDate#' AS DATE), INTERVAL -1 DAY) AS DATE), latest_follow_up) > 0) as NotActive_IIT
 										)
 
 										-- Client Seen: As either patient OR Treatment Buddy
