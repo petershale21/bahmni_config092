@@ -151,5 +151,3 @@ from obs o
 )as cd4
 on all_patients.Id = cd4.person_id
 where CD4 < 200
-
-s
