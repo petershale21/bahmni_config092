@@ -630,14 +630,22 @@
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/peads_client_list.sql"
         }
+<<<<<<< HEAD
     },
+=======
+    }, 
+>>>>>>> b1be1715c3e1c31703d8f7f8fe844aa248eaaf09
     "peads_outcomes": {
         "name": "ART-077 | PEADS Aging Out Analysis (Client Outcomes)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/peads_client_outcomes.sql"
         }
+<<<<<<< HEAD
     },
+=======
+    }, 
+>>>>>>> b1be1715c3e1c31703d8f7f8fe844aa248eaaf09
     "peads_appointments": {
         "name": "ART-078 | PEADS Aging Out Analysis (Client Appointments)",
         "type": "MRSGeneric",
