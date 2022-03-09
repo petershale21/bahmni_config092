@@ -1,7 +1,7 @@
 
 SELECT Program_Status,
-IF(Id IS NULL, 0, SUM(IF(Program_Status = 'Initiated', 1, 0))) AS Total,
-IF(Id IS NULL, 0, SUM(IF(Program_Status = 'Tx_Curr', 1, 0))) AS Total
+IF(Id IS NULL, 0, SUM(IF(Program_Status = 'Initiated', 1, 0))) AS Initiated_with_CD4_less_than_200,
+IF(Id IS NULL, 0, SUM(IF(Program_Status = 'Tx_Curr', 1, 0))) AS Active_with_CD4_less_than_200
 FROM(
 Select Id,Patient_Identifier, Patient_Name, Program_Status, CD4
 FROM(
