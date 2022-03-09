@@ -1,11 +1,15 @@
-SELECT distinct Patient_Identifier, Patient_Name, DOB, Sex, Client_Outcome, Date_of_Outcome
-FROM
-(
+select distinct Patient_Identifier,
+				Patient_Name, 
+				DOB,
+				Age,
+				Visit_Date,
+				Appointment_Date,
+				Client_Outcome,
+				Date_of_Outcome
 
-SELECT distinct Patient_Identifier, Patient_Name, Age,DOB, Sex, Program_Status
 FROM
 (
-(SELECT Id,patientIdentifier AS "Patient_Identifier", patientName AS "Patient_Name", Age,DOB, Sex, 'Initiated' AS 'Program_Status'
+	(SELECT Id,patientIdentifier AS "Patient_Identifier", patientName AS "Patient_Name", Age,DOB, Sex, 'Initiated' AS 'Program_Status'
 	FROM
                 (select distinct patient.patient_id AS Id,
 									   patient_identifier.identifier AS patientIdentifier,
@@ -44,9 +48,9 @@ FROM
 				   where Age <=19
 ORDER BY Newly_Initiated_ART_Clients.patientName)
 
-UNION
+	UNION
 
-(SELECT Id,patientIdentifier AS "Patient_Identifier", patientName AS "Patient_Name", Age,DOB, Sex, 'Seen' AS 'Program_Status'
+	(SELECT Id,patientIdentifier AS "Patient_Identifier", patientName AS "Patient_Name", Age,DOB, Sex, 'Seen' AS 'Program_Status'
 FROM (
 
 select distinct patient.patient_id AS Id,
@@ -172,10 +176,10 @@ AND Clients_Seen.Id not in
 
 AND Age <= 19					
 ORDER BY Clients_Seen.patientName)
-		   
-UNION
 
-(SELECT  Id,patientIdentifier , patientName, Age,DOB, Sex, 'Seen_Previous' AS 'Program_Status'
+	UNION
+
+	(SELECT  Id,patientIdentifier , patientName, Age,DOB, Sex, 'Seen_Previous' AS 'Program_Status'
 	FROM
                 (select distinct patient.patient_id AS Id,
 									   patient_identifier.identifier AS patientIdentifier,
@@ -286,7 +290,6 @@ ORDER BY Seen_Previous_ART_Clients.patientName)
 
 UNION
 
--- INCLUDE MISSED APPOINTMENTS WITHIN 28 DAYS ACCORDING TO THE NEW PEPFAR GUIDELINE
 (SELECT Id, patientIdentifier , patientName , Age, DOB, Sex, 'MissedWithin28Days' AS 'Program_Status'
 FROM
                  (select distinct patient.patient_id AS Id,
@@ -372,13 +375,26 @@ FROM
                    WHERE observed_age_group.report_group_name = 'Modified_Ages') AS TwentyEightDayDefaulters
 				   where Age <=19
 				   order by TwentyEightDayDefaulters.patientName)
-)txcurr_2020Q4)
-cohort_txcurr
+
+) previous
+
+left outer JOIN
+		-- Visit and Appointment Dates
+
+	(select oss.person_id, SUBSTRING(CONCAT(oss.value_datetime, oss.obs_id), 20) AS observation_id, CAST(oss.value_datetime AS DATE) as Appointment_Date, CAST(oss.obs_datetime AS DATE) as Visit_Date
+		from obs oss
+		where oss.voided=0 
+		and oss.concept_id=3752 
+		AND CAST(oss.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+		AND CAST(oss.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
+		-- AND CAST(oss.obs_datetime AS DATE) >= DATE_ADD(CAST('#endDate#' AS DATE), INTERVAL -3 MONTH)
+		order by Visit_Date
+	)visit_date
+	on visit_date.person_id = previous.ID
 
 left outer join 
 
-
- (Select patientIdentifier, Client_Outcome
+(Select patientIdentifier, Client_Outcome
  FROM( 
  (Select patientIdentifier, Client_Outcome
  FROM
@@ -420,7 +436,7 @@ left outer join
 													where oss.voided=0 
 													and oss.concept_id=3752 
 													and CAST(oss.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
-													and CAST(oss.obs_datetime AS DATE) >= DATE_ADD(CAST('#endDate#' AS DATE), INTERVAL -13 MONTH)
+													-- and CAST(oss.obs_datetime AS DATE) >= DATE_ADD(CAST('#endDate#' AS DATE), INTERVAL -13 MONTH)
 													group by oss.person_id) firstquery
 										inner join (
 													select os.person_id,datediff(CAST(max(os.value_datetime) AS DATE), CAST('#endDate#' AS DATE)) as last_ap
@@ -882,12 +898,11 @@ select distinct patient.patient_id AS Id,
 )reinitiating)
 
  )outcomes)All_outcomes
- ON All_outcomes.patientIdentifier = cohort_txcurr.Patient_Identifier
+ ON All_outcomes.patientIdentifier = previous.Patient_Identifier
 
- left outer JOIN
+ left outer join
 
-
-(SELECT patientIdentifier, Date_of_Outcome
+ (SELECT patientIdentifier, Date_of_Outcome
 FROM
 (
 (Select patientIdentifier, Date_of_Outcome
@@ -1096,8 +1111,129 @@ UNION
 	)date_reinitiated)reinitiated)	
 	
 )outcomedates)dates_of_outcomes
-ON dates_of_outcomes.patientIdentifier = cohort_txcurr.Patient_Identifier
+ON dates_of_outcomes.patientIdentifier = previous.Patient_Identifier
+
+
+---------------------------------------------------------------
+
+select distinct o.person_id 
+from obs o inner join location l on o.location_id = l.location_id
+where (o.location_id =:location or parent_location =:location)
+and o.person_id in
+(SELECT Id
+
+                    FROM
+                                    (select distinct patient.patient_id AS Id,
+                                                        patient_identifier.identifier AS patientIdentifier
+                                                        -- concat(person_name.given_name, ' ', person_name.family_name) AS patientName,
+                                                        -- floor(datediff(CAST(:endDate AS DATE), person.birthdate)/365) AS Age,
+                                                        -- (select name from concept_name cn where cn.concept_id = 1738 and concept_name_type='FULLY_SPECIFIED') AS HIV_Status,
+                                                        -- person.gender AS Gender,
+                                                        -- observed_age_group.name AS age_group,
+                                                       -- observed_age_group.sort_order AS sort_order
+                                    from obs o
+                                            -- HTS SELF TEST STRATEGY
+                                            INNER JOIN patient ON o.person_id = patient.patient_id 
+                                            AND o.concept_id = 4845 and value_coded = 4822
+                                            AND patient.voided = 0 AND o.voided = 0
+                                            AND MONTH(o.obs_datetime) = MONTH(CAST(:endDate AS DATE)) 
+                                            AND YEAR(o.obs_datetime) = YEAR(CAST(:endDate AS DATE))
+                                            
+                                            -- HAS HIV POSITIVE RESULTS 
+                                            AND o.person_id in (
+                                                select distinct os.person_id
+                                                from obs os
+                                                where os.concept_id = 4844 and os.value_coded = 1738
+                                                AND MONTH(os.obs_datetime) = MONTH(CAST(:endDate AS DATE)) 
+                                            AND YEAR(os.obs_datetime) = YEAR(CAST(:endDate AS DATE))
+                                                AND patient.voided = 0 AND o.voided = 0
+                                            )
+                                            
+                                            INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
+                                            -- INNER JOIN person_name ON person.person_id = person_name.person_id AND person_name.preferred = 1
+                                            INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1
+                                            INNER JOIN reporting_age_group AS observed_age_group ON
+                                            CAST(:endDate AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
+                                            AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
+                                    WHERE observed_age_group.report_group_name = 'Modified_Ages'
+                                            ) AS HTSClients_HIV_Status
+                    -- ORDER BY HTSClients_HIV_Status.HIV_Status, HTSClients_HIV_Status.Age)as Pos_Self_Test
+					
+
+ left outer join
+	(
+	select distinct os.person_id
+	from obs os
+	INNER JOIN patient ON os.person_id = patient.patient_id 
+	where os.concept_id = 4238 and os.value_coded = 4235
+	AND MONTH(os.obs_datetime) = MONTH(CAST(:endDate AS DATE)) 
+    AND YEAR(os.obs_datetime) = YEAR(CAST(:endDate AS DATE))
+	AND patient.voided = 0 AND os.voided = 0
+	-- group by os.person_id
+	)B
+	ON B.person_id = HTSClients_HIV_Status.Id)			
 
 
 
+------------------------- ORIGINAL
 
+select distinct o.person_id 
+from obs o inner join location l on o.location_id = l.location_id
+where (o.location_id =:location or parent_location =:location)
+and o.person_id in
+(SELECT Id
+FROM (
+(SELECT distinct Id, patientIdentifier AS "Patient_Identifier", patientName AS "Patient_Name", Age, Gender, age_group, 'Self-test' AS 'HIV_Testing_Initiation'
+                                  , HIV_Status
+                    FROM
+                                    (select distinct patient.patient_id AS Id,
+                                                        patient_identifier.identifier AS patientIdentifier,
+                                                        concat(person_name.given_name, ' ', person_name.family_name) AS patientName,
+                                                        floor(datediff(CAST(:endDate AS DATE), person.birthdate)/365) AS Age,
+                                                        (select name from concept_name cn where cn.concept_id = 1738 and concept_name_type='FULLY_SPECIFIED') AS HIV_Status,
+                                                        person.gender AS Gender,
+                                                        observed_age_group.name AS age_group,
+                                                        observed_age_group.sort_order AS sort_order
+                                    from obs o
+                                            -- HTS SELF TEST STRATEGY
+                                            INNER JOIN patient ON o.person_id = patient.patient_id 
+                                            AND o.concept_id = 4845 and value_coded = 4822
+                                            AND patient.voided = 0 AND o.voided = 0
+                                            AND MONTH(o.obs_datetime) = MONTH(CAST(:endDate AS DATE)) 
+                                            AND YEAR(o.obs_datetime) = YEAR(CAST(:endDate AS DATE))
+                                            
+                                            -- HAS HIV POSITIVE RESULTS 
+                                            AND o.person_id in (
+                                                select distinct os.person_id
+                                                from obs os
+                                                where os.concept_id = 4844 and os.value_coded = 1738
+                                                AND MONTH(os.obs_datetime) = MONTH(CAST(:endDate AS DATE)) 
+                                            AND YEAR(os.obs_datetime) = YEAR(CAST(:endDate AS DATE))
+                                                AND patient.voided = 0 AND o.voided = 0
+                                            )
+                                            
+                                            INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
+                                            INNER JOIN person_name ON person.person_id = person_name.person_id AND person_name.preferred = 1
+                                            INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1
+                                            INNER JOIN reporting_age_group AS observed_age_group ON
+                                            CAST(:endDate AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
+                                            AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
+                                    WHERE observed_age_group.report_group_name = 'Modified_Ages'
+                                            ) AS HTSClients_HIV_Status
+                    ORDER BY HTSClients_HIV_Status.HIV_Status, HTSClients_HIV_Status.Age)as Pos_Self_Test
+					
+
+ left outer join
+	(
+	select distinct os.person_id
+	from obs os
+	INNER JOIN patient ON os.person_id = patient.patient_id 
+	where os.concept_id = 4238 and os.value_coded = 4235
+	AND MONTH(os.obs_datetime) = MONTH(CAST(:endDate AS DATE)) 
+    AND YEAR(os.obs_datetime) = YEAR(CAST(:endDate AS DATE))
+	AND patient.voided = 0 AND os.voided = 0
+	-- group by os.person_id
+	)B
+	ON B.person_id = Pos_Self_Test.Id)			
+					
+					)
