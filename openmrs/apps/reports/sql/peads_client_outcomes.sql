@@ -1,8 +1,6 @@
 select distinct Patient_Identifier,
 				Patient_Name, 
 				DOB,
-				Visit_Date,
-				Appointment_Date,
 				Client_Outcome,
 				Date_of_Outcome
 
