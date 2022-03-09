@@ -1,7 +1,6 @@
 select distinct Patient_Identifier,
 				Patient_Name, 
 				DOB,
-				Age,
 				Visit_Date,
 				Appointment_Date,
 				Client_Outcome,
