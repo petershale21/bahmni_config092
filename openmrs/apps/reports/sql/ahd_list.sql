@@ -1,6 +1,6 @@
-Select Patient_Identifier, Patient_Name, Program_Status, CD4
+Select Patient_Identifier, Patient_Name,age_group, Program_Status,  CD4
 FROM(
-(SELECT Id,patientIdentifier AS "Patient_Identifier", patientName AS "Patient_Name", Age,DOB, Sex, 'Initiated' AS 'Program_Status'
+(SELECT Id,patientIdentifier AS "Patient_Identifier", patientName AS "Patient_Name", Age,DOB,age_group, Sex, 'Initiated' AS 'Program_Status'
 	FROM
                 (select distinct patient.patient_id AS Id,
 									   patient_identifier.identifier AS patientIdentifier,
@@ -40,7 +40,7 @@ ORDER BY Newly_Initiated_ART_Clients.patientName)-- AS Tx_New
 
 UNION
 
-(SELECT Id,patientIdentifier AS "Patient_Identifier", patientName AS "Patient_Name", Age,DOB, Sex, 'Tx_Curr' AS 'Program_Status'
+(SELECT Id,patientIdentifier AS "Patient_Identifier", patientName AS "Patient_Name", Age,DOB,age_group, Sex, 'Tx_Curr' AS 'Program_Status'
 	FROM
                 (select distinct patient.patient_id AS Id,
 									   patient_identifier.identifier AS patientIdentifier,

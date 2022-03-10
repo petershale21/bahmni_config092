@@ -1,11 +1,13 @@
-
-SELECT Program_Status,
+SELECT age_group,
 IF(Id IS NULL, 0, SUM(IF(Program_Status = 'Initiated', 1, 0))) AS Initiated_with_CD4_less_than_200,
 IF(Id IS NULL, 0, SUM(IF(Program_Status = 'Tx_Curr', 1, 0))) AS Active_with_CD4_less_than_200
+
+FROM
+(SELECT Id,Patient_Identifier, Patient_Name,age_group, Program_Status, CD4
+FROM
+(SELECT Id,Patient_Identifier, Patient_Name,age_group, Program_Status, CD4
 FROM(
-Select Id,Patient_Identifier, Patient_Name, Program_Status, CD4
-FROM(
-(SELECT Id,patientIdentifier AS "Patient_Identifier", patientName AS "Patient_Name", Age,DOB, Sex, 'Initiated' AS 'Program_Status'
+(SELECT Id,patientIdentifier AS "Patient_Identifier", patientName AS "Patient_Name", Age,DOB,age_group, Sex, 'Initiated' AS 'Program_Status'
 	FROM
                 (select distinct patient.patient_id AS Id,
 									   patient_identifier.identifier AS patientIdentifier,
@@ -41,11 +43,11 @@ FROM(
 						  CAST('#endDate#' AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
 						  AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
                    WHERE observed_age_group.report_group_name = 'Modified_Ages') AS Newly_Initiated_ART_Clients
-ORDER BY Newly_Initiated_ART_Clients.patientName)-- AS Tx_New
+ORDER BY Newly_Initiated_ART_Clients.patientName)
 
-UNION
+UNION 
 
-(SELECT Id,patientIdentifier AS "Patient_Identifier", patientName AS "Patient_Name", Age,DOB, Sex, 'Tx_Curr' AS 'Program_Status'
+(SELECT Id,patientIdentifier AS "Patient_Identifier", patientName AS "Patient_Name", Age,DOB,age_group, Sex, 'Tx_Curr' AS 'Program_Status'
 	FROM
                 (select distinct patient.patient_id AS Id,
 									   patient_identifier.identifier AS patientIdentifier,
@@ -142,8 +144,8 @@ UNION
 						  CAST('#endDate#' AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
 						  AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
                    WHERE observed_age_group.report_group_name = 'Modified_Ages') AS Seen_Previous_ART_Clients
-ORDER BY Seen_Previous_ART_Clients.patientName)
-)as all_patients
+ORDER BY Seen_Previous_ART_Clients.patientName))all_patients
+
 inner join 
 
 (select o.person_id, SUBSTRING(MAX(CONCAT(o.obs_datetime, o.obs_id)), 20) AS observation_id, o.value_numeric as CD4
@@ -156,5 +158,32 @@ from obs o
 )as cd4
 on all_patients.Id = cd4.person_id
 where CD4 < 200
-)as ahd_clients
-group by Program_Status
+)ahd_clients
+
+union all
+select '','','','Under 1yr','',''	
+union all
+select '','','','1-4yrs','',''
+union all 
+select '','','','5-9yrs','',''	
+union all  
+select '','','','10-14yrs','',''
+union all 
+select '','','','15-19yrs','',''
+union all 
+select '','','','20-24yrs','',''
+union all 
+select '','','','25-29yrs','',''
+union all 
+select '','','','30-34yrs','',''
+union all 
+select '','','','35-39yrs','',''
+union all 
+select '','','','40-44yrs','',''
+union all  
+select '','','','45-50yrs','',''
+union all 
+select '','','','50+yrs','',''
+)all_ahd_clients
+GROUP BY age_group
+ORDER BY FIELD (age_group,'Under 1yr','1-4yrs','5-9yrs','10-14yrs','15-19yrs','20-24yrs','25-29yrs','30-34yrs','35-39yrs','40-44yrs','45-50yrs','50+yrs') 
