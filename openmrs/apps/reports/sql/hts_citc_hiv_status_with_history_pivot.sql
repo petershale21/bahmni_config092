@@ -39,16 +39,16 @@ FROM (
 											 INNER JOIN patient ON o.person_id = patient.patient_id 
 											 AND o.concept_id = 2165
 											 AND patient.voided = 0 AND o.voided = 0
-											 AND MONTH(o.obs_datetime) = MONTH(CAST('#endDate' AS DATE)) 
-                            				 AND YEAR(o.obs_datetime) = YEAR(CAST('#endDate' AS DATE))
+											 AND MONTH(o.obs_datetime) = MONTH(CAST('#endDate#' AS DATE)) 
+                            				 AND YEAR(o.obs_datetime) = YEAR(CAST('#endDate#' AS DATE))
 											 
 											 -- PROVIDER INITIATED TESTING AND COUNSELING
 											 AND o.person_id in (
 												select distinct os.person_id 
 												from obs os
 												where os.concept_id = 4228 and os.value_coded = 4227
-												AND MONTH(os.obs_datetime) = MONTH(CAST('#endDate' AS DATE)) 
-                            					AND YEAR(os.obs_datetime) = YEAR(CAST('#endDate' AS DATE))
+												AND MONTH(os.obs_datetime) = MONTH(CAST('#endDate#' AS DATE)) 
+                            					AND YEAR(os.obs_datetime) = YEAR(CAST('#endDate#' AS DATE))
 												AND patient.voided = 0 AND o.voided = 0
 											 )
 											 
@@ -57,8 +57,8 @@ FROM (
 												select distinct os.person_id
 												from obs os
 												where os.concept_id = 2137 and os.value_coded = 2146
-												AND MONTH(os.obs_datetime) = MONTH(CAST('#endDate' AS DATE)) 
-                            					AND YEAR(os.obs_datetime) = YEAR(CAST('#endDate' AS DATE))
+												AND MONTH(os.obs_datetime) = MONTH(CAST('#endDate#' AS DATE)) 
+                            					AND YEAR(os.obs_datetime) = YEAR(CAST('#endDate#' AS DATE))
 												AND patient.voided = 0 AND o.voided = 0
 											 )
 											 
@@ -91,16 +91,16 @@ FROM (
 											 INNER JOIN patient ON o.person_id = patient.patient_id 
 											 AND o.concept_id = 2165
 											 AND patient.voided = 0 AND o.voided = 0
-											 AND MONTH(o.obs_datetime) = MONTH(CAST('#endDate' AS DATE)) 
-                            				 AND YEAR(o.obs_datetime) = YEAR(CAST('#endDate' AS DATE))
+											 AND MONTH(o.obs_datetime) = MONTH(CAST('#endDate#' AS DATE)) 
+                            				 AND YEAR(o.obs_datetime) = YEAR(CAST('#endDate#' AS DATE))
 											 
 											 -- PROVIDER INITIATED TESTING AND COUNSELING
 											 AND o.person_id in (
 												select distinct os.person_id 
 												from obs os
 												where os.concept_id = 4228 and os.value_coded = 4227
-												AND MONTH(os.obs_datetime) = MONTH(CAST('#endDate' AS DATE)) 
-                            					AND YEAR(os.obs_datetime) = YEAR(CAST('#endDate' AS DATE))
+												AND MONTH(os.obs_datetime) = MONTH(CAST('#endDate#' AS DATE)) 
+                            					AND YEAR(os.obs_datetime) = YEAR(CAST('#endDate#' AS DATE))
 												AND patient.voided = 0 AND o.voided = 0
 											 )
 											 
@@ -109,8 +109,8 @@ FROM (
 												select distinct os.person_id
 												from obs os
 												where os.concept_id = 2137 and os.value_coded = 2147
-												AND MONTH(os.obs_datetime) = MONTH(CAST('#endDate' AS DATE)) 
-                            					AND YEAR(os.obs_datetime) = YEAR(CAST('#endDate' AS DATE))
+												AND MONTH(os.obs_datetime) = MONTH(CAST('#endDate#' AS DATE)) 
+                            					AND YEAR(os.obs_datetime) = YEAR(CAST('#endDate#' AS DATE))
 												AND patient.voided = 0 AND o.voided = 0
 											 )
 											 
@@ -143,16 +143,16 @@ FROM (
 											 INNER JOIN patient ON o.person_id = patient.patient_id 
 											 AND o.concept_id = 2165
 											 AND patient.voided = 0 AND o.voided = 0
-											 AND MONTH(o.obs_datetime) = MONTH(CAST('#endDate' AS DATE)) 
-                            				 AND YEAR(o.obs_datetime) = YEAR(CAST('#endDate' AS DATE))
+											 AND MONTH(o.obs_datetime) = MONTH(CAST('#endDate#' AS DATE)) 
+                            				 AND YEAR(o.obs_datetime) = YEAR(CAST('#endDate#' AS DATE))
 											 
 											 -- PROVIDER INITIATED TESTING AND COUNSELING
 											 AND o.person_id in (
 												select distinct os.person_id 
 												from obs os
 												where os.concept_id = 4228 and os.value_coded = 4226
-												AND MONTH(os.obs_datetime) = MONTH(CAST('#endDate' AS DATE)) 
-                            					AND YEAR(os.obs_datetime) = YEAR(CAST('#endDate' AS DATE))
+												AND MONTH(os.obs_datetime) = MONTH(CAST('#endDate#' AS DATE)) 
+                            					AND YEAR(os.obs_datetime) = YEAR(CAST('#endDate#' AS DATE))
 												AND patient.voided = 0 AND o.voided = 0
 											 )
 											 
@@ -161,8 +161,8 @@ FROM (
 												select distinct os.person_id
 												from obs os
 												where os.concept_id = 2137 and os.value_coded = 2146
-												AND MONTH(os.obs_datetime) = MONTH(CAST('#endDate' AS DATE)) 
-                            					AND YEAR(os.obs_datetime) = YEAR(CAST('#endDate' AS DATE))
+												AND MONTH(os.obs_datetime) = MONTH(CAST('#endDate#' AS DATE)) 
+                            					AND YEAR(os.obs_datetime) = YEAR(CAST('#endDate#' AS DATE))
 												AND patient.voided = 0 AND o.voided = 0
 											 )						 
 											 
@@ -194,16 +194,16 @@ FROM (
 											 INNER JOIN patient ON o.person_id = patient.patient_id 
 											 AND o.concept_id = 2165
 											 AND patient.voided = 0 AND o.voided = 0
-											 AND MONTH(o.obs_datetime) = MONTH(CAST('#endDate' AS DATE)) 
-                            				 AND YEAR(o.obs_datetime) = YEAR(CAST('#endDate' AS DATE))
+											 AND MONTH(o.obs_datetime) = MONTH(CAST('#endDate#' AS DATE)) 
+                            				 AND YEAR(o.obs_datetime) = YEAR(CAST('#endDate#' AS DATE))
 											 
 											 -- PROVIDER INITIATED TESTING AND COUNSELING
 											 AND o.person_id in (
 												select distinct os.person_id 
 												from obs os
 												where os.concept_id = 4228 and os.value_coded = 4226
-												AND MONTH(os.obs_datetime) = MONTH(CAST('#endDate' AS DATE)) 
-                            					AND YEAR(os.obs_datetime) = YEAR(CAST('#endDate' AS DATE))
+												AND MONTH(os.obs_datetime) = MONTH(CAST('#endDate#' AS DATE)) 
+                            					AND YEAR(os.obs_datetime) = YEAR(CAST('#endDate#' AS DATE))
 												AND patient.voided = 0 AND o.voided = 0
 											 )
 											 
@@ -212,8 +212,8 @@ FROM (
 												select distinct os.person_id
 												from obs os
 												where os.concept_id = 2137 and os.value_coded = 2147
-												AND MONTH(os.obs_datetime) = MONTH(CAST('#endDate' AS DATE)) 
-                            					AND YEAR(os.obs_datetime) = YEAR(CAST('#endDate' AS DATE))
+												AND MONTH(os.obs_datetime) = MONTH(CAST('#endDate#' AS DATE)) 
+                            					AND YEAR(os.obs_datetime) = YEAR(CAST('#endDate#' AS DATE))
 												AND patient.voided = 0 AND o.voided = 0
 											 )						 
 											 
@@ -262,16 +262,16 @@ FROM (
 											 INNER JOIN patient ON o.person_id = patient.patient_id 
 											 AND o.concept_id = 2165
 											 AND patient.voided = 0 AND o.voided = 0
-											 AND MONTH(o.obs_datetime) = MONTH(CAST('#endDate' AS DATE)) 
-                		               		 AND YEAR(o.obs_datetime) = YEAR(CAST('#endDate' AS DATE))
+											 AND MONTH(o.obs_datetime) = MONTH(CAST('#endDate#' AS DATE)) 
+                		               		 AND YEAR(o.obs_datetime) = YEAR(CAST('#endDate#' AS DATE))
 											 
 											 -- PROVIDER INITIATED TESTING AND COUNSELING
 											 AND o.person_id in (
 												select distinct os.person_id 
 												from obs os
 												where os.concept_id = 4228 and os.value_coded = 4227
-												AND MONTH(os.obs_datetime) = MONTH(CAST('#endDate' AS DATE)) 
-                            					AND YEAR(os.obs_datetime) = YEAR(CAST('#endDate' AS DATE))
+												AND MONTH(os.obs_datetime) = MONTH(CAST('#endDate#' AS DATE)) 
+                            					AND YEAR(os.obs_datetime) = YEAR(CAST('#endDate#' AS DATE))
 												AND patient.voided = 0 AND o.voided = 0
 											 )
 											 
@@ -280,8 +280,8 @@ FROM (
 												select distinct os.person_id
 												from obs os
 												where os.concept_id = 2137 and os.value_coded = 2146
-												AND MONTH(os.obs_datetime) = MONTH(CAST('#endDate' AS DATE)) 
-                            					AND YEAR(os.obs_datetime) = YEAR(CAST('#endDate' AS DATE))
+												AND MONTH(os.obs_datetime) = MONTH(CAST('#endDate#' AS DATE)) 
+                            					AND YEAR(os.obs_datetime) = YEAR(CAST('#endDate#' AS DATE))
 												AND patient.voided = 0 AND o.voided = 0
 											 )
 											 
@@ -307,16 +307,16 @@ FROM (
 											 INNER JOIN patient ON o.person_id = patient.patient_id 
 											 AND o.concept_id = 2165
 											 AND patient.voided = 0 AND o.voided = 0
-											 AND MONTH(o.obs_datetime) = MONTH(CAST('#endDate' AS DATE)) 
-                            				 AND YEAR(o.obs_datetime) = YEAR(CAST('#endDate' AS DATE))
+											 AND MONTH(o.obs_datetime) = MONTH(CAST('#endDate#' AS DATE)) 
+                            				 AND YEAR(o.obs_datetime) = YEAR(CAST('#endDate#' AS DATE))
 											 
 											 -- PROVIDER INITIATED TESTING AND COUNSELING
 											 AND o.person_id in (
 												select distinct os.person_id 
 												from obs os
 												where os.concept_id = 4228 and os.value_coded = 4227
-												AND MONTH(os.obs_datetime) = MONTH(CAST('#endDate' AS DATE)) 
-                            					AND YEAR(os.obs_datetime) = YEAR(CAST('#endDate' AS DATE))
+												AND MONTH(os.obs_datetime) = MONTH(CAST('#endDate#' AS DATE)) 
+                            					AND YEAR(os.obs_datetime) = YEAR(CAST('#endDate#' AS DATE))
 												AND patient.voided = 0 AND o.voided = 0
 											 )
 											 
@@ -325,8 +325,8 @@ FROM (
 												select distinct os.person_id
 												from obs os
 												where os.concept_id = 2137 and os.value_coded = 2147
-												AND MONTH(os.obs_datetime) = MONTH(CAST('#endDate' AS DATE)) 
-                            					AND YEAR(os.obs_datetime) = YEAR(CAST('#endDate' AS DATE))
+												AND MONTH(os.obs_datetime) = MONTH(CAST('#endDate#' AS DATE)) 
+                            					AND YEAR(os.obs_datetime) = YEAR(CAST('#endDate#' AS DATE))
 												AND patient.voided = 0 AND o.voided = 0
 											 )
 											 
@@ -352,16 +352,16 @@ FROM (
 											 INNER JOIN patient ON o.person_id = patient.patient_id 
 											 AND o.concept_id = 2165
 											 AND patient.voided = 0 AND o.voided = 0
-											 AND MONTH(o.obs_datetime) = MONTH(CAST('#endDate' AS DATE)) 
-                            				 AND YEAR(o.obs_datetime) = YEAR(CAST('#endDate' AS DATE))
+											 AND MONTH(o.obs_datetime) = MONTH(CAST('#endDate#' AS DATE)) 
+                            				 AND YEAR(o.obs_datetime) = YEAR(CAST('#endDate#' AS DATE))
 											 
 											 -- PROVIDER INITIATED TESTING AND COUNSELING
 											 AND o.person_id in (
 												select distinct os.person_id 
 												from obs os
 												where os.concept_id = 4228 and os.value_coded = 4226
-												AND MONTH(os.obs_datetime) = MONTH(CAST('#endDate' AS DATE)) 
-                            					AND YEAR(os.obs_datetime) = YEAR(CAST('#endDate' AS DATE))
+												AND MONTH(os.obs_datetime) = MONTH(CAST('#endDate#' AS DATE)) 
+                            					AND YEAR(os.obs_datetime) = YEAR(CAST('#endDate#' AS DATE))
 												AND patient.voided = 0 AND o.voided = 0
 											 )
 											 
@@ -370,8 +370,8 @@ FROM (
 												select distinct os.person_id
 												from obs os
 												where os.concept_id = 2137 and os.value_coded = 2146
-												AND MONTH(os.obs_datetime) = MONTH(CAST('#endDate' AS DATE)) 
-                            					AND YEAR(os.obs_datetime) = YEAR(CAST('#endDate' AS DATE))
+												AND MONTH(os.obs_datetime) = MONTH(CAST('#endDate#' AS DATE)) 
+                            					AND YEAR(os.obs_datetime) = YEAR(CAST('#endDate#' AS DATE))
 												AND patient.voided = 0 AND o.voided = 0
 											 )						 
 											 
@@ -397,16 +397,16 @@ FROM (
 											 INNER JOIN patient ON o.person_id = patient.patient_id 
 											 AND o.concept_id = 2165
 											 AND patient.voided = 0 AND o.voided = 0
-											 AND MONTH(o.obs_datetime) = MONTH(CAST('#endDate' AS DATE)) 
-                            				 AND YEAR(o.obs_datetime) = YEAR(CAST('#endDate' AS DATE))
+											 AND MONTH(o.obs_datetime) = MONTH(CAST('#endDate#' AS DATE)) 
+                            				 AND YEAR(o.obs_datetime) = YEAR(CAST('#endDate#' AS DATE))
 											 
 											 -- PROVIDER INITIATED TESTING AND COUNSELING
 											 AND o.person_id in (
 												select distinct os.person_id 
 												from obs os
 												where os.concept_id = 4228 and os.value_coded = 4226
-												AND MONTH(os.obs_datetime) = MONTH(CAST('#endDate' AS DATE)) 
-                            					AND YEAR(os.obs_datetime) = YEAR(CAST('#endDate' AS DATE))
+												AND MONTH(os.obs_datetime) = MONTH(CAST('#endDate#' AS DATE)) 
+                            					AND YEAR(os.obs_datetime) = YEAR(CAST('#endDate#' AS DATE))
 												AND patient.voided = 0 AND o.voided = 0
 											 )
 											 
@@ -415,8 +415,8 @@ FROM (
 												select distinct os.person_id
 												from obs os
 												where os.concept_id = 2137 and os.value_coded = 2147
-												AND MONTH(os.obs_datetime) = MONTH(CAST('#endDate' AS DATE)) 
-                            					AND YEAR(os.obs_datetime) = YEAR(CAST('#endDate' AS DATE))
+												AND MONTH(os.obs_datetime) = MONTH(CAST('#endDate#' AS DATE)) 
+                            					AND YEAR(os.obs_datetime) = YEAR(CAST('#endDate#' AS DATE))
 												AND patient.voided = 0 AND o.voided = 0
 											 )						 
 											 
