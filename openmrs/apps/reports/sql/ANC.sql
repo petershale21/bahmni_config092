@@ -1,4 +1,5 @@
 SELECT ageGroup,
+IF(Id IS NULL, 0, SUM(IF(ANC_visit = 'First_Visit', 1, 0))) AS ANC_1st_visits,
 IF(Id IS NULL, 0, SUM(IF(ANC_visit = '1st_trimester_visits', 1, 0))) AS 1st_trimester_visits,
 IF(Id IS NULL, 0, SUM(IF(ANC_visit = '2nd_trimester_visits', 1, 0))) AS 2nd_trimester_visits,
 IF(Id IS NULL, 0, SUM(IF(ANC_visit = '3rd_trimester_visits', 1, 0))) AS 3rd_trimester_visits,
@@ -16,6 +17,27 @@ FROM
 		SELECT Id, ANC_visit,ageGroup
 		FROM
 		(
+
+			select o.person_id as Id,'First_Visit' as ANC_visit,'Under20' as ageGroup
+			from obs o
+			INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0 
+			AND o.person_Id in (select id
+								FROM
+								( 
+									select distinct o.person_id AS Id,
+									floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age								   
+									from obs o
+									INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
+									INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3	
+								) as a
+								WHERE age < 20
+												)
+			WHERE concept_id = 4658 and value_coded in (4659)
+			AND MONTH(obs_datetime) = MONTH(CAST('#endDate#' AS DATE))
+			AND YEAR(obs_datetime) =  YEAR(CAST('#endDate#' AS DATE))
+
+			UNION
+			
 			-- visits in first trimester 4658 and value_coded in (4659,4660)
 			
 			select o.person_id as Id,'1st_trimester_visits' as ANC_visit,'Under20' as ageGroup
@@ -188,7 +210,7 @@ FROM
 								) as a
 								WHERE age < 20
 												)
-			and concept_id in (4300,4299)
+			and concept_id in (4300,4299) AND value_coded in (4668)
 			AND MONTH(obs_datetime) = MONTH(CAST('#endDate#' AS DATE))
 			AND YEAR(obs_datetime) =  YEAR(CAST('#endDate#' AS DATE))
 			
@@ -269,12 +291,33 @@ FROM
 								) as a
 								WHERE age < 20
 												)
-			where concept_id = 4367 and value_coded != 4368
+			where (concept_id = 4367 and value_coded != 4368)
 			AND MONTH(obs_datetime) = MONTH(CAST('#endDate#' AS DATE))
 			AND YEAR(obs_datetime) =  YEAR(CAST('#endDate#' AS DATE))
 			
 			UNION
 			-- -------------------------------- above 20
+			select o.person_id as Id,'First_Visit' as ANC_visit,'Above20' as ageGroup
+			from obs o
+			INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0 
+			AND o.person_Id in (select id
+								FROM
+								( 
+									select distinct o.person_id AS Id,
+									floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age								   
+									from obs o
+									INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
+									INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3	
+								) as a
+								WHERE age >=20
+												)
+			WHERE concept_id = 4658 and value_coded = 4659
+			AND MONTH(obs_datetime) = MONTH(CAST('#endDate#' AS DATE))
+			AND YEAR(obs_datetime) =  YEAR(CAST('#endDate#' AS DATE)) 
+
+			UNION
+
+
 			select o.person_id as Id,'1st_trimester_visits' as ANC_visit,'Above20' as ageGroup
 			from obs o
 			INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0 
@@ -296,7 +339,7 @@ FROM
 			
 
 			UNION
-			-- visits in second
+			-- visits in second Trimester
 			
 			select o.person_id as Id,'2nd_trimester_visits' as ANC_visit,'Above20' as ageGroup
 			from obs o
@@ -445,7 +488,7 @@ FROM
 								) as a
 								WHERE age >=20
 												)
-			and concept_id in (4300,4299)
+			and concept_id in (4300,4299) AND value_coded in (4668)
 			AND MONTH(obs_datetime) = MONTH(CAST('#endDate#' AS DATE))
 			AND YEAR(obs_datetime) =  YEAR(CAST('#endDate#' AS DATE))
 			
@@ -526,7 +569,7 @@ FROM
 								) as a
 								WHERE age >=20
 												)
-			where concept_id = 4367 and value_coded != 4368
+			where (concept_id = 4367 and value_coded != 4368)
 			AND MONTH(obs_datetime) = MONTH(CAST('#endDate#' AS DATE))
 			AND YEAR(obs_datetime) =  YEAR(CAST('#endDate#' AS DATE))
 		)as a	
