@@ -50,7 +50,7 @@ FROM
 						 AND o.person_id not in (
 							select distinct os.person_id from obs os
 							where os.concept_id = 3634 
-							AND os.value_coded = 2095 
+							AND os.value_coded = 2095 and os.voided = 0
 							AND MONTH(os.obs_datetime) = MONTH(CAST('#endDate#' AS DATE)) 
 							AND YEAR(os.obs_datetime) = YEAR(CAST('#endDate#' AS DATE))
 						 )	
@@ -123,7 +123,7 @@ AND Clients_Seen.Id not in (
 										inner join (
 													select os.person_id,datediff(CAST(max(os.value_datetime) AS DATE), CAST('#endDate#' AS DATE)) as last_ap
 													from obs os
-													where concept_id = 3752
+													where concept_id = 3752 and os.voided = 0
 													and CAST(os.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 													group by os.person_id
 													having last_ap < 0
@@ -136,7 +136,7 @@ AND Clients_Seen.Id not in (
 									(
 										select os.person_id, CAST(max(os.value_datetime) AS DATE) as latest_transferout
 										from obs os
-										where os.concept_id=2266
+										where os.concept_id=2266 and os.voided = 0
 										group by os.person_id
 										having latest_transferout <= CAST('#endDate#' AS DATE)
 									) as TOUTS
@@ -162,7 +162,7 @@ AND Clients_Seen.Id not in
 											inner join (
 														select os.person_id,datediff(CAST(max(os.value_datetime) AS DATE), CAST('#endDate#' AS DATE)) as last_ap
 														from obs os
-														where concept_id = 3752
+														where concept_id = 3752 and os.voided = 0
 														and CAST(os.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 														group by os.person_id
 														having last_ap < 0
@@ -174,7 +174,8 @@ AND Clients_Seen.Id not in
 											select distinct p.person_id
 											from person p
 											where dead = 1
-											and death_date <= CAST('#endDate#' AS DATE)		
+											and death_date <= CAST('#endDate#' AS DATE)	
+											and voided = 0
 						)
 					)
 ORDER BY Clients_Seen.patientName)
@@ -205,6 +206,7 @@ FROM
 									(select person_id, max(obs_datetime), SUBSTRING(MAX(CONCAT(obs_datetime, obs_id)), 20) AS observation_id
 									from obs where concept_id = 3753
 									and obs_datetime <= cast('#endDate#' as date)
+									and voided = 0
 									group by person_id) as A
 									on A.observation_id = B.obs_group_id
 									where concept_id = 3752
@@ -222,12 +224,13 @@ FROM
 							where (os.concept_id = 3843 AND os.value_coded = 3841 OR os.value_coded = 3842)
 							AND MONTH(os.obs_datetime) = MONTH(CAST('#endDate#' AS DATE)) 
 							AND YEAR(os.obs_datetime) = YEAR(CAST('#endDate#' AS DATE))
+							and os.voided = 0
 							)
 						
 		and active_clients.person_id not in (
 							select distinct os.person_id
 							from obs os
-							where concept_id = 2249
+							where concept_id = 2249 and os.voided = 0
 							AND MONTH(os.value_datetime) = MONTH(CAST('#endDate#' AS DATE)) 
 							AND YEAR(os.value_datetime) = YEAR(CAST('#endDate#' AS DATE))
 							)
@@ -240,7 +243,7 @@ FROM
 									(
 										select os.person_id, CAST(max(os.obs_datetime) AS DATE) as latest_transferout
 										from obs os
-										where os.concept_id=2398
+										where os.concept_id=2398 and os.voided = 0
 										group by os.person_id
 										having latest_transferout <= CAST('#endDate#' AS DATE)
 									) as TOUTS
@@ -252,7 +255,7 @@ FROM
 									select person_id 
 									from person 
 									where death_date <= cast('#endDate#' as date)
-									and dead = 1
+									and dead = 1 and voided = 0
 						 )
 						 )
 						 -- end
@@ -290,10 +293,13 @@ FROM
 									(select person_id, max(obs_datetime), SUBSTRING(MAX(CONCAT(obs_datetime, obs_id)), 20) AS observation_id
 									from obs where concept_id = 3753
 									and obs_datetime <= cast('#endDate#' as date)
+									and voided = 0
 									group by person_id) as A
 									on A.observation_id = B.obs_group_id
 									where concept_id = 3752
-									and A.observation_id = B.obs_group_id	
+									and A.observation_id = B.obs_group_id
+                                    and voided = 0	
+									group by B.person_id	
 								) as active_clients
 								where active_clients.latest_follow_up >= cast('#endDate#' as date)
 				
@@ -304,12 +310,13 @@ FROM
 							where (os.concept_id = 3843 AND os.value_coded = 3841 OR os.value_coded = 3842)
 							AND MONTH(os.obs_datetime) = MONTH(CAST('#endDate#' AS DATE)) 
 							AND YEAR(os.obs_datetime) = YEAR(CAST('#endDate#' AS DATE))
+							and os.voided = 0
 							)
 						
 		and active_clients.person_id not in (
 							select distinct os.person_id
 							from obs os
-							where concept_id = 2249
+							where concept_id = 2249 and os.voided = 0
 							AND MONTH(os.value_datetime) = MONTH(CAST('#endDate#' AS DATE)) 
 							AND YEAR(os.value_datetime) = YEAR(CAST('#endDate#' AS DATE))
 							)
@@ -332,7 +339,7 @@ FROM
 										inner join (
 													select os.person_id,datediff(CAST(max(os.value_datetime) AS DATE), CAST('#endDate#' AS DATE)) as last_ap
 													from obs os
-													where concept_id = 3752
+													where concept_id = 3752 and os.voided = 0
 													and CAST(os.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 													group by os.person_id
 													having last_ap < 0
@@ -345,7 +352,7 @@ FROM
 									(
 										select os.person_id, CAST(max(os.value_datetime) AS DATE) as latest_transferout
 										from obs os
-										where os.concept_id=2266
+										where os.concept_id=2266 and os.voided = 0
 										group by os.person_id
 										having latest_transferout <= CAST('#endDate#' AS DATE)
 									) as TOUTS
@@ -357,7 +364,7 @@ FROM
 									select person_id 
 									from person 
 									where death_date <= cast('#endDate#' as date)
-									and dead = 1
+									and dead = 1 and voided = 0
 						 )
 						 )
 						 -- end
@@ -429,7 +436,7 @@ FROM
 						 AND o.person_id not in (
 							select distinct os.person_id from obs os
 							where os.concept_id = 3634 
-							AND os.value_coded = 2095 
+							AND os.value_coded = 2095 and os.voided = 0
 							AND MONTH(os.obs_datetime) = MONTH(CAST('#endDate#' AS DATE)) 
 							AND YEAR(os.obs_datetime) = YEAR(CAST('#endDate#' AS DATE))
 						 )	
@@ -503,7 +510,7 @@ AND Clients_Seen.Id not in (
 										inner join (
 													select os.person_id,datediff(CAST(max(os.value_datetime) AS DATE), CAST('#endDate#' AS DATE)) as last_ap
 													from obs os
-													where concept_id = 3752
+													where concept_id = 3752 and os.voided = 0
 													and CAST(os.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 													group by os.person_id
 													having last_ap < 0
@@ -516,7 +523,7 @@ AND Clients_Seen.Id not in (
 									(
 										select os.person_id, CAST(max(os.value_datetime) AS DATE) as latest_transferout
 										from obs os
-										where os.concept_id=2266
+										where os.concept_id=2266 and os.voided = 0
 										group by os.person_id
 										having latest_transferout <= CAST('#endDate#' AS DATE)
 									) as TOUTS
@@ -542,7 +549,7 @@ AND Clients_Seen.Id not in
 											inner join (
 														select os.person_id,datediff(CAST(max(os.value_datetime) AS DATE), CAST('#endDate#' AS DATE)) as last_ap
 														from obs os
-														where concept_id = 3752
+														where concept_id = 3752 and os.voided = 0
 														and CAST(os.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 														group by os.person_id
 														having last_ap < 0
@@ -554,7 +561,8 @@ AND Clients_Seen.Id not in
 											select distinct p.person_id
 											from person p
 											where dead = 1
-											and death_date <= CAST('#endDate#' AS DATE)		
+											and death_date <= CAST('#endDate#' AS DATE)
+											and voided = 0
 						)
 					)
 ORDER BY Clients_Seen.patientName
@@ -586,6 +594,7 @@ FROM
 									(select person_id, max(obs_datetime), SUBSTRING(MAX(CONCAT(obs_datetime, obs_id)), 20) AS observation_id
 									from obs where concept_id = 3753
 									and obs_datetime <= cast('#endDate#' as date)
+									and voided = 0
 									group by person_id) as A
 									on A.observation_id = B.obs_group_id
 									where concept_id = 3752
@@ -603,12 +612,13 @@ FROM
 							where (os.concept_id = 3843 AND os.value_coded = 3841 OR os.value_coded = 3842)
 							AND MONTH(os.obs_datetime) = MONTH(CAST('#endDate#' AS DATE)) 
 							AND YEAR(os.obs_datetime) = YEAR(CAST('#endDate#' AS DATE))
+							and os.voided = 0
 							)
 						
 		and active_clients.person_id not in (
 							select distinct os.person_id
 							from obs os
-							where concept_id = 2249
+							where concept_id = 2249 and os.voided = 0
 							AND MONTH(os.value_datetime) = MONTH(CAST('#endDate#' AS DATE)) 
 							AND YEAR(os.value_datetime) = YEAR(CAST('#endDate#' AS DATE))
 							)
@@ -621,7 +631,7 @@ FROM
 									(
 										select os.person_id, CAST(max(os.obs_datetime) AS DATE) as latest_transferout
 										from obs os
-										where os.concept_id=2398
+										where os.concept_id=2398 and os.voided = 0
 										group by os.person_id
 										having latest_transferout <= CAST('#endDate#' AS DATE)
 									) as TOUTS
@@ -633,7 +643,7 @@ FROM
 									select person_id 
 									from person 
 									where death_date <= cast('#endDate#' as date)
-									and dead = 1
+									and dead = 1 and voided = 0
 						 )
 						 )
 						 -- end
@@ -672,10 +682,13 @@ FROM
 									(select person_id, max(obs_datetime), SUBSTRING(MAX(CONCAT(obs_datetime, obs_id)), 20) AS observation_id
 									from obs where concept_id = 3753
 									and obs_datetime <= cast('#endDate#' as date)
+									and voided = 0
 									group by person_id) as A
 									on A.observation_id = B.obs_group_id
 									where concept_id = 3752
-									and A.observation_id = B.obs_group_id	
+									and A.observation_id = B.obs_group_id
+                                    and voided = 0	
+									group by B.person_id	
 								) as active_clients
 								where active_clients.latest_follow_up >= cast('#endDate#' as date)
 				
@@ -686,12 +699,13 @@ FROM
 							where (os.concept_id = 3843 AND os.value_coded = 3841 OR os.value_coded = 3842)
 							AND MONTH(os.obs_datetime) = MONTH(CAST('#endDate#' AS DATE)) 
 							AND YEAR(os.obs_datetime) = YEAR(CAST('#endDate#' AS DATE))
+							and os.voided = 0
 							)
 						
 		and active_clients.person_id not in (
 							select distinct os.person_id
 							from obs os
-							where concept_id = 2249
+							where concept_id = 2249 and os.voided = 0
 							AND MONTH(os.value_datetime) = MONTH(CAST('#endDate#' AS DATE)) 
 							AND YEAR(os.value_datetime) = YEAR(CAST('#endDate#' AS DATE))
 							)
@@ -714,7 +728,7 @@ FROM
 										inner join (
 													select os.person_id,datediff(CAST(max(os.value_datetime) AS DATE), CAST('#endDate#' AS DATE)) as last_ap
 													from obs os
-													where concept_id = 3752
+													where concept_id = 3752 and os.voided = 0
 													and CAST(os.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 													group by os.person_id
 													having last_ap < 0
@@ -727,7 +741,7 @@ FROM
 									(
 										select os.person_id, CAST(max(os.value_datetime) AS DATE) as latest_transferout
 										from obs os
-										where os.concept_id=2266
+										where os.concept_id=2266 and os.voided = 0
 										group by os.person_id
 										having latest_transferout <= CAST('#endDate#' AS DATE)
 									) as TOUTS
@@ -739,7 +753,7 @@ FROM
 									select person_id 
 									from person 
 									where death_date <= cast('#endDate#' as date)
-									and dead = 1
+									and dead = 1 and voided = 0
 						 )
 						 )
 						 -- end

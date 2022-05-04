@@ -1,5 +1,5 @@
 
-Select Distinct Patient_Identifier, Patient_Name,Age, Gender, age_group,HIV_Testing_Initiation, HIV_Status, Distribution_Date, IFNULL(Kits_Distributed,1) as Kits_Distributed, Kits_Returned
+Select Distinct Patient_Identifier, Patient_Name,Age, Gender, age_group,HIV_Testing_Initiation, HIV_Status, Distribution_Date, IFNULL(Kits_Distributed,1) AS "Distributed Kits", IFNULL(Kits_Returned,0) AS "Returned Kits"
 from(
 SELECT Id,Patient_Identifier, Patient_Name, Age, Gender, age_group, HIV_Testing_Initiation  , HIV_Status
 FROM (
@@ -20,7 +20,7 @@ FROM (
 								 AND o.concept_id = 4845 and value_coded = 4822
 								 AND patient.voided = 0 AND o.voided = 0
 								 AND MONTH(o.obs_datetime) = MONTH(CAST('#endDate#' AS DATE)) 
-								 AND YEAR(o.obs_datetime) = YEAR(CAST('#endDate#' AS DATE))
+								 AND YEAR(o.obs_datetime) = YEAR(CAST('#endDate#' AS DATE)) 
 								 
 								 -- HAS HIV POSITIVE RESULTS 
 								 AND o.person_id in (
@@ -167,10 +167,19 @@ on SelfTest.Id = num_returned.Id
 
 -- DISTRIBUTION DATE
 left outer join
-	(
-	select patient.patient_id,CAST(o.value_datetime AS DATE) as Distribution_Date 
-	from obs o
-	INNER JOIN patient ON o.person_id = patient.patient_id
-	 where o.concept_id = 4824
-	) as distibutedDate
-	on SelfTest.Id = distibutedDate.patient_id
+	(select o.person_id,CAST(latest_distribution_date AS DATE) as Distribution_Date
+	from obs o 
+	inner join 
+    (
+     select oss.person_id, MAX(oss.obs_datetime) as max_observation,
+     SUBSTRING(MAX(CONCAT(oss.obs_datetime, oss.value_datetime)), 20) as latest_distribution_date
+     from obs oss
+     where oss.concept_id = 4824 and oss.voided=0
+     and oss.obs_datetime < cast('#endDate#' as date)
+     group by oss.person_id
+    )latest 
+  on latest.person_id = o.person_id
+  where concept_id = 4824
+  and  o.obs_datetime = max_observation 
+  ) as distibutedDate
+	on SelfTest.Id = distibutedDate.person_id
