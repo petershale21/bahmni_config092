@@ -12,3 +12,5 @@ FROM test_section ts
   LEFT OUTER JOIN result r2 on r2.result_type = 'D' and r2.value != '' and r.id=r2.id and r2.abnormal=true
 GROUP BY ts.name, t.name, t.id
 order by ts.name;
+
+--testing this out
