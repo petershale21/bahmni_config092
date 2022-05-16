@@ -150,7 +150,7 @@
 				"required": true
 			},
 			"Delivery Note, Delivery location" : {
-				"required": false
+				"required": true
 			},
 			"Mode of Delivery" : {
 				"required": true
@@ -315,6 +315,9 @@
 			"Appointment scheduled":{
 				 "required" : true
 			},
+			"Delivery date and time":{
+				"required" : true
+		   },
 
 			"Type of client":{
 				 "required" : true

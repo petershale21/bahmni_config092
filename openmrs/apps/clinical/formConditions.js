@@ -226,7 +226,7 @@ Bahmni.ConceptSet.FormConditions.rules = {
                 var DeliveryPlace = formFieldValues['Delivery Note, Delivery location'];
 
                 if ((formName == "PostNatal Care Register") || (formName == "Delivery Information") || (formName == "Lesotho Obstetric Record")) {
-                        var conditions = { show: [], hide: [] };
+                        var conditions = { assignedValues: [],show: [], hide: [] };
 
                         if ((DeliveryPlace == "Institutional Delivery") || (DeliveryPlace == "Home Delivery")) {
                                 conditions.show.push("Mode of Delivery");
@@ -234,6 +234,21 @@ Bahmni.ConceptSet.FormConditions.rules = {
                                 conditions.hide.push("Mode of Delivery");
                         }
                 }
+                if ((formName == "PostNatal Care Register") || (formName == "Delivery Information") ) {
+                       
+                        conditions.assignedValues.push({
+                                field: "Delivery Note, Delivery location",
+                                fieldValue: {
+                                    isAutoFill: true,
+                                    scopedEncounter: "latestvisit",
+                                    isFilledOnRetrospectiveMode: true,
+                                    enableDefaultValue: true,
+                                    enableEditAfterAutoFill: true
+                                }
+                            });
+
+                }
+
                 return conditions;
         },
         'ANC, Parity': function (formName, formFieldValues) {
@@ -976,38 +991,42 @@ Bahmni.ConceptSet.FormConditions.rules = {
                 conditions.disable.push("HIVTC, ART Regimen");
 
 
-                if (conditionConcept == "Treatment Buddy") {
-                        conditions.hide.push("HTC, Pregnancy Status");
-                        conditions.hide.push("Function");
-                        conditions.hide.push("HIVTC, HIV care WHO Staging");
-                        conditions.hide.push("HIVTC, Treatment Staging");
-                        conditions.hide.push("TB Status");
-                        conditions.hide.push("TB Suspect signs");
-                        conditions.hide.push("Sexually Transmitted Infection");
-                        conditions.hide.push("Potential Side Effects");
-                        conditions.hide.push("OI, Opportunistic infections");
-                        conditions.hide.push("Refer or Consult");
-                        conditions.hide.push("Number of days hospitalised");
-
-                } else {
-                        conditions.show.push("HTC, Pregnancy Status");
-                        conditions.show.push("Function");
-                        conditions.show.push("HIVTC, HIV care WHO Staging");
-                        conditions.show.push("HIVTC, Treatment Staging");
-                        conditions.show.push("TB Status");
-                        conditions.show.push("TB Suspect signs");
-                        conditions.show.push("Sexually Transmitted Infection");
-                        conditions.show.push("Potential Side Effects");
-                        conditions.show.push("OI, Opportunistic infections");
-                        conditions.show.push("Refer or Consult");
-                        conditions.show.push("Number of days hospitalised");
-                }
-
-                if ((patientGender == "F") && (patientAge > 12 || patientAge < 50)) {
-                        conditions.show.push("HTC, Pregnancy Status");
-                } else {
-                        conditions.hide.push("HTC, Pregnancy Status");
-                }
+                if (conditionConcept == "ART patient" ) {
+                        
+                        if ((patientGender == "M") || (patientAge < 12 || patientAge > 50)) {
+                       conditions.hide.push("HTC, Pregnancy Status");
+                       } 
+                       else {
+                       conditions.show.push("HTC, Pregnancy Status");
+                       }
+                       
+                       //conditions.show.push("HTC, Pregnancy Status");
+                       conditions.show.push("Function");
+                       conditions.show.push("HIVTC, HIV care WHO Staging");
+                       conditions.show.push("HIVTC, Treatment Staging");
+                       conditions.show.push("TB Status");
+                       conditions.show.push("TB Suspect signs");
+                       conditions.show.push("Sexually Transmitted Infection");
+                       conditions.show.push("Potential Side Effects");
+                       conditions.show.push("OI, Opportunistic infections");
+                       conditions.show.push("Refer or Consult");
+                       conditions.show.push("Number of days hospitalised");
+              
+               } 
+               else {
+                       
+                       conditions.hide.push("HTC, Pregnancy Status");
+                       conditions.hide.push("Function");
+                       conditions.hide.push("HIVTC, HIV care WHO Staging");
+                       conditions.hide.push("HIVTC, Treatment Staging");
+                       conditions.hide.push("TB Status");
+                       conditions.hide.push("TB Suspect signs");
+                       conditions.hide.push("Sexually Transmitted Infection");
+                       conditions.hide.push("Potential Side Effects");
+                       conditions.hide.push("OI, Opportunistic infections");
+                       conditions.hide.push("Refer or Consult");
+                       conditions.hide.push("Number of days hospitalised");
+                        }
 
                 return conditions;
         },
@@ -1122,11 +1141,14 @@ Bahmni.ConceptSet.FormConditions.rules = {
 
        'HIVTC, HIV care IPT started': function (formName, formFieldValues) {
                 var conditionConcept = formFieldValues['HIVTC, HIV care IPT started'];
-                var conditions = { show: [], hide: [] };
+                var conditions = { assignedValues: [],show: [], hide: [] };
 
                 if (conditionConcept == "Treatment complete") {
                         conditions.show.push("HIVTC, TPT completion Date");
+                    
+
                 }
+
                 else if (conditionConcept == "Yes") {
                         conditions.show.push("IPT Adherence");
                         conditions.show.push("IPT No. of days dispensed");
@@ -1135,6 +1157,19 @@ Bahmni.ConceptSet.FormConditions.rules = {
                         conditions.hide.push("IPT No. of days dispensed");
                         conditions.hide.push("HIVTC, TPT completion Date");
                 }
+
+                if (formName == "HIVTC, Patient Register" || formName=="HIV Treatment and Care Progress Template" ) {
+                        conditions.assignedValues.push({
+                            field: "HIVTC, HIV care IPT started",
+                            fieldValue: {
+                                isAutoFill: true,
+                                scopedEncounter: "latestvisit",
+                                isFilledOnRetrospectiveMode: true,
+                                enableDefaultValue: true,
+                                enableEditAfterAutoFill: true
+                            }
+                        });
+                   }
                 return conditions;
         },
 
@@ -1919,6 +1954,63 @@ Bahmni.ConceptSet.FormConditions.rules = {
         conditions.hide.push("HTSIDX,Partner/Child's PRE/ART Number");
     }
     return conditions;
-}
+},
+  /* Auto populate forms in PNC,REGISTER form */
+
+  'Delivery date and time': function(formName, formFieldValues) {
+        var conditions = { assignedValues: [], disable: [] };
+
+        if (formName == "PostNatal Care Register" || formName == "Delivery Information") {
+            conditions.assignedValues.push({
+                field: "Delivery date and time",
+                fieldValue: {
+                    isAutoFill: true,
+                    scopedEncounter: "latestvisit",
+                    isFilledOnRetrospectiveMode: true,
+                    enableDefaultValue: true,
+                    enableEditAfterAutoFill: true
+                }
+            });
+        }
+        return conditions;
+    },
+
+    'Mode of Delivery': function(formName, formFieldValues) {
+        var conditions = { assignedValues: [], disable: [] };
+        var conditionConcept;
+        if (formName == "PostNatal Care Register" || formName == "Delivery Information") {
+            conditions.assignedValues.push({
+                field: "Mode of Delivery",
+                fieldValue: {
+                    isAutoFill: true,
+                    scopedEncounter: "latestvisit",
+                    isFilledOnRetrospectiveMode: true,
+                    enableDefaultValue: true,
+                    enableEditAfterAutoFill: true
+                }
+            });
+        }
+        return conditions;
+    },
+    //Autofill TPT completed date - Litsitso Masoebe and Kgomotjo Seipobi
+    'HIVTC, TPT completion Date': function(formName, formFieldValues) {
+        var conditions = { assignedValues: [], disable: [] };
+        var conditionConcept;
+        if (formName == "HIVTC, Patient Register" || formName=="HIV Treatment and Care Progress Template" ) {
+            conditions.assignedValues.push({
+                field: "HIVTC, TPT completion Date",
+                fieldValue: {
+                    isAutoFill: true,
+                    scopedEncounter: "latestvisit",
+                    isFilledOnRetrospectiveMode: true,
+                    enableDefaultValue: true,
+                    enableEditAfterAutoFill: true
+                }
+            });
+
+        }
+        return conditions;
+    }
+
 
 };
