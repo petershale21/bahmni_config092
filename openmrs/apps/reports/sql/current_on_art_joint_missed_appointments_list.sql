@@ -1,5 +1,5 @@
 -- INCLUDE MISSED APPOINTMENTS WITHIN 28 DAYS ACCORDING TO THE NEW PEPFAR GUIDELINE
-(SELECT ART_Number, patientIdentifier , patientName , Age, Gender, 'MissedWithin28Days' AS 'Program_Status',Date_Missed ,sort_order
+(SELECT ART_Number, patientIdentifier , patientName , Age, Gender, 'MissedWithin28Days' AS 'Program_Status',Date_Missed ,Contacts, Village
 FROM
                 (select distinct patient.patient_id AS Id,
 						patient_identifier.identifier AS patientIdentifier,
@@ -8,7 +8,10 @@ FROM
 						floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age,
 						person.gender AS Gender,
 						cast(max(value_datetime) as date) as Date_Missed,
-						observed_age_group.sort_order AS sort_order
+						pa.value as Contacts,
+						person_address.city_village AS Village
+
+						
 
                 from obs o
 						-- CLIENTS WHO MISSED APPOINTMENTS < 28 DAYS
@@ -78,8 +81,10 @@ FROM
 						 
 						INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
 						INNER JOIN person_name ON person.person_id = person_name.person_id AND person_name.preferred = 1
+						INNER JOIN person_address ON person_address.person_id =  person.person_id AND person_address.voided = 0
 						INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1
 						LEFT OUTER JOIN patient_identifier p ON p.patient_id = patient.patient_id AND p.identifier_type in (5,12) AND p.voided = 0
+						LEFT OUTER JOIN person_attribute pa ON pa.person_id = person.person_id AND pa.person_attribute_type_id in (26) AND p.voided = 0
                         INNER JOIN reporting_age_group AS observed_age_group ON
 						CAST('#endDate#' AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
 						AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
@@ -92,7 +97,7 @@ order by TwentyEightDayDefaulters.patientName)
 UNION
 
 -- INCLUDE MISSED APPOINTMENTS WITH MORE THAN 28 AND LESS THAN 89 DAYS ACCORDING TO THE NEW PEPFAR GUIDELINE
-(SELECT ART_Number, patientIdentifier , patientName , Age, Gender, 'Defaulted' AS 'Program_Status',Date_Missed, sort_order
+(SELECT ART_Number, patientIdentifier , patientName , Age, Gender, 'Defaulted' AS 'Program_Status',Date_Missed, Contacts, Village
 FROM
                 (select distinct patient.patient_id AS Id,
 						patient_identifier.identifier AS patientIdentifier,
@@ -102,7 +107,9 @@ FROM
 						person.gender AS Gender,
 						observed_age_group.name AS age_group,
 						cast(max(value_datetime) as date) as Date_Missed,
-						observed_age_group.sort_order AS sort_order
+						pa.value as Contacts,
+						person_address.city_village AS Village
+						
 
                 from obs o
 						-- CLIENTS WHO MISSED APPOINTMENTS > 28 and < 89 DAYS
@@ -171,9 +178,11 @@ FROM
 						 
 						INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
 						INNER JOIN person_name ON person.person_id = person_name.person_id AND person_name.preferred = 1
+						INNER JOIN person_address ON person_address.person_id =  person.person_id AND person_address.voided = 0
 						INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1
 						LEFT OUTER JOIN patient_identifier p ON p.patient_id = patient.patient_id AND p.identifier_type in (5,12) AND p.voided = 0
-                        INNER JOIN reporting_age_group AS observed_age_group ON
+                        LEFT OUTER JOIN person_attribute pa ON pa.person_id = person.person_id AND pa.person_attribute_type_id in (26) AND p.voided = 0
+						INNER JOIN reporting_age_group AS observed_age_group ON
 						  CAST('#endDate#' AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
 						  AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
                    WHERE observed_age_group.report_group_name = 'Modified_Ages'and cast(value_datetime as date) <= CAST('#endDate#' AS DATE) and concept_id = 3752 Group  BY patientIdentifier) AS MoreThanTwentyEightDayDefaulters
@@ -183,7 +192,7 @@ order by MoreThanTwentyEightDayDefaulters.patientName)
 UNION
 
 -- INCLUDE MISSED APPOINTMENTS WITH MORE THAN 89 ACCORDING TO THE NEW PEPFAR GUIDELINE
-(SELECT ART_Number, patientIdentifier , patientName , Age, Gender, 'LTFU' AS 'Program_Status',Date_Missed , sort_order
+(SELECT ART_Number, patientIdentifier , patientName , Age, Gender, 'LTFU' AS 'Program_Status',Date_Missed ,Contacts, Village
 FROM
                  (select distinct patient.patient_id AS Id,
 						patient_identifier.identifier AS patientIdentifier,
@@ -193,7 +202,9 @@ FROM
 						person.gender AS Gender,
 						observed_age_group.name AS age_group,
 						cast(max(value_datetime) as date) as Date_Missed,
-						observed_age_group.sort_order AS sort_order
+						pa.value as Contacts,
+						person_address.city_village AS Village
+						
 
                 from obs o
 						-- CLIENTS WHO MISSED APPOINTMENTS < 89 DAYS
@@ -261,9 +272,11 @@ FROM
 						 
 					    INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
 						INNER JOIN person_name ON person.person_id = person_name.person_id AND person_name.preferred = 1
+						INNER JOIN person_address ON person_address.person_id =  person.person_id AND person_address.voided = 0
 						INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1
 						LEFT OUTER JOIN patient_identifier p ON p.patient_id = patient.patient_id AND p.identifier_type in (5,12) AND p.voided = 0
-                        INNER JOIN reporting_age_group AS observed_age_group ON
+                        LEFT OUTER JOIN person_attribute pa ON pa.person_id = person.person_id AND pa.person_attribute_type_id in (26) AND p.voided = 0
+						INNER JOIN reporting_age_group AS observed_age_group ON
 						  CAST('#endDate#' AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
 						  AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
                         WHERE observed_age_group.report_group_name = 'Modified_Ages'and cast(value_datetime as date) <= CAST('#endDate#' AS DATE) and concept_id = 3752 Group  BY patientIdentifier) AS MoreThanEightyNineDayDefaulters

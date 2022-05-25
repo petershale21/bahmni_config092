@@ -25,8 +25,8 @@
 						-- CLIENTS NEWLY INITIATED
 						 INNER JOIN patient ON o.person_id = patient.patient_id 
 						 AND (o.concept_id = 2249
-							AND CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
-							AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
+							AND CAST(o.value_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+							AND CAST(o.value_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 
 						 	)
 						 AND patient.voided = 0 AND o.voided = 0
