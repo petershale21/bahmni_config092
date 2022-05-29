@@ -255,6 +255,9 @@
 			"HIVTC, Viral load blood results return date" : {
 					"required" : true
 			},
+      "Follow up Date" : {
+        "allowFutureDates": true
+      },
 				"Pregnancy Estimated Date of Delivery" : {
 					"allowFutureDates": true
 				},
