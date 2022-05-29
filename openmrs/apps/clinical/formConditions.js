@@ -701,6 +701,25 @@ Bahmni.ConceptSet.FormConditions.rules = {
                 }
                 return conditions;
         },
+        //Cervical Cancer Screening Register - Show PITC Results only when PITC has been Offered nkepanem
+        'PITC Offered': function (formName, formFieldValues) {
+                var CancerPitcOffered = formFieldValues['PITC Offered'];
+                var conditions = { show: [], hide: [] };
+
+                if (formName == "Cervical Cancer Screening Register") {
+
+
+                        if ( CancerPitcOffered == "Yes") {
+                                conditions.show.push("PITC Results");
+                        }
+
+
+                        else {
+                                conditions.hide.push("PITC Results");
+                        }
+                }
+                return conditions;
+        },
 
         'HIV Status': function (formName, formFieldValues) {
                 var Cancerhivstatusresults = formFieldValues['HIV Status'];
