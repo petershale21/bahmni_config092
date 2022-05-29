@@ -40,8 +40,8 @@ Bahmni.ConceptSet.FormConditions.rules = {
                         var conditions = { assignedValues: [] , disable: [] };
                         if (formName == "Vitals" || formName == "HIV Treatment and Care Progress Template"){
                                 conditions.assignedValues.push(
-                                { field: "WEIGHT", 
-                                  fieldValue : 
+                                { field: "WEIGHT",
+                                  fieldValue :
                                         {
                                            isAutoFill: true,
                                            scopedEncounter:"CurrentVisit",
@@ -53,7 +53,7 @@ Bahmni.ConceptSet.FormConditions.rules = {
                         }
                         return conditions;
                 },
-                
+
         'HTC, Patient type': function (formName, formFieldValues) {
                 var conditionConcept = formFieldValues['HTC, Patient type'];
                 var conditions = { show: [], hide: [],   assignedValues: [] };
@@ -67,7 +67,7 @@ Bahmni.ConceptSet.FormConditions.rules = {
 
                 }else if (conditionConcept == "HTC, Patient") {
                         conditions.assignedValues.push( {
-                                field: "HEIGHT", 
+                                field: "HEIGHT",
                                 fieldValue : {
                                         isAutoFill: true,
                                         scopedEncounter:"latestvisit",
@@ -80,7 +80,7 @@ Bahmni.ConceptSet.FormConditions.rules = {
                         conditions.show.push("HEIGHT");
                         conditions.show.push("WEIGHT");
                         conditions.assignedValues.push( {
-                                field: "WEIGHT", 
+                                field: "WEIGHT",
                                 fieldValue : {
                                         isAutoFill: true,
                                         scopedEncounter:"latestvisit",
@@ -677,7 +677,7 @@ Bahmni.ConceptSet.FormConditions.rules = {
 
              if (formName == "Cervical Cancer Screening Register") {
 
-                  if (CancerAssessment == "VIA Test") {
+                  if (CancerAssessment == "Cervical VIA Test") {
                      conditions.show.push("VIA Test");
                      conditions.hide.push("Results of Pap Smear");
 
@@ -1475,7 +1475,7 @@ Bahmni.ConceptSet.FormConditions.rules = {
         },
 
         /*--------------------- SCREENING TOOL FOR HIV TESTING ELIGIBILITY ----------------------*/
-        
+
 
         'Testing Eligibility, Tested For HIV': function (formName, formFieldValues) {
                 if ( formName == "HIV Testing and Counseling Intake Template") {
@@ -1485,7 +1485,7 @@ Bahmni.ConceptSet.FormConditions.rules = {
 
                         if (testedForHIV == "No"){
                                 conditions.show.push("Test For HIV");
-                                
+
                                 //conditions.hide.push("HTC, HIV Test");
                                 //conditions.hide.push("HTC, Post-test Counseling Set");
                                 conditions.hide.push("ART, Condoms Dispensed");
@@ -1495,35 +1495,35 @@ Bahmni.ConceptSet.FormConditions.rules = {
                                 conditions.hide.push("Testing Eligibility, On ART Treatment");
                                 conditions.hide.push("Testing Eligibility, Provided Adherence Counselling");
                                 conditions.hide.push("Testing Eligibility, Counselled & linked to Treatment");
-                                
+
                                 conditions.hide.push("Testing Eligibility, Reinforced Prevention Counselling");
-                               
+
                                 conditions.hide.push("Offered prevention Counselling and or Linked to prevention services");
 
 
                         }
                         if (testedForHIV == "Yes"){
                           conditions.show.push("Testing Eligibility, Last Test Results");
-                          
+
                           //conditions.hide.push("HTC, Post-test Counseling Set");
-                          
+
                           conditions.hide.push("ART, Condoms Dispensed");
                           conditions.hide.push("HIVTC, TB Screened");
                           conditions.hide.push("HTS, Referral");
                           conditions.hide.push("Testing Eligibility, Provided Adherence Counselling");
                           conditions.hide.push("Testing Eligibility, Counselled & linked to Treatment");
-                          
+
                           conditions.hide.push("Testing Eligibility, Reinforced Prevention Counselling");
-                          
+
                           conditions.hide.push("Offered prevention Counselling and or Linked to prevention services");
-                          
+
 
                         }
-                        else if (!testedForHIV)    { 
-                          
+                        else if (!testedForHIV)    {
+
                           conditions.hide.push("Self_Test_Buddy");
                           conditions.hide.push("HTC, Post-test Counseling Set");
-                          conditions.hide.push("Testing Eligibility, Time Last Test Done");                        
+                          conditions.hide.push("Testing Eligibility, Time Last Test Done");
                           conditions.hide.push("HIVTC, TB Screened","HIV, Testing Strategies");
                           conditions.hide.push("HTS, Referral");
                           conditions.hide.push("Testing Eligibility, Provided Adherence Counselling","Testing Eligibility, Last Test Results");
@@ -1549,9 +1549,9 @@ Bahmni.ConceptSet.FormConditions.rules = {
 
                         if (test == "Yes") {
                           conditions.show.push("HIV, Testing Strategies");
-                          
-                         
-                          
+
+
+
                           conditions.hide.push("ART, Condoms Dispensed");
                           conditions.hide.push("HIVTC, TB Screened");
                           conditions.hide.push("HTS, Referral");
@@ -1564,8 +1564,8 @@ Bahmni.ConceptSet.FormConditions.rules = {
 
                        else if (test == "No" || test == "Declined" || !test){
                           conditions.hide.push("HIV, Testing Strategies");
-                          
-                          
+
+
                           conditions.hide.push("HTC, HIV Test");
                           conditions.hide.push("Self_Test_Buddy");
                           conditions.hide.push("HIVTC, TB Screened");
@@ -1578,7 +1578,7 @@ Bahmni.ConceptSet.FormConditions.rules = {
                           conditions.hide.push("Offered prevention Counselling and or Linked to prevention services");
                           conditions.hide.push("ART, Condoms Dispensed","HTC, Date Of Distribution","HTC, Distribution channel","HTC, Distribution channel","HTC, Distribution Mode","HTC, Kit Collected For","HTC, Key Pop","HTC, Tested for HIV in The Past 12 Months","HTC, HIVST Results");
                         }
-                        
+
 
                         return conditions;
                 }
@@ -1594,9 +1594,9 @@ Bahmni.ConceptSet.FormConditions.rules = {
                        conditions.hide.push("HTC, Kit Collected For");
 
                   if (testingStrategy.includes('HIVTC, Rapid Test') && !testingStrategy.includes('HIVTC, Self Test')){
-                         
+
                           conditions.show.push("HTC, Pre-test Counseling Set","HTC, HIV Test","HTC, Post-test Counseling Set");
-                          
+
                           conditions.show.push("ART, Condoms Dispensed");
                           conditions.show.push("HIVTC, TB Screened");
                           conditions.show.push("HTS, Referral");
@@ -1618,18 +1618,18 @@ Bahmni.ConceptSet.FormConditions.rules = {
                 else if (testingStrategy.includes('HIVTC, Self Test') && !testingStrategy.includes('HIVTC, Rapid Test')) {
                         conditions.show.push("HTC, Date Of Distribution","HTC, Distribution Mode","Self_Test_Buddy", "HTC, Kit Collected For","HTC, Key Pop","HTC, Tested for HIV in The Past 12 Months","HTC, HIVST Results");
                         conditions.hide.push("HTC, Pre-test Counseling Set","HTC, HIV Test","HTC, Post-test Counseling Set");
-                       
+
                         conditions.hide.push("ART, Condoms Dispensed");
                         conditions.hide.push("HIVTC, TB Screened");
                         conditions.hide.push("HTS, Referral");
                         }
-                
+
                  if (testingStrategy.includes('HIVTC, Self Test') && testingStrategy.includes('HIVTC, Rapid Test')){
-                  
+
                   conditions.show.push("HTC, Date Of Distribution","HTC, Distribution Mode", "Self_Test_Buddy", "HTC, Kit Collected For","HTC, Key Pop","HTC, Tested for HIV in The Past 12 Months","HTC, HIVST Results");
                   conditions.show.push("HTC, Pre-test Counseling Set","HTC, Post-test Counseling Set");
                   conditions.show.push("HTC, HIV Test","ART, Condoms Dispensed","HIVTC, TB Screened","HTS, Referral");
-                  
+
                 }
                 if (!testingStrategy.includes('HIVTC, Self Test') && !testingStrategy.includes('HIVTC, Rapid Test')){
                   conditions.hide.push("HTC, Date Of Distribution");
@@ -1680,10 +1680,10 @@ Bahmni.ConceptSet.FormConditions.rules = {
 
         'HTC, Distribution Mode': function (formName, formFieldValues) {
                 var conditionConcept = formFieldValues['HTC, Distribution Mode'];
-                var conditions = { show: [], hide: [] };                
+                var conditions = { show: [], hide: [] };
                 conditionConcept = conditionConcept.sort();
                 console.log(conditionConcept);
-                
+
                 if (JSON.stringify(conditionConcept) === JSON.stringify(['HTC, Secondary', 'HTC, Secondary'])) {
                         conditions.show.push("Self_Test_Buddy");
                         conditions.show.push("HTC, Kit Collected For");
@@ -1713,7 +1713,7 @@ Bahmni.ConceptSet.FormConditions.rules = {
                                 conditions.hide.push("Testing Eligibility, Reinforced Prevention Counselling");
                                 conditions.hide.push("Offered prevention Counselling and or Linked to prevention services");
                                 conditions.hide.push("HTC, History of Previous Testing","HTC, Pre-test Counseling");
-                               
+
 
                         }
 
@@ -1723,8 +1723,8 @@ Bahmni.ConceptSet.FormConditions.rules = {
                                 conditions.hide.push("Testing Eligibility, On ART Treatment");
                                 conditions.hide.push("Testing Eligibility, Provided Adherence Counselling");
                                 conditions.hide.push("Testing Eligibility, Counselled & linked to Treatment");
-                                conditions.hide.push("Testing Eligibility, Reinforced Prevention Counselling"); 
-                                conditions.hide.push("Offered prevention Counselling and or Linked to prevention services");                               
+                                conditions.hide.push("Testing Eligibility, Reinforced Prevention Counselling");
+                                conditions.hide.push("Offered prevention Counselling and or Linked to prevention services");
 
                         }
                         return conditions;
@@ -1740,15 +1740,15 @@ Bahmni.ConceptSet.FormConditions.rules = {
 
                         if (onART == "Yes") {
                                 conditions.show.push("Testing Eligibility, Provided Adherence Counselling");
-                                conditions.hide.push("Testing Eligibility, Counselled & linked to Treatment");                               
-                                conditions.hide.push("Testing Eligibility, Reinforced Prevention Counselling");                               
+                                conditions.hide.push("Testing Eligibility, Counselled & linked to Treatment");
+                                conditions.hide.push("Testing Eligibility, Reinforced Prevention Counselling");
                                 conditions.hide.push("Offered prevention Counselling and or Linked to prevention services");
                         }
 
                         if (onART=="No"){
                                 conditions.show.push("Testing Eligibility, Counselled & linked to Treatment");
-                                conditions.hide.push("Testing Eligibility, Provided Adherence Counselling");                                
-                                conditions.hide.push("Testing Eligibility, Reinforced Prevention Counselling");                        
+                                conditions.hide.push("Testing Eligibility, Provided Adherence Counselling");
+                                conditions.hide.push("Testing Eligibility, Reinforced Prevention Counselling");
                                 conditions.hide.push("Offered prevention Counselling and or Linked to prevention services");
                         }
                         return conditions;
@@ -1794,7 +1794,7 @@ Bahmni.ConceptSet.FormConditions.rules = {
                               conditions.hide.push("Offered prevention Counselling and or Linked to prevention services")
 
                         }
-                    
+
 
 
                         return conditions;
