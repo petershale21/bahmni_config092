@@ -22,8 +22,8 @@
 							where os.concept_id = 3634 
 							AND os.value_coded = 2095 
 							and os.voided = 0
-							AND MONTH(os.obs_datetime) <= MONTH(CAST('#endDate#' AS DATE)) 
-							AND YEAR(os.obs_datetime) <= YEAR(CAST('#endDate#' AS DATE))
+							AND MONTH(os.obs_datetime) = MONTH(CAST('#endDate#' AS DATE)) 
+							AND YEAR(os.obs_datetime) = YEAR(CAST('#endDate#' AS DATE))
 						 )	
 						 
 						 INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
@@ -78,8 +78,8 @@ WHERE Clients_Seen.Id not in (
 							where os.concept_id = 3634 
 							AND os.value_coded = 2095 
 							and os.voided = 0
-							AND MONTH(os.obs_datetime) <= MONTH(CAST('#endDate#' AS DATE)) 
-							AND YEAR(os.obs_datetime) <= YEAR(CAST('#endDate#' AS DATE))
+							AND MONTH(os.obs_datetime) = MONTH(CAST('#endDate#' AS DATE)) 
+							AND YEAR(os.obs_datetime) = YEAR(CAST('#endDate#' AS DATE))
 						 )	
 
 							)
