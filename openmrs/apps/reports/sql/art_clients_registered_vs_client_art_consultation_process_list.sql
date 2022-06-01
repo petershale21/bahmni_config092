@@ -33,7 +33,7 @@ FROM
 							p.person_id as id,
 							concat(pn.given_name,' ', ifnull(pn.family_name,'')) as name,
 							p.gender AS gender,				
-							floor(datediff(CAST('#endDate#' AS DATE), p.birthdate)/365) AS age,				
+							floor(datediff(CAST('2022-03-01' AS DATE), p.birthdate)/365) AS age,				
 							pi.identifier as identifier,
 							concat("",p.uuid) as uuid,
 							concept_id,
@@ -44,9 +44,10 @@ FROM
 							JOIN patient_identifier pi on v.patient_id = pi.patient_id and pi.identifier_type=5
 							JOIN patient_identifier_type pit on pi.identifier_type = pit.patient_identifier_type_id
 							JOIN encounter en on en.visit_id = v.visit_id and en.voided=0 and en.encounter_type = 2
+							JOIN visit_type vt on vt.visit_type_id = vt.visit_type_id and vt.visit_type_id in (10,19)
 							JOIN obs o on o.encounter_id=en.encounter_id
 							JOIN location l on v.location_id = l.location_id and l.retired=0
-					WHERE en.encounter_datetime >= CAST('#startDate#' AS DATE) and en.encounter_datetime <= CAST('#endDate#' AS DATE)) reg
+					WHERE en.encounter_datetime >= CAST('2022-03-01' AS DATE) and en.encounter_datetime <= CAST('2022-06-16' AS DATE)) reg
 
 					LEFT JOIN 
 
@@ -54,7 +55,7 @@ FROM
 							p.person_id as id,
 							concat(pn.given_name,' ', ifnull(pn.family_name,'')) as name,
 							p.gender AS gender,
-							floor(datediff(CAST('#endDate#' AS DATE), p.birthdate)/365) AS age,				
+							floor(datediff(CAST('2022-06-16' AS DATE), p.birthdate)/365) AS age,				
 							pi.identifier as identifier,
 							concat("",p.uuid) as uuid,
 							concept_id,
@@ -65,9 +66,10 @@ FROM
 							JOIN patient_identifier pi on v.patient_id = pi.patient_id and pi.identifier_type=5
 							JOIN patient_identifier_type pit on pi.identifier_type = pit.patient_identifier_type_id
 							JOIN encounter en on en.visit_id = v.visit_id and en.voided=0 and en.encounter_type = 1
+							JOIN visit_type vt on vt.visit_type_id = vt.visit_type_id and vt.visit_type_id in (10,19)
 							JOIN obs o on o.encounter_id=en.encounter_id and o.concept_id in (3843, 4276)
 							JOIN location l on v.location_id = l.location_id and l.retired=0
-					WHERE en.encounter_datetime >= CAST('#startDate#' AS DATE) and en.encounter_datetime <= CAST('#endDate#' AS DATE)) art_consultation
+					WHERE en.encounter_datetime >= CAST('2022-03-01' AS DATE) and en.encounter_datetime <= CAST('2022-06-16' AS DATE)) art_consultation
 					
 					ON reg.id = art_consultation.id)			
 					
@@ -103,7 +105,7 @@ FROM
 							p.person_id as id,
 							concat(pn.given_name,' ', ifnull(pn.family_name,'')) as name,
 							p.gender AS gender,				
-							floor(datediff(CAST('#endDate#' AS DATE), p.birthdate)/365) AS age,				
+							floor(datediff(CAST('2022-03-01' AS DATE), p.birthdate)/365) AS age,				
 							pi.identifier as identifier,
 							concat("",p.uuid) as uuid,
 							concept_id,
@@ -114,9 +116,10 @@ FROM
 							JOIN patient_identifier pi on v.patient_id = pi.patient_id and pi.identifier_type=5
 							JOIN patient_identifier_type pit on pi.identifier_type = pit.patient_identifier_type_id
 							JOIN encounter en on en.visit_id = v.visit_id and en.voided=0 and en.encounter_type = 2
+							JOIN visit_type vt on vt.visit_type_id = vt.visit_type_id and vt.visit_type_id in (10,19)
 							JOIN obs o on o.encounter_id=en.encounter_id
 							JOIN location l on v.location_id = l.location_id and l.retired=0
-					WHERE en.encounter_datetime >= CAST('#startDate#' AS DATE) and en.encounter_datetime <= CAST('#endDate#' AS DATE)) reg
+					WHERE en.encounter_datetime >= CAST('2022-03-01' AS DATE) and en.encounter_datetime <= CAST('2022-06-16' AS DATE)) reg
 
 					LEFT JOIN 
 
@@ -124,7 +127,7 @@ FROM
 							p.person_id as id,
 							concat(pn.given_name,' ', ifnull(pn.family_name,'')) as name,
 							p.gender AS gender,
-							floor(datediff(CAST('#endDate#' AS DATE), p.birthdate)/365) AS age,				
+							floor(datediff(CAST('2022-03-31' AS DATE), p.birthdate)/365) AS age,				
 							pi.identifier as identifier,
 							concat("",p.uuid) as uuid,
 							concept_id,
@@ -135,9 +138,10 @@ FROM
 							JOIN patient_identifier pi on v.patient_id = pi.patient_id and pi.identifier_type=5
 							JOIN patient_identifier_type pit on pi.identifier_type = pit.patient_identifier_type_id
 							JOIN encounter en on en.visit_id = v.visit_id and en.voided=0 and en.encounter_type = 1
-							JOIN obs o on o.encounter_id=en.encounter_id and o.concept_id in (3843, 4276)
+							JOIN visit_type vt on vt.visit_type_id = vt.visit_type_id and vt.visit_type_id in (10,19)
+							JOIN obs o on o.encounter_id=en.encounter_id and o.concept_id in (3843, 4276) and o.voided =0
 							JOIN location l on v.location_id = l.location_id and l.retired=0
-					WHERE en.encounter_datetime >= CAST('#startDate#' AS DATE) and en.encounter_datetime <= CAST('#endDate#' AS DATE)) art_consultation
+					WHERE en.encounter_datetime >= CAST('2022-03-01' AS DATE) and en.encounter_datetime <= CAST('2022-03-16' AS DATE)) art_consultation
 					
 					ON reg.id = art_consultation.id)			
 					
@@ -146,7 +150,7 @@ FROM
 								select distinct os.person_id 
 								from obs os 
 								where os.concept_id=3843 
-								and os.obs_datetime >= CAST('#startDate#' AS DATE) and os.obs_datetime <= CAST('#endDate#' AS DATE)
+								and os.obs_datetime >= CAST('2022-03-01' AS DATE) and os.obs_datetime <= CAST('2022-06-16' AS DATE)
 		)
 		GROUP BY ARTConsultationsRegistered.id
 
