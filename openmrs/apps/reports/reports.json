@@ -1066,21 +1066,20 @@
             ]
         }
     },
-    "TB Prevention Therapy (TPT)": {
-        "name": "TB-014 | TB Prevention Therapy (TPT)",
-        "type": "concatenated",
+    "tpt_list": {
+       "name": "TB Prevention Therapy;TPT (List) ",
+        "type": "MRSGeneric",
         "config": {
-            "reports": [
-                {
-                    "name": "TB Prevention Therapy (TPT)",
-                    "type": "MRSGeneric",
-                    "config": {
-                        "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/SECTION7.sql"
-                    }
-                }
-            ]
-        }
+            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/tpt_list.sql"                   
+         }
     },
+    "tpt_pivot": {
+        "name": "TB Prevention Therapy;TPT (Pivot) ",
+         "type": "MRSGeneric",
+         "config": {
+             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/tpt_pivot.sql"                   
+          }
+     },
     "DHIS_TB_SCREENING": {
         "name": "TB-015 | TB SCREENING",
         "type": "MRSGeneric",
@@ -1089,3 +1088,4 @@
         }
     }
 }
+
