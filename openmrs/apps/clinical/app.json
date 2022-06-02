@@ -113,6 +113,9 @@
 			"ANC, Drug History": {
 				"multiSelect": true
 			},
+      "HTC, HIVST Results": {
+				"required": true
+			},
 
 			"HTC, Distribution Mode": {
 				"multiSelect": true
