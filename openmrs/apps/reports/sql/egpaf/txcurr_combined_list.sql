@@ -72,7 +72,15 @@ WHERE Clients_Seen.Id not in (
 											AND MONTH(o.value_datetime) = MONTH(CAST('#endDate#' AS DATE)) 
 											AND YEAR(o.value_datetime) = YEAR(CAST('#endDate#' AS DATE))
 						)		
-				 AND patient.voided = 0 AND o.voided = 0
+				 		AND patient.voided = 0 AND o.voided = 0
+				 		AND o.person_id not in (
+							select distinct os.person_id from obs os
+							where os.concept_id = 3634 
+							AND os.value_coded = 2095 
+							and os.voided = 0
+							AND MONTH(os.obs_datetime) = MONTH(CAST('#endDate#' AS DATE)) 
+							AND YEAR(os.obs_datetime) = YEAR(CAST('#endDate#' AS DATE))
+						 )	
 
 							)
 AND Clients_Seen.Id not in (
