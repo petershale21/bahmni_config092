@@ -13,7 +13,7 @@ FROM
     FROM( 
             select o.person_id AS Id,
                     patient_identifier.identifier AS patientIdentifier,
-                    floor(datediff(CAST('2020-07-31' AS DATE), person.birthdate)/365) AS Age,
+                    floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age,
                     person.gender AS Gender,
                     observed_age_group.name AS age_group
             from obs o
@@ -22,17 +22,14 @@ FROM
             INNER JOIN person_name ON person.person_id = person_name.person_id AND person_name.preferred = 1
             INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1
             INNER JOIN reporting_age_group AS observed_age_group ON
-            CAST('2020-07-31' AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
+            CAST('#endDate#' AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
             AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
             WHERE observed_age_group.report_group_name = 'Modified_Ages'
             AND o.concept_id = 3843 AND o.value_coded in (3841,3842)
-            AND MONTH(obs_datetime) = MONTH(CAST('2020-07-31' AS DATE))
-            AND YEAR(obs_datetime) =  YEAR(CAST('2020-07-31' AS DATE))
+            AND MONTH(obs_datetime) = MONTH(CAST('#endDate#' AS DATE))
+            AND YEAR(obs_datetime) =  YEAR(CAST('#endDate#' AS DATE))
             AND o.voided = 0
-            AND o.person_id in (
-                    select person_id from obs
-                    where concept_id = 2223 
-                            )
+          
         ) artPreart_a
     WHERE Age < 15  )     
 
@@ -42,7 +39,7 @@ FROM
     FROM( 
             select o.person_id AS Id,
                     patient_identifier.identifier AS patientIdentifier,
-                    floor(datediff(CAST('2020-07-31' AS DATE), person.birthdate)/365) AS Age,
+                    floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age,
                     person.gender AS Gender,
                     observed_age_group.name AS age_group
             from obs o
@@ -51,19 +48,16 @@ FROM
             INNER JOIN person_name ON person.person_id = person_name.person_id AND person_name.preferred = 1
             INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1
             INNER JOIN reporting_age_group AS observed_age_group ON
-            CAST('2020-07-31' AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
+            CAST('#endDate#' AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
             AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
             WHERE observed_age_group.report_group_name = 'Modified_Ages'
             AND o.concept_id = 3843 AND o.value_coded in (3841,3842)
-            AND MONTH(obs_datetime) = MONTH(CAST('2020-07-31' AS DATE))
-            AND YEAR(obs_datetime) =  YEAR(CAST('2020-07-31' AS DATE))
+            AND MONTH(obs_datetime) = MONTH(CAST('#endDate#' AS DATE))
+            AND YEAR(obs_datetime) =  YEAR(CAST('#endDate#' AS DATE))
             AND o.voided = 0
-            AND o.person_id in (
-                    select person_id from obs
-                    where concept_id = 2223 
-                            )
+          
         ) artPreart_a
-    WHERE Age > 15  ) 
+    WHERE Age >= 15  ) 
 
     UNION
 
@@ -71,7 +65,7 @@ FROM
     FROM( 
             select o.person_id AS Id,
                     patient_identifier.identifier AS patientIdentifier,
-                    floor(datediff(CAST('2020-07-31' AS DATE), person.birthdate)/365) AS Age,
+                    floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age,
                     person.gender AS Gender,
                     observed_age_group.name AS age_group
             from obs o
@@ -80,20 +74,20 @@ FROM
             INNER JOIN person_name ON person.person_id = person_name.person_id AND person_name.preferred = 1
             INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1
             INNER JOIN reporting_age_group AS observed_age_group ON
-            CAST('2020-07-31' AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
+            CAST('#endDate#' AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
             AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
             WHERE observed_age_group.report_group_name = 'Modified_Ages'
+            AND MONTH(obs_datetime) = MONTH(CAST('#endDate#' AS DATE))
+			AND YEAR(obs_datetime) =  YEAR(CAST('#endDate#' AS DATE))
             AND o.voided = 0
-            AND o.person_id in (
-                    select person_id from obs
-                    where concept_id = 2223 
-                            )
+            AND o.concept_id = 3843 AND o.value_coded in (3842) 
             AND o.person_id in (
 						select person_id from obs
-						where concept_id = 2294 and value_coded = 2146 
-						AND MONTH(obs_datetime) = MONTH(CAST('2020-07-31' AS DATE))
-						AND YEAR(obs_datetime) =  YEAR(CAST('2020-07-31' AS DATE))
+						where concept_id = 3710 and value_coded IN (3709,1876,3639) 
+						AND MONTH(obs_datetime) = MONTH(CAST('#endDate#' AS DATE))
+						AND YEAR(obs_datetime) =  YEAR(CAST('#endDate#' AS DATE))
 					)
+                    
         ) artPreart_a
     WHERE Age < 15  )     
 
@@ -103,7 +97,7 @@ FROM
     FROM( 
             select o.person_id AS Id,
                     patient_identifier.identifier AS patientIdentifier,
-                    floor(datediff(CAST('2020-07-31' AS DATE), person.birthdate)/365) AS Age,
+                    floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age,
                     person.gender AS Gender,
                     observed_age_group.name AS age_group
             from obs o
@@ -112,22 +106,21 @@ FROM
             INNER JOIN person_name ON person.person_id = person_name.person_id AND person_name.preferred = 1
             INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1
             INNER JOIN reporting_age_group AS observed_age_group ON
-            CAST('2020-07-31' AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
+            CAST('#endDate#' AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
             AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
             WHERE observed_age_group.report_group_name = 'Modified_Ages'
-            AND o.voided = 0
-            AND o.person_id in (
-                    select person_id from obs
-                    where concept_id = 2223 
-                            )
+            AND MONTH(obs_datetime) = MONTH(CAST('#endDate#' AS DATE))
+			AND YEAR(obs_datetime) =  YEAR(CAST('#endDate#' AS DATE))
+            AND o.concept_id = 3843 AND o.value_coded in (3842) 
+            AND o.voided = 0          
             and o.person_id in (
 						select person_id from obs
-						where concept_id = 2294 and value_coded = 2146 
-						AND MONTH(obs_datetime) = MONTH(CAST('2020-07-31' AS DATE))
-						AND YEAR(obs_datetime) =  YEAR(CAST('2020-07-31' AS DATE))
+						where concept_id = 3710 and value_coded IN (3709,1876,3639)  
+						AND MONTH(obs_datetime) = MONTH(CAST('#endDate#' AS DATE))
+						AND YEAR(obs_datetime) =  YEAR(CAST('#endDate#' AS DATE))
 					)
         ) artPreart_a
-    WHERE Age > 15  )              
+    WHERE Age >= 15  )              
 
     UNION
 
@@ -135,7 +128,7 @@ FROM
     FROM( 
             select o.person_id AS Id,
                     patient_identifier.identifier AS patientIdentifier,
-                    floor(datediff(CAST('2020-07-31' AS DATE), person.birthdate)/365) AS Age,
+                    floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age,
                     person.gender AS Gender,
                     observed_age_group.name AS age_group
             from obs o
@@ -144,19 +137,19 @@ FROM
             INNER JOIN person_name ON person.person_id = person_name.person_id AND person_name.preferred = 1
             INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1
             INNER JOIN reporting_age_group AS observed_age_group ON
-            CAST('2020-07-31' AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
+            CAST('#endDate#' AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
             AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
             WHERE observed_age_group.report_group_name = 'Modified_Ages'
+            AND MONTH(obs_datetime) = MONTH(CAST('#endDate#' AS DATE))
+			AND YEAR(obs_datetime) =  YEAR(CAST('#endDate#' AS DATE))
+            AND o.concept_id = 3843 AND o.value_coded in (3842)
             AND o.voided = 0
-            AND o.person_id in (
-                    select person_id from obs
-                    where concept_id = 2223 
-                            )
+          
             AND o.person_id in (
 						select person_id from obs
 						where concept_id = 3710 and value_coded = 1876 
-						AND MONTH(obs_datetime) = MONTH(CAST('2020-07-31' AS DATE))
-						AND YEAR(obs_datetime) =  YEAR(CAST('2020-07-31' AS DATE))
+						AND MONTH(obs_datetime) = MONTH(CAST('#endDate#' AS DATE))
+						AND YEAR(obs_datetime) =  YEAR(CAST('#endDate#' AS DATE))
 					)
         ) artPreart_a
     WHERE Age < 15  )     
@@ -167,7 +160,7 @@ FROM
     FROM( 
             select o.person_id AS Id,
                     patient_identifier.identifier AS patientIdentifier,
-                    floor(datediff(CAST('2020-07-31' AS DATE), person.birthdate)/365) AS Age,
+                    floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age,
                     person.gender AS Gender,
                     observed_age_group.name AS age_group
             from obs o
@@ -176,65 +169,50 @@ FROM
             INNER JOIN person_name ON person.person_id = person_name.person_id AND person_name.preferred = 1
             INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1
             INNER JOIN reporting_age_group AS observed_age_group ON
-            CAST('2020-07-31' AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
+            CAST('#endDate#' AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
             AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
             WHERE observed_age_group.report_group_name = 'Modified_Ages'
+            AND MONTH(obs_datetime) = MONTH(CAST('#endDate#' AS DATE))
+			AND YEAR(obs_datetime) =  YEAR(CAST('#endDate#' AS DATE))
+            AND o.concept_id = 3843 AND o.value_coded in (3842)
             AND o.voided = 0
-            AND o.person_id in (
-                    select person_id from obs
-                    where concept_id = 2223 
-                            )
+          
             and o.person_id in (
 						select person_id from obs
 						where concept_id = 3710 and value_coded = 1876 
-						AND MONTH(obs_datetime) = MONTH(CAST('2020-07-31' AS DATE))
-						AND YEAR(obs_datetime) =  YEAR(CAST('2020-07-31' AS DATE))
+						AND MONTH(obs_datetime) = MONTH(CAST('#endDate#' AS DATE))
+						AND YEAR(obs_datetime) =  YEAR(CAST('#endDate#' AS DATE))
 					)
         ) artPreart_a
-    WHERE Age > 15  )              
+    WHERE Age >= 15  )              
 
     UNION
 
+    -- Start : ART clients disagnosed using genXpert in the reporting period
        (SELECT  Id,Gender,'Diagnosed' as Heading,'Children' as Persons
     FROM( 
             select o.person_id AS Id,
                     patient_identifier.identifier AS patientIdentifier,
-                    floor(datediff(CAST('2020-07-31' AS DATE), person.birthdate)/365) AS Age,
+                    floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age,
                     person.gender AS Gender,
                     observed_age_group.name AS age_group
             from obs o
-        -- CLIENTS SEEN FOR ART
+         
             INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
             INNER JOIN person_name ON person.person_id = person_name.person_id AND person_name.preferred = 1
             INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1
             INNER JOIN reporting_age_group AS observed_age_group ON
-            CAST('2020-07-31' AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
+            CAST('#endDate#' AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
             AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
             WHERE observed_age_group.report_group_name = 'Modified_Ages'
+            AND MONTH(obs_datetime) = MONTH(CAST('#endDate#' AS DATE))
+			AND YEAR(obs_datetime) =  YEAR(CAST('#endDate#' AS DATE))
             AND o.voided = 0
-            AND o.person_id in (
-                    select person_id from obs
-                    where concept_id = 2223 
-                            )
-            AND o.person_id in (
-						select person_id from obs 
-						-- genexpert
-						where concept_id = 3787 and value_coded in (3816,3817) 
-						AND MONTH(obs_datetime) = MONTH(CAST('2020-07-31' AS DATE))
-						AND YEAR(obs_datetime) =  YEAR(CAST('2020-07-31' AS DATE))
-						-- line probe
-						UNION
-						select person_id from obs
-						where concept_id = 3805 and value_coded in (1738) 
-						AND MONTH(obs_datetime) = MONTH(CAST('2020-07-31' AS DATE))
-						AND YEAR(obs_datetime) =  YEAR(CAST('2020-07-31' AS DATE))
-						UNION
-						-- phenotypic
-						select person_id from obs
-						where concept_id = 3840 and value_coded in (3837,3838,3839) 
-						AND MONTH(obs_datetime) = MONTH(CAST('2020-07-31' AS DATE))
-						AND YEAR(obs_datetime) =  YEAR(CAST('2020-07-31' AS DATE))
-					)
+            
+            -- select geneXpert as diagnosis
+            AND o.concept_id = 3814 and o.value_coded = 3824
+            AND o.voided = 0 
+             
         ) artPreart_a
     WHERE Age < 15  )     
 
@@ -244,52 +222,35 @@ FROM
     FROM( 
             select o.person_id AS Id,
                     patient_identifier.identifier AS patientIdentifier,
-                    floor(datediff(CAST('2020-07-31' AS DATE), person.birthdate)/365) AS Age,
+                    floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age,
                     person.gender AS Gender,
                     observed_age_group.name AS age_group
             from obs o
-        -- CLIENTS SEEN FOR ART
+        
             INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
             INNER JOIN person_name ON person.person_id = person_name.person_id AND person_name.preferred = 1
             INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1
             INNER JOIN reporting_age_group AS observed_age_group ON
-            CAST('2020-07-31' AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
+            CAST('#endDate#' AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
             AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
             WHERE observed_age_group.report_group_name = 'Modified_Ages'
-            AND o.voided = 0
-            AND o.person_id in (
-                    select person_id from obs
-                    where concept_id = 2223 
-                            )
-            and o.person_id in (
-						select person_id from obs 
-						-- genexpert
-						where concept_id = 3787 and value_coded in (3816,3817) 
-						AND MONTH(obs_datetime) = MONTH(CAST('2020-07-31' AS DATE))
-						AND YEAR(obs_datetime) =  YEAR(CAST('2020-07-31' AS DATE))
-						-- line probe
-						UNION
-						select person_id from obs
-						where concept_id = 3805 and value_coded in (1738) 
-						AND MONTH(obs_datetime) = MONTH(CAST('2020-07-31' AS DATE))
-						AND YEAR(obs_datetime) =  YEAR(CAST('2020-07-31' AS DATE))
-						UNION
-						-- phenotypic
-						select person_id from obs
-						where concept_id = 3840 and value_coded in (3837,3838,3839) 
-						AND MONTH(obs_datetime) = MONTH(CAST('2020-07-31' AS DATE))
-						AND YEAR(obs_datetime) =  YEAR(CAST('2020-07-31' AS DATE))
-					)
+            AND MONTH(obs_datetime) = MONTH(CAST('#endDate#' AS DATE))
+			AND YEAR(obs_datetime) =  YEAR(CAST('#endDate#' AS DATE))
+            
+            -- select geneXpert as diagnosis
+            AND o.concept_id = 3814 and o.value_coded = 3824
+            AND o.voided = 0 
+             
         ) artPreart_a
-    WHERE Age > 15  )              
-
+    WHERE Age >= 15  )   
+        -- //End ART clients disagnosed using genXpert in the reporting period
     UNION
 
        (SELECT  Id,Gender,'Started' as Heading,'Children' as Persons
     FROM( 
             select o.person_id AS Id,
                     patient_identifier.identifier AS patientIdentifier,
-                    floor(datediff(CAST('2020-07-31' AS DATE), person.birthdate)/365) AS Age,
+                    floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age,
                     person.gender AS Gender,
                     observed_age_group.name AS age_group
             from obs o
@@ -298,38 +259,37 @@ FROM
             INNER JOIN person_name ON person.person_id = person_name.person_id AND person_name.preferred = 1
             INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1
             INNER JOIN reporting_age_group AS observed_age_group ON
-            CAST('2020-07-31' AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
+            CAST('#endDate#' AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
             AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
             WHERE observed_age_group.report_group_name = 'Modified_Ages'
+            AND MONTH(obs_datetime) = MONTH(CAST('#endDate#' AS DATE))
+			AND YEAR(obs_datetime) =  YEAR(CAST('#endDate#' AS DATE))
             AND o.voided = 0
-            AND o.person_id in (
-                    select person_id from obs
-                    where concept_id = 2223 
-                            )
+          
             AND o.person_id in (
 						select person_id from obs 
 						-- genexpert
 						where concept_id = 3787 and value_coded in (3816,3817) 
-						AND MONTH(obs_datetime) = MONTH(CAST('2020-07-31' AS DATE))
-						AND YEAR(obs_datetime) =  YEAR(CAST('2020-07-31' AS DATE))
+						AND MONTH(obs_datetime) = MONTH(CAST('#endDate#' AS DATE))
+						AND YEAR(obs_datetime) =  YEAR(CAST('#endDate#' AS DATE))
 						-- line probe
 						UNION
 						select person_id from obs
 						where concept_id = 3805 and value_coded in (1738) 
-						AND MONTH(obs_datetime) = MONTH(CAST('2020-07-31' AS DATE))
-						AND YEAR(obs_datetime) =  YEAR(CAST('2020-07-31' AS DATE))
+						AND MONTH(obs_datetime) = MONTH(CAST('#endDate#' AS DATE))
+						AND YEAR(obs_datetime) =  YEAR(CAST('#endDate#' AS DATE))
 						UNION
 						-- phenotypic
 						select person_id from obs
 						where concept_id = 3840 and value_coded in (3837,3838,3839) 
-						AND MONTH(obs_datetime) = MONTH(CAST('2020-07-31' AS DATE))
-						AND YEAR(obs_datetime) =  YEAR(CAST('2020-07-31' AS DATE))
+						AND MONTH(obs_datetime) = MONTH(CAST('#endDate#' AS DATE))
+						AND YEAR(obs_datetime) =  YEAR(CAST('#endDate#' AS DATE))
 					)
             AND o.person_id in(
                 select person_id from obs
                 where concept_id = 2237 
-                AND MONTH(value_datetime) = MONTH(CAST('2020-07-31' AS DATE))
-                AND YEAR(value_datetime) =  YEAR(CAST('2020-07-31' AS DATE))
+                AND MONTH(value_datetime) = MONTH(CAST('#endDate#' AS DATE))
+                AND YEAR(value_datetime) =  YEAR(CAST('#endDate#' AS DATE))
             )
         ) artPreart_a
     WHERE Age < 15  )     
@@ -340,7 +300,7 @@ FROM
     FROM( 
             select o.person_id AS Id,
                     patient_identifier.identifier AS patientIdentifier,
-                    floor(datediff(CAST('2020-07-31' AS DATE), person.birthdate)/365) AS Age,
+                    floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age,
                     person.gender AS Gender,
                     observed_age_group.name AS age_group
             from obs o
@@ -349,41 +309,40 @@ FROM
             INNER JOIN person_name ON person.person_id = person_name.person_id AND person_name.preferred = 1
             INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1
             INNER JOIN reporting_age_group AS observed_age_group ON
-            CAST('2020-07-31' AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
+            CAST('#endDate#' AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
             AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
             WHERE observed_age_group.report_group_name = 'Modified_Ages'
+            AND MONTH(obs_datetime) = MONTH(CAST('#endDate#' AS DATE))
+			AND YEAR(obs_datetime) =  YEAR(CAST('#endDate#' AS DATE))
             AND o.voided = 0
-            AND o.person_id in (
-                    select person_id from obs
-                    where concept_id = 2223 
-                            )
+          
             and o.person_id in (
 						select person_id from obs 
 						-- genexpert
 						where concept_id = 3787 and value_coded in (3816,3817) 
-						AND MONTH(obs_datetime) = MONTH(CAST('2020-07-31' AS DATE))
-						AND YEAR(obs_datetime) =  YEAR(CAST('2020-07-31' AS DATE))
+						AND MONTH(obs_datetime) = MONTH(CAST('#endDate#' AS DATE))
+						AND YEAR(obs_datetime) =  YEAR(CAST('#endDate#' AS DATE))
 						-- line probe
 						UNION
 						select person_id from obs
 						where concept_id = 3805 and value_coded in (1738) 
-						AND MONTH(obs_datetime) = MONTH(CAST('2020-07-31' AS DATE))
-						AND YEAR(obs_datetime) =  YEAR(CAST('2020-07-31' AS DATE))
+						AND MONTH(obs_datetime) = MONTH(CAST('#endDate#' AS DATE))
+						AND YEAR(obs_datetime) =  YEAR(CAST('#endDate#' AS DATE))
 						UNION
 						-- phenotypic
 						select person_id from obs
 						where concept_id = 3840 and value_coded in (3837,3838,3839) 
-						AND MONTH(obs_datetime) = MONTH(CAST('2020-07-31' AS DATE))
-						AND YEAR(obs_datetime) =  YEAR(CAST('2020-07-31' AS DATE))
+						AND MONTH(obs_datetime) = MONTH(CAST('#endDate#' AS DATE))
+						AND YEAR(obs_datetime) =  YEAR(CAST('#endDate#' AS DATE))
 					)
             AND o.person_id in(
                 select person_id from obs
                 where concept_id = 2237 
-                AND MONTH(value_datetime) = MONTH(CAST('2020-07-31' AS DATE))
-                AND YEAR(value_datetime) =  YEAR(CAST('2020-07-31' AS DATE))
+                AND MONTH(value_datetime) = MONTH(CAST('#endDate#' AS DATE))
+                AND YEAR(value_datetime) =  YEAR(CAST('#endDate#' AS DATE))
             )        
         ) artPreart_a
-    WHERE Age > 15  )
+    WHERE Age >= 15  )
     
 	UNION ALL
 	
