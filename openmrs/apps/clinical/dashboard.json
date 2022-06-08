@@ -1,45 +1,45 @@
-{  
- "general":{  
-        "translationKey":"DASHBOARD_TAB_GENERAL_KEY",
-        "displayByDefault":true,
-        "maxRecentlyViewedPatients":10,
-        "sections":{  
-            "patientInformation":{  
-                "translationKey":"DASHBOARD_TITLE_PATIENT_INFORMATION_KEY",
-                "type":"patientInformation",
-                "displayOrder":0,
-                "ageLimit":100,
-                "patientAttributes":[  
-
-                ],
-                "addressFields":[  
+{
+    "general": {
+        "translationKey": "DASHBOARD_TAB_GENERAL_KEY",
+        "displayByDefault": true,
+        "maxRecentlyViewedPatients": 10,
+        "sections": {
+            "patientInformation": {
+                "translationKey": "DASHBOARD_TITLE_PATIENT_INFORMATION_KEY",
+                "type": "patientInformation",
+                "displayOrder": 0,
+                "ageLimit": 100,
+                "patientAttributes": [],
+                "addressFields": [
                     "address1",
                     "address2",
                     "cityVillage",
                     "countryDistrict"
                 ]
             },
-            "navigationLinksControl":{  
-                "translationKey":"DASHBOARD_TITLE_NAVIGATION_LINKS_CONTROL_KEY",
-                "type":"navigationLinksControl",
-                "displayOrder":2,
-                "showLinks":[  
+            "navigationLinksControl": {
+                "translationKey": "DASHBOARD_TITLE_NAVIGATION_LINKS_CONTROL_KEY",
+                "type": "navigationLinksControl",
+                "displayOrder": 2,
+                "showLinks": [
                     "home",
                     "visit",
                     "registration",
                     "enrolment",
                     "visitAttribute"
                 ],
-		"customLinks": [{
-		    "translationKey": "APPOINTMENTS_PAGE_KEY",
-		    "url": "../appointments/#/home/manage/appointments/calendar/new"
-		}]
+                "customLinks": [
+                    {
+                        "translationKey": "APPOINTMENTS_PAGE_KEY",
+                        "url": "../appointments/#/home/manage/appointments/calendar/new"
+                    }
+                ]
             },
-	    "tuberculosis": {
+            "tuberculosis": {
                 "title": "Tuberculosis Follow Up",
                 "type": "tuberculosis",
                 "isObservation": true,
-		"hideEmptyDisplayControl": true,
+                "hideEmptyDisplayControl": true,
                 "dashboardConfig": {
                     "conceptNames": [
                         "Tuberculosis Followup Template"
@@ -47,49 +47,44 @@
                     "numberOfVisits": 5
                 }
             },
-
-
-            "viralloadmonitoring":{
-                "translationKey":"Viral Load Monitoring",
-                "type":"viralloadmonitoring",
-                "isObservation":true,
+            "viralloadmonitoring": {
+                "translationKey": "Viral Load Monitoring",
+                "type": "viralloadmonitoring",
+                "isObservation": true,
                 "hideEmptyDisplayControl": true,
-                "displayOrder":4,
-                "dashboardConfig":{
-                    "conceptNames":[
+                "displayOrder": 4,
+                "dashboardConfig": {
+                    "conceptNames": [
+                        "HIVTC, Viral Load Result",
                         "HIVTC, Viral Load Data",
-			"HIVTC, Viral load blood results return date",
-			"HIVTC, Date VL Result given to patient"
+                        "HIVTC, Viral load blood results return date",
+                        "HIVTC, Date VL Result given to patient"
                     ],
-                    "showDetailsButton":true,
-                    "numberOfVisits":3
+                    "showDetailsButton": true,
+                    "numberOfVisits": 3
                 },
-                "expandedViewConfig":{
-                    "conceptNames":[
+                "expandedViewConfig": {
+                    "conceptNames": [
                         "HIVTC, Viral Load Blood drawn date",
                         "HIVTC, Viral Load Monitoring Type",
                         "HIVTC, Viral Load Data",
                         "HIVTC, Viral Load Result",
                         "HIVTC, Viral load blood results return date",
                         "HIVTC, Date VL Result given to patient",
-			"HIVTC, VL Pregnancy Status",
-			"HIVTC, VL Breastfeeding Status"
-		    ],
-                    "numberOfVisits":3,
-                    "scope":"latest",
-                    "showDetailsButton":true,
-                    "pivotTable":{
-
-                    }
+                        "HIVTC, VL Pregnancy Status",
+                        "HIVTC, VL Breastfeeding Status"
+                    ],
+                    "numberOfVisits": 3,
+                    "scope": "latest",
+                    "showDetailsButton": true,
+                    "pivotTable": {}
                 }
             },
-
-
             "hivcareandtreatment": {
                 "title": "HIV Care and Treatment Follow Up",
                 "type": "hivcareandtreatment",
                 "isObservation": true,
-		"hideEmptyDisplayControl": true,
+                "hideEmptyDisplayControl": true,
                 "dashboardConfig": {
                     "conceptNames": [
                         "HIV Treatment and Care Progress Template"
@@ -97,7 +92,6 @@
                     "numberOfVisits": 1
                 }
             },
-
             "hivtestingandcounseling": {
                 "title": "HIV Testing and Counseling",
                 "type": "hivtestingandcounseling",
@@ -110,8 +104,6 @@
                     "numberOfVisits": 3
                 }
             },
-
-
             "htsretesting": {
                 "title": "HTS Retesting",
                 "type": "htsretesting",
@@ -124,8 +116,6 @@
                     "numberOfVisits": 3
                 }
             },
-
-
             "hivcareandtreatmentintake": {
                 "title": "HIV Care and Treatment Intake",
                 "type": "hivcareandtreatmentintake",
@@ -134,61 +124,56 @@
                 "dashboardConfig": {
                     "conceptNames": [
                         "HIV Treatment and Care Intake Template",
-			"HTC, HIV Treatment and Care Intake - Counselor"
+                        "HTC, HIV Treatment and Care Intake - Counselor"
                     ],
                     "numberOfVisits": 3
                 }
             },
-
-
-
-            "treatments":{  
-                "translationKey":"DASHBOARD_TITLE_TREATMENTS_KEY",
-                "type":"treatment",
-                "displayOrder":11,
-		"hideEmptyDisplayControl": true,
-                "dashboardConfig":{  
-                    "showFlowSheet":true,
-                    "showListView":true,
-                    "showRoute":true,
-                    "showDrugForm":true,
-                    "numberOfVisits":5,
-                    "showOtherActive":true,
-                    "showDetailsButton":true
+            "treatments": {
+                "translationKey": "DASHBOARD_TITLE_TREATMENTS_KEY",
+                "type": "treatment",
+                "displayOrder": 11,
+                "hideEmptyDisplayControl": true,
+                "dashboardConfig": {
+                    "showFlowSheet": true,
+                    "showListView": true,
+                    "showRoute": true,
+                    "showDrugForm": true,
+                    "numberOfVisits": 5,
+                    "showOtherActive": true,
+                    "showDetailsButton": true
                 },
-                "expandedViewConfig":{  
-                    "translationKey":"DASHBOARD_TITLE_TREATMENTS_KEY",
-                    "showFlowSheet":true,
-                    "showListView":true,
-                    "showRoute":true,
-                    "showDrugForm":true,
-                    "numberOfVisits":10,
-                    "showOtherActive":true,
-                    "showDetailsButton":true
+                "expandedViewConfig": {
+                    "translationKey": "DASHBOARD_TITLE_TREATMENTS_KEY",
+                    "showFlowSheet": true,
+                    "showListView": true,
+                    "showRoute": true,
+                    "showDrugForm": true,
+                    "numberOfVisits": 10,
+                    "showOtherActive": true,
+                    "showDetailsButton": true
                 }
             },
-            
-
-            "nutritionalValues":{  
-                "translationKey":"DASHBOARD_TITLE_NUTRITIONAL_VALUES_KEY",
-                "type":"nutritionalValues",
-                "isObservation":true,
-		"hideEmptyDisplayControl": true,
-                "displayOrder":5,
-                "dashboardConfig":{  
-                    "conceptNames":[  
+            "nutritionalValues": {
+                "translationKey": "DASHBOARD_TITLE_NUTRITIONAL_VALUES_KEY",
+                "type": "nutritionalValues",
+                "isObservation": true,
+                "hideEmptyDisplayControl": true,
+                "displayOrder": 5,
+                "dashboardConfig": {
+                    "conceptNames": [
                         "HEIGHT",
                         "Weight",
                         "BMI Data",
                         "BMI Status Data",
-			"TB Status",
- 			"TB Suspect signs"
+                        "TB Status",
+                        "TB Suspect signs"
                     ],
-                    "showDetailsButton":true,
-                    "numberOfVisits":3
+                    "showDetailsButton": true,
+                    "numberOfVisits": 3
                 },
-                "expandedViewConfig":{  
-                    "conceptNames":[  
+                "expandedViewConfig": {
+                    "conceptNames": [
                         "HEIGHT",
                         "Weight",
                         "BMI",
@@ -196,116 +181,101 @@
                         "TB Status",
                         "TB Suspect signs"
                     ],
-                    "numberOfVisits":3,
-                    "scope":"latest",
-                    "showDetailsButton":true,
-                    "pivotTable":{  
-
-                    }
+                    "numberOfVisits": 3,
+                    "scope": "latest",
+                    "showDetailsButton": true,
+                    "pivotTable": {}
                 }
             },
-
-
-            "artSwitchValues":{
-                "translationKey":"ART Treatment Switch",
-                "type":"artSwitchValues",
-                "isObservation":true,
+            "artSwitchValues": {
+                "translationKey": "ART Treatment Switch",
+                "type": "artSwitchValues",
+                "isObservation": true,
                 "hideEmptyDisplayControl": true,
-                "displayOrder":4,
-                "dashboardConfig":{
-                    "conceptNames":[
+                "displayOrder": 4,
+                "dashboardConfig": {
+                    "conceptNames": [
                         "HIVTC, Treatment switched date",
                         "HIVTC, Name of Switched Regimen",
                         "HIVTC, Reason for treatment switch"
                     ],
-                    "showDetailsButton":true,
-                    "scope":"latest"
+                    "showDetailsButton": true,
+                    "scope": "latest"
                 },
-                "expandedViewConfig":{
-                    "conceptNames":[
+                "expandedViewConfig": {
+                    "conceptNames": [
                         "HIVTC, Name of Substituted Regimen"
                     ],
-                    "numberOfVisits":1,
-                    "scope":"latest",
-                    "showDetailsButton":true,
-                    "pivotTable":{
-
-                    }
+                    "numberOfVisits": 1,
+                    "scope": "latest",
+                    "showDetailsButton": true,
+                    "pivotTable": {}
                 }
             },
-
-            "artSubstitutionValues":{
-                "translationKey":"ART Treatment Substitution",
-                "type":"artSubstitutionValues",
-                "isObservation":true,
+            "artSubstitutionValues": {
+                "translationKey": "ART Treatment Substitution",
+                "type": "artSubstitutionValues",
+                "isObservation": true,
                 "hideEmptyDisplayControl": true,
-                "displayOrder":4,
-                "dashboardConfig":{
-                    "conceptNames":[
-			"HIVTC, Treatment substituted date",
+                "displayOrder": 4,
+                "dashboardConfig": {
+                    "conceptNames": [
+                        "HIVTC, Treatment substituted date",
                         "HIVTC, Name of Substituted Regimen",
-			"HIVTC, Reason for treatment substitution"
+                        "HIVTC, Reason for treatment substitution"
                     ],
-                    "showDetailsButton":true,
-                    "scope":"latest"
+                    "showDetailsButton": true,
+                    "scope": "latest"
                 },
-                "expandedViewConfig":{
-                    "conceptNames":[
+                "expandedViewConfig": {
+                    "conceptNames": [
                         "HIVTC, Name of Substituted Regimen"
                     ],
-                    "numberOfVisits":1,
-                    "scope":"latest",
-                    "showDetailsButton":true,
-                    "pivotTable":{
-
-                    }
+                    "numberOfVisits": 1,
+                    "scope": "latest",
+                    "showDetailsButton": true,
+                    "pivotTable": {}
                 }
             },
-
-
-            "artInitiationValues":{
-                "translationKey":"ART Initiation",
-                "type":"artInitiationValues",
-                "isObservation":true,
+            "artInitiationValues": {
+                "translationKey": "ART Initiation",
+                "type": "artInitiationValues",
+                "isObservation": true,
                 "hideEmptyDisplayControl": true,
-                "displayOrder":4,
-                "dashboardConfig":{
-                    "conceptNames":[
+                "displayOrder": 4,
+                "dashboardConfig": {
+                    "conceptNames": [
                         "HIVTC, ART start date"
                     ],
-                    "showDetailsButton":true,
+                    "showDetailsButton": true,
                     "scope": "initial"
                 },
-                "expandedViewConfig":{
-                    "conceptNames":[
+                "expandedViewConfig": {
+                    "conceptNames": [
                         "HIVTC, ART start date"
                     ],
-                    "numberOfVisits":1,
-                    "showDetailsButton":true,
-                    "pivotTable":{
-
-                    }
+                    "numberOfVisits": 1,
+                    "showDetailsButton": true,
+                    "pivotTable": {}
                 }
             },
-
-
-            "adherenceValues":{
-                "translationKey":"ART Adherence",
-                "type":"adherenceValues",
-                "isObservation":true,
+            "adherenceValues": {
+                "translationKey": "ART Adherence",
+                "type": "adherenceValues",
+                "isObservation": true,
                 "hideEmptyDisplayControl": true,
-                "displayOrder":23,
-                "dashboardConfig":{
-                    "conceptNames":[
+                "displayOrder": 23,
+                "dashboardConfig": {
+                    "conceptNames": [
                         "HIVTC, Percentage Adherence",
                         "HIVTC, ART Treatment Adherence",
                         "Poor or Fair ART adherence reason"
                     ],
-                    "showDetailsButton":true,
-                    "numberOfVisits":3
+                    "showDetailsButton": true,
+                    "numberOfVisits": 3
                 },
-                "expandedViewConfig":{
-                    "conceptNames":[
+                "expandedViewConfig": {
+                    "conceptNames": [
                         "HIVTC, Percentage Adherence",
                         "HIVTC, Adherence Total amount taken home",
                         "HIVTC, Adherence Medication",
@@ -316,130 +286,117 @@
                         "HIVTC, ART Treatment Adherence",
                         "Poor or Fair ART adherence reason"
                     ],
-                    "numberOfVisits":3,
-                    "scope":"latest",
-                    "showDetailsButton":true,
-                    "pivotTable":{
-
-                    }
+                    "numberOfVisits": 3,
+                    "scope": "latest",
+                    "showDetailsButton": true,
+                    "pivotTable": {}
                 }
             },
-
-
-            "vitals":{  
-                "translationKey":"DASHBOARD_TITLE_VITALS_KEY",
-                "type":"vitals",
-                "isObservation":true,
-		"hideEmptyDisplayControl": true,
-                "displayOrder":12,
-                "dashboardConfig":{  
-                    "showDetailsButton":true,
-                    "conceptNames":[  
+            "vitals": {
+                "translationKey": "DASHBOARD_TITLE_VITALS_KEY",
+                "type": "vitals",
+                "isObservation": true,
+                "hideEmptyDisplayControl": true,
+                "displayOrder": 12,
+                "dashboardConfig": {
+                    "showDetailsButton": true,
+                    "conceptNames": [
                         "Vitals"
                     ],
-                    "numberOfVisits":3
+                    "numberOfVisits": 3
                 },
-                "expandedViewConfig":{  
-                    "conceptNames":[  
+                "expandedViewConfig": {
+                    "conceptNames": [
                         "Vitals"
                     ],
-                    "numberOfVisits":2,
-                    "showDetailsButton":true,
-                    "pivotTable":{  
-                        "numberOfVisits":"10",
-                        "groupBy":"encounters",
-                        "obsConcepts":[  
+                    "numberOfVisits": 2,
+                    "showDetailsButton": true,
+                    "pivotTable": {
+                        "numberOfVisits": "10",
+                        "groupBy": "encounters",
+                        "obsConcepts": [
                             "Weight",
                             "Vitals"
                         ],
-                        "drugConcepts":[  
-
-                        ],
-                        "labConcepts":[  
-
-                        ]
+                        "drugConcepts": [],
+                        "labConcepts": []
                     }
                 }
             },
-
-            "secondVitals":{  
-                "translationKey":"DASHBOARD_TITLE_SECOND_VITALS_KEY",
-                "type":"second vitals",
-                "isObservation":true,
-		"hideEmptyDisplayControl": true,
-                "displayOrder":13,
-                "dashboardConfig":{  
-                    "showDetailsButton":true,
-                    "conceptNames":[  
+            "secondVitals": {
+                "translationKey": "DASHBOARD_TITLE_SECOND_VITALS_KEY",
+                "type": "second vitals",
+                "isObservation": true,
+                "hideEmptyDisplayControl": true,
+                "displayOrder": 13,
+                "dashboardConfig": {
+                    "showDetailsButton": true,
+                    "conceptNames": [
                         "Second Vitals"
                     ],
-                    "numberOfVisits":2
+                    "numberOfVisits": 2
                 },
-                "expandedViewConfig":{  
-                    "conceptNames":[  
+                "expandedViewConfig": {
+                    "conceptNames": [
                         "Second Vitals"
                     ],
-                    "numberOfVisits":2,
-                    "showDetailsButton":true,
-                    "pivotTable":{  
-
-                    }
+                    "numberOfVisits": 2,
+                    "showDetailsButton": true,
+                    "pivotTable": {}
                 }
             },
-            "historyAndExaminations":{  
-                "translationKey":"DASHBOARD_TITLE_HISTORY_AND_EXAMINATIONS_KEY",
-                "type":"vitals",
-                "isObservation":true,
-                "displayOrder":14,
-		"hideEmptyDisplayControl": true,
-                "dashboardConfig":{  
-                    "showDetailsButton":true,
-                    "conceptNames":[  
+            "historyAndExaminations": {
+                "translationKey": "DASHBOARD_TITLE_HISTORY_AND_EXAMINATIONS_KEY",
+                "type": "vitals",
+                "isObservation": true,
+                "displayOrder": 14,
+                "hideEmptyDisplayControl": true,
+                "dashboardConfig": {
+                    "showDetailsButton": true,
+                    "conceptNames": [
                         "History and Examination"
                     ],
-                    "numberOfVisits":2
+                    "numberOfVisits": 2
                 },
-                "expandedViewConfig":{  
-                    "conceptNames":[  
+                "expandedViewConfig": {
+                    "conceptNames": [
                         "History and Examination"
                     ],
-                    "numberOfVisits":2,
-                    "showDetailsButton":true,
-                    "pivotTable":{  
-
-                    }
+                    "numberOfVisits": 2,
+                    "showDetailsButton": true,
+                    "pivotTable": {}
                 }
             },
-            "visits":{  
-                "translationKey":"DASHBOARD_TITLE_VISITS_KEY",
-                "type":"visits",
-                "displayOrder":3,
-                "dashboardConfig":{  
-                    "title":null,
-                    "maximumNoOfVisits":8,
-                    "groupByVisits":true
+            "visits": {
+                "translationKey": "DASHBOARD_TITLE_VISITS_KEY",
+                "type": "visits",
+                "displayOrder": 3,
+                "dashboardConfig": {
+                    "title": null,
+                    "maximumNoOfVisits": 8,
+                    "groupByVisits": true
                 }
             },
             "conditions": {
-                "translationKey":"CONDITION_LIST_DISPLAY_CONTROL_TITLE",
+                "translationKey": "CONDITION_LIST_DISPLAY_CONTROL_TITLE",
                 "type": "conditionsList",
-		"hideEmptyDisplayControl": true,
+                "hideEmptyDisplayControl": true,
                 "displayOrder": 20
             },
             "formsDisplay": {
                 "type": "forms",
                 "displayOrder": 21,
-		"hideEmptyDisplayControl": true,
+                "hideEmptyDisplayControl": true,
                 "dashboardConfig": {
                     "title": null,
                     "maximumNoOfVisits": 10
                 },
-                "formGroup": [ ],
+                "formGroup": [],
                 "translationKey": "DASHBOARD_TITLE_FORMS_DISPLAY_CONTROL_KEY"
             },
             "patientAppointments": {
                 "type": "custom",
-		"hideEmptyDisplayControl": true,
+                "hideEmptyDisplayControl": true,
                 "displayOrder": 22,
                 "config": {
                     "title": "DASHBOARD_TITLE_APPOINTMENTS_KEY",
@@ -448,15 +405,15 @@
             }
         }
     },
-    "trends":{  
-        "translationKey":"DASHBOARD_TAB_TRENDS_KEY",
-        "displayByDefault":true,
-        "maxRecentlyViewedPatients":10,
-        "sections":{  
-            "patientInformation":{  
-                "translationKey":"DASHBOARD_TITLE_PATIENT_INFORMATION_KEY",
-                "type":"patientInformation",
-                "patientAttributes":[  
+    "trends": {
+        "translationKey": "DASHBOARD_TAB_TRENDS_KEY",
+        "displayByDefault": true,
+        "maxRecentlyViewedPatients": 10,
+        "sections": {
+            "patientInformation": {
+                "translationKey": "DASHBOARD_TITLE_PATIENT_INFORMATION_KEY",
+                "type": "patientInformation",
+                "patientAttributes": [
                     "caste",
                     "class",
                     "education",
@@ -468,116 +425,106 @@
                     "RationCard",
                     "familyIncome"
                 ],
-                "addressFields":[  
+                "addressFields": [
                     "address1",
                     "address2",
                     "cityVillage",
                     "countryDistrict"
                 ],
-                "displayOrder":0
+                "displayOrder": 0
             },
-            "BP":{  
-                "type":"observationGraph",
-                "title":"BP",
- 		"hideEmptyDisplayControl": true,
-                "config":{  
-                    "yAxisConcepts":[  
+            "BP": {
+                "type": "observationGraph",
+                "title": "BP",
+                "hideEmptyDisplayControl": true,
+                "config": {
+                    "yAxisConcepts": [
                         "Systolic Data",
                         "Diastolic Data"
                     ],
-                    "xAxisConcept":"observationDateTime",
-                    "numberOfVisits":10
+                    "xAxisConcept": "observationDateTime",
+                    "numberOfVisits": 10
                 },
-                "displayOrder":2
+                "displayOrder": 2
             },
-
-            "weight/BMI":{  
-                "type":"observationGraph",
-                "title":"Weight/BMI",
-                "config":{  
-                    "yAxisConcepts":[  
+            "weight/BMI": {
+                "type": "observationGraph",
+                "title": "Weight/BMI",
+                "config": {
+                    "yAxisConcepts": [
                         "Weight",
                         "BMI"
                     ],
-                    "xAxisConcept":"observationDateTime",
-                    "numberOfVisits":10
+                    "xAxisConcept": "observationDateTime",
+                    "numberOfVisits": 10
                 },
-                "displayOrder":3
+                "displayOrder": 3
             },
-
-            "diabetes/BloodSugar":{  
-                "type":"observationGraph",
-                "title":"Diabetes/Blood Sugar",
- 		"hideEmptyDisplayControl": true,
-                "config":{  
-                    "yAxisConcepts":[  
+            "diabetes/BloodSugar": {
+                "type": "observationGraph",
+                "title": "Diabetes/Blood Sugar",
+                "hideEmptyDisplayControl": true,
+                "config": {
+                    "yAxisConcepts": [
                         "Blood Sugar Fasting",
                         "Blood Sugar P.P"
                     ],
-                    "xAxisConcept":"observationDateTime",
-                    "numberOfVisits":10
+                    "xAxisConcept": "observationDateTime",
+                    "numberOfVisits": 10
                 },
-                "displayOrder":4
+                "displayOrder": 4
             },
-
-            "observationGraph":{  
-                "type":"observationGraph",
- 		"hideEmptyDisplayControl": true,
-                "title":"Pulse",
-                "config":{  
-                    "yAxisConcepts":[  
+            "observationGraph": {
+                "type": "observationGraph",
+                "hideEmptyDisplayControl": true,
+                "title": "Pulse",
+                "config": {
+                    "yAxisConcepts": [
                         "Pulse Data"
                     ],
-                    "xAxisConcept":"observationDateTime",
-                    "numberOfVisits":10
+                    "xAxisConcept": "observationDateTime",
+                    "numberOfVisits": 10
                 },
-                "displayOrder":5
+                "displayOrder": 5
             },
-
-
-            "artadherence":{
-                "type":"observationGraph",
-                "title":"ART Adherence",
- 		"hideEmptyDisplayControl": true,
-                "config":{
-                    "yAxisConcepts":[
+            "artadherence": {
+                "type": "observationGraph",
+                "title": "ART Adherence",
+                "hideEmptyDisplayControl": true,
+                "config": {
+                    "yAxisConcepts": [
                         "HIVTC, Percentage Adherence"
                     ],
-                    "xAxisConcept":"observationDateTime",
-                    "numberOfVisits":10
+                    "xAxisConcept": "observationDateTime",
+                    "numberOfVisits": 10
                 },
-                "displayOrder":3
+                "displayOrder": 3
             },
-
-            "viralloadmonitoring":{
-                "type":"observationGraph",
-                "title":"Viral Load Monitoring",
-                "config":{
-                    "yAxisConcepts":[
+            "viralloadmonitoring": {
+                "type": "observationGraph",
+                "title": "Viral Load Monitoring",
+                "config": {
+                    "yAxisConcepts": [
                         "HIVTC, Viral Load"
                     ],
-                    "xAxisConcept":"observationDateTime",
-                    "numberOfVisits":10
+                    "xAxisConcept": "observationDateTime",
+                    "numberOfVisits": 10
                 },
-                "displayOrder":1
+                "displayOrder": 1
             },
-
-
-            "diabetes":{  
-                "title":"Diabetes",
-                "templateName":"Diabetes, Progress",
-                "type":"diseaseTemplate",
-                "dashboardConfig":{  
-                    "showOnly":[  
-
-                    ]
+            "diabetes": {
+                "title": "Diabetes",
+                "templateName": "Diabetes, Progress",
+                "type": "diseaseTemplate",
+                "dashboardConfig": {
+                    "showOnly": []
                 },
-                "expandedViewConfig":{  
-                    "showDetailsButton":true,
-                    "pivotTable":{  
-                        "numberOfVisits":"10",
-                        "groupBy":"visits",
-                        "obsConcepts":[  
+                "expandedViewConfig": {
+                    "showDetailsButton": true,
+                    "pivotTable": {
+                        "numberOfVisits": "10",
+                        "groupBy": "visits",
+                        "obsConcepts": [
                             "Diabetes, Blood Pressure",
                             "Diabetes, A1C",
                             "Diabetes, LDL",
@@ -585,7 +532,7 @@
                             "Blood Sugar Fasting",
                             "Blood Sugar PP"
                         ],
-                        "labConcepts":[  
+                        "labConcepts": [
                             "RBS",
                             "FBS",
                             "PP2BS",
@@ -595,38 +542,38 @@
                         ]
                     }
                 },
-                "displayOrder":6
+                "displayOrder": 6
             }
         }
     },
-    "patientSummary":{  
-        "translationKey":"DASHBOARD_TAB_PATIENT_SUMMARY_KEY",
-        "maxRecentlyViewedPatients":10,
-        "sections":{  
-            "Bacteriology Concept Set":{  
-                "displayType":"Full-Page",
-                "translationKey":"DASHBOARD_TITLE_BACTERIOLOGY_RESULTS_KEY",
-                "type":"obsToObsFlowSheet",
-                "dashboardConfig":{  
-                    "numberOfVisits":1,
-                    "templateName":"BACTERIOLOGY CONCEPT SET",
-                    "groupByConcept":"Specimen Collection Date",
-                    "conceptNames":[  
+    "patientSummary": {
+        "translationKey": "DASHBOARD_TAB_PATIENT_SUMMARY_KEY",
+        "maxRecentlyViewedPatients": 10,
+        "sections": {
+            "Bacteriology Concept Set": {
+                "displayType": "Full-Page",
+                "translationKey": "DASHBOARD_TITLE_BACTERIOLOGY_RESULTS_KEY",
+                "type": "obsToObsFlowSheet",
+                "dashboardConfig": {
+                    "numberOfVisits": 1,
+                    "templateName": "BACTERIOLOGY CONCEPT SET",
+                    "groupByConcept": "Specimen Collection Date",
+                    "conceptNames": [
                         "Specimen Id"
                     ]
                 },
-                "expandedViewConfig":{  
-                    "templateName":"BACTERIOLOGY CONCEPT SET",
-                    "groupByConcept":"Specimen Collection Date"
+                "expandedViewConfig": {
+                    "templateName": "BACTERIOLOGY CONCEPT SET",
+                    "groupByConcept": "Specimen Collection Date"
                 }
             },
-            "HistoryAndExamination":{  
-                "type":"historyAndExamination",
-                "isObservation":true,
-                "displayType":"Full-Page",
-                "dashboardConfig":{  
-                    "showGroupDateTime":false,
-                    "conceptNames":[  
+            "HistoryAndExamination": {
+                "type": "historyAndExamination",
+                "isObservation": true,
+                "displayType": "Full-Page",
+                "dashboardConfig": {
+                    "showGroupDateTime": false,
+                    "conceptNames": [
                         "Chief Complaint Data",
                         "Examination Notes",
                         "Smoking History",
@@ -634,29 +581,29 @@
                         "Blood Pressure"
                     ]
                 },
-                "displayOrder":6,
-                "translationKey":"DASHBOARD_TITLE_HISTORY_AND_EXAMINATIONS_KEY"
+                "displayOrder": 6,
+                "translationKey": "DASHBOARD_TITLE_HISTORY_AND_EXAMINATIONS_KEY"
             },
-            "drugOther":{  
-                "translationKey":"DASHBOARD_TITLE_TREATMENTS_KEY",
-                "type":"drugOrderDetails",
-                "displayType":"Full-Page",
-                "showDetailsButton":true,
-                "displayOrder":24,
-                "dashboardConfig":{  
-                    "showOnlyActive":true,
-                    "drugConceptSet":"All Other Drugs"
+            "drugOther": {
+                "translationKey": "DASHBOARD_TITLE_TREATMENTS_KEY",
+                "type": "drugOrderDetails",
+                "displayType": "Full-Page",
+                "showDetailsButton": true,
+                "displayOrder": 24,
+                "dashboardConfig": {
+                    "showOnlyActive": true,
+                    "drugConceptSet": "All Other Drugs"
                 }
             },
-            "malaria":{  
-                "title":"Malaria",
-                "type":"obsToObsFlowSheet",
-                "displayType":"Full-Page",
-                "displayOrder":26,
-                "dashboardConfig":{  
-                    "groupByConcept":"Malaria, Treatment Start Date",
-                    "templateName":"Malaria",
-                    "conceptNames":[  
+            "malaria": {
+                "title": "Malaria",
+                "type": "obsToObsFlowSheet",
+                "displayType": "Full-Page",
+                "displayOrder": 26,
+                "dashboardConfig": {
+                    "groupByConcept": "Malaria, Treatment Start Date",
+                    "templateName": "Malaria",
+                    "conceptNames": [
                         "Malaria, Parents Name",
                         "Malaria, drug regimen",
                         "Malaria, Malaria Type",
@@ -664,19 +611,15 @@
                     ]
                 }
             },
-            "Chronic Treatment Chart":{  
-                "displayType":"Full-Page",
-                "title":"Chronic Treatment Chart",
-                "type":"chronicTreatmentChart",
-                "dashboardConfig":{  
-                    "drugs":[  
-
-                    ]
+            "Chronic Treatment Chart": {
+                "displayType": "Full-Page",
+                "title": "Chronic Treatment Chart",
+                "type": "chronicTreatmentChart",
+                "dashboardConfig": {
+                    "drugs": []
                 },
-                "expandedViewConfig":{  
-                    "drugs":[  
-
-                    ]
+                "expandedViewConfig": {
+                    "drugs": []
                 }
             }
         }
