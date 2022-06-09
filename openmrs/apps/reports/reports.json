@@ -680,6 +680,48 @@
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/AHD_Cryptococal_Meningitis_pivot.sql"
         }
     },
+    "ahd_tb_list": {
+        "name": "ART-083 | AHD TB (List)",
+        "type": "MRSGeneric",
+        "config": {
+            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/ahd_tb_list.sql"
+        }
+    },
+    "ahd_tb_pivot": {
+        "name": "ART-084 | AHD TB (Pivot)",
+        "type": "MRSGeneric",
+        "config": {
+            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/ahd_tb_pivot.sql"
+        }
+    },
+    "ahd_treatment_list": {
+        "name": "ART-085 | AHD Treatment (List)",
+        "type": "MRSGeneric",
+        "config": {
+            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/ahd_treatment_list.sql"
+        }
+    },
+    "ahd_treatment_pivot": {
+        "name": "ART-086 | AHD Treatment (Pivot)",
+        "type": "MRSGeneric",
+        "config": {
+            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/ahd_treatment_pivot.sql"
+        }
+    },
+    "weekly_ppr_list": {
+        "name": "ART-087 | Weekly PPR (List)",
+        "type": "MRSGeneric",
+        "config": {
+            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/weekly_ppr_report_list.sql"
+        }
+    },
+    "weekly_ppr_pivot": {
+        "name": "ART-088 | Weekly PPR (Pivot)",
+        "type": "MRSGeneric",
+        "config": {
+            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/weekly_ppr_report_pivot.sql"
+        }
+    },
     "htsfinalhivstatusbyservicepointlist": {
         "name": "HTS-001 | HTS Final HIV Status (List)",
         "type": "MRSGeneric",
