@@ -7,7 +7,7 @@ FROM
 							patient_identifier.identifier as ART_Number,
 							pi.identifier as File_Number,
 							concat(pn.given_name, ' ', pn.family_name) AS patientName,
-							floor(datediff(CAST('2022-03-30' AS DATE), ps.birthdate)/365) AS Age
+							floor(datediff(CAST('#endDate#' AS DATE), ps.birthdate)/365) AS Age
 
 					FROM obs o
 			
@@ -16,8 +16,8 @@ FROM
 										(				
 											SELECT DISTINCT person_id FROM obs o
 											WHERE concept_id = 2227 AND value_coded = 2146
-											AND MONTH(o.obs_datetime) = MONTH(CAST('2022-03-30' AS DATE)) 
-											AND YEAR(o.obs_datetime) = YEAR(CAST('2022-03-30' AS DATE))
+											AND MONTH(o.obs_datetime) = MONTH(CAST('#endDate#' AS DATE)) 
+											AND YEAR(o.obs_datetime) = YEAR(CAST('#endDate#' AS DATE))
 										) 								
 									AND o.voided = 0
 									INNER JOIN person ps ON ps.person_id = patient.patient_id AND ps.voided = 0
@@ -42,7 +42,7 @@ FROM
 							patient_identifier.identifier as ART_Number,
 							pi.identifier as File_Number,
 							concat(pn.given_name, ' ', pn.family_name) AS patientName,
-							floor(datediff(CAST('2022-03-30' AS DATE), ps.birthdate)/365) AS Age
+							floor(datediff(CAST('#endDate#' AS DATE), ps.birthdate)/365) AS Age
 							
 							FROM obs o
 			
@@ -53,8 +53,8 @@ FROM
 										select distinct os.person_id
 										from obs os
 										where os.concept_id = 4821 
-										AND MONTH(os.value_datetime) = MONTH(CAST('2022-03-30' AS DATE)) 
-							      		AND YEAR(os.value_datetime) = YEAR(CAST('2022-03-30' AS DATE))
+										AND MONTH(os.value_datetime) = MONTH(CAST('#endDate#' AS DATE)) 
+							      		AND YEAR(os.value_datetime) = YEAR(CAST('#endDate#' AS DATE))
 														
 									)	
 									AND o.voided = 0
