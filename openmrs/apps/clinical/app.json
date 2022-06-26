@@ -471,7 +471,6 @@
 
 
 			"LPA Susceptibility result" : {
-				"required": true,
 				"multiSelect": true
 			},
 			"OI, Opportunistic infections" : {
