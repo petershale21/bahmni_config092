@@ -737,7 +737,25 @@ Bahmni.ConceptSet.FormConditions.rules = {
                 }
                 return conditions;
         },
+        
+        'PITC Offered': function (formName, formFieldValues) {
+                var Cancerhivtestoffered = formFieldValues['PITC Offered'];
+                var conditions = { show: [], hide: [] };
 
+                if (formName == "Cervical Cancer Screening Register") {
+
+
+                        if (Cancerhivtestoffered == "Yes") {
+                                conditions.show.push("PITC Results");
+                        }
+
+
+                        else {
+                                conditions.hide.push("PITC Results");
+                        }
+                }
+                return conditions;
+        },
 
         'Cervical Cancer Assessment Method': function (formName, formFieldValues) {
                 var CancerAssessment = formFieldValues['Cervical Cancer Assessment Method'];
