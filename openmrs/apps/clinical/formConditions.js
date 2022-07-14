@@ -235,7 +235,7 @@ Bahmni.ConceptSet.FormConditions.rules = {
                         }
                 }
                 if ((formName == "PostNatal Care Register") || (formName == "Delivery Information") ) {
-                       
+
                         conditions.assignedValues.push({
                                 field: "Delivery Note, Delivery location",
                                 fieldValue: {
@@ -685,8 +685,8 @@ Bahmni.ConceptSet.FormConditions.rules = {
                 return conditions;
         },
 
-        'Type of Screening Offered': function (formName, formFieldValues) {
-                var CancerAssessment = formFieldValues['Type of Screening Offered'];
+        'Method of Screening Offered': function (formName, formFieldValues) {
+                var CancerAssessment = formFieldValues['Method of Screening Offered'];
                 var conditions = { show: [], hide: [] };
 
 
@@ -740,6 +740,24 @@ Bahmni.ConceptSet.FormConditions.rules = {
                 return conditions;
         },
 
+        //Cervical Cancer Screening Register - Show Type of Screening only when purpose of visit is screening -> nkepanem
+        'Purpose of Visit': function (formName, formFieldValues) {
+                var CancerPurposeOfVisit = formFieldValues['Purpose of Visit'];
+                var conditions = { show: [], hide: [] };
+
+                if (formName == "Cervical Cancer Screening Register") {
+
+                        if ( CancerPurposeOfVisit == "CACX, Screening") {
+                                conditions.show.push("CACX, Type of Screening");
+                        }
+
+                        else {
+                                conditions.hide.push("CACX, Type of Screening");
+                        }
+                }
+                return conditions;
+        },
+
         'HIV Status': function (formName, formFieldValues) {
                 var Cancerhivstatusresults = formFieldValues['HIV Status'];
                 var conditions = { show: [], hide: [] };
@@ -760,7 +778,7 @@ Bahmni.ConceptSet.FormConditions.rules = {
                 }
                 return conditions;
         },
-        
+
         'PITC Offered': function (formName, formFieldValues) {
                 var Cancerhivtestoffered = formFieldValues['PITC Offered'];
                 var conditions = { show: [], hide: [] };
@@ -1033,14 +1051,14 @@ Bahmni.ConceptSet.FormConditions.rules = {
 
 
                 if (conditionConcept == "ART patient" ) {
-                        
+
                         if ((patientGender == "M") || (patientAge < 12 || patientAge > 50)) {
                        conditions.hide.push("HTC, Pregnancy Status");
-                       } 
+                       }
                        else {
                        conditions.show.push("HTC, Pregnancy Status");
                        }
-                       
+
                        //conditions.show.push("HTC, Pregnancy Status");
                        conditions.show.push("Function");
                        conditions.show.push("HIVTC, HIV care WHO Staging");
@@ -1052,10 +1070,10 @@ Bahmni.ConceptSet.FormConditions.rules = {
                        conditions.show.push("OI, Opportunistic infections");
                        conditions.show.push("Refer or Consult");
                        conditions.show.push("Number of days hospitalised");
-              
-               } 
+
+               }
                else {
-                       
+
                        conditions.hide.push("HTC, Pregnancy Status");
                        conditions.hide.push("Function");
                        conditions.hide.push("HIVTC, HIV care WHO Staging");
@@ -1186,7 +1204,7 @@ Bahmni.ConceptSet.FormConditions.rules = {
 
                 if (conditionConcept == "Treatment complete") {
                         conditions.show.push("HIVTC, TPT completion Date");
-                    
+
 
                 }
 
@@ -2000,7 +2018,6 @@ Bahmni.ConceptSet.FormConditions.rules = {
 
   'Delivery date and time': function(formName, formFieldValues) {
         var conditions = { assignedValues: [], disable: [] };
-
         if (formName == "PostNatal Care Register" || formName == "Delivery Information") {
             conditions.assignedValues.push({
                 field: "Delivery date and time",
