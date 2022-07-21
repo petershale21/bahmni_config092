@@ -389,11 +389,12 @@ ORDER BY ARTCurrent_PrevMonths.Age)
 
 UNION
 
-(SELECT Id,patientIdentifier AS "Patient_Identifier",ART_Number, patientName AS "Patient_Name", Age,DOB, Gender, age_group, 'Defaulted' AS 'Program_Status'
+(SELECT Id,patientIdentifier AS "Patient_Identifier",ART_Number, File_Number, patientName AS "Patient_Name", Age,DOB, Gender, age_group, 'Defaulted' AS 'Program_Status'
 FROM
                 (select distinct patient.patient_id AS Id,
 									   patient_identifier.identifier AS patientIdentifier,
 									   p.identifier as ART_Number,
+									   pi.identifier as File_Number,
 									   concat(person_name.given_name, ' ', person_name.family_name) AS patientName,
 									   floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age,
 									   person.birthdate as DOB,
@@ -471,6 +472,7 @@ FROM
 						 INNER JOIN person_name ON person.person_id = person_name.person_id AND person_name.preferred = 1
 						 INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1
 						 LEFT OUTER JOIN patient_identifier p ON p.patient_id = person.person_id AND p.identifier_type = 5
+						 LEFT OUTER JOIN patient_identifier pi ON pi.patient_id = person.person_id AND pi.identifier_type = 11
 						 INNER JOIN reporting_age_group AS observed_age_group ON
 						  CAST('#endDate#' AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
 						  AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
@@ -479,11 +481,12 @@ FROM
 
 UNION 
 
-(SELECT Id,patientIdentifier AS "Patient_Identifier",ART_Number, patientName AS "Patient_Name", Age,DOB, Gender, age_group, 'LTFU' AS 'Program_Status'
+(SELECT Id,patientIdentifier AS "Patient_Identifier",ART_Number, File_Number, patientName AS "Patient_Name", Age,DOB, Gender, age_group, 'LTFU' AS 'Program_Status'
 FROM
                 (select distinct patient.patient_id AS Id,
 									   patient_identifier.identifier AS patientIdentifier,
 									   p.identifier as ART_Number,
+									   pi.identifier as File_Number,
 									   concat(person_name.given_name, ' ', person_name.family_name) AS patientName,
 									   floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age,
 									   person.birthdate as DOB,
@@ -560,6 +563,7 @@ FROM
 						 INNER JOIN person_name ON person.person_id = person_name.person_id AND person_name.preferred = 1
 						 INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1
 						 LEFT OUTER JOIN patient_identifier p ON p.patient_id = person.person_id AND p.identifier_type = 5
+						 LEFT OUTER JOIN patient_identifier pi ON pi.patient_id = person.person_id AND pi.identifier_type = 11
 						 INNER JOIN reporting_age_group AS observed_age_group ON
 						  CAST('#endDate#' AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
 						  AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
