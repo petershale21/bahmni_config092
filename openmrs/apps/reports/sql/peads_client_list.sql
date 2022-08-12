@@ -1,4 +1,4 @@
-SELECT distinct Patient_Identifier, Patient_Name, DOB, Sex, Program_Status, ART_Start, Date_Diagnosed
+SELECT distinct Patient_Identifier, Patient_Name, DOB, Sex,  ART_Start, Date_Diagnosed
 FROM
 (
 (SELECT Id,patientIdentifier AS "Patient_Identifier", patientName AS "Patient_Name", Age,DOB, Sex, 'Initiated' AS 'Program_Status'
@@ -386,3 +386,4 @@ FROM
 	from obs where concept_id = 2222 and voided = 0
 	)diagnosis_date
 	on txcurr.Id = diagnosis_date.person_id
+	Order by Patient_Identifier
