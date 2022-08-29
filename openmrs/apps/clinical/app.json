@@ -405,7 +405,7 @@
 				"required": true
 			},
 			"HTC, SD Bioline Tie Breaker": {
-				"required": true
+				"required": false
 			},
 			"HTC, DNA PCR Test Results": {
 				"required": true
