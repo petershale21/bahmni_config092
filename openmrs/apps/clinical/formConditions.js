@@ -235,7 +235,7 @@ Bahmni.ConceptSet.FormConditions.rules = {
                         }
                 }
                 if ((formName == "PostNatal Care Register") || (formName == "Delivery Information") ) {
-                       
+
                         conditions.assignedValues.push({
                                 field: "Delivery Note, Delivery location",
                                 fieldValue: {
@@ -760,7 +760,7 @@ Bahmni.ConceptSet.FormConditions.rules = {
                 }
                 return conditions;
         },
-        
+
         'PITC Offered': function (formName, formFieldValues) {
                 var Cancerhivtestoffered = formFieldValues['PITC Offered'];
                 var conditions = { show: [], hide: [] };
@@ -1046,14 +1046,14 @@ Bahmni.ConceptSet.FormConditions.rules = {
 
 
                 if (conditionConcept == "ART patient" ) {
-                        
+
                         if ((patientGender == "M") || (patientAge < 12 || patientAge > 50)) {
                        conditions.hide.push("HTC, Pregnancy Status");
-                       } 
+                       }
                        else {
                        conditions.show.push("HTC, Pregnancy Status");
                        }
-                       
+
                        //conditions.show.push("HTC, Pregnancy Status");
                        conditions.show.push("Function");
                        conditions.show.push("HIVTC, HIV care WHO Staging");
@@ -1065,10 +1065,10 @@ Bahmni.ConceptSet.FormConditions.rules = {
                        conditions.show.push("OI, Opportunistic infections");
                        conditions.show.push("Refer or Consult");
                        conditions.show.push("Number of days hospitalised");
-              
-               } 
+
+               }
                else {
-                       
+
                        conditions.hide.push("HTC, Pregnancy Status");
                        conditions.hide.push("Function");
                        conditions.hide.push("HIVTC, HIV care WHO Staging");
@@ -1199,7 +1199,7 @@ Bahmni.ConceptSet.FormConditions.rules = {
 
                 if (conditionConcept == "Treatment complete") {
                         conditions.show.push("HIVTC, TPT completion Date");
-                    
+
 
                 }
 
@@ -1771,19 +1771,24 @@ Bahmni.ConceptSet.FormConditions.rules = {
                 var conditionConcept = formFieldValues['HTC, Distribution Mode'];
                 var conditions = { show: [], hide: [] };
                 conditionConcept = conditionConcept.sort();
-                console.log(conditionConcept);
+                
 
                 if (JSON.stringify(conditionConcept) === JSON.stringify(['HTC, Secondary', 'HTC, Secondary'])) {
                         conditions.show.push("Self_Test_Buddy");
                         conditions.show.push("HTC, Kit Collected For");
+                        conditions.hide.push("HTC, HIVST Results");
+
 
                 }else if(JSON.stringify(conditionConcept) === JSON.stringify(['HTC, Primary', 'HTC, Primary','HTC, Secondary', 'HTC, Secondary'])){
                         conditions.show.push("Self_Test_Buddy");
                         conditions.show.push("HTC, Kit Collected For");
+                        conditions.show.push("HTC, HIVST Results");
+
 
                 }else if(JSON.stringify(conditionConcept) === JSON.stringify(['HTC, Primary', 'HTC, Primary']) || JSON.stringify(conditionConcept) === JSON.stringify([])){
                         conditions.hide.push("Self_Test_Buddy");
                         conditions.hide.push("HTC, Kit Collected For");
+
                 }
                 return conditions;
         },
