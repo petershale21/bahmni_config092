@@ -1022,6 +1022,19 @@ Bahmni.ConceptSet.FormConditions.rules = {
                 return conditions;
         },
 
+        // Hide WHO staging is T-Staging is selected -- Shale
+        'HIVTC, Treatment Staging': function(formName, formFieldValues){
+                var conditionConcept = formFieldValues['HIVTC, Treatment Staging'];
+                var conditions = { show: [], hide: []};
+                if(conditionConcept) {
+                        conditions.hide.push("HIVTC, HIV care WHO Staging");
+                }
+                else {
+                        conditions.show.push("HIVTC, HIV care WHO Staging")
+                }
+                return conditions;
+        },
+
         'Type of client': function (formName, formFieldValues, patient) {
                 var conditionConcept = formFieldValues['Type of client'];
                 var conditions = { show: [], hide: [], enable: [], disable: [] };
