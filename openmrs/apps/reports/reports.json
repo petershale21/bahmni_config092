@@ -1151,14 +1151,14 @@
         }
     },
     "Registered_TB_Visits_with_TB_Consultation_List": {
-        "name": "TB-020 | Registered ART Visits with ART Consultation (List) ",
+        "name": "TB-020 | Registered TB Visits with TB Consultation (List) ",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/tb_clients_registered_vs_tb_clients_consultation_process_list.sql"
         }
     },
     "Registered_TB_Visits_with_TB_Consultation_pivot": {
-        "name": "TB-021 | Registered ART Visits with ART Consultation (Pivot)",
+        "name": "TB-021 | Registered TB Visits with TB Consultation (Pivot)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/TB_clients_registered_vs_TB_clients_consultation_process_pivot.sql/"
