@@ -118,7 +118,8 @@
 			},
 
 			"HTC, Distribution Mode": {
-				"multiSelect": true
+				"multiSelect": true,
+                "required": true
 			},
 
 			"Addiction": {
