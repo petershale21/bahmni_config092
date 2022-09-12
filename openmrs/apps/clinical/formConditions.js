@@ -1016,6 +1016,7 @@ Bahmni.ConceptSet.FormConditions.rules = {
 
                 if (conditionConcept == "Yes") {
                         conditions.show.push("HIVTC, Transferred out");
+                        
                 } else {
                         conditions.hide.push("HIVTC, Transferred out");
                 }
@@ -1086,13 +1087,13 @@ Bahmni.ConceptSet.FormConditions.rules = {
         },
 
 
-     /*--- ARV Drug days and drug supply duration generic autocalculations---- */
+    /*--- ARV Drug days and drug supply duration generic autocalculations---- */
     'ART, Follow-up date' : function (formName, formFieldValues) {
         if(formName=="HIVTC, Patient Register") {
                  var followUpDate = formFieldValues['ART, Follow-up date'];
                  var conditions = { assignedValues: [], error: [] };
                  var dateUtil = Bahmni.Common.Util.DateUtil;
-				 var retrospectiveDate = $.cookie(Bahmni.Common.Constants.retrospectiveEntryEncounterDateCookieName);
+                                 var retrospectiveDate = $.cookie(Bahmni.Common.Constants.retrospectiveEntryEncounterDateCookieName);
 
                  if(followUpDate) {
                          var daysDispesed;
@@ -1129,15 +1130,68 @@ Bahmni.ConceptSet.FormConditions.rules = {
                                  } else {
                                         // No action
                                  }
-
+                                  
                                  conditions.assignedValues.push({ field: "ARV drugs No. of days dispensed", fieldValue: daysDispensed, autocalculate:true });
                                  conditions.assignedValues.push({ field: "HIVTC, ARV drugs supply duration", fieldValue: drugSupplyPeriod, autocalculate:true });
+                                 
                          // }
                  }
                  return conditions;
          }
-     },
+         else if(formName=="PrEP , Follow Up Template")
+         {
+                var followUpDate = formFieldValues['ART, Follow-up date'];
+                var conditions = { assignedValues: [], error: [] };
+                var dateUtil = Bahmni.Common.Util.DateUtil;
+                                var retrospectiveDate = $.cookie(Bahmni.Common.Constants.retrospectiveEntryEncounterDateCookieName);
 
+                if(followUpDate) {
+                        var daysDispesed;
+
+                        if(!retrospectiveDate) {
+                               daysDispensed = dateUtil.diffInDaysRegardlessOfTime(dateUtil.now(), followUpDate);
+                        } else {
+                               daysDispensed = dateUtil.diffInDaysRegardlessOfTime(dateUtil.parse(retrospectiveDate.substr(1, 10)), followUpDate);
+                        }
+
+                        // if(daysDispensed <= 0) {
+                                // conditions.error.push("Invalid input for Follow-up Date, must be a date in the future. Please correct.");
+                                // conditions.assignedValues.push({ field: "ARV drugs No. of days dispensed", fieldValue: daysDispensed });
+                        // } else {
+                                var drugSupplyPeriod = "";
+
+                                if(daysDispensed >= 10 && daysDispensed < 21) {
+                                        // Providing 3 days slack from 2 weeks, in case of weekends or other reasons
+                                        drugSupplyPeriod = "HIVTC, Two weeks supply";
+                                } else if (daysDispensed >= 28  && daysDispensed < 56) {
+                                        drugSupplyPeriod = "HIVTC, One month supply";
+                                } else if (daysDispensed >= 56 && daysDispensed < 84 ) {
+                                        drugSupplyPeriod = "HIVTC, Two months supply";
+                                } else if (daysDispensed >= 84 && daysDispensed < 112) {
+                                        drugSupplyPeriod = "HIVTC, Three months supply";
+                                } else if (daysDispensed >= 112 && daysDispensed < 140) {
+                                        drugSupplyPeriod = "HIVTC, Four months supply";
+                                } else if (daysDispensed >= 140 && daysDispensed < 168) {
+                                        drugSupplyPeriod = "HIVTC, Five months supply";
+                                } else if (daysDispensed >= 168 && daysDispensed < 196) {
+                                        drugSupplyPeriod = "HIVTC, Six months supply";
+                                } else if (daysDispensed >= 196) {
+                                        drugSupplyPeriod = "HIVTC, Seven+ months supply";
+                                } else {
+                                       // No action
+                                }
+                                 
+
+                                conditions.assignedValues.push({ field: "PrEP drugs supply duration", fieldValue: drugSupplyPeriod, autocalculate:true });
+                                conditions.assignedValues.push({ field: "ARV drugs No. of days dispensed", fieldValue: daysDispensed, autocalculate:true });
+                               
+                                
+                        // }
+                }
+                return conditions;
+
+         }
+     },
 /*--- TB number of days dispensed generic autocalculation----*/
            'TB, Next appointment/refill date' : function (formName, formFieldValues) {
                 if(formName=="Tuberculosis Followup Template") {
@@ -2069,7 +2123,214 @@ Bahmni.ConceptSet.FormConditions.rules = {
 
         }
         return conditions;
-    }
+    },
+    'PrEP ,Entry Point Mode': function (formName, formFieldValues, patient) {
+        var EntryMode= formFieldValues['PrEP ,Entry Point Mode'];
+
+        if ((formName == "PrEP , Intake Template") || (formName == "PrEP ,Entry point")) {
+                var conditions = { show: [], hide: [] };
+                
+                
+                if (EntryMode == "PrEP Community Entry Point") {
+                        conditions.show.push("PrEP  Entry Point  Community");
+                        conditions.hide.push("PrEP , Health Facility")
+
+                } else if (EntryMode == "PrEP Health Facility Entry Point") {
+                        conditions.show.push("PrEP , Health Facility");
+                        conditions.hide.push("PrEP  Entry Point  Community");
+                        
+
+
+                }else{
+
+                        conditions.hide.push("PrEP , Health Facility")
+                        conditions.hide.push("PrEP  Entry Point  Community");
+
+                }
+        }
+        return conditions;
+},
+'PrEP, Indication for stopping PrEP': function (formName, formFieldValues) {
+        var EntryMode= formFieldValues['PrEP, Indication for stopping PrEP'];
+
+        if ((formName == "PrEP , Follow Up Template") || (formName == "PrEP ,Stopping PrEP")) {
+                var conditions = { show: [], hide: [] };
+
+                if (EntryMode == "PrEP Stopped Due To New HIV status") {
+                        conditions.show.push("PrEP stopped due to new HIV infection")
+
+                }else{
+                        conditions.hide.push("PrEP stopped due to new HIV infection")
+                }
+               
+        }
+
+        return conditions;
+},
+
+'PrEP , Pregnancy Test': function (formName, formFieldValues,patient) {
+        var EntryMode= formFieldValues['PrEP , Pregnancy Test'];
+        var patientGender = patient['gender'];
+
+        if ((formName == "PrEP , Intake Template") || (formName == "PrEP ,Other Tests")) {
+                var conditions = { show: [], hide: [] };
+
+                if (EntryMode && patientGender=="F" ) {
+                        conditions.show.push("PrEP , Pregnancy Status")
+                        
+
+                }else{
+                        
+                        conditions.hide.push("PrEP , Pregnancy Status")
+                        
+                        
+                }
+        }
+        return conditions;
+     },
+     
+
+
+
+
+     'PrEP, STI Screening OrTreatment': function (formName, formFieldValues) {
+        var EntryMode= formFieldValues['PrEP, STI Screening OrTreatment'];
+        var conditions = { show: [], hide: [] };
+
+
+
+        if ((formName == "PrEP , Follow Up Template") || (formName == "PrEP, STI Screening and Treatment")) {
+             
+
+                if (EntryMode =="PrEP , Treatment" ) {
+                        conditions.show.push("PrEP, STI Treatment");
+                        conditions.hide.push("PrEP, STI Screening");
+
+                        
+
+                }else if(EntryMode=="PrEP , Screening") {
+
+                        conditions.show.push("PrEP, STI Screening");
+                        conditions.hide.push("PrEP, STI Treatment");
+                        
+                        
+                }else {
+                        conditions.hide.push("PrEP, STI Treatment");
+                        conditions.hide.push("PrEP, STI Screening")
+          
+                }
+        }
+        return conditions;
+     },
+     
+ 
+'PrEP ,Entry Point Mode' : function (formName, formFieldValues) {
+        
+        var conditionConcept = formFieldValues['PrEP ,Entry Point Mode'];    
+        var conditions = {show: [], hide: [], assignedValues: []};
+
+        conditions.hide.push("PrEP Entry Point Community")
+        conditions.hide.push("PrEP , Health Facility");
+        
+        
+        
+
+       if (conditionConcept == "PrEP Community Entry Point"){
+           
+
+           conditions.show.push("PrEP Entry Point Community");
+            
+           conditions.hide.push("PrEP , Facilty Outreach");
+            
+       }
+       else {
+
+               
+               conditions.hide.push("PrEP Community Program");
+               conditions.show.push("PrEP , Facilty Outreach");
+                
+        }
+        return conditions;
+    },    
+  
+    'PrEP ,Entry Point Mode': function (formName, formFieldValues) {
+        var EntryMode= formFieldValues['PrEP ,Entry Point Mode'];
+
+        if ((formName == "PrEP , Intake Template") || (formName == "PrEP ,Entry point")) {
+                var conditions = { show: [], hide: [] };
+
+                if (EntryMode == "PrEP Community Entry Point") {
+                        conditions.show.push("PrEP  Entry Point  Community");
+                        conditions.hide.push("PrEP , Health Facility");
+
+                } else if (EntryMode == "PrEP Health Facility Entry Point") {
+                        conditions.show.push("PrEP , Health Facility");
+                        conditions.hide.push("PrEP  Entry Point  Community");
+
+
+                }else{
+
+                        conditions.hide.push("PrEP , Health Facility")
+                        conditions.hide.push("PrEP  Entry Point  Community");
+
+                }
+        }
+        return conditions;
+},
+
+
+'PrEP , Stopping PrEP Confirmation': function (formName, formFieldValues) {
+        var conditionConcept = formFieldValues['PrEP , Stopping PrEP Confirmation'];
+        var conditions = { show: [], hide: [] };
+          
+               // conditions.hide.push("PrEP ,Stopping PrEP");
+
+                if (conditionConcept) {
+                        conditions.show.push("PrEP ,Stopping PrEP")
+                        
+                }
+                else {
+                        conditions.hide.push("PrEP ,Stopping PrEP");
+                        
+                }
+        
+        return conditions;
+},
+
+
+'PrEP, Transfer Inn': function (formName, formFieldValues) {
+        var conditionConcept = formFieldValues['PrEP, Transfer Inn'];
+        var conditions = { show: [], hide: [] };
+          
+
+        if (conditionConcept == "Yes") {
+                conditions.show.push("PrEP, Transferred in");
+                
+        } else {
+                conditions.hide.push("PrEP, Transferred in");
+        }
+        return conditions;
+        
+
+},
+
+'PrEP, Transfer Out Question': function (formName, formFieldValues) {
+        var conditionConcept = formFieldValues['PrEP, Transfer Out Question'];
+        var conditions = { show: [], hide: [] };
+
+        if (conditionConcept == "Yes") {
+                conditions.show.push("PrEP, Transferred out");
+                
+        } else {
+                conditions.hide.push("PrEP, Transferred out");
+        }
+        return conditions;
+},
+
+
+
+
+     
 
 
 };
