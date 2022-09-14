@@ -1163,6 +1163,13 @@
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/TB_clients_registered_vs_TB_clients_consultation_process_pivot.sql/"
         }
+    },
+    "TB_Drug_Resistant_list": {
+        "name": "TB-022 | TB Drug Resistant (list)",
+        "type": "MRSGeneric",
+        "config": {
+            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/TB_Drug-Resistant_list.sql/"
+        }
     }
 }
 
