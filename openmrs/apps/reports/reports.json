@@ -1126,7 +1126,7 @@
         "name": "TB-016 | TB SCREENING",
         "type": "MRSGeneric",
         "config": {
-            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/SECTION3.sql"
+            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/TB_Screening.sql"
         }
     },
     "TB_Clients_Registered_Vs_Clients_Intakes_List": {
@@ -1169,6 +1169,13 @@
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/TB_Drug-Resistant_list.sql/"
+        }
+    },
+    "TB_Case_Detection_list": {
+        "name": "TB-023 | TB Case Detection (list)",
+        "type": "MRSGeneric",
+        "config": {
+            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/TB_Case_Detection.sql/"
         }
     }
 }
