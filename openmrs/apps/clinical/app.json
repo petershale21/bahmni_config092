@@ -469,10 +469,22 @@
         "required": true,
         "multiSelect": true
       },
-
-
-
-
+	  "PrEP ,Entry point": {
+		"required": true
+	},
+	"PrEP ,Entry Point Mode": {
+		"required": true
+	},
+	"PrEP, Indication for starting PrEP": {
+		"required": true
+	},
+	"PrEP ,Date of Initiation": {
+		"required": true
+	},
+	"PrEP , HIV rapid test result": {
+		"required": true
+	},
+	
 
 			"LPA Susceptibility result" : {
 				"multiSelect": true
