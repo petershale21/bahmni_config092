@@ -550,6 +550,9 @@
 			},
 			"3rd Dose": {
 				"multiSelect": true
+			},
+			"Under5, Base Doses":{
+				"multiSelect": true
 			}
 		},
 		"visitPage": {
