@@ -1027,7 +1027,7 @@
         "name": "TB-003 | TB Notification (List)",
         "type": "MRSGeneric",
         "config": {
-            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/TB_Enrolled_list.sql"
+            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/TB_Enrolled_list.sql"
         }
     },
     "Documented_TB": {
