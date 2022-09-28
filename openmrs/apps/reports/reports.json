@@ -1017,84 +1017,91 @@
         }
     },
     "detection_TB": {
-        "name": "TB-002 | TB Case Detection",
+        "name": "TB-002 | TB Case Detection (List)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/TB_Case_Detection.sql"
         }
     },
+    "TB_Notification": {
+        "name": "TB-003 | TB Notification (List)",
+        "type": "MRSGeneric",
+        "config": {
+            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/TB_Enrolled_list.sql"
+        }
+    },
     "Documented_TB": {
-        "name": "TB-003 | Documented TB/HIV Activities",
+        "name": "TB-004 | Documented TB/HIV Activities",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/Documented_TB.sql"
         }
     },
     "Strategy_TB": {
-        "name": "TB-004 | TB Testing Strategy",
+        "name": "TB-005 | TB Testing Strategy",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/testing_strategy.sql"
         }
     },
     "Contact_TB": {
-        "name": "TB-005 | TB Contact Tracing and Screening",
+        "name": "TB-006 | TB Contact Tracing and Screening",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/TB_contact.sql"
         }
     },
     "TB_notification1": {
-        "name": "TB-006 | All TB Patients on Treatment",
+        "name": "TB-007 | All TB Patients on Treatment",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/tb_notification_block1.sql"
         }
     },
     "TB_notification2": {
-        "name": "TB-007 | New and Relapse Enrolled on TB",
+        "name": "TB-008 | New and Relapse Enrolled on TB",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/tb_notification_block2.sql"
         }
     },
     "tb_stat_list": {
-        "name": "TB-008 | TB Status (List)",
+        "name": "TB-009 | TB Status (List)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/TB_STAT_list.sql"
         }
     },
     "tb_stat_pivot": {
-        "name": "TB-009 | TB Status (Pivot)",
+        "name": "TB-010 | TB Status (Pivot)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/TB_STAT_pivot.sql"
         }
     },
     "tb_enrolled": {
-        "name": "TB-010 | New and Relapse Enrolled on TB (List)",
+        "name": "TB-011 | New and Relapse Enrolled on TB (List)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/TB_Enrolled_list.sql"
         }
     },
     "tb_art_list": {
-        "name": "TB-011 | DSD TB_ART (List)",
+        "name": "TB-012 | DSD TB_ART (List)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/TB_Enrolled_list.sql"
         }
     },
     "tb_art_pivot": {
-        "name": "TB-012 | DSD TB_ART (PIVOT)",
+        "name": "TB-013 | DSD TB_ART (PIVOT)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/TB_Enrolled_list.sql"
         }
     },
     "TB Screening Among HIV Clients": {
-        "name": "TB-013 | TB Screening Among HIV Clients",
+        "name": "TB-014 | TB Screening Among HIV Clients",
         "type": "concatenated",
         "config": {
             "reports": [
@@ -1109,63 +1116,63 @@
         }
     },
     "tpt_list": {
-       "name": "TB-014 | TB Prevention Therapy (List) ",
+       "name": "TB-015 | TB Prevention Therapy (List) ",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/tpt_list.sql"                   
          }
     },
     "tpt_pivot": {
-        "name": "TB-015 | TB Prevention Therapy (Pivot) ",
+        "name": "TB-016 | TB Prevention Therapy (Pivot) ",
          "type": "MRSGeneric",
          "config": {
              "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/tpt_pivot.sql"                   
           }
      },
     "DHIS_TB_SCREENING": {
-        "name": "TB-016 | TB SCREENING",
+        "name": "TB-017 | TB SCREENING",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/SECTION3.sql"
         }
     },
     "TB_Clients_Registered_Vs_Clients_Intakes_List": {
-        "name": "TB-017 | TB Intakes (List)",
+        "name": "TB-018 | TB Intakes (List)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/TB_Patients_List.sql"
         }
     },
     "TB_Clients_Registered_Vs_Clients_Intakes_Pivot": {
-        "name": "TB-018 | TB Intakes (Pivot)",
+        "name": "TB-019 | TB Intakes (Pivot)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/TB_clients_registered_vs_client_intakes_joinversion_pivot.sql"
         }
     },
     "TB_Indicators": {
-        "name": "TB-019 | TB Indicators (List)",
+        "name": "TB-020 | TB Indicators (List)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/TB_Indicators.sql"
         }
     },
     "Registered_TB_Visits_with_TB_Consultation_List": {
-        "name": "TB-020 | Registered TB Visits with TB Consultation (List) ",
+        "name": "TB-021 | Registered TB Visits with TB Consultation (List) ",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/tb_clients_registered_vs_tb_clients_consultation_process_list.sql"
         }
     },
     "Registered_TB_Visits_with_TB_Consultation_pivot": {
-        "name": "TB-021 | Registered TB Visits with TB Consultation (Pivot)",
+        "name": "TB-022 | Registered TB Visits with TB Consultation (Pivot)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/TB_clients_registered_vs_TB_clients_consultation_process_pivot.sql/"
         }
     },
     "TB_Drug_Resistant_list": {
-        "name": "TB-022 | TB Drug Resistant (list)",
+        "name": "TB-023 | TB Drug Resistant (list)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/TB_Drug-Resistant_list.sql/"
