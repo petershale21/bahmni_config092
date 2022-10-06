@@ -21,7 +21,7 @@
             "forwardUrl": "#/default/patient/{{patientUuid}}/dashboard"
         },
         "label": "All",
-        "order": 6,
+        "order": 10,
         "requiredPrivilege": "app:clinical"
     },
     "bahmniClinicalPatientsSearchDrugPickupPatients": {
@@ -203,5 +203,63 @@
         "icon": "fa-user-md",
         "order": 5,
         "requiredPrivilege": "app:clinical:consultationTab"
-    }
+    },
+
+    "bahmniClinicalPatientsSearchUnder5": {
+        "id": "bahmni.clinical.patients.search.Under5",
+        "extensionPointId": "org.bahmni.patient.search",
+        "type": "config",
+        "extensionParams": {
+                "searchHandler": "emrapi.sqlSearch.Under5",
+                "translationKey": "MODULE_LABEL_UNDER5",
+                "forwardUrl": "#/default/patient/{{patientUuid}}/dashboard"
+        },
+        "label": "Under5",
+        "order": 7,
+        "requiredPrivilege": "app:clinical"
+      },
+      
+          
+          "bahmniClinicalPatientsSearchFamilyPlanning": {
+            "id": "bahmni.clinical.patients.search.familyplanning",
+            "extensionPointId": "org.bahmni.patient.search",
+            "type": "config",
+            "extensionParams": {
+                    "searchHandler": "emrapi.sqlSearch.familyplanning",
+                    "translationKey": "MODULE_LABEL_FAMILYPLANNING",
+                    "forwardUrl": "#/default/patient/{{patientUuid}}/dashboard"
+            },
+            "label": "Family Planning",
+            "order": 8,
+            "requiredPrivilege": "app:clinical"
+        },
+      
+        "bahmniClinicalPatientsSearchCervicalCancerScreening": {
+          "id": "bahmni.clinical.patients.search.cervicalcancerscreening",
+          "extensionPointId": "org.bahmni.patient.search",
+          "type": "config",
+          "extensionParams": {
+                  "searchHandler": "emrapi.sqlSearch.cervicalcancerscreening",
+                  "translationKey": "MODULE_LABEL_CERVICALCANCERSCREENING",
+                  "forwardUrl": "#/default/patient/{{patientUuid}}/dashboard"
+          },
+          "label": "Cervical Cancer Screening",
+          "order": 9,
+          "requiredPrivilege": "app:clinical"
+      },
+      
+      "bahmniClinicalPatientsSearchEAC": {
+        "id": "bahmni.clinical.patients.search.EAC",
+        "extensionPointId": "org.bahmni.patient.search",
+        "type": "config",
+        "extensionParams": {
+                "searchHandler": "emrapi.sqlSearch.eac",
+                "translationKey": "MODULE_LABEL_EAC",
+                "forwardUrl": "#/default/patient/{{patientUuid}}/dashboard"
+        },
+        "label": "EAC",
+        "order": 6,
+        "requiredPrivilege": "app:clinical"
+      }
+      
 }
