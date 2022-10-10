@@ -14,287 +14,204 @@
         }
     },
     "artclients_seenandconsultedlist": {
-        "name": "ART-002A | ART Clients Seen and Initiated (List)",
+        "name": "ART-003 | ART Clients Seen and Initiated (List)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/seen_and_initiated_list.sql"
         }
     },
     "currentonart_jointmissedListSQL": {
-        "name": "ART-003 | Missed Appointments Status Report (List)",
+        "name": "ART-004 | Missed Appointments Status Report (List)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/current_on_art_joint_missed_appointments_list.sql"
         }
     },
     "currentonart_jointmissedPivotSQL": {
-        "name": "ART-004 | Missed Appointments Status Report (Pivot)",
+        "name": "ART-005 | Missed Appointments Status Report (Pivot)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/current_on_art_joint_missed_appointments_pivot.sql"
         }
     },
     "PEPFARcurrentonart_jointmissedListSQL": {
-        "name": "ART-005 | ART clients with Appointment Status-28 Days (List)",
+        "name": "ART-006 | ART clients with Appointment Status-28 Days (List)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/current_on_art_joint_missed_appointments_twentyeight_day_list.sql"
         }
     },
     "PEPFARcurrentonart_jointmissedPivotSQL": {
-        "name": "ART-006 | ART clients with Appointment Status-28 Days (Pivot)",
+        "name": "ART-007 | ART clients with Appointment Status-28 Days (Pivot)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/current_on_art_joint_missed_appointments_twentyeight_day_pivot.sql"
         }
     },
     "Clients_enrolled": {
-        "name": "ART-007 | Clients newly enrolled on ART",
+        "name": "ART-008 | Clients newly enrolled on ART",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/Enrolled.sql"
         }
     },
     "regimens": {
-        "name": "ART-008 | Current on ART with regimens (List)",
+        "name": "ART-009 | Current on ART with regimens (List)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/includeregimen.sql"
         }
     },
     "ART_report_regimen": {
-        "name": "ART-009 | Current on ART with regimens (List)",
+        "name": "ART-010 | Current on ART with regimens (List)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/includeregimen_with_weight_pivot.sql"
         }
     },
     "viralloadresultsstatuslist": {
-        "name": "ART-010 | Viral Load Results Status, within 3 months (List)",
+        "name": "ART-011 | Viral Load Results Status, within 3 months (List)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/viral_load_list.sql"
         }
     },
     "viralloadresultsstatuspivot": {
-        "name": "ART-011 | Viral Load Results Status, within 3 months (Pivot)",
+        "name": "ART-012 | Viral Load Results Status, within 3 months (Pivot)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/viral_load_pivot.sql"
         }
     },
     "Modified_ART": {
-        "name": "ART-012 | Current on ART with Modified ages (pivot)",
+        "name": "ART-013 | Current on ART with Modified ages (pivot)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/modified_txcurr_pivot.sql"
         }
     },
     "substitutedclientslist": {
-        "name": "ART-013 | Substituted Clients (List)",
+        "name": "ART-014 | Substituted Clients (List)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/substituted_clients_list.sql"
         }
     },
     "substitutedclientspivot": {
-        "name": "ART-014 | Substituted Clients (Pivot)",
+        "name": "ART-015 | Substituted Clients (Pivot)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/substituted_clients_pivot.sql"
         }
     },
     "switchedclientslist": {
-        "name": "ART-015 | Switched Clients (List)",
+        "name": "ART-016 | Switched Clients (List)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/switched_clients_list.sql"
         }
     },
     "switchedclientspivot": {
-        "name": "ART-016 | Switched Clients (Pivot)",
+        "name": "ART-017 | Switched Clients (Pivot)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/switched_clients_pivot.sql"
         }
     },
     "registeredartclientswithartconsultation_process": {
-        "name": "ART-017 | Registered ART Visits with ART Consultation (List)",
+        "name": "ART-018 | Registered ART Visits with ART Consultation (List)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/art_clients_registered_vs_client_art_consultation_process_list.sql"
         }
     },
     "registeredartclientswithartconsultation_process_pivot": {
-        "name": "ART-018 | Registered ART Visits with ART Consultation (Pivot)",
+        "name": "ART-019 | Registered ART Visits with ART Consultation (Pivot)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/art_clients_registered_vs_client_art_consultation_process_pivot.sql"
         }
     },
     "registeredartclientswithintakes_joinversion": {
-        "name": "ART-019 | Registered ART Clients with Intakes (List)",
+        "name": "ART-020 | Registered ART Clients with Intakes (List)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/art_clients_registered_vs_client_intakes_joinversion_list.sql"
         }
     },
     "registeredartclientswithintakes_joinversion_pivot": {
-        "name": "ART-020 | Registered ART Clients with Intakes (Pivot)",
+        "name": "ART-021 | Registered ART Clients with Intakes (Pivot)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/art_clients_registered_vs_client_intakes_joinversion_pivot.sql"
         }
     },
     "Nointakes": {
-        "name": "ART-021 | ART Client Without Intakes (List)",
+        "name": "ART-022 | ART Client Without Intakes (List)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/No_intakes.sql"
         }
     },
     "DQA_Tool": {
-        "name": "ART-022 | Data Quality Assessment tool",
+        "name": "ART-023 | Data Quality Assessment tool",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/monitoring.sql"
         }
     },
-    "HEI": {
-        "name": "ART-023 | HIV Exposed Infants (HEI)",
-        "type": "MRSGeneric",
-        "config": {
-            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/HEI.sql"
-        }
-    },
-    "PNC1": {
-        "name": "ART-024 | Mother Post Natal Care (PNC)",
-        "type": "MRSGeneric",
-        "config": {
-            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/PNC.sql"
-        }
-    },
-    "PNC2": {
-        "name": "ART-025 | Child Post Natal Care (PNC)",
-        "type": "MRSGeneric",
-        "config": {
-            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/Infant_PNC.sql"
-        }
-    },
-    "ANC": {
-        "name": "ART-026 | Ante Natal Care (ANC)",
-        "type": "MRSGeneric",
-        "config": {
-            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/ANC.sql"
-        }
-    },
-    "pmtct_stat_denominator_list": {
-        "name": "ART-027 | PMTCT STAT DINOMINATOR (List)",
-        "type": "MRSGeneric",
-        "config": {
-            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/PMTCT_STAT_Denominator_list.sql"
-        }
-    },
-    "pmtct_stat_denominator_pivot": {
-        "name": "ART-028 | PMTCT STAT DINOMINATOR (Pivot)",
-        "type": "MRSGeneric",
-        "config": {
-            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/PMTCT_STAT_Denominator_pivot.sql"
-        }
-    },
-    "pmtct_stat_list": {
-        "name": "ART-029 | PMTCT STAT (List)",
-        "type": "MRSGeneric",
-        "config": {
-            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/PMTCT_STAT_list.sql"
-        }
-    },
-    "pmtct_stat_pivot": {
-        "name": "ART-030 | PMTCT STAT (Pivot)",
-        "type": "MRSGeneric",
-        "config": {
-            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/PMTCT_STAT_pivot.sql"
-        }
-    },
-    "pmtct_eid_list": {
-        "name": " ART-031 | PMTCT EID (List)",
-        "type": "MRSGeneric",
-        "config": {
-            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/PMTCT_EID_list.sql"
-        }
-    },
-    "pmtct_eid_pivot": {
-        "name": "ART-032 | PMTCT EID (PIVOT)",
-        "type": "MRSGeneric",
-        "config": {
-            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/PMTCT_EID_pivot.sql"
-        }
-    },
-    "pmtct_hei_pos_list": {
-        "name": "ART-033 | PMTCT HEI POS (List)",
-        "type": "MRSGeneric",
-        "config": {
-            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/PMTCT_HEI_POS_list.sql"
-        }
-    },
-    "pmtct_hei_pos_pivot": {
-        "name": "ART-034 | PMTCT HEI POS (Pivot)",
-        "type": "MRSGeneric",
-        "config": {
-            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/PMTCT_HEI_POS_pivot.sql"
-        }
-    },
+    
     "IndexClientEligible_list": {
-        "name": "ART-035 | Clients Eligible for Indexing (List)",
+        "name": "ART-024 | Clients Eligible for Indexing (List)",
         "type": "MRSGeneric",
        "config": {
       "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/index_cases_eligible_for_indexing_list.sql"
     }
 	  },
 	  "IndexClientEligible_pivot": {
-	    "name": "ART-036 | Clients Eligible for Indexing (Pivot)",
+	    "name": "ART-025 | Clients Eligible for Indexing (Pivot)",
 	    "type": "MRSGeneric",
 	    "config": {
 	      "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/index_cases_eligible_for_indexing_pivot.sql"
 	    }
 	  },
 	  "IndexOfferedClients_list": {
-	    "name": "ART-037 | Clients Offered Indexing (List)",
+	    "name": "ART-026 | Clients Offered Indexing (List)",
 	    "type": "MRSGeneric",
 	    "config": {
 	      "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/index_cases_offered_indexing_list.sql"
 	    }
 	  },
 	  "IndexOfferedClients_pivot": {
-	    "name": "ART-038 | Clients Offered Indexing (Pivot)",
+	    "name": "ART-027 | Clients Offered Indexing (Pivot)",
 	    "type": "MRSGeneric",
 	    "config": {
 	      "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/index_cases_offered_indexing_pivot.sql"
 	    }
 	  },
 	  "IndexContactsElicited_list": {
-	    "name": "ART-039 | Index Contacts Elicited (List)",
+	    "name": "ART-028 | Index Contacts Elicited (List)",
 	    "type": "MRSGeneric",
 	    "config": {
 	      "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/index_elicited_contacts_list.sql"
 	    }
 	  },
 	  "IndexContactsElicited_pivot": {
-	    "name": "ART-040 | Index Contacts Elicited (Pivot)",
+	    "name": "ART-029 | Index Contacts Elicited (Pivot)",
 	    "type": "MRSGeneric",
 	    "config": {
 	      "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/index_elicited_contacts_pivot.sql"
 	    }
 	  },
 	  "IndexContactsElicitedWithHIVStatus_list": {
-	    "name": "ART-041 | Index Contacts Elicited with HIV Status (List)",
+	    "name": "ART-030 | Index Contacts Elicited with HIV Status (List)",
 	    "type": "MRSGeneric",
 	    "config": {
 	      "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/index_elicited_contacts_along_with_their_hiv_status_list.sql"
 	    }
 	  },
 	  "IndexContactsElicitedWithHIVStatus_pivot": {
-	    "name": "ART-042 | Index Contacts Elicited with HIV Status (Pivot)",
+	    "name": "ART-031 | Index Contacts Elicited with HIV Status (Pivot)",
 	    "type": "MRSGeneric", 
 	    "config": {
 	      "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/index_elicited_contacts_along_with_their_hiv_status_pivot.sql"
@@ -302,175 +219,175 @@
 	  }
     ,
     "txnew_list": {
-        "name": "ART-043 | TX_NEW (List)",
+        "name": "ART-032 | TX_NEW (List)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/TX_NEW.sql"
         }
     },
     "txnew_pivot": {
-        "name": "ART-044 | TX_NEW (PIVOT)",
+        "name": "ART-033 | TX_NEW (PIVOT)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/TX_NEW_Pivot.sql"
         }
     },
     "txnew_coarseages": {
-        "name": "ART-045 | Tx new Coarse Ages",
+        "name": "ART-034 | Tx new Coarse Ages",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/txnew_coarseages.sql"
         }
     },
     "txnew_coarse_ages_pivot": {
-        "name": "ART-046 | Tx new Coarse Ages (Pivot)",
+        "name": "ART-035 | Tx new Coarse Ages (Pivot)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/txnew_coarseages_pivot.sql"
         }
     },
     "cxca_txpivot": {
-        "name": "ART-047 | CXCA_TX (Pivot)",
+        "name": "ART-036 | CXCA_TX (Pivot)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/cxca_treatment_pivot.sql"
         }
     },
     "cxca_txlist": {
-        "name": "ART-048 | CXCA_TX (List)",
+        "name": "ART-037 | CXCA_TX (List)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/cxca_treatment_list.sql"
         }
     },
     "tx_tb_diagnostic": {
-        "name": "ART-049 | TX TB Diagnostic",
+        "name": "ART-038 | TX TB Diagnostic",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/TX_TB_diagnostic.sql"
         }
     },
     "tx_tb_numerator": {
-        "name": "ART-050 | TX TB Numerator",
+        "name": "ART-039 | TX TB Numerator",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/TX_TB_Numerator.sql"
         }
     },
     "tx_tb_result_combined": {
-        "name": "ART-051 | TX TB Screen Combined (Pivot)",
+        "name": "ART-040 | TX TB Screen Combined (Pivot)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/tx_tb_nume_pivot.sql"
         }
     },
     "tx_tb_diagnostic_pos": {
-        "name": "ART-052 | TX TB Diagnostic Test Positive",
+        "name": "ART-041 | TX TB Diagnostic Test Positive",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/TX_TB_diagnostic.sql"
         }
     },
     "txcurrcombinedpivot_pepfar": {
-        "name": "ART-053 | TX_CURR (Pivot)",
+        "name": "ART-042 | TX_CURR (Pivot)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/txcurr_combined_pivot.sql"
         }
     },
     "txcurrcombinedlist_perfar": {
-        "name": "ART-054 | TX_CURR (List)",
+        "name": "ART-043 | TX_CURR (List)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/txcurr_combined_list.sql"
         }
     },
     "txcurrmmd_list": {
-        "name": "ART-055 | TX_CURR MMD (List)",
+        "name": "ART-044 | TX_CURR MMD (List)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/txcurr_mmd_list.sql"
         }
     },
     "txcurrmmd_pivot": {
-        "name": "ART-056 | TX_CURR MMD (PIVOT)",
+        "name": "ART-045 | TX_CURR MMD (PIVOT)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/txcurr_mmd_pivot.sql"
         }
     },
     "txcurrcoarse_list": {
-        "name": "ART-057 | TX_CURR Coarse Ages (List)",
+        "name": "ART-046 | TX_CURR Coarse Ages (List)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/txcurr_coarseages_list.sql"
         }
     },
     "txcurrcoarse_pivot": {
-        "name": "ART-058 | TX_CURR Coarse Ages (Pivot)",
+        "name": "ART-047 | TX_CURR Coarse Ages (Pivot)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/txcurr_coarseages_pivot.sql"
         }
     },
     "txrtt_list": {
-        "name": "ART-059 | TX_RTT (List)",
+        "name": "ART-048 | TX_RTT (List)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/txrtt_restart_list.sql"
         }
     },
     "txrtt_pivot": {
-        "name": "ART-060 | TX_RTT (Pivot)",
+        "name": "ART-049 | TX_RTT (Pivot)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/txrtt_restart_pivot.sql"
         }
     },
     "txml_list": {
-        "name": "ART-061 | TX_ML (List)",
+        "name": "ART-050 | TX_ML (List)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/tx_ml_list.sql"
         }
     },
     "txml_pivot": {
-        "name": "ART-062 | TX_ML (Pivot)",
+        "name": "ART-051 | TX_ML (Pivot)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/tx_ml_pivot.sql"
         }
     },
     "txpvlsnum_list": {
-        "name": "ART-063 | TX_PVLS Numerator (List))",
+        "name": "ART-052 | TX_PVLS Numerator (List))",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/txpvls_numerator_list.sql"
         }
     },
     "txpvlsnum_pivot": {
-        "name": "ART-064 | TX_PVLS Numerator (Pivot)",
+        "name": "ART-053 | TX_PVLS Numerator (Pivot)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/txpvls_numerator_pivot.sql"
         }
     },
     "txpvlsdenom_list": {
-        "name": "ART-065 | TX_PVLS Denominator (List)",
+        "name": "ART-054 | TX_PVLS Denominator (List)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/txpvls_denominator_list.sql"
         }
     },
     "txpvlsdenom_pivot": {
-        "name": "ART-066 | TX_PVLS Denominator (Pivot)",
+        "name": "ART-055 | TX_PVLS Denominator (Pivot)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/txpvls_denominator_pivot.sql"
         }
     },
 	  "dailyvlresult_list": {
-		  "name": "ART-067 | Daily Viral Load Results (List)",
+		  "name": "ART-056 | Daily Viral Load Results (List)",
 		  "type": "MRSGeneric",
 		  "config": {
 			  "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/daily_vlresult_list.sql"
@@ -478,14 +395,14 @@
 	  },
 
 	  "dailyvlresult_pivot": {
-		  "name": "ART-068 | Daily Viral Load Results (Pivot)",
+		  "name": "ART-057 | Daily Viral Load Results (Pivot)",
 		  "type": "MRSGeneric",
 		  "config": {
 			  "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/daily_vlresult_pivot.sql"
 		  }
 	  }, 
 	  "dailycd4result_list": {
-		  "name": "ART-069 | Daily CD4 Results (List)",
+		  "name": "ART-058 | Daily CD4 Results (List)",
 		  "type": "MRSGeneric",
 		  "config": {
 			  "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/daily_cd4result_list.sql"
@@ -493,42 +410,42 @@
 	  },
 
 	  "dailycd4result_pivot": {
-		  "name": "ART-070 | Daily CD4 Results (Pivot)",
+		  "name": "ART-059 | Daily CD4 Results (Pivot)",
 		  "type": "MRSGeneric",
 		  "config": {
 			  "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/daily_cd4result_pivot.sql"
 		  }
 	  }, 	  
     "DHIS_Pre_ART": {
-        "name": "ART-071 | Pre-ART",
+        "name": "ART-060 | Pre-ART",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/SECTION1.sql"
         }
     },
     "DHIS_ART_CARE_A": {
-        "name": "ART-072 | ART CARE - NEW AND CURRENT ON ART",
+        "name": "ART-061 | ART CARE - NEW AND CURRENT ON ART",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/SECTION2.sql"
         }
     },
     "DHIS_CTX": {
-        "name": "ART-073 | COTRIMOX PROPHYLAXIS/DAPSONE",
+        "name": "ART-062 | COTRIMOX PROPHYLAXIS/DAPSONE",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/SECTION8.sql"
         }
     },
     "DHIS_NUTRITIONAL_SUPPLEMENT": {
-        "name": "ART-074 | NUTRITIONAL SUPPLEMENT",
+        "name": "ART-063 | NUTRITIONAL SUPPLEMENT",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/SECTION9.sql"
         }
     },
     "ART-067 HIV Care and Treatment 2020a": {
-		"name": "ART-075 HIV Care and Treatment 2020a", 
+		"name": "ART-064 HIV Care and Treatment 2020a", 
         "DHISProgram": true,
         "type": "concatenated",
         "config": {
@@ -632,91 +549,91 @@
         }
     },
     "peads_clientlist": {
-        "name": "ART-076 | PEADS Aging Out Analysis (Client List)",
+        "name": "ART-065 | PEADS Aging Out Analysis (Client List)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/peads_client_list.sql"
         }
     },
     "peads_outcomes": {
-        "name": "ART-077 | PEADS Aging Out Analysis (Client Outcomes)",
+        "name": "ART-066 | PEADS Aging Out Analysis (Client Outcomes)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/peads_client_outcomes.sql"
         }
     },
     "peads_appointments": {
-        "name": "ART-078 | PEADS Aging Out Analysis (Client Appointments)",
+        "name": "ART-067 | PEADS Aging Out Analysis (Client Appointments)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/client_appointments.sql"
         }
     },
     "ahd_list": {
-        "name": "ART-079 | AHD Report (List)",
+        "name": "ART-068 | AHD Report (List)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/ahd_list.sql"
         }
     },
     "ahd_pivot": {
-        "name": "ART-080 | AHD Report (Pivot)",
+        "name": "ART-069 | AHD Report (Pivot)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/ahd_pivot.sql"
         }
     },
     "ahd_cryptococal_meningitis_list": {
-        "name": "ART-081 | AHD Cryptococal Meningitis Report (List)",
+        "name": "ART-070 | AHD Cryptococal Meningitis Report (List)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/AHD_Cryptococal_Meningitis.sql"
         }
     },
     "ahd_cryptococal_meningitis_pivot": {
-        "name": "ART-082 | AHD Cryptococal Meningitis Report (Pivot)",
+        "name": "ART-071 | AHD Cryptococal Meningitis Report (Pivot)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/AHD_Cryptococal_Meningitis_pivot.sql"
         }
     },
     "ahd_tb_list": {
-        "name": "ART-083 | AHD TB (List)",
+        "name": "ART-072 | AHD TB (List)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/ahd_tb_list.sql"
         }
     },
     "ahd_tb_pivot": {
-        "name": "ART-084 | AHD TB (Pivot)",
+        "name": "ART-073 | AHD TB (Pivot)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/ahd_tb_pivot.sql"
         }
     },
     "ahd_treatment_list": {
-        "name": "ART-085 | AHD Treatment (List)",
+        "name": "ART-074 | AHD Treatment (List)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/ahd_treatment_list.sql"
         }
     },
     "ahd_treatment_pivot": {
-        "name": "ART-086 | AHD Treatment (Pivot)",
+        "name": "ART-075 | AHD Treatment (Pivot)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/ahd_treatment_pivot.sql"
         }
     },
     "weekly_ppr_list": {
-        "name": "ART-087 | Weekly PPR (List)",
+        "name": "ART-076 | Weekly PPR (List)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/weekly_ppr_report_list.sql"
         }
     },
     "weekly_ppr_pivot": {
-        "name": "ART-088 | Weekly PPR (Pivot)",
+        "name": "ART-077 | Weekly PPR (Pivot)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/weekly_ppr_report_pivot.sql"
@@ -911,6 +828,97 @@
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/HTS_TST_Other_pivot.sql"
         }
     },
+    "HEI": {
+        "name": "MCH-001 | HIV Exposed Infants (HEI)",
+        "type": "MRSGeneric",
+        "config": {
+            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/HEI.sql"
+        }
+    },
+    "PNC1": {
+        "name": "MCH-002 | Mother Post Natal Care (PNC)",
+        "type": "MRSGeneric",
+        "config": {
+            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/PNC.sql"
+        }
+    },
+    "PNC2": {
+        "name": "MCH-003 | Child Post Natal Care (PNC)",
+        "type": "MRSGeneric",
+        "config": {
+            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/Infant_PNC.sql"
+        }
+    },
+    "ANC1": {
+        "name": "MCH-004 | Ante Natal Care (ANC) (Pivot)",
+        "type": "MRSGeneric",
+        "config": {
+            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/ANC.sql"
+        }
+    },
+    "ANC2": {
+        "name": "MCH-005 | Ante Natal Care (ANC) (List)",
+        "type": "MRSGeneric",
+        "config": {
+            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/ANC_List.sql"
+        }
+    },
+    "pmtct_stat_denominator_list": {
+        "name": "MCH-006 | PMTCT STAT DINOMINATOR (List)",
+        "type": "MRSGeneric",
+        "config": {
+            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/PMTCT_STAT_Denominator_list.sql"
+        }
+    },
+    "pmtct_stat_denominator_pivot": {
+        "name": "MCH-007 | PMTCT STAT DINOMINATOR (Pivot)",
+        "type": "MRSGeneric",
+        "config": {
+            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/PMTCT_STAT_Denominator_pivot.sql"
+        }
+    },
+    "pmtct_stat_list": {
+        "name": "MCH-008 | PMTCT STAT (List)",
+        "type": "MRSGeneric",
+        "config": {
+            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/PMTCT_STAT_list.sql"
+        }
+    },
+    "pmtct_stat_pivot": {
+        "name": "MCH-009 | PMTCT STAT (Pivot)",
+        "type": "MRSGeneric",
+        "config": {
+            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/PMTCT_STAT_pivot.sql"
+        }
+    },
+    "pmtct_eid_list": {
+        "name": " MCH-010 | PMTCT EID (List)",
+        "type": "MRSGeneric",
+        "config": {
+            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/PMTCT_EID_list.sql"
+        }
+    },
+    "pmtct_eid_pivot": {
+        "name": "MCH-011 | PMTCT EID (PIVOT)",
+        "type": "MRSGeneric",
+        "config": {
+            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/PMTCT_EID_pivot.sql"
+        }
+    },
+    "pmtct_hei_pos_list": {
+        "name": "MCH-012 | PMTCT HEI POS (List)",
+        "type": "MRSGeneric",
+        "config": {
+            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/PMTCT_HEI_POS_list.sql"
+        }
+    },
+    "pmtct_hei_pos_pivot": {
+        "name": "MCH-013 | PMTCT HEI POS (Pivot)",
+        "type": "MRSGeneric",
+        "config": {
+            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/PMTCT_HEI_POS_pivot.sql"
+        }
+    },
     "arv_list": {
         "name": "PHARM-001 | Pharmacy ARV Regimen",
         "type": "ERPGeneric",
@@ -1017,91 +1025,84 @@
         }
     },
     "detection_TB": {
-        "name": "TB-002 | TB Case Detection (List)",
+        "name": "TB-002 | TB Case Detection",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/TB_Case_Detection.sql"
         }
     },
-    "TB_Notification": {
-        "name": "TB-003 | TB Notification (List)",
-        "type": "MRSGeneric",
-        "config": {
-            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/TB_Enrolled_list.sql"
-        }
-    },
     "Documented_TB": {
-        "name": "TB-004 | Documented TB/HIV Activities",
+        "name": "TB-003 | Documented TB/HIV Activities",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/Documented_TB.sql"
         }
     },
     "Strategy_TB": {
-        "name": "TB-005 | TB Testing Strategy",
+        "name": "TB-004 | TB Testing Strategy",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/testing_strategy.sql"
         }
     },
     "Contact_TB": {
-        "name": "TB-006 | TB Contact Tracing and Screening",
+        "name": "TB-005 | TB Contact Tracing and Screening",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/TB_contact.sql"
         }
     },
     "TB_notification1": {
-        "name": "TB-007 | All TB Patients on Treatment",
+        "name": "TB-006 | All TB Patients on Treatment",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/tb_notification_block1.sql"
         }
     },
     "TB_notification2": {
-        "name": "TB-008 | New and Relapse Enrolled on TB",
+        "name": "TB-007 | New and Relapse Enrolled on TB",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/tb_notification_block2.sql"
         }
     },
     "tb_stat_list": {
-        "name": "TB-009 | TB Status (List)",
+        "name": "TB-008 | TB Status (List)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/TB_STAT_list.sql"
         }
     },
     "tb_stat_pivot": {
-        "name": "TB-010 | TB Status (Pivot)",
+        "name": "TB-009 | TB Status (Pivot)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/TB_STAT_pivot.sql"
         }
     },
     "tb_enrolled": {
-        "name": "TB-011 | New and Relapse Enrolled on TB (List)",
+        "name": "TB-010 | New and Relapse Enrolled on TB (List)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/TB_Enrolled_list.sql"
         }
     },
     "tb_art_list": {
-        "name": "TB-012 | DSD TB_ART (List)",
+        "name": "TB-011 | DSD TB_ART (List)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/TB_Enrolled_list.sql"
         }
     },
     "tb_art_pivot": {
-        "name": "TB-013 | DSD TB_ART (PIVOT)",
+        "name": "TB-012 | DSD TB_ART (PIVOT)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/TB_Enrolled_list.sql"
         }
     },
     "TB Screening Among HIV Clients": {
-        "name": "TB-014 | TB Screening Among HIV Clients",
+        "name": "TB-013 | TB Screening Among HIV Clients",
         "type": "concatenated",
         "config": {
             "reports": [
@@ -1116,56 +1117,56 @@
         }
     },
     "tpt_list": {
-       "name": "TB-015 | TB Prevention Therapy (List) ",
+       "name": "TB-014 | TB Prevention Therapy (List) ",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/tpt_list.sql"                   
          }
     },
     "tpt_pivot": {
-        "name": "TB-016 | TB Prevention Therapy (Pivot) ",
+        "name": "TB-015 | TB Prevention Therapy (Pivot) ",
          "type": "MRSGeneric",
          "config": {
              "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/tpt_pivot.sql"                   
           }
      },
     "DHIS_TB_SCREENING": {
-        "name": "TB-017 | TB SCREENING",
+        "name": "TB-016 | TB SCREENING",
         "type": "MRSGeneric",
         "config": {
-            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/TB_Screening.sql"
+            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/SECTION3.sql"
         }
     },
     "TB_Clients_Registered_Vs_Clients_Intakes_List": {
-        "name": "TB-018 | TB Intakes (List)",
+        "name": "TB-017 | TB Intakes (List)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/TB_Patients_List.sql"
         }
     },
     "TB_Clients_Registered_Vs_Clients_Intakes_Pivot": {
-        "name": "TB-019 | TB Intakes (Pivot)",
+        "name": "TB-018 | TB Intakes (Pivot)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/TB_clients_registered_vs_client_intakes_joinversion_pivot.sql"
         }
     },
     "TB_Indicators": {
-        "name": "TB-020 | TB Indicators (List)",
+        "name": "TB-019 | TB Indicators (List)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/TB_Indicators.sql"
         }
     },
     "Registered_TB_Visits_with_TB_Consultation_List": {
-        "name": "TB-021 | Registered TB Visits with TB Consultation (List) ",
+        "name": "TB-020 | Registered TB Visits with TB Consultation (List) ",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/tb_clients_registered_vs_tb_clients_consultation_process_list.sql"
         }
     },
     "Registered_TB_Visits_with_TB_Consultation_pivot": {
-        "name": "TB-022 | Registered TB Visits with TB Consultation (Pivot)",
+        "name": "TB-021 | Registered TB Visits with TB Consultation (Pivot)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/TB_clients_registered_vs_TB_clients_consultation_process_pivot.sql/"
@@ -1179,11 +1180,11 @@
         }
     },
     "TB_Case_Detection_list": {
-        "name": "TB-023 | TB Case Detection (list)",
+        "name": "TB-024 | TB Case Detection (list)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/TB_Case_Detection.sql/"
         }
-    }
+    }    
 }
 
