@@ -30,8 +30,8 @@ FROM
 									(				
 										select distinct person_id from obs o
 										where concept_id = 2227 and value_coded = 2146
-										AND MONTH(o.obs_datetime) = MONTH(CAST('#endDate#' AS DATE)) 
-							            AND YEAR(o.obs_datetime) = YEAR(CAST('#endDate#' AS DATE))
+										AND CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+										AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 										
 										) 								
 									AND o.voided = 0
@@ -67,8 +67,8 @@ FROM
 										select distinct os.person_id
 										from obs os
 										where os.concept_id = 4821 
-										AND MONTH(os.value_datetime) = MONTH(CAST('#endDate#' AS DATE)) 
-							      		AND YEAR(os.value_datetime) = YEAR(CAST('#endDate#' AS DATE))
+										AND CAST(os.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+										AND CAST(os.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 														
 									)				
 									AND o.voided = 0
