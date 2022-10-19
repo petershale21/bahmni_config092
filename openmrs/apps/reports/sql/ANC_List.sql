@@ -18,7 +18,7 @@ FROM
 select distinct patient.patient_id AS Id,
 						patient_identifier.identifier AS patientIdentifier,
 						concat(person_name.given_name, ' ', person_name.family_name) AS patientName,
-						floor(datediff(CAST('2022-10-30' AS DATE), person.birthdate)/365) AS Age,
+						floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age,
 						(select name from concept_name cn where cn.concept_id = 4659 and concept_name_type='FULLY_SPECIFIED') AS ANC_visit,
                         '1st_trimester' as 'Trimester'
 from obs o
@@ -26,15 +26,15 @@ from obs o
      INNER JOIN patient ON o.person_id = patient.patient_id 
 	    AND o.concept_id = 4658 and o.value_coded = 4659
 	    AND patient.voided = 0 AND o.voided = 0
-	    AND CAST(o.obs_datetime AS DATE) >= CAST('2022-10-01' AS DATE)
-		AND CAST(o.obs_datetime AS DATE) <= CAST('2022-10-30' AS DATE)
+	    AND CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+		AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 
     -- 1st trimester
     AND o.person_Id in (select id
 								FROM
 								( 
 									select distinct o.person_id AS Id,
-									floor(datediff(CAST('2022-10-30' AS DATE), person.birthdate)/365) AS Age
+									floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age
 
 									from obs o
 									INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
@@ -45,8 +45,8 @@ from obs o
 	INNER JOIN person_name ON person.person_id = person_name.person_id AND person_name.preferred = 1
     INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1
     AND o.person_id in (select o.person_id from obs o where concept_id = 2423 and value_numeric < 13)
-	WHERE CAST(o.obs_datetime AS DATE) >= CAST('2022-10-01' AS DATE)
-	AND CAST(o.obs_datetime AS DATE) <= CAST('2022-10-30' AS DATE) 
+	WHERE CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+	AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE) 
 )AS first_anc_1st_trimester
 
 
@@ -59,7 +59,7 @@ FROM
 select distinct patient.patient_id AS Id,
 						patient_identifier.identifier AS patientIdentifier,
 						concat(person_name.given_name, ' ', person_name.family_name) AS patientName,
-						floor(datediff(CAST('2022-10-30' AS DATE), person.birthdate)/365) AS Age,
+						floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age,
 						(select name from concept_name cn where cn.concept_id = 4660 and concept_name_type='FULLY_SPECIFIED') AS ANC_visit,
                         '1st_trimester' as 'Trimester'
 from obs o
@@ -67,15 +67,15 @@ from obs o
      INNER JOIN patient ON o.person_id = patient.patient_id 
 	    AND o.concept_id = 4658 and o.value_coded = 4660
 	    AND patient.voided = 0 AND o.voided = 0
-	    AND CAST(o.obs_datetime AS DATE) >= CAST('2022-10-01' AS DATE)
-		AND CAST(o.obs_datetime AS DATE) <= CAST('2022-10-30' AS DATE)
+	    AND CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+		AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 
     -- 1st trimester
     AND o.person_Id in (select id
 								FROM
 								( 
 									select distinct o.person_id AS Id,
-									floor(datediff(CAST('2022-10-30' AS DATE), person.birthdate)/365) AS Age
+									floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age
 
 									from obs o
 									INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
@@ -86,8 +86,8 @@ from obs o
 	INNER JOIN person_name ON person.person_id = person_name.person_id AND person_name.preferred = 1
     INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1
     AND o.person_id in (select o.person_id from obs o where concept_id = 2423 and value_numeric < 13)
-	WHERE CAST(o.obs_datetime AS DATE) >= CAST('2022-10-01' AS DATE)
-	AND CAST(o.obs_datetime AS DATE) <= CAST('2022-10-30' AS DATE)
+	WHERE CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+	AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 )AS subsequent_1st_trimester
 
 
@@ -99,7 +99,7 @@ FROM
 select distinct patient.patient_id AS Id,
 						patient_identifier.identifier AS patientIdentifier,
 						concat(person_name.given_name, ' ', person_name.family_name) AS patientName,
-						floor(datediff(CAST('2022-10-30' AS DATE), person.birthdate)/365) AS Age,
+						floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age,
 						(select name from concept_name cn where cn.concept_id = 4659 and concept_name_type='FULLY_SPECIFIED') AS ANC_visit,
                         '2nd_trimester' as 'Trimester'
 from obs o
@@ -107,15 +107,15 @@ from obs o
      INNER JOIN patient ON o.person_id = patient.patient_id 
 	    AND o.concept_id = 4658 and o.value_coded = 4659
 	    AND patient.voided = 0 AND o.voided = 0
-	    AND CAST(o.obs_datetime AS DATE) >= CAST('2022-10-01' AS DATE)
-		AND CAST(o.obs_datetime AS DATE) <= CAST('2022-10-30' AS DATE)
+	    AND CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+		AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 
     -- 2nd trimester
     AND o.person_Id in (select id
 								FROM
 								( 
 									select distinct o.person_id AS Id,
-									floor(datediff(CAST('2022-10-30' AS DATE), person.birthdate)/365) AS Age
+									floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age
 
 									from obs o
 									INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
@@ -126,8 +126,8 @@ from obs o
 	INNER JOIN person_name ON person.person_id = person_name.person_id AND person_name.preferred = 1
     INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1
     AND o.person_id in (select o.person_id from obs o where concept_id = 2423 and value_numeric >= 13 and value_numeric < 25)
-	WHERE CAST(o.obs_datetime AS DATE) >= CAST('2022-10-01' AS DATE)
-	AND CAST(o.obs_datetime AS DATE) <= CAST('2022-10-30' AS DATE)
+	WHERE CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+	AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 )AS first_2nd_trimester
 
 
@@ -141,7 +141,7 @@ FROM
 select distinct patient.patient_id AS Id,
 						patient_identifier.identifier AS patientIdentifier,
 						concat(person_name.given_name, ' ', person_name.family_name) AS patientName,
-						floor(datediff(CAST('2022-10-30' AS DATE), person.birthdate)/365) AS Age,
+						floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age,
 						(select name from concept_name cn where cn.concept_id = 4660 and concept_name_type='FULLY_SPECIFIED') AS ANC_visit,
                         '2nd_trimester' as 'Trimester'
 from obs o
@@ -149,15 +149,15 @@ from obs o
      INNER JOIN patient ON o.person_id = patient.patient_id 
 	    AND o.concept_id = 4658 and o.value_coded = 4660
 	    AND patient.voided = 0 AND o.voided = 0
-	    AND CAST(o.obs_datetime AS DATE) >= CAST('2022-10-01' AS DATE)
-		AND CAST(o.obs_datetime AS DATE) <= CAST('2022-10-30' AS DATE)
+	    AND CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+		AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 
     -- 1st trimester
     AND o.person_Id in (select id
 								FROM
 								( 
 									select distinct o.person_id AS Id,
-									floor(datediff(CAST('2022-10-30' AS DATE), person.birthdate)/365) AS Age
+									floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age
 
 									from obs o
 									INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
@@ -168,8 +168,8 @@ from obs o
 	INNER JOIN person_name ON person.person_id = person_name.person_id AND person_name.preferred = 1
     INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1
     AND o.person_id in (select o.person_id from obs o where concept_id = 2423 and value_numeric >= 13 and value_numeric < 25)
-	WHERE CAST(o.obs_datetime AS DATE) >= CAST('2022-10-01' AS DATE)
-	AND CAST(o.obs_datetime AS DATE) <= CAST('2022-10-30' AS DATE)
+	WHERE CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+	AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 ) AS subsquent_2nd_trimester
 
     UNION
@@ -181,7 +181,7 @@ FROM
 select distinct patient.patient_id AS Id,
 						patient_identifier.identifier AS patientIdentifier,
 						concat(person_name.given_name, ' ', person_name.family_name) AS patientName,
-						floor(datediff(CAST('2022-10-30' AS DATE), person.birthdate)/365) AS Age,
+						floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age,
 						(select name from concept_name cn where cn.concept_id = 4659 and concept_name_type='FULLY_SPECIFIED') AS ANC_visit,
                         '3rd_trimester' as 'Trimester'
 from obs o
@@ -189,15 +189,15 @@ from obs o
      INNER JOIN patient ON o.person_id = patient.patient_id 
 	    AND o.concept_id = 4658 and o.value_coded = 4659
 	    AND patient.voided = 0 AND o.voided = 0
-	    AND CAST(o.obs_datetime AS DATE) >= CAST('2022-10-01' AS DATE)
-		AND CAST(o.obs_datetime AS DATE) <= CAST('2022-10-30' AS DATE)
+	    AND CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+		AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 
     -- 3rd trimester
     AND o.person_Id in (select id
 								FROM
 								( 
 									select distinct o.person_id AS Id,
-									floor(datediff(CAST('2022-10-30' AS DATE), person.birthdate)/365) AS Age
+									floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age
 
 									from obs o
 									INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
@@ -208,8 +208,8 @@ from obs o
 	INNER JOIN person_name ON person.person_id = person_name.person_id AND person_name.preferred = 1
     INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1
     AND o.person_id in (select o.person_id from obs o where concept_id = 2423 and value_numeric > 25)
-	WHERE CAST(o.obs_datetime AS DATE) >= CAST('2022-10-01' AS DATE)
-	AND CAST(o.obs_datetime AS DATE) <= CAST('2022-10-30' AS DATE)
+	WHERE CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+	AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 )AS first_3rd_trimester
 
 
@@ -224,7 +224,7 @@ FROM
 select distinct patient.patient_id AS Id,
 						patient_identifier.identifier AS patientIdentifier,
 						concat(person_name.given_name, ' ', person_name.family_name) AS patientName,
-						floor(datediff(CAST('2022-10-30' AS DATE), person.birthdate)/365) AS Age,
+						floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age,
 						(select name from concept_name cn where cn.concept_id = 4660 and concept_name_type='FULLY_SPECIFIED') AS ANC_visit,
                         '3rd_trimester' as 'Trimester'
 from obs o
@@ -232,15 +232,15 @@ from obs o
      INNER JOIN patient ON o.person_id = patient.patient_id 
 	    AND o.concept_id = 4658 and o.value_coded = 4660
 	    AND patient.voided = 0 AND o.voided = 0
-	    AND CAST(o.obs_datetime AS DATE) >= CAST('2022-10-01' AS DATE)
-		AND CAST(o.obs_datetime AS DATE) <= CAST('2022-10-30' AS DATE)
+	    AND CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+		AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 
     -- 3rd trimester
     AND o.person_Id in (select id
 								FROM
 								( 
 									select distinct o.person_id AS Id,
-									floor(datediff(CAST('2022-10-30' AS DATE), person.birthdate)/365) AS Age
+									floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age
 
 									from obs o
 									INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
@@ -251,8 +251,8 @@ from obs o
 	INNER JOIN person_name ON person.person_id = person_name.person_id AND person_name.preferred = 1
     INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1
     AND o.person_id in (select o.person_id from obs o where concept_id = 2423 and value_numeric > 25)
-	WHERE CAST(o.obs_datetime AS DATE) >= CAST('2022-10-01' AS DATE)
-	AND CAST(o.obs_datetime AS DATE) <= CAST('2022-10-30' AS DATE) 
+	WHERE CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+	AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE) 
 
 )AS subsequent_3rd_trimester
 
@@ -265,7 +265,7 @@ FROM
 select distinct patient.patient_id AS Id,
 						patient_identifier.identifier AS patientIdentifier,
 						concat(person_name.given_name, ' ', person_name.family_name) AS patientName,
-						floor(datediff(CAST('2022-10-30' AS DATE), person.birthdate)/365) AS Age,
+						floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age,
 						(select name from concept_name cn where cn.concept_id = 4659 and concept_name_type='FULLY_SPECIFIED') AS ANC_visit,
                         'NULL' as 'Trimester'
 from obs o
@@ -273,15 +273,15 @@ from obs o
      INNER JOIN patient ON o.person_id = patient.patient_id 
 	    AND o.concept_id = 4658 and o.value_coded = 4659
 	    AND patient.voided = 0 AND o.voided = 0
-	    AND CAST(o.obs_datetime AS DATE) >= CAST('2022-10-01' AS DATE)
-		AND CAST(o.obs_datetime AS DATE) <= CAST('2022-10-30' AS DATE)
+	    AND CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+		AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 
     -- no trimester
     AND o.person_Id in (select id
 								FROM
 								( 
 									select distinct o.person_id AS Id,
-									floor(datediff(CAST('2022-10-30' AS DATE), person.birthdate)/365) AS Age
+									floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age
 
 									from obs o
 									INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
@@ -292,8 +292,8 @@ from obs o
 	INNER JOIN person_name ON person.person_id = person_name.person_id AND person_name.preferred = 1
     INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1
     AND o.person_id not in (select o.person_id from obs o where concept_id = 2423)
-	WHERE CAST(o.obs_datetime AS DATE) >= CAST('2022-10-01' AS DATE)
-	AND CAST(o.obs_datetime AS DATE) <= CAST('2022-10-30' AS DATE)
+	WHERE CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+	AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 )AS first_no_trimester
 
 
@@ -307,7 +307,7 @@ FROM
 select distinct patient.patient_id AS Id,
 						patient_identifier.identifier AS patientIdentifier,
 						concat(person_name.given_name, ' ', person_name.family_name) AS patientName,
-						floor(datediff(CAST('2022-10-30' AS DATE), person.birthdate)/365) AS Age,
+						floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age,
 						(select name from concept_name cn where cn.concept_id = 4660 and concept_name_type='FULLY_SPECIFIED') AS ANC_visit,
                         'NULL' as 'Trimester'
 from obs o
@@ -315,15 +315,15 @@ from obs o
      INNER JOIN patient ON o.person_id = patient.patient_id 
 	    AND o.concept_id = 4658 and o.value_coded = 4660
 	    AND patient.voided = 0 AND o.voided = 0
-	    AND CAST(o.obs_datetime AS DATE) >= CAST('2022-10-01' AS DATE)
-		AND CAST(o.obs_datetime AS DATE) <= CAST('2022-10-30' AS DATE)
+	    AND CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+		AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 
     -- no trimester
     AND o.person_Id in (select id
 								FROM
 								( 
 									select distinct o.person_id AS Id,
-									floor(datediff(CAST('2022-10-30' AS DATE), person.birthdate)/365) AS Age
+									floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age
 
 									from obs o
 									INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
@@ -334,8 +334,8 @@ from obs o
 	INNER JOIN person_name ON person.person_id = person_name.person_id AND person_name.preferred = 1
     INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1
     AND o.person_id not in (select o.person_id from obs o where concept_id = 2423)
-	WHERE CAST(o.obs_datetime AS DATE) >= CAST('2022-10-01' AS DATE)
-	AND CAST(o.obs_datetime AS DATE) <= CAST('2022-10-30' AS DATE)
+	WHERE CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+	AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 )AS subsquent_no_trimester
 ) AS ANC
 ON o.person_id = ID
