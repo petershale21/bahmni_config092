@@ -4,7 +4,9 @@ select distinct patientIdentifier,
 				ANC_visit,
 				Trimester,
 				Estimated_Date_Delivery,
-				High_Risk_Pregnancy
+				High_Risk_Pregnancy,
+				Syphilis_Screening_Results,
+				Syphilis_Treatment_Completed
 from obs o
 inner join
 (
@@ -346,6 +348,7 @@ left outer join
 	)intake_date
 	on ANC.Id = intake_date.person_id
 
+-- High Risk Pregnancy
 left outer join
 	(
 	select person_id, value_coded as Risk_Code
@@ -364,3 +367,43 @@ left outer join
 	on concept_name.concept_id = High_Risk_Preg.Risk_Code 
 
 on High_Risk_Preg.person_id = ANC.Id
+
+-- Syphilis_Screening_Results
+left outer join
+	(
+
+		select distinct a.person_id, Syphilis_Results.value_coded,
+				case 
+				when Syphilis_Results.value_coded = 4306 then 'Non Reactive'
+				when Syphilis_Results.value_coded = 4307 then 'Reactive'
+				when Syphilis_Results.value_coded = 4308 then 'Not done'
+				else 'NewResult' end as Syphilis_Screening_Results
+	from obs a
+	inner join 
+		( SELECT person_id, value_coded from obs o
+			where concept_id = 4305 and voided = 0
+		) Syphilis_Results
+
+		ON a.person_id = Syphilis_Results.person_id
+	
+
+	) Syphilis_Screening_Res
+
+on Syphilis_Screening_Res.person_id = ANC.Id
+
+-- Syphilis Treatment Completed
+left outer join
+	(
+	select person_id, value_coded as Treatment_Code
+	from obs where concept_id = 1732 and voided = 0
+	)Syphilis_Treatment_Comp
+
+	inner join
+	(
+		select concept_id, name AS Syphilis_Treatment_Completed
+			from concept_name 
+				where name in ('Yes','No','Not Applicable') 
+	) treatment_concept
+	on treatment_concept.concept_id = Syphilis_Treatment_Comp.Treatment_Code 
+
+on Syphilis_Treatment_Comp.person_id = ANC.Id
