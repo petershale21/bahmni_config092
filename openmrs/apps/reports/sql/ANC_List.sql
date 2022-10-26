@@ -4,7 +4,17 @@ select distinct patientIdentifier,
 				ANC_visit,
 				Trimester,
 				Estimated_Date_Delivery,
-				High_Risk_Pregnancy
+				Gestational_Period,
+				High_Risk_Pregnancy,
+				Syphilis_Screening_Results,
+				Syphilis_Treatment_Completed,
+				Haemoglobin,
+				HIV_Status_Known_Before_Visit,
+				Final_HIV_Status,
+				Subsequent_HIV_Test_Results,
+				MUAC,
+				Tuberculosis
+				
 from obs o
 inner join
 (
@@ -338,6 +348,14 @@ from obs o
 ) AS ANC
 ON o.person_id = ID
 
+-- Gestational period
+left outer join
+	(
+	select person_id, value_numeric as Gestational_Period
+	from obs where concept_id = 2423 and voided = 0
+	)current_gestation
+	on ANC.Id = current_gestation.person_id
+
 -- EDD
 left outer join
 	(
@@ -346,6 +364,7 @@ left outer join
 	)intake_date
 	on ANC.Id = intake_date.person_id
 
+-- High Risk Pregnancy
 left outer join
 	(
 	select person_id, value_coded as Risk_Code
@@ -364,3 +383,144 @@ left outer join
 	on concept_name.concept_id = High_Risk_Preg.Risk_Code 
 
 on High_Risk_Preg.person_id = ANC.Id
+
+-- Syphilis_Screening_Results
+left outer join
+	(
+
+		select distinct a.person_id, Syphilis_Results.value_coded,
+				case 
+				when Syphilis_Results.value_coded = 4306 then 'Reactive'
+				when Syphilis_Results.value_coded = 4307 then 'Non Reactive'
+				when Syphilis_Results.value_coded = 4308 then 'Not done'
+				else 'NewResult' end as Syphilis_Screening_Results
+	from obs a
+	inner join 
+		( SELECT person_id, value_coded from obs o
+			where concept_id = 4305 and voided = 0
+			and o.obs_datetime >= CAST('#startDate#' AS DATE)
+    		and o.obs_datetime <= CAST('#endDate#'AS DATE)
+		) Syphilis_Results
+
+		ON a.person_id = Syphilis_Results.person_id
+	
+
+	) Syphilis_Screening_Res
+
+on Syphilis_Screening_Res.person_id = ANC.Id
+
+-- Syphilis Treatment Completed
+left outer join
+	(
+	select person_id, value_coded as Treatment_Code
+	from obs os
+	where concept_id = 1732 and voided = 0
+	and os.obs_datetime >= CAST('#startDate#' AS DATE)
+    and os.obs_datetime <= CAST('#endDate#'AS DATE)
+	)Syphilis_Treatment_Comp
+
+	inner join
+	(
+		select concept_id, name AS Syphilis_Treatment_Completed
+			from concept_name 
+				where name in ('Yes','No','Not Applicable') 
+	) treatment_concept
+	on treatment_concept.concept_id = Syphilis_Treatment_Comp.Treatment_Code 
+
+on Syphilis_Treatment_Comp.person_id = ANC.Id
+
+-- ANEMIA HAEMOGLOBIN
+left outer join
+	(
+	select person_id,value_numeric as Haemoglobin
+	from obs o
+	where concept_id = 3204 and voided = 0
+	)Haemoglobin_Anemia
+	on ANC.Id = Haemoglobin_Anemia.person_id
+ 
+-- HIV Status Known Before Visit	
+left outer join
+	(
+	select person_id, value_coded as Status_Code
+	from obs os
+	where concept_id = 4427 and voided = 0
+	and os.obs_datetime >= CAST('#startDate#' AS DATE)
+    and os.obs_datetime <= CAST('#endDate#'AS DATE)
+	)HIV_Status
+
+	inner join
+	(
+		select concept_id, name AS HIV_Status_Known_Before_Visit
+			from concept_name 
+				where name in ('Positive', 'Negative', 'Unknown') 
+	) hiv_concept_name
+	on hiv_concept_name.concept_id = HIV_Status.Status_Code 
+
+on HIV_Status.person_id = ANC.Id
+
+-- Final HIV Status	
+left outer join
+	(
+	select person_id, value_coded as Final_Status_Code
+	from obs os
+	where concept_id = 2165 and voided = 0
+	)F_HIV_Status
+
+	inner join
+	(
+		select concept_id, name AS Final_HIV_Status
+			from concept_name 
+				where name in ('Positive', 'Negative') 
+	) final_hiv_concept_name
+	on final_hiv_concept_name.concept_id = F_HIV_Status.Final_Status_Code 
+
+on F_HIV_Status.person_id = ANC.Id
+
+-- Subsequent HIV Test Results
+
+left outer join
+	(
+	select person_id, value_coded as Subsequent_Final_Status
+	from obs os
+	where concept_id = 4325 and voided = 0
+	)Subsequent_HIV_Status
+
+	inner join
+	(
+		select concept_id, name AS Subsequent_HIV_Test_Results
+			from concept_name 
+				where name in ('Positive', 'Negative', 'Declined', 'Not Applicable') 
+	) subsequent_hiv_concept
+	on subsequent_hiv_concept.concept_id = Subsequent_HIV_Status.Subsequent_Final_Status 
+
+on Subsequent_HIV_Status.person_id = ANC.Id
+
+-- MUAC
+left outer join
+	(
+	select person_id, value_numeric as MUAC
+	from obs where concept_id = 2086 and voided = 0
+	)Muac
+	on ANC.Id = Muac.person_id
+
+-- TB Status
+
+left outer join
+	(
+	select person_id, value_coded as TB_Status
+	from obs os
+	where concept_id = 3710 and voided = 0
+	)TB_Status
+
+	inner join
+	(
+		select concept_id, name AS Tuberculosis
+			from concept_name 
+				where name in ('No signs', 'Suspected / Probable', 'On TB treatment') 
+	) tb_concept
+	on tb_concept.concept_id = TB_Status.TB_Status 
+
+on TB_Status.person_id = ANC.Id
+
+
+
