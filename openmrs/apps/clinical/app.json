@@ -448,6 +448,10 @@
 			"HTC, Mode of Entry Point": {
 				"required": true
 			},
+			"ANC, Last Normal Menstrual Period": {
+				"required": true
+			},
+			
 			"HTC, Referred Facility": {
 				"required": true,
 				"dropdown": true

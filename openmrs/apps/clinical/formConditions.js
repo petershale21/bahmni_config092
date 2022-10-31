@@ -2326,11 +2326,19 @@ Bahmni.ConceptSet.FormConditions.rules = {
         }
         return conditions;
 },
+ 'ANC, Last Normal Menstrual Period': function(formName, formFieldValues) {
+        var conditions = { assignedValues: [], disable: [] };
+        var conditionConcept;
+        if (formName == "ANC, Obstetric History"){ 
+            conditions.assignedValues.push({
+                field: "ANC, Last Normal Menstrual Period",
+                fieldValue: {
+                    isAutoFill: true,
+                    scopedEncounter: "latestvisit",
+                }
+            });
 
-
-
-
-     
-
-
+        }
+        return conditions;
+    }
 };
