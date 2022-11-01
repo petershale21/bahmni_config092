@@ -51,7 +51,7 @@ select distinct patient.patient_id AS Id,
                                  INNER JOIN patient ON o.person_id = patient.patient_id
                                  AND (o.concept_id = 3843 AND o.value_coded = 3841 OR o.value_coded = 3842)
 								 AND MONTH(o.obs_datetime) = MONTH(CAST('#endDate#' AS DATE)) 
-								 AND YEAR(o.obs_datetime) = YEAR(CAST('#endDate#' AS DATE))								 
+								 AND YEAR(o.obs_datetime) = YEAR(CAST('#endDate#' AS DATE))
                                  AND patient.voided = 0 AND o.voided = 0
                                  INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
                                  INNER JOIN person_name ON person.person_id = person_name.person_id AND person_name.preferred = 1
@@ -107,8 +107,7 @@ AND Clients_Seen.Id not in (
 													having last_ap < 0
 										) secondquery
 										on firstquery.person_id = secondquery.person_id
-							)
-							 and o.person_id in (
+							) and o.person_id in (
 									-- TOUTS
 									select distinct(person_id)
 									from
@@ -158,35 +157,6 @@ AND Clients_Seen.Id not in
 						)
 					)
 
-AND Clients_Seen.Id not in 
-					(
-						select distinct(o.person_id)
-						from obs o
-						where o.person_id in (
-								-- FOLLOW UPS
-											select firstquery.person_id
-											from
-											(
-											select oss.person_id, SUBSTRING(MAX(CONCAT(oss.value_datetime, oss.obs_id)), 20) AS observation_id, CAST(max(oss.value_datetime) AS DATE) as latest_followup_obs
-											from obs oss
-														where oss.voided=0 
-														and oss.concept_id=3752 
-														and CAST(oss.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
-														and CAST(oss.obs_datetime AS DATE) >= DATE_ADD(CAST('#endDate#' AS DATE), INTERVAL -13 MONTH)
-														group by oss.person_id) firstquery
-											inner join (
-														select os.person_id,datediff(CAST(max(os.value_datetime) AS DATE), CAST('#endDate#' AS DATE)) as last_ap
-														from obs os
-														where concept_id = 3752 and os.voided = 0
-														and CAST(os.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
-														group by os.person_id
-														having last_ap < 0
-											) secondquery
-											on firstquery.person_id = secondquery.person_id
-						)
-						
-					)
-
 ORDER BY Clients_Seen.patientName)
 
 UNION
@@ -228,33 +198,14 @@ FROM
 								and DATEDIFF(CAST('#endDate#' AS DATE),latest_follow_up) <= 28
 				
 				
-		and active_clients.person_id in (
-							select distinct(o.person_id)
-							from obs o
-							where o.person_id in (
-								-- FOLLOW UPS
-											select firstquery.person_id
-											from
-											(
-											select oss.person_id, SUBSTRING(MAX(CONCAT(oss.value_datetime, oss.obs_id)), 20) AS observation_id, CAST(max(oss.value_datetime) AS DATE) as latest_followup_obs
-											from obs oss
-														where oss.voided=0 
-														and oss.concept_id=3752 
-														and CAST(oss.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
-														and CAST(oss.obs_datetime AS DATE) >= DATE_ADD(CAST('#endDate#' AS DATE), INTERVAL -13 MONTH)
-														group by oss.person_id) firstquery
-											inner join (
-														select os.person_id,datediff(CAST(max(os.value_datetime) AS DATE), CAST('#endDate#' AS DATE)) as last_ap
-														from obs os
-														where concept_id = 3752 and os.voided = 0
-														and CAST(os.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
-														group by os.person_id
-														having last_ap < 0
-											) secondquery
-											on firstquery.person_id = secondquery.person_id
-						)
+		and active_clients.person_id not in (
+							select distinct os.person_id
+							from obs os
+							where (os.concept_id = 3843 AND os.value_coded = 3841 OR os.value_coded = 3842)
+							AND MONTH(os.obs_datetime) = MONTH(CAST('#endDate#' AS DATE)) 
+							AND YEAR(os.obs_datetime) = YEAR(CAST('#endDate#' AS DATE))
+							and os.voided = 0
 							)
-
 						
 		and active_clients.person_id not in (
 							select distinct os.person_id
