@@ -222,7 +222,7 @@ FROM
 									select distinct(person_id)
 									from
 									(
-										select os.person_id, CAST(max(os.obs_datetime) AS DATE) as latest_transferout
+										select os.person_id, CAST(max(os.value_datetime) AS DATE) as latest_transferout
 										from obs os
 										where os.concept_id=2398 and os.voided = 0
 										group by os.person_id

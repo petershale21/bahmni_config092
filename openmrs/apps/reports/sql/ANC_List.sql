@@ -13,7 +13,10 @@ select distinct patientIdentifier,
 				Final_HIV_Status,
 				Subsequent_HIV_Test_Results,
 				MUAC,
-				Tuberculosis
+				Tuberculosis,
+				Iron,
+				Folate,
+				Blood_Group
 				
 from obs o
 inner join
@@ -521,6 +524,68 @@ left outer join
 	on tb_concept.concept_id = TB_Status.TB_Status 
 
 on TB_Status.person_id = ANC.Id
+
+-- Iron
+left outer join
+	(
+	select person_id, value_coded as Iron_Status
+	from obs os
+	where concept_id = 4299 and voided = 0
+	and os.obs_datetime >= CAST('#startDate#' AS DATE)
+    and os.obs_datetime <= CAST('#endDate#'AS DATE)
+	)Iron_Status
+
+	inner join
+	(
+		select concept_id, name AS Iron
+			from concept_name 
+				where name in ('Prophylaxis', '	On Treatment', 'Not Dispensed') 
+	) iron_concept
+	on iron_concept.concept_id = Iron_Status.Iron_Status 
+
+on Iron_Status.person_id = ANC.Id
+
+-- Folate
+left outer join
+	(
+	select person_id, value_coded as Folate_Status
+	from obs os
+	where concept_id = 4300 and voided = 0
+	and os.obs_datetime >= CAST('#startDate#' AS DATE)
+    and os.obs_datetime <= CAST('#endDate#'AS DATE)
+	)Folate_Status
+
+	inner join
+	(
+		select concept_id, name AS Folate
+			from concept_name 
+				where name in ('Prophylaxis', '	On Treatment', 'Not Dispensed') 
+	) folate_concept
+	on folate_concept.concept_id = Folate_Status.Folate_Status 
+
+on Folate_Status.person_id = ANC.Id
+
+-- Blood Group
+left outer join
+	(
+	select person_id, value_coded as Blood_Group_Status
+	from obs os
+	where concept_id = 1179 and voided = 0
+	and os.obs_datetime >= CAST('#startDate#' AS DATE)
+    and os.obs_datetime <= CAST('#endDate#'AS DATE)
+	)Blood_Group_Status
+
+	inner join
+	(
+		select concept_id, name AS Blood_Group
+			from concept_name 
+				where name in ('Blood Group, A+', 'Blood Group, A-', '	Blood Group, B+', 'Blood Group, B-',
+								 'Blood Group, O+', 'Blood Group, O-', 'Blood Group, AB+', 'Blood Group, AB-') 
+	) blood_group_concept
+	on blood_group_concept.concept_id = Blood_Group_Status.Blood_Group_Status 
+
+on Blood_Group_Status.person_id = ANC.Id
+
 
 
 
