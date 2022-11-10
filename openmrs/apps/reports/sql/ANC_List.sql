@@ -351,27 +351,31 @@ from obs o
 ) AS ANC
 ON o.person_id = ID
 
--- Gestational period
-left outer join
-	(
-	select person_id, value_numeric as Gestational_Period
-	from obs where concept_id = 2423 and voided = 0
-	)current_gestation
-	on ANC.Id = current_gestation.person_id
-
 -- EDD
 left outer join
 	(
 	select person_id,CAST(value_datetime AS DATE) as Estimated_Date_Delivery
 	from obs where concept_id = 4627 and voided = 0
-	)intake_date
-	on ANC.Id = intake_date.person_id
+	)edd
+	on ANC.Id = edd.person_id
+
+-- Gestational period
+left outer join
+	(
+	select person_id, value_numeric as Gestational_Period
+	from obs where concept_id = 2423 and voided = 0
+	and obs_datetime >= CAST('#startDate#' AS DATE)
+    and obs_datetime <= CAST('#endDate#'AS DATE)
+	)current_gestation
+	on ANC.Id = current_gestation.person_id
 
 -- High Risk Pregnancy
 left outer join
 	(
 	select person_id, value_coded as Risk_Code
 	from obs where concept_id = 4352 and voided = 0
+	and obs_datetime >= CAST('#startDate#' AS DATE)
+    and obs_datetime <= CAST('#endDate#'AS DATE)
 	)High_Risk_Preg
 
 	inner join
@@ -404,7 +408,7 @@ left outer join
 			and o.obs_datetime >= CAST('#startDate#' AS DATE)
     		and o.obs_datetime <= CAST('#endDate#'AS DATE)
 		) Syphilis_Results
-
+		
 		ON a.person_id = Syphilis_Results.person_id
 	
 
@@ -412,7 +416,6 @@ left outer join
 
 on Syphilis_Screening_Res.person_id = ANC.Id
 
--- Syphilis Treatment Completed
 left outer join
 	(
 	select person_id, value_coded as Treatment_Code
@@ -432,15 +435,17 @@ left outer join
 
 on Syphilis_Treatment_Comp.person_id = ANC.Id
 
--- ANEMIA HAEMOGLOBIN
+-- ANAEMIA HAEMOGLOBIN
 left outer join
 	(
 	select person_id,value_numeric as Haemoglobin
 	from obs o
 	where concept_id = 3204 and voided = 0
+	and obs_datetime >= CAST('#startDate#' AS DATE)
+    and obs_datetime <= CAST('#endDate#'AS DATE)
 	)Haemoglobin_Anemia
 	on ANC.Id = Haemoglobin_Anemia.person_id
- 
+
 -- HIV Status Known Before Visit	
 left outer join
 	(
@@ -467,6 +472,8 @@ left outer join
 	select person_id, value_coded as Final_Status_Code
 	from obs os
 	where concept_id = 2165 and voided = 0
+	and obs_datetime >= CAST('#startDate#' AS DATE)
+    and obs_datetime <= CAST('#endDate#'AS DATE)
 	)F_HIV_Status
 
 	inner join
@@ -479,13 +486,13 @@ left outer join
 
 on F_HIV_Status.person_id = ANC.Id
 
--- Subsequent HIV Test Results
-
 left outer join
 	(
 	select person_id, value_coded as Subsequent_Final_Status
 	from obs os
 	where concept_id = 4325 and voided = 0
+	and obs_datetime >= CAST('#startDate#' AS DATE)
+    and obs_datetime <= CAST('#endDate#'AS DATE)
 	)Subsequent_HIV_Status
 
 	inner join
@@ -503,16 +510,19 @@ left outer join
 	(
 	select person_id, value_numeric as MUAC
 	from obs where concept_id = 2086 and voided = 0
+	and obs_datetime >= CAST('#startDate#' AS DATE)
+    and obs_datetime <= CAST('#endDate#'AS DATE)
 	)Muac
 	on ANC.Id = Muac.person_id
 
 -- TB Status
-
 left outer join
 	(
 	select person_id, value_coded as TB_Status
 	from obs os
 	where concept_id = 3710 and voided = 0
+	and obs_datetime >= CAST('#startDate#' AS DATE)
+    and obs_datetime <= CAST('#endDate#'AS DATE)
 	)TB_Status
 
 	inner join
@@ -585,7 +595,3 @@ left outer join
 	on blood_group_concept.concept_id = Blood_Group_Status.Blood_Group_Status 
 
 on Blood_Group_Status.person_id = ANC.Id
-
-
-
-
