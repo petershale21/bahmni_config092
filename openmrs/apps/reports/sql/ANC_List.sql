@@ -364,8 +364,8 @@ left outer join
 	(
 	select person_id, value_numeric as Gestational_Period
 	from obs where concept_id = 2423 and voided = 0
-	and obs_datetime >= CAST('#startDate#' AS DATE)
-    and obs_datetime <= CAST('#endDate#'AS DATE)
+	-- and cast obs_datetime as date >= CAST('#startDate#' AS DATE)
+   	-- and cast obs_datetime as date <= CAST('#endDate#' AS DATE)
 	)current_gestation
 	on ANC.Id = current_gestation.person_id
 
