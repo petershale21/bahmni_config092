@@ -1020,7 +1020,7 @@
         "name": "TB-001 | TB Outcomes (List)",
         "type": "MRSGeneric",
         "config": {
-            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/TB_Outcomes.sql"
+            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/TB_Outcomes_list.sql"
         }
     },
     "detection_TB": {
