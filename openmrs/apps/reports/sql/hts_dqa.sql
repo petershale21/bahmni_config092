@@ -1,9 +1,9 @@
-SELECT Patient_Identifier, Patient_Name, Age, Gender, age_group, Testing_Strategies , Testing_History , HIV_Status, Mode_of_Entry, Linkage_to_Care
+SELECT Patient_Identifier, Patient_Name, Age, Gender, age_group,location_name, Testing_Strategies , Testing_History , HIV_Status, Mode_of_Entry, Linkage_to_Care
 FROM
-(SELECT Id, Patient_Identifier, Patient_Name, Age, Gender, age_group, Testing_Strategies , Testing_History , HIV_Status, sort_order
+(SELECT Id, Patient_Identifier, Patient_Name, Age, Gender, age_group,location_name, Testing_Strategies , Testing_History , HIV_Status, sort_order
 FROM (
 
-		(SELECT Id,patientIdentifier AS "Patient_Identifier", patientName AS "Patient_Name", Age, Gender, age_group, 'PITC' AS 'Testing_Strategies'
+		(SELECT Id,patientIdentifier AS "Patient_Identifier", patientName AS "Patient_Name", Age, Gender, age_group,location_name, 'PITC' AS 'Testing_Strategies'
 				, 'Repeat' AS 'Testing_History' , HIV_Status, sort_order
 		FROM
 						(select distinct patient.patient_id AS Id,
@@ -13,6 +13,7 @@ FROM (
 											   (select name from concept_name cn where cn.concept_id = 1738 and concept_name_type='FULLY_SPECIFIED') AS HIV_Status,
 											   person.gender AS Gender,
 											   observed_age_group.name AS age_group,
+											   l.name as location_name,
 											   observed_age_group.sort_order AS sort_order
 
 						from obs o
@@ -46,6 +47,7 @@ FROM (
 								INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
 								INNER JOIN person_name ON person.person_id = person_name.person_id AND person_name.preferred = 1
 								INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1
+								INNER JOIN location l on o.location_id = l.location_id and l.retired=0
 								INNER JOIN reporting_age_group AS observed_age_group ON
 								  CAST('#endDate#' AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
 								  AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
@@ -56,7 +58,7 @@ FROM (
 
 		UNION
 
-		(SELECT Id,patientIdentifier AS "Patient_Identifier", patientName AS "Patient_Name", Age, Gender, age_group, 'PITC' AS 'Testing_Strategies'
+		(SELECT Id,patientIdentifier AS "Patient_Identifier", patientName AS "Patient_Name", Age, Gender, age_group,location_name, 'PITC' AS 'Testing_Strategies'
 				, 'New' AS 'Testing_History' , HIV_Status, sort_order
 		FROM
 						(select distinct patient.patient_id AS Id,
@@ -66,6 +68,7 @@ FROM (
 											   (select name from concept_name cn where cn.concept_id = 1738 and concept_name_type='FULLY_SPECIFIED') AS HIV_Status,
 											   person.gender AS Gender,
 											   observed_age_group.name AS age_group,
+											   l.name as location_name,
 											   observed_age_group.sort_order AS sort_order
 
 						from obs o
@@ -99,6 +102,7 @@ FROM (
 								 INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
 								 INNER JOIN person_name ON person.person_id = person_name.person_id AND person_name.preferred = 1
 								 INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1
+								 INNER JOIN location l on o.location_id = l.location_id and l.retired=0
 								 INNER JOIN reporting_age_group AS observed_age_group ON
 								  CAST('#endDate#' AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
 								  AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
@@ -107,7 +111,7 @@ FROM (
 		ORDER BY HTSClients_HIV_Status.HIV_Status, HTSClients_HIV_Status.Age)
 
 		UNION
-		(SELECT Id, patientIdentifier AS "Patient_Identifier", patientName AS "Patient_Name", Age, Gender, age_group, 'PITC' AS 'Testing_Strategies'
+		(SELECT Id, patientIdentifier AS "Patient_Identifier", patientName AS "Patient_Name", Age, Gender, age_group, location_name,'PITC' AS 'Testing_Strategies'
 				, 'Repeat' AS 'Testing_History' , HIV_Status, sort_order
 		FROM
 						(select distinct patient.patient_id AS Id,
@@ -117,6 +121,7 @@ FROM (
 											   (select name from concept_name cn where cn.concept_id = 1016 and concept_name_type='FULLY_SPECIFIED') AS HIV_Status,
 											   person.gender AS Gender,
 											   observed_age_group.name AS age_group,
+											   l.name as location_name,
 											   observed_age_group.sort_order AS sort_order
 
 						from obs o
@@ -150,6 +155,7 @@ FROM (
 								 INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
 								 INNER JOIN person_name ON person.person_id = person_name.person_id AND person_name.preferred = 1
 								 INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1
+								 INNER JOIN location l on o.location_id = l.location_id and l.retired=0
 								 INNER JOIN reporting_age_group AS observed_age_group ON
 								  CAST('#endDate#' AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
 								  AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
@@ -160,7 +166,7 @@ FROM (
 
 		UNION
 
-		(SELECT Id,patientIdentifier AS "Patient_Identifier", patientName AS "Patient_Name", Age, Gender, age_group, 'PITC' AS 'Testing_Strategies'
+		(SELECT Id,patientIdentifier AS "Patient_Identifier", patientName AS "Patient_Name", Age, Gender, age_group,location_name, 'PITC' AS 'Testing_Strategies'
 				, 'New' AS 'Testing_History' , HIV_Status, sort_order
 		FROM
 						(select distinct patient.patient_id AS Id,
@@ -170,6 +176,7 @@ FROM (
 											   (select name from concept_name cn where cn.concept_id = 1016 and concept_name_type='FULLY_SPECIFIED') AS HIV_Status,
 											   person.gender AS Gender,
 											   observed_age_group.name AS age_group,
+											   l.name as location_name,
 											   observed_age_group.sort_order AS sort_order
 
 						from obs o
@@ -202,6 +209,7 @@ FROM (
 								 INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
 								 INNER JOIN person_name ON person.person_id = person_name.person_id AND person_name.preferred = 1
 								 INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1
+								 INNER JOIN location l on o.location_id = l.location_id and l.retired=0
 								 INNER JOIN reporting_age_group AS observed_age_group ON
 								  CAST('#endDate#' AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
 								  AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
@@ -211,7 +219,7 @@ FROM (
 		UNION
 		
 
-		(SELECT Id,patientIdentifier AS "Patient_Identifier", patientName AS "Patient_Name", Age, Gender, age_group, 'CITC' AS 'Testing_Strategies'
+		(SELECT Id,patientIdentifier AS "Patient_Identifier", patientName AS "Patient_Name", Age, Gender, age_group,location_name, 'CITC' AS 'Testing_Strategies'
 				, 'Repeat' AS 'Testing_History' , HIV_Status, sort_order
 		FROM
 						(select distinct patient.patient_id AS Id,
@@ -221,6 +229,7 @@ FROM (
 											   (select name from concept_name cn where cn.concept_id = 1738 and concept_name_type='FULLY_SPECIFIED') AS HIV_Status,
 											   person.gender AS Gender,
 											   observed_age_group.name AS age_group,
+											   l.name as location_name,
 											   observed_age_group.sort_order AS sort_order
 
 						from obs o
@@ -255,6 +264,7 @@ FROM (
 								 INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
 								 INNER JOIN person_name ON person.person_id = person_name.person_id AND person_name.preferred = 1
 								 INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1
+								 INNER JOIN location l on o.location_id = l.location_id and l.retired=0
 								 INNER JOIN reporting_age_group AS observed_age_group ON
 								  CAST('#endDate#' AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
 								  AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
@@ -265,7 +275,7 @@ FROM (
 
 		UNION
 
-		(SELECT Id,patientIdentifier AS "Patient_Identifier", patientName AS "Patient_Name", Age, Gender, age_group, 'CITC' AS 'Testing_Strategies'
+		(SELECT Id,patientIdentifier AS "Patient_Identifier", patientName AS "Patient_Name", Age, Gender, age_group,location_name, 'CITC' AS 'Testing_Strategies'
 				, 'New' AS 'Testing_History' , HIV_Status, sort_order
 		FROM
 						(select distinct patient.patient_id AS Id,
@@ -275,6 +285,7 @@ FROM (
 											   (select name from concept_name cn where cn.concept_id = 1738 and concept_name_type='FULLY_SPECIFIED') AS HIV_Status,
 											   person.gender AS Gender,
 											   observed_age_group.name AS age_group,
+											   l.name as location_name,
 											   observed_age_group.sort_order AS sort_order
 
 						from obs o
@@ -308,6 +319,7 @@ FROM (
 								 INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
 								 INNER JOIN person_name ON person.person_id = person_name.person_id AND person_name.preferred = 1
 								 INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1
+								 INNER JOIN location l on o.location_id = l.location_id and l.retired=0
 								 INNER JOIN reporting_age_group AS observed_age_group ON
 								  CAST('#endDate#' AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
 								  AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
@@ -316,7 +328,7 @@ FROM (
 		ORDER BY HTSClients_HIV_Status.HIV_Status, HTSClients_HIV_Status.Age)
 
 		UNION
-		(SELECT Id,patientIdentifier AS "Patient_Identifier", patientName AS "Patient_Name", Age, Gender, age_group, 'CITC' AS 'Testing_Strategies'
+		(SELECT Id,patientIdentifier AS "Patient_Identifier", patientName AS "Patient_Name", Age, Gender, age_group,location_name, 'CITC' AS 'Testing_Strategies'
 				, 'Repeat' AS 'Testing_History' , HIV_Status, sort_order
 		FROM
 						(select distinct patient.patient_id AS Id,
@@ -326,6 +338,7 @@ FROM (
 											   (select name from concept_name cn where cn.concept_id = 1016 and concept_name_type='FULLY_SPECIFIED') AS HIV_Status,
 											   person.gender AS Gender,
 											   observed_age_group.name AS age_group,
+											   l.name as location_name,
 											   observed_age_group.sort_order AS sort_order
 
 						from obs o
@@ -360,6 +373,7 @@ FROM (
 								 INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
 								 INNER JOIN person_name ON person.person_id = person_name.person_id AND person_name.preferred = 1
 								 INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1
+								 INNER JOIN location l on o.location_id = l.location_id and l.retired=0
 								 INNER JOIN reporting_age_group AS observed_age_group ON
 								  CAST('#endDate#' AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
 								  AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
@@ -370,7 +384,7 @@ FROM (
 
 		UNION
 
-		(SELECT Id,patientIdentifier AS "Patient_Identifier", patientName AS "Patient_Name", Age, Gender, age_group, 'CITC' AS 'Testing_Strategies'
+		(SELECT Id,patientIdentifier AS "Patient_Identifier", patientName AS "Patient_Name", Age, Gender, age_group,location_name, 'CITC' AS 'Testing_Strategies'
 				, 'New' AS 'Testing_History' , HIV_Status, sort_order
 		FROM
 						(select distinct patient.patient_id AS Id,
@@ -380,6 +394,7 @@ FROM (
 											   (select name from concept_name cn where cn.concept_id = 1016 and concept_name_type='FULLY_SPECIFIED') AS HIV_Status,
 											   person.gender AS Gender,
 											   observed_age_group.name AS age_group,
+											   l.name as location_name,
 											   observed_age_group.sort_order AS sort_order
 
 						from obs o
@@ -413,6 +428,7 @@ FROM (
 								 INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
 								 INNER JOIN person_name ON person.person_id = person_name.person_id AND person_name.preferred = 1
 								 INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1
+								 INNER JOIN location l on o.location_id = l.location_id and l.retired=0
 								 INNER JOIN reporting_age_group AS observed_age_group ON
 								  CAST('#endDate#' AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
 								  AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
@@ -433,11 +449,11 @@ UNION
 
 
 
-Select Id, Patient_Identifier, Patient_Name,Age, Gender, age_group,Testing_Strategies,Testing_History, HIV_Status, sort_order
+Select Id, Patient_Identifier, Patient_Name,Age, Gender, age_group,location_name,Testing_Strategies,Testing_History, HIV_Status, sort_order
 from(
-SELECT Id,Patient_Identifier, Patient_Name, Age, Gender, age_group, Testing_Strategies  ,Testing_History, HIV_Status,sort_order
+SELECT Id,Patient_Identifier, Patient_Name, Age, Gender, age_group,location_name, Testing_Strategies  ,Testing_History, HIV_Status,sort_order
 FROM (
-(SELECT Id,patientIdentifier AS "Patient_Identifier", patientName AS "Patient_Name", Age, Gender, age_group, 'Self-test' AS 'Testing_Strategies'
+(SELECT Id,patientIdentifier AS "Patient_Identifier", patientName AS "Patient_Name", Age, Gender, age_group,location_name, 'Self-test' AS 'Testing_Strategies'
                           ,'N/A' AS 'Testing_History', HIV_Status, sort_order
 		FROM
 						(select distinct patient.patient_id AS Id,
@@ -447,6 +463,7 @@ FROM (
 											   (select name from concept_name cn where cn.concept_id = 1738 and concept_name_type='FULLY_SPECIFIED') AS HIV_Status,
 											   person.gender AS Gender,
 											   observed_age_group.name AS age_group,
+											   l.name as location_name,
 											   observed_age_group.sort_order AS sort_order
 						from obs o
 								-- HTS SELF TEST STRATEGY
@@ -469,6 +486,7 @@ FROM (
 								 INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
 								 INNER JOIN person_name ON person.person_id = person_name.person_id AND person_name.preferred = 1
 								 INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1
+								  INNER JOIN location l on o.location_id = l.location_id and l.retired=0
 								 INNER JOIN reporting_age_group AS observed_age_group ON
 								  CAST('#endDate#' AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
 								  AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
@@ -477,7 +495,7 @@ FROM (
 		ORDER BY HTSClients_HIV_Status.HIV_Status, HTSClients_HIV_Status.Age)
 		
 UNION
-(SELECT Id,patientIdentifier AS "Patient_Identifier", patientName AS "Patient_Name", Age, Gender, age_group, 'Self-test' AS 'Testing_Strategies'
+(SELECT Id,patientIdentifier AS "Patient_Identifier", patientName AS "Patient_Name", Age, Gender, age_group,location_name, 'Self-test' AS 'Testing_Strategies'
 				,'N/A' AS 'Testing_History', HIV_Status, sort_order
 		FROM
 						(select distinct patient.patient_id AS Id,
@@ -487,6 +505,7 @@ UNION
 											   (select name from concept_name cn where cn.concept_id = 1016 and concept_name_type='FULLY_SPECIFIED') AS HIV_Status,
 											   person.gender AS Gender,
 											   observed_age_group.name AS age_group,
+											   l.name as location_name,
 											   observed_age_group.sort_order AS sort_order
 						from obs o
 								-- HTS SELF TEST STRATEGY
@@ -509,6 +528,7 @@ UNION
 								 INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
 								 INNER JOIN person_name ON person.person_id = person_name.person_id AND person_name.preferred = 1
 								 INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1
+								 INNER JOIN location l on o.location_id = l.location_id and l.retired=0
 								 INNER JOIN reporting_age_group AS observed_age_group ON
 								  CAST('#endDate#' AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
 								  AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
@@ -517,7 +537,7 @@ UNION
 		ORDER BY HTSClients_HIV_Status.HIV_Status, HTSClients_HIV_Status.Age)
 		
 UNION
-(SELECT Id,patientIdentifier AS "Patient_Identifier", patientName AS "Patient_Name", Age, Gender, age_group, 'Self-test' AS 'Testing_Strategies'
+(SELECT Id,patientIdentifier AS "Patient_Identifier", patientName AS "Patient_Name", Age, Gender, age_group,location_name, 'Self-test' AS 'Testing_Strategies'
 				 , 'N/A' AS 'Testing_History', HIV_Status, sort_order
 		FROM
 						(select distinct patient.patient_id AS Id,
@@ -527,6 +547,7 @@ UNION
 											   (select name from concept_name cn where cn.concept_id = 2148 and concept_name_type='FULLY_SPECIFIED') AS HIV_Status,
 											   person.gender AS Gender,
 											   observed_age_group.name AS age_group,
+											   l.name as location_name,
 											   observed_age_group.sort_order AS sort_order
 						from obs o
 								-- HTS SELF TEST STRATEGY
@@ -550,6 +571,7 @@ UNION
 								 INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
 								 INNER JOIN person_name ON person.person_id = person_name.person_id AND person_name.preferred = 1
 								 INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1
+								 INNER JOIN location l on o.location_id = l.location_id and l.retired=0
 								 INNER JOIN reporting_age_group AS observed_age_group ON
 								  CAST('#endDate#' AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
 								  AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
@@ -563,7 +585,7 @@ ORDER BY HTS_Status_Detailed.HIV_Status desc
             
      UNION
 
-     (SELECT Id,patientIdentifier AS "Patient_Identifier", patientName AS "Patient_Name", Age, Gender, age_group, 'Patient_Retested_Only' AS 'Testing_Strategies'
+     (SELECT Id,patientIdentifier AS "Patient_Identifier", patientName AS "Patient_Name", Age, Gender, age_group,location_name, 'Patient_Retested_Only' AS 'Testing_Strategies'
 				, 'N/A' AS 'Testing_History' , HIV_Status, sort_order
 		FROM
 						(select distinct patient.patient_id AS Id,
@@ -573,6 +595,7 @@ ORDER BY HTS_Status_Detailed.HIV_Status desc
 											   (select name from concept_name cn where cn.concept_id = 1016 and concept_name_type='FULLY_SPECIFIED') AS HIV_Status,
 											   person.gender AS Gender,
 											   observed_age_group.name AS age_group,
+											   l.name as location_name,
 											   observed_age_group.sort_order AS sort_order
 
 						from obs o
@@ -605,6 +628,7 @@ ORDER BY HTS_Status_Detailed.HIV_Status desc
 								 INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
 								 INNER JOIN person_name ON person.person_id = person_name.person_id AND person_name.preferred = 1
 								 INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1
+								 INNER JOIN location l on o.location_id = l.location_id and l.retired=0
 								 INNER JOIN reporting_age_group AS observed_age_group ON
 								  CAST('#endDate#' AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
 								  AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
@@ -614,7 +638,7 @@ ORDER BY HTS_Status_Detailed.HIV_Status desc
 
         UNION 
 
-        (SELECT Id,patientIdentifier AS "Patient_Identifier", patientName AS "Patient_Name", Age, Gender, age_group, 'Patient_Retested_Only' AS 'Testing_Strategies'
+        (SELECT Id,patientIdentifier AS "Patient_Identifier", patientName AS "Patient_Name", Age, Gender, age_group,location_name, 'Patient_Retested_Only' AS 'Testing_Strategies'
 				, 'N/A' AS 'Testing_History' , HIV_Status, sort_order
 		FROM
 						(select distinct patient.patient_id AS Id,
@@ -624,6 +648,7 @@ ORDER BY HTS_Status_Detailed.HIV_Status desc
 											   (select name from concept_name cn where cn.concept_id = 1738 and concept_name_type='FULLY_SPECIFIED') AS HIV_Status,
 											   person.gender AS Gender,
 											   observed_age_group.name AS age_group,
+											   l.name as location_name,
 											   observed_age_group.sort_order AS sort_order
 
 						from obs o
@@ -656,6 +681,7 @@ ORDER BY HTS_Status_Detailed.HIV_Status desc
 								 INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
 								 INNER JOIN person_name ON person.person_id = person_name.person_id AND person_name.preferred = 1
 								 INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1
+								 INNER JOIN location l on o.location_id = l.location_id and l.retired=0
 								 INNER JOIN reporting_age_group AS observed_age_group ON
 								  CAST('#endDate#' AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
 								  AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
