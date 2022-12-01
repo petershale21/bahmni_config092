@@ -939,81 +939,18 @@
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/tally.sql"
         }
     },
-    "Regimens List": {
-        "name": "PHARM-004 | Regimens List",
-        "type": "concatenated",
+    "prescribed_dispensed": {
+        "name": "PHARM-004 | Registered Clients Prescribed and Dispensed (List)",
+        "type": "ERPGeneric",
         "config": {
-            "reports": [
-                {
-                    "name": "Regimens List",
-                    "type": "MRSGeneric",
-                    "config": {
-                        "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/regimenCount.sql"
-                    }
-                }
-            ]
+            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/prescribedvsdispensed.sql"
         }
     },
-    "DHIS_ADULT_Regimen": {
-        "name": "PHARM-005 | ADULT REGIMENS",
-        "type": "concatenated",
+    "prescribed_dispensed_pivot": {
+        "name": "PHARM-005 | Registered Clients Prescribed and Dispensed (Pivot)",
+        "type": "ERPGeneric",
         "config": {
-            "reports": [
-                {
-                    "name": "Adult ARV Regimen at the End of the Month - 1st Line",
-                    "type": "MRSGeneric",
-                    "config": {
-                        "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/SECTION4_1stLine.sql"
-                    }
-                }
-				,
-				{
-                    "name": "Adult ARV Regimen 2nd Line",
-                    "type": "MRSGeneric",
-                    "config": {
-                        "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/SECTION4_2ndLine.sql"
-                    }
-                }
-				,
-				{
-                    "name": "Adult ARV Regimen 3rd Line",
-                    "type": "MRSGeneric",
-                    "config": {
-                        "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/SECTION4_3rdLine.sql"
-                    }
-                }
-            ]
-        }
-    },
-    "DHIS_Children_Regimen": {
-        "name": "PHARM-006 | CHILDREN REGIMENS",
-        "type": "concatenated",
-        "config": {
-            "reports": [
-                {
-                    "name": "Children ARV Regimen 1st Line",
-                    "type": "MRSGeneric",
-                    "config": {
-                        "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/SECTION5_1stLine.sql"
-                    }
-                }
-				,
-				{
-                    "name": "Children ARV Regimen 2nd Line",
-                    "type": "MRSGeneric",
-                    "config": {
-                        "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/SECTION5_2ndLine.sql"
-                    }
-                }
-				,
-				{
-                    "name": "Children ARV Regimen 3rd Line",
-                    "type": "MRSGeneric",
-                    "config": {
-                        "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/SECTION5_3rdLine.sql"
-                    }
-                }
-            ]
+            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/prescribedvsdispensedpivot.sql"
         }
     },
     "TB_Outcomes": {
