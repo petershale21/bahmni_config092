@@ -26,20 +26,19 @@ from
                 and p.voided = 0 
                 and p.gender = 'M'
                 -- less than a year
-                and FLOOR(DATEDIFF(current_date(),p.birthdate)/30.4) < 12
-                and o.person_id in (
+                and FLOOR(DATEDIFF(current_date(),p.birthdate)/30.4) < 12 
+                 where o.concept_id = 2237
+                 and CAST(o.value_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+		         and CAST(o.value_datetime AS DATE) <= CAST('#endDate#' AS DATE)        
+                    and o.person_id in (
                                     -- New and Relapse Clients
-                                    select distinct person_id
-                                        from obs
-                                        where concept_id = 3785
-                                        and value_coded = 1034 or value_coded =1084
-										AND MONTH(obs_datetime) = MONTH(CAST('#endDate#' AS DATE))
-										AND YEAR(obs_datetime) =  YEAR(CAST('#endDate#' AS DATE))
-									)
-                inner join patient_identifier pi on pi.patient_id = o.person_id 
-                and pi.identifier_type = 3
-										AND MONTH(obs_datetime) = MONTH(CAST('#endDate#' AS DATE))
-										AND YEAR(obs_datetime) =  YEAR(CAST('#endDate#' AS DATE))				
+                                        select distinct person_id
+                                            from obs
+                                            where concept_id = 3785
+                                            and value_coded = 1034 or value_coded =1084
+                                            AND CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+		                                    AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
+										)				
     )
     UNION
     (
@@ -49,20 +48,19 @@ from
                 and p.voided = 0 
                 and p.gender = 'M'
                 -- Age between 1year and 4years
-                and FLOOR(DATEDIFF(current_date(),p.birthdate)/365) between 1 and 4
-                and o.person_id in (
+                and FLOOR(DATEDIFF(current_date(),p.birthdate)/365) between 1 and 4 
+                 where o.concept_id = 2237
+                   and CAST(o.value_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+		            and CAST(o.value_datetime AS DATE) <= CAST('#endDate#' AS DATE)          
+                    and o.person_id in (
                                     -- New and Relapse Clients
-                                    select distinct person_id
-                                        from obs
-                                        where concept_id = 3785
-                                        and value_coded = 1034 or value_coded =1084
-																				AND MONTH(obs_datetime) = MONTH(CAST('#endDate#' AS DATE))
-										AND YEAR(obs_datetime) =  YEAR(CAST('#endDate#' AS DATE))
+                                        select distinct person_id
+                                            from obs
+                                            where concept_id = 3785
+                                            and value_coded = 1034 or value_coded =1084
+                                            AND CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+		                                    AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 										)
-                inner join patient_identifier pi on pi.patient_id = o.person_id 
-                and pi.identifier_type = 3
-														AND MONTH(obs_datetime) = MONTH(CAST('#endDate#' AS DATE))
-										AND YEAR(obs_datetime) =  YEAR(CAST('#endDate#' AS DATE))
 
     )
 
@@ -75,19 +73,19 @@ from
                 and p.gender = 'M'
                 -- Age between 5 - 9years
                 and FLOOR(DATEDIFF(current_date(),p.birthdate)/365) between 5 and 9
-                and o.person_id in (
+                 where
+                    o.concept_id = 2237
+                    and CAST(o.value_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+		            and CAST(o.value_datetime AS DATE) <= CAST('#endDate#' AS DATE)          
+                    and o.person_id in (
                                     -- New and Relapse Clients
-                                    select distinct person_id
-                                        from obs
-                                        where concept_id = 3785
-                                        and value_coded = 1034 or value_coded =1084
-																				AND MONTH(obs_datetime) = MONTH(CAST('#endDate#' AS DATE))
-										AND YEAR(obs_datetime) =  YEAR(CAST('#endDate#' AS DATE))
+                                        select distinct person_id
+                                            from obs
+                                            where concept_id = 3785
+                                            and value_coded = 1034 or value_coded =1084
+                                            AND CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+		                                    AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 										)
-                inner join patient_identifier pi on pi.patient_id = o.person_id 
-                and pi.identifier_type = 3
-														AND MONTH(obs_datetime) = MONTH(CAST('#endDate#' AS DATE))
-										AND YEAR(obs_datetime) =  YEAR(CAST('#endDate#' AS DATE))
 
     )
     UNION
@@ -98,20 +96,19 @@ from
                 and p.voided = 0 
                 and p.gender = 'M'
                 -- Age between 10 - 14 years
-                and FLOOR(DATEDIFF(current_date(),p.birthdate)/365) between 10 and 14
-                and o.person_id in (
+                and FLOOR(DATEDIFF(current_date(),p.birthdate)/365) between 10 and 14 
+                 where o.concept_id = 2237
+                    and CAST(o.value_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+		            and CAST(o.value_datetime AS DATE) <= CAST('#endDate#' AS DATE)         
+                    and o.person_id in (
                                     -- New and Relapse Clients
-                                    select distinct person_id
-                                        from obs
-                                        where concept_id = 3785
-                                        and value_coded = 1034 or value_coded =1084
-																				AND MONTH(obs_datetime) = MONTH(CAST('#endDate#' AS DATE))
-										AND YEAR(obs_datetime) =  YEAR(CAST('#endDate#' AS DATE))
+                                        select distinct person_id
+                                            from obs
+                                            where concept_id = 3785
+                                            and value_coded = 1034 or value_coded =1084
+                                            AND CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+		                                    AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 										)
-                inner join patient_identifier pi on pi.patient_id = o.person_id 
-                and pi.identifier_type = 3
-														AND MONTH(obs_datetime) = MONTH(CAST('#endDate#' AS DATE))
-										AND YEAR(obs_datetime) =  YEAR(CAST('#endDate#' AS DATE))
 
     )
 
@@ -124,19 +121,18 @@ from
                 and p.gender = 'M'
                 -- Age between 15 - 19 yrs
                 and FLOOR(DATEDIFF(current_date(),p.birthdate)/365) between 15 and 19
-                and o.person_id in (
+                 where o.concept_id = 2237
+                    and CAST(o.value_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+		            and CAST(o.value_datetime AS DATE) <= CAST('#endDate#' AS DATE)        
+                    and o.person_id in (
                                     -- New and Relapse Clients
-                                    select distinct person_id
-                                        from obs
-                                        where concept_id = 3785
-                                        and value_coded = 1034 or value_coded =1084
-																				AND MONTH(obs_datetime) = MONTH(CAST('#endDate#' AS DATE))
-										AND YEAR(obs_datetime) =  YEAR(CAST('#endDate#' AS DATE))
+                                        select distinct person_id
+                                            from obs
+                                            where concept_id = 3785
+                                            and value_coded = 1034 or value_coded =1084
+                                            AND CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+		                                    AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 										)
-                inner join patient_identifier pi on pi.patient_id = o.person_id 
-                and pi.identifier_type = 3
-														AND MONTH(obs_datetime) = MONTH(CAST('#endDate#' AS DATE))
-										AND YEAR(obs_datetime) =  YEAR(CAST('#endDate#' AS DATE))
 
     )
 
@@ -149,20 +145,18 @@ from
                 and p.gender = 'M'
                 -- Age between 20 - 24 yrs
                 and FLOOR(DATEDIFF(current_date(),p.birthdate)/365) between 20 and 24
-
-                and o.person_id in (
+                 where o.concept_id = 2237
+                    and CAST(o.value_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+		            and CAST(o.value_datetime AS DATE) <= CAST('#endDate#' AS DATE)          
+                    and o.person_id in (
                                     -- New and Relapse Clients
-                                    select distinct person_id
-                                        from obs
-                                        where concept_id = 3785
-                                        and value_coded = 1034 or value_coded =1084
-										AND MONTH(obs_datetime) = MONTH(CAST('#endDate#' AS DATE))
-										AND YEAR(obs_datetime) =  YEAR(CAST('#endDate#' AS DATE))
+                                        select distinct person_id
+                                            from obs
+                                            where concept_id = 3785
+                                            and value_coded = 1034 or value_coded =1084
+                                            AND CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+		                                    AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 										)
-                inner join patient_identifier pi on pi.patient_id = o.person_id 
-                and pi.identifier_type = 3
-														AND MONTH(obs_datetime) = MONTH(CAST('#endDate#' AS DATE))
-										AND YEAR(obs_datetime) =  YEAR(CAST('#endDate#' AS DATE))
 
     )
 
@@ -174,20 +168,19 @@ from
                 and p.voided = 0 
                 and p.gender = 'M'
                 -- Age between 25 - 34 yrs
-                and FLOOR(DATEDIFF(current_date(),p.birthdate)/365) between 25 and 34
-                and o.person_id in (
+               and FLOOR(DATEDIFF(current_date(),p.birthdate)/365) between 25 and 34
+                 where o.concept_id = 2237
+                    and CAST(o.value_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+		            and CAST(o.value_datetime AS DATE) <= CAST('#endDate#' AS DATE)        
+                    and o.person_id in (
                                     -- New and Relapse Clients
-                                    select distinct person_id
-                                        from obs
-                                        where concept_id = 3785
-                                        and value_coded = 1034 or value_coded =1084
-																				AND MONTH(obs_datetime) = MONTH(CAST('#endDate#' AS DATE))
-										AND YEAR(obs_datetime) =  YEAR(CAST('#endDate#' AS DATE))
+                                        select distinct person_id
+                                            from obs
+                                            where concept_id = 3785
+                                            and value_coded in (1034, 1084)
+                                            AND CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+		                                    AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 										)
-                inner join patient_identifier pi on pi.patient_id = o.person_id 
-                and pi.identifier_type = 3
-														AND MONTH(obs_datetime) = MONTH(CAST('#endDate#' AS DATE))
-										AND YEAR(obs_datetime) =  YEAR(CAST('#endDate#' AS DATE))
 
     )
 
@@ -199,20 +192,20 @@ from
                 and p.voided = 0 
                 and p.gender = 'M'
                 -- Age between 35 - 44 yrs
-                and FLOOR(DATEDIFF(current_date(),p.birthdate)/365) between 35 and 44
-                and o.person_id in (
+                and FLOOR(DATEDIFF(current_date(),p.birthdate)/365) between 34 and 45
+                 where
+                    o.concept_id = 2237
+                    and CAST(o.value_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+		            and CAST(o.value_datetime AS DATE) <= CAST('#endDate#' AS DATE)          
+                    and o.person_id in (
                                     -- New and Relapse Clients
-                                    select distinct person_id
-                                        from obs
-                                        where concept_id = 3785
-                                        and value_coded = 1034 or value_coded =1084
-																				AND MONTH(obs_datetime) = MONTH(CAST('#endDate#' AS DATE))
-										AND YEAR(obs_datetime) =  YEAR(CAST('#endDate#' AS DATE))
+                                        select distinct person_id
+                                            from obs
+                                            where concept_id = 3785
+                                            and value_coded = 1034 or value_coded =1084
+                                            AND CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+		                                    AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 										)
-                inner join patient_identifier pi on pi.patient_id = o.person_id 
-                and pi.identifier_type = 3
-														AND MONTH(obs_datetime) = MONTH(CAST('#endDate#' AS DATE))
-										AND YEAR(obs_datetime) =  YEAR(CAST('#endDate#' AS DATE))
 
     )
     UNION
@@ -224,19 +217,18 @@ from
                 and p.gender = 'M'
                 -- Age between 45 - 49 yrs
                 and FLOOR(DATEDIFF(current_date(),p.birthdate)/365) between 45 and 49
-                and o.person_id in (
+                 where o.concept_id = 2237
+                   and CAST(o.value_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+		            and CAST(o.value_datetime AS DATE) <= CAST('#endDate#' AS DATE)          
+                    and o.person_id in (
                                     -- New and Relapse Clients
-                                    select distinct person_id
-                                        from obs
-                                        where concept_id = 3785
-                                        and value_coded = 1034 or value_coded =1084
-																				AND MONTH(obs_datetime) = MONTH(CAST('#endDate#' AS DATE))
-										AND YEAR(obs_datetime) =  YEAR(CAST('#endDate#' AS DATE))
+                                        select distinct person_id
+                                            from obs
+                                            where concept_id = 3785
+                                            and value_coded = 1034 or value_coded =1084
+                                            AND CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+		                                    AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 										)
-                inner join patient_identifier pi on pi.patient_id = o.person_id 
-                and pi.identifier_type = 3
-														AND MONTH(obs_datetime) = MONTH(CAST('#endDate#' AS DATE))
-										AND YEAR(obs_datetime) =  YEAR(CAST('#endDate#' AS DATE))
 
     )
 
@@ -248,20 +240,19 @@ from
                 and p.voided = 0 
                 and p.gender = 'M'
                 -- Age between 50 - 54 yrs
-                and FLOOR(DATEDIFF(current_date(),p.birthdate)/365) between 50 and 54
-                and o.person_id in (
+               and FLOOR(DATEDIFF(current_date(),p.birthdate)/365) between 50 and 54
+                 where o.concept_id = 2237
+                    and CAST(o.value_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+		            and CAST(o.value_datetime AS DATE) <= CAST('#endDate#' AS DATE)          
+                    and o.person_id in (
                                     -- New and Relapse Clients
-                                    select distinct person_id
-                                        from obs
-                                        where concept_id = 3785
-                                        and value_coded = 1034 or value_coded =1084
-																				AND MONTH(obs_datetime) = MONTH(CAST('#endDate#' AS DATE))
-										AND YEAR(obs_datetime) =  YEAR(CAST('#endDate#' AS DATE))
+                                        select distinct person_id
+                                            from obs
+                                            where concept_id = 3785
+                                            and value_coded = 1034 or value_coded =1084
+                                            AND CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+		                                    AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 										)
-                inner join patient_identifier pi on pi.patient_id = o.person_id 
-                and pi.identifier_type = 3
-														AND MONTH(obs_datetime) = MONTH(CAST('#endDate#' AS DATE))
-										AND YEAR(obs_datetime) =  YEAR(CAST('#endDate#' AS DATE))
 
     )
     UNION
@@ -273,19 +264,18 @@ from
                 and p.gender = 'M'
                 -- Age between 55 - 64  yrs
                 and FLOOR(DATEDIFF(current_date(),p.birthdate)/365) between 55 and 64
-                and o.person_id in (
+                 where o.concept_id = 2237
+                    and CAST(o.value_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+		            and CAST(o.value_datetime AS DATE) <= CAST('#endDate#' AS DATE)         
+                    and o.person_id in (
                                     -- New and Relapse Clients
-                                    select distinct person_id
-                                        from obs
-                                        where concept_id = 3785
-                                        and value_coded = 1034 or value_coded =1084
-																				AND MONTH(obs_datetime) = MONTH(CAST('#endDate#' AS DATE))
-										AND YEAR(obs_datetime) =  YEAR(CAST('#endDate#' AS DATE))
+                                        select distinct person_id
+                                            from obs
+                                            where concept_id = 3785
+                                            and value_coded = 1034 or value_coded =1084
+                                            AND CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+		                                    AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 										)
-                inner join patient_identifier pi on pi.patient_id = o.person_id 
-                and pi.identifier_type = 3
-														AND MONTH(obs_datetime) = MONTH(CAST('#endDate#' AS DATE))
-										AND YEAR(obs_datetime) =  YEAR(CAST('#endDate#' AS DATE))
 
     )
 
@@ -297,20 +287,19 @@ from
                 and p.voided = 0 
                 and p.gender = 'M'
                 -- Age between 65+ yrs
-                and FLOOR(DATEDIFF(current_date(),p.birthdate)/365) >=65
-                and o.person_id in (
+                and FLOOR(DATEDIFF(current_date(),p.birthdate)/365) >= 65
+                 where o.concept_id = 2237
+                    and CAST(o.value_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+		            and CAST(o.value_datetime AS DATE) <= CAST('#endDate#' AS DATE)          
+                    and o.person_id in (
                                     -- New and Relapse Clients
-                                    select distinct person_id
-                                        from obs
-                                        where concept_id = 3785
-                                        and value_coded = 1034 or value_coded =1084
-																				AND MONTH(obs_datetime) = MONTH(CAST('#endDate#' AS DATE))
-										AND YEAR(obs_datetime) =  YEAR(CAST('#endDate#' AS DATE))
+                                        select distinct person_id
+                                            from obs
+                                            where concept_id = 3785
+                                            and value_coded = 1034 or value_coded =1084
+                                            AND CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+		                                    AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 										)
-                inner join patient_identifier pi on pi.patient_id = o.person_id 
-                and pi.identifier_type = 3
-														AND MONTH(obs_datetime) = MONTH(CAST('#endDate#' AS DATE))
-										AND YEAR(obs_datetime) =  YEAR(CAST('#endDate#' AS DATE))
 
     )
 
@@ -324,19 +313,19 @@ from
                 and p.gender = 'F'
                 -- less than a year
                 and FLOOR(DATEDIFF(current_date(),p.birthdate)/30.4) < 12
-                and o.person_id in (
+                 where
+                    o.concept_id = 2237
+                    and CAST(o.value_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+		            and CAST(o.value_datetime AS DATE) <= CAST('#endDate#' AS DATE)          
+                    and o.person_id in (
                                     -- New and Relapse Clients
-                                    select distinct person_id
-                                        from obs
-                                        where concept_id = 3785
-                                        and value_coded = 1034 or value_coded =1084
-																				AND MONTH(obs_datetime) = MONTH(CAST('#endDate#' AS DATE))
-										AND YEAR(obs_datetime) =  YEAR(CAST('#endDate#' AS DATE))
+                                        select distinct person_id
+                                            from obs
+                                            where concept_id = 3785
+                                            and value_coded = 1034 or value_coded =1084
+                                            AND CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+		                                    AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 										)
-                inner join patient_identifier pi on pi.patient_id = o.person_id 
-                and pi.identifier_type = 3
-														AND MONTH(obs_datetime) = MONTH(CAST('#endDate#' AS DATE))
-										AND YEAR(obs_datetime) =  YEAR(CAST('#endDate#' AS DATE))
     )
     UNION
     (
@@ -347,22 +336,21 @@ from
                 and p.gender = 'F'
                 -- Age between 1year and 4years
                 and FLOOR(DATEDIFF(current_date(),p.birthdate)/365) between 1 and 4
-                and o.person_id in (
+                 where
+                    o.concept_id = 2237
+                    and CAST(o.value_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+		            and CAST(o.value_datetime AS DATE) <= CAST('#endDate#' AS DATE)           
+                    and o.person_id in (
                                     -- New and Relapse Clients
-                                    select distinct person_id
-                                        from obs
-                                        where concept_id = 3785
-                                        and value_coded = 1034 or value_coded =1084
-																				AND MONTH(obs_datetime) = MONTH(CAST('#endDate#' AS DATE))
-										AND YEAR(obs_datetime) =  YEAR(CAST('#endDate#' AS DATE))
-										)
-                inner join patient_identifier pi on pi.patient_id = o.person_id 
-                and pi.identifier_type = 3
-														AND MONTH(obs_datetime) = MONTH(CAST('#endDate#' AS DATE))
-										AND YEAR(obs_datetime) =  YEAR(CAST('#endDate#' AS DATE))
+                                        select distinct person_id
+                                            from obs
+                                            where concept_id = 3785
+                                            and value_coded = 1034 or value_coded =1084
+                                            AND CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+		                                    AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 
-    )
-
+                                    )
+  )
     UNION
     (
         select distinct o.person_id as id, '5 -9 yrs' as outcome, 'Female' as patient_type
@@ -372,19 +360,18 @@ from
                 and p.gender = 'F'
                 -- Age between 5 - 9years
                 and FLOOR(DATEDIFF(current_date(),p.birthdate)/365) between 5 and 9
-                and o.person_id in (
+                 where o.concept_id = 2237
+                    and CAST(o.value_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+		            and CAST(o.value_datetime AS DATE) <= CAST('#endDate#' AS DATE)          
+                    and o.person_id in (
                                     -- New and Relapse Clients
-                                    select distinct person_id
-                                        from obs
-                                        where concept_id = 3785
-                                        and value_coded = 1034 or value_coded =1084
-																				AND MONTH(obs_datetime) = MONTH(CAST('#endDate#' AS DATE))
-										AND YEAR(obs_datetime) =  YEAR(CAST('#endDate#' AS DATE))
-										)
-                inner join patient_identifier pi on pi.patient_id = o.person_id 
-                and pi.identifier_type = 3
-										AND MONTH(obs_datetime) = MONTH(CAST('#endDate#' AS DATE))
-										AND YEAR(obs_datetime) =  YEAR(CAST('#endDate#' AS DATE))
+                                        select distinct person_id
+                                            from obs
+                                            where concept_id = 3785
+                                            and value_coded = 1034 or value_coded =1084
+                                            AND CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+		                                    AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
+                      )
     )
     UNION
     (
@@ -394,20 +381,19 @@ from
                 and p.voided = 0 
                 and p.gender = 'F'
                 -- Age between 10 - 14 years
-                and FLOOR(DATEDIFF(current_date(),p.birthdate)/365) between 10 and 14
-                and o.person_id in (
+               and FLOOR(DATEDIFF(current_date(),p.birthdate)/365) between 10 and 14
+                 where o.concept_id = 2237
+                    and CAST(o.value_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+		            and CAST(o.value_datetime AS DATE) <= CAST('#endDate#' AS DATE)           
+                    and o.person_id in (
                                     -- New and Relapse Clients
-                                    select distinct person_id
-                                        from obs
-                                        where concept_id = 3785
-                                        and value_coded = 1034 or value_coded =1084
-																				AND MONTH(obs_datetime) = MONTH(CAST('#endDate#' AS DATE))
-										AND YEAR(obs_datetime) =  YEAR(CAST('#endDate#' AS DATE))
-										)
-                inner join patient_identifier pi on pi.patient_id = o.person_id 
-                and pi.identifier_type = 3
-										AND MONTH(obs_datetime) = MONTH(CAST('#endDate#' AS DATE))
-										AND YEAR(obs_datetime) =  YEAR(CAST('#endDate#' AS DATE))
+                                        select distinct person_id
+                                            from obs
+                                            where concept_id = 3785
+                                            and value_coded = 1034 or value_coded =1084
+                                            AND CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+		                                    AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
+                        )
     )
 
     UNION
@@ -419,19 +405,18 @@ from
                 and p.gender = 'F'
                 -- Age between 15 - 19 yrs
                 and FLOOR(DATEDIFF(current_date(),p.birthdate)/365) between 15 and 19
-                and o.person_id in (
+                 where o.concept_id = 2237
+                    and CAST(o.value_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+		            and CAST(o.value_datetime AS DATE) <= CAST('#endDate#' AS DATE)           
+                    and o.person_id in (
                                     -- New and Relapse Clients
-                                    select distinct person_id
-                                        from obs
-                                        where concept_id = 3785
-                                        and value_coded = 1034 or value_coded =1084
-																				AND MONTH(obs_datetime) = MONTH(CAST('#endDate#' AS DATE))
-										AND YEAR(obs_datetime) =  YEAR(CAST('#endDate#' AS DATE))
-										)
-                inner join patient_identifier pi on pi.patient_id = o.person_id 
-                and pi.identifier_type = 3
-										AND MONTH(obs_datetime) = MONTH(CAST('#endDate#' AS DATE))
-										AND YEAR(obs_datetime) =  YEAR(CAST('#endDate#' AS DATE))
+                                        select distinct person_id
+                                            from obs
+                                            where concept_id = 3785
+                                            and value_coded = 1034 or value_coded =1084
+                                            AND CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+		                                    AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
+                                )
     )
 
     UNION
@@ -443,21 +428,19 @@ from
                 and p.gender = 'F'
                 -- Age between 20 - 24 yrs
                 and FLOOR(DATEDIFF(current_date(),p.birthdate)/365) between 20 and 24
-
-                and o.person_id in (
+                 where  o.concept_id = 2237
+                    and CAST(o.value_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+		            and CAST(o.value_datetime AS DATE) <= CAST('#endDate#' AS DATE)           
+                    and o.person_id in (
                                     -- New and Relapse Clients
-                                    select distinct person_id
-                                        from obs
-                                        where concept_id = 3785
-                                        and value_coded = 1034 or value_coded =1084
-																				AND MONTH(obs_datetime) = MONTH(CAST('#endDate#' AS DATE))
-										AND YEAR(obs_datetime) =  YEAR(CAST('#endDate#' AS DATE))
-										)
-                inner join patient_identifier pi on pi.patient_id = o.person_id 
-                and pi.identifier_type = 3
-														AND MONTH(obs_datetime) = MONTH(CAST('#endDate#' AS DATE))
-										AND YEAR(obs_datetime) =  YEAR(CAST('#endDate#' AS DATE))
+                                        select distinct person_id
+                                            from obs
+                                            where concept_id = 3785
+                                            and value_coded = 1034 or value_coded =1084
+                                            AND CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+		                                    AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 
+                                  )
     )
 
     UNION
@@ -469,20 +452,20 @@ from
                 and p.gender = 'F'
                 -- Age between 25 - 34 yrs
                 and FLOOR(DATEDIFF(current_date(),p.birthdate)/365) between 25 and 34
-                and o.person_id in (
+                 where
+                    o.concept_id = 2237
+                    and CAST(o.value_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+		            and CAST(o.value_datetime AS DATE) <= CAST('#endDate#' AS DATE)          
+                    and o.person_id in (
                                     -- New and Relapse Clients
-                                    select distinct person_id
-                                        from obs
-                                        where concept_id = 3785
-                                        and value_coded = 1034 or value_coded =1084
-																				AND MONTH(obs_datetime) = MONTH(CAST('#endDate#' AS DATE))
-										AND YEAR(obs_datetime) =  YEAR(CAST('#endDate#' AS DATE))
-										)
-                    inner join patient_identifier pi on pi.patient_id = o.person_id 
-                    and pi.identifier_type = 3
-										AND MONTH(obs_datetime) = MONTH(CAST('#endDate#' AS DATE))
-										AND YEAR(obs_datetime) =  YEAR(CAST('#endDate#' AS DATE))
-        )
+                                        select distinct person_id
+                                            from obs
+                                            where concept_id = 3785
+                                            and value_coded = 1034 or value_coded =1084
+                                            AND CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+		                                    AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
+                                    )
+    )
 
         UNION
         (
@@ -493,19 +476,18 @@ from
                     and p.gender = 'F'
                     -- Age between 35 - 44 yrs
                     and FLOOR(DATEDIFF(current_date(),p.birthdate)/365) between 35 and 44
-                    and o.person_id in (
-                                    -- New and Relapse Clients
-                                        select distinct person_id
-                                            from obs
-                                            where concept_id = 3785
-                                            and value_coded = 1034 or value_coded =1084
-																					AND MONTH(obs_datetime) = MONTH(CAST('#endDate#' AS DATE))
-										AND YEAR(obs_datetime) =  YEAR(CAST('#endDate#' AS DATE))
-											)
-                    inner join patient_identifier pi on pi.patient_id = o.person_id 
-                    and pi.identifier_type = 3
-										AND MONTH(obs_datetime) = MONTH(CAST('#endDate#' AS DATE))
-										AND YEAR(obs_datetime) =  YEAR(CAST('#endDate#' AS DATE))
+                    where o.concept_id = 2237
+                        and CAST(o.value_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+		                and CAST(o.value_datetime AS DATE) <= CAST('#endDate#' AS DATE)           
+                        and o.person_id in (
+                                        -- New and Relapse Clients
+                                            select distinct person_id
+                                                from obs
+                                                where concept_id = 3785
+                                                and value_coded = 1034 or value_coded =1084
+                                                AND CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+		                                        AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
+                                        )
         )
     UNION
         (
@@ -515,20 +497,19 @@ from
                     and p.voided = 0 
                     and p.gender = 'F'
                     -- Age between 45 - 49 yrs
-                    and FLOOR(DATEDIFF(current_date(),p.birthdate)/365) between 45 and 49
-                   and o.person_id in (
-                                        -- New and Relapse Clients
-                                        select distinct person_id
-                                            from obs
-                                            where concept_id = 3785
-                                            and value_coded = 1034 or value_coded =1084
-																					AND MONTH(obs_datetime) = MONTH(CAST('#endDate#' AS DATE))
-										AND YEAR(obs_datetime) =  YEAR(CAST('#endDate#' AS DATE))
-											)
-                    inner join patient_identifier pi on pi.patient_id = o.person_id 
-                    and pi.identifier_type = 3
-										AND MONTH(obs_datetime) = MONTH(CAST('#endDate#' AS DATE))
-										AND YEAR(obs_datetime) =  YEAR(CAST('#endDate#' AS DATE))
+                   and FLOOR(DATEDIFF(current_date(),p.birthdate)/365) between 45 and 49
+                  where o.concept_id = 2237
+                      and CAST(o.value_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+		              and CAST(o.value_datetime AS DATE) <= CAST('#endDate#' AS DATE)          
+                      and o.person_id in (
+                                      -- New and Relapse Clients
+                                          select distinct person_id
+                                              from obs
+                                              where concept_id = 3785
+                                              and value_coded = 1034 or value_coded =1084
+                                              AND CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+		                                      AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
+                                    )
         )
 
         UNION
@@ -540,21 +521,21 @@ from
                     and p.gender = 'F'
                     -- Age between 50 - 54 yrs
                     and FLOOR(DATEDIFF(current_date(),p.birthdate)/365) between 50 and 54
-                    and o.person_id in (
+                    where o.concept_id = 2237
+                        and CAST(o.value_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+		                and CAST(o.value_datetime AS DATE) <= CAST('#endDate#' AS DATE)          
+                        and o.person_id in (
                                         -- New and Relapse Clients
-                                        select distinct person_id
-                                            from obs
-                                            where concept_id = 3785
-                                            and value_coded = 1034 or value_coded =1084
-																					AND MONTH(obs_datetime) = MONTH(CAST('#endDate#' AS DATE))
-										AND YEAR(obs_datetime) =  YEAR(CAST('#endDate#' AS DATE))
-											)
-                    inner join patient_identifier pi on pi.patient_id = o.person_id 
-                    and pi.identifier_type = 3
-															AND MONTH(obs_datetime) = MONTH(CAST('#endDate#' AS DATE))
-										AND YEAR(obs_datetime) =  YEAR(CAST('#endDate#' AS DATE))
+                                            select distinct person_id
+                                                from obs
+                                                where concept_id = 3785
+                                                and value_coded = 1034 or value_coded =1084
+                                                AND CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+		                                        AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 
+                                        )
         )
+
         UNION
         (
             select distinct o.person_id as id, '55 - 64 yrs' as outcome, 'Female' as patient_type
@@ -563,20 +544,19 @@ from
                     and p.voided = 0 
                     and p.gender = 'F'
                     -- Age between 55 - 64  yrs
-                    and FLOOR(DATEDIFF(current_date(),p.birthdate)/365) between 55 and 64
+                   and FLOOR(DATEDIFF(current_date(),p.birthdate)/365) between 55 and 64
+                   where o.concept_id = 2237
+                    and CAST(o.value_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+		            and CAST(o.value_datetime AS DATE) <= CAST('#endDate#' AS DATE)          
                     and o.person_id in (
-                                        -- New and Relapse Clients
+                                    -- New and Relapse Clients
                                         select distinct person_id
                                             from obs
                                             where concept_id = 3785
                                             and value_coded = 1034 or value_coded =1084
-																					AND MONTH(obs_datetime) = MONTH(CAST('#endDate#' AS DATE))
-										AND YEAR(obs_datetime) =  YEAR(CAST('#endDate#' AS DATE))
-											)
-                    inner join patient_identifier pi on pi.patient_id = o.person_id 
-                    and pi.identifier_type = 3
-										AND MONTH(obs_datetime) = MONTH(CAST('#endDate#' AS DATE))
-										AND YEAR(obs_datetime) =  YEAR(CAST('#endDate#' AS DATE))
+                                            AND CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+		                                    AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
+                                   )
         )
 
         UNION
@@ -587,22 +567,21 @@ from
                     and p.voided = 0 
                     and p.gender = 'F'
                     -- Age between 65+ yrs
-                    and FLOOR(DATEDIFF(current_date(),p.birthdate)/365) >=65
+                    and FLOOR(DATEDIFF(current_date(),p.birthdate)/365) >= 65
+                 where o.concept_id = 2237
+                    and CAST(o.value_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+		            and CAST(o.value_datetime AS DATE) <= CAST('#endDate#' AS DATE)           
                     and o.person_id in (
-                                        -- New and Relapse Clients
+                                    -- New and Relapse Clients
                                         select distinct person_id
                                             from obs
                                             where concept_id = 3785
                                             and value_coded = 1034 or value_coded =1084
-																					AND MONTH(obs_datetime) = MONTH(CAST('#endDate#' AS DATE))
-										AND YEAR(obs_datetime) =  YEAR(CAST('#endDate#' AS DATE))
-											)
-                        inner join patient_identifier pi on pi.patient_id = o.person_id 
-                        and pi.identifier_type = 3
-																AND MONTH(obs_datetime) = MONTH(CAST('#endDate#' AS DATE))
-										AND YEAR(obs_datetime) =  YEAR(CAST('#endDate#' AS DATE))
+                                            AND CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+		                                    AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 
-        )
+                                    )
+      )  
 ) allDataRows
 ) pivotTable
 group by patient_type
