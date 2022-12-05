@@ -1,7 +1,7 @@
 
-SELECT  Patient_Identifier, Patient_Name, Age, Gender, age_group, HIV_Testing_Initiation , Testing_History , HIV_Status
+SELECT  Patient_Identifier, Patient_Name, Age, Gender, age_group,location_name, HIV_Testing_Initiation , Testing_History , HIV_Status
 FROM (
-	(SELECT Id, patientIdentifier AS "Patient_Identifier", patientName AS "Patient_Name", Age, Gender, age_group, 'PITC' AS 'HIV_Testing_Initiation'
+	(SELECT Id, patientIdentifier AS "Patient_Identifier", patientName AS "Patient_Name", Age, Gender, age_group,location_name, 'PITC' AS 'HIV_Testing_Initiation'
 				, 'Repeat' AS 'Testing_History' , HIV_Status, current_conc, sort_order
 		FROM
 						(select distinct patient.patient_id AS Id,
@@ -12,6 +12,7 @@ FROM (
 											   person.gender AS Gender,
 											   observed_age_group.name AS age_group,
 											   pitc.current_conc,
+											   l.name as location_name,
 											   observed_age_group.sort_order AS sort_order
 
 						from obs o
@@ -19,8 +20,8 @@ FROM (
 								 INNER JOIN patient ON o.person_id = patient.patient_id 
 								 AND o.concept_id = 2165 and o.value_coded = 1738
 								 AND patient.voided = 0 AND o.voided = 0
-								 AND MONTH(o.obs_datetime) = MONTH(CAST("#endDate#" AS DATE)) 
-                            	 AND YEAR(o.obs_datetime) = YEAR(CAST("#endDate#" AS DATE))
+								 AND CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+					    AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 								 
 								 -- PROVIDER INITIATED TESTING AND COUNSELING
 								 Inner Join (
@@ -28,8 +29,8 @@ FROM (
 									from obs os
 									INNER JOIN patient ON os.person_id = patient.patient_id
 									where os.concept_id = 4228 and os.value_coded = 4227
-									AND MONTH(os.obs_datetime) = MONTH(CAST("#endDate#" AS DATE)) 
-                            		AND YEAR(os.obs_datetime) = YEAR(CAST("#endDate#" AS DATE))
+									AND CAST(os.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+					    AND CAST(os.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 									AND patient.voided = 0 AND os.voided = 0
 								 ) as pitc
 								 on o.person_id = pitc.person_id
@@ -40,8 +41,8 @@ FROM (
 									from obs os
 									INNER JOIN patient ON os.person_id = patient.patient_id
 									where os.concept_id = 2137 and os.value_coded = 2146
-									AND MONTH(os.obs_datetime) = MONTH(CAST("#endDate#" AS DATE)) 
-                            		AND YEAR(os.obs_datetime) = YEAR(CAST("#endDate#" AS DATE))
+									AND CAST(os.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+					    AND CAST(os.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 									AND patient.voided = 0 AND os.voided = 0
 								 ) as repeater
 								 on o.person_id = repeater.person_id
@@ -50,6 +51,7 @@ FROM (
 								 INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
 								 INNER JOIN person_name ON person.person_id = person_name.person_id AND person_name.preferred = 1
 								 INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1
+								 INNER JOIN location l on o.location_id = l.location_id and l.retired=0
 								 INNER JOIN reporting_age_group AS observed_age_group ON
 								  CAST("#endDate#" AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
 								  AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
@@ -59,7 +61,7 @@ FROM (
 
 	UNION ALL
 
-	(SELECT Id, patientIdentifier AS "Patient_Identifier", patientName AS "Patient_Name", Age, Gender, age_group, 'PITC' AS 'HIV_Testing_Initiation'
+	(SELECT Id, patientIdentifier AS "Patient_Identifier", patientName AS "Patient_Name", Age, Gender, age_group,location_name, 'PITC' AS 'HIV_Testing_Initiation'
 				, 'Repeat' AS 'Testing_History' , HIV_Status, current_conc, sort_order
 		FROM
 						(select distinct patient.patient_id AS Id,
@@ -70,6 +72,7 @@ FROM (
 											   person.gender AS Gender,
 											   observed_age_group.name AS age_group,
 											   pitc.current_conc,
+											   l.name as location_name,
 											   observed_age_group.sort_order AS sort_order
 
 						from obs o
@@ -77,8 +80,8 @@ FROM (
 								 INNER JOIN patient ON o.person_id = patient.patient_id 
 								 AND o.concept_id = 2165 and o.value_coded = 1738
 								 AND patient.voided = 0 AND o.voided = 0
-								 AND MONTH(o.obs_datetime) = MONTH(CAST("#endDate#" AS DATE)) 
-                            	 AND YEAR(o.obs_datetime) = YEAR(CAST("#endDate#" AS DATE))
+								 AND CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+					    AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 								 
 								 -- PROVIDER INITIATED TESTING AND COUNSELING
 								 Inner Join (
@@ -86,8 +89,8 @@ FROM (
 									from obs os
 									INNER JOIN patient ON os.person_id = patient.patient_id
 									where os.concept_id = 4228 and os.value_coded = 4227
-									AND MONTH(os.obs_datetime) = MONTH(CAST("#endDate#" AS DATE)) 
-                            		AND YEAR(os.obs_datetime) = YEAR(CAST("#endDate#" AS DATE))
+									AND CAST(os.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+					    AND CAST(os.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 									AND patient.voided = 0 AND os.voided = 0
 								 ) as pitc
 								 on o.person_id = pitc.person_id
@@ -98,8 +101,8 @@ FROM (
 									from obs os
 									INNER JOIN patient ON os.person_id = patient.patient_id
 									where os.concept_id = 2137 and os.value_coded = 2147
-									AND MONTH(os.obs_datetime) = MONTH(CAST("#endDate#" AS DATE)) 
-                            		AND YEAR(os.obs_datetime) = YEAR(CAST("#endDate#" AS DATE))
+									AND CAST(os.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+					    AND CAST(os.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 									AND patient.voided = 0 AND os.voided = 0
 								 ) as repeater
 								 on o.person_id = repeater.person_id
@@ -108,6 +111,7 @@ FROM (
 								 INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
 								 INNER JOIN person_name ON person.person_id = person_name.person_id AND person_name.preferred = 1
 								 INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1
+								 INNER JOIN location l on o.location_id = l.location_id and l.retired=0
 								 INNER JOIN reporting_age_group AS observed_age_group ON
 								  CAST("#endDate#" AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
 								  AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
@@ -116,7 +120,7 @@ FROM (
 		ORDER BY HTSClients_HIV_Status.HIV_Status, HTSClients_HIV_Status.Age)
 
 	UNION ALL
-	(SELECT Id, patientIdentifier AS "Patient_Identifier", patientName AS "Patient_Name", Age, Gender, age_group, 'PITC' AS 'HIV_Testing_Initiation'
+	(SELECT Id, patientIdentifier AS "Patient_Identifier", patientName AS "Patient_Name", Age, Gender, age_group,location_name, 'PITC' AS 'HIV_Testing_Initiation'
 				, 'Repeat' AS 'Testing_History' , HIV_Status, current_conc, sort_order
 		FROM
 						(select distinct patient.patient_id AS Id,
@@ -127,6 +131,7 @@ FROM (
 											   person.gender AS Gender,
 											   observed_age_group.name AS age_group,
 											   pitc.current_conc,
+											   l.name as location_name,
 											   observed_age_group.sort_order AS sort_order
 
 						from obs o
@@ -134,8 +139,8 @@ FROM (
 								 INNER JOIN patient ON o.person_id = patient.patient_id 
 								 AND o.concept_id = 2165 and o.value_coded = 1016
 								 AND patient.voided = 0 AND o.voided = 0
-								 AND MONTH(o.obs_datetime) = MONTH(CAST("#endDate#" AS DATE)) 
-                            	 AND YEAR(o.obs_datetime) = YEAR(CAST("#endDate#" AS DATE))
+								 AND CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+					    AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 								 
 								 -- PROVIDER INITIATED TESTING AND COUNSELING
 								 Inner Join (
@@ -143,8 +148,8 @@ FROM (
 									from obs os
 									INNER JOIN patient ON os.person_id = patient.patient_id
 									where os.concept_id = 4228 and os.value_coded = 4227
-									AND MONTH(os.obs_datetime) = MONTH(CAST("#endDate#" AS DATE)) 
-                            		AND YEAR(os.obs_datetime) = YEAR(CAST("#endDate#" AS DATE))
+									AND CAST(os.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+					    AND CAST(os.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 									AND patient.voided = 0 AND os.voided = 0
 								 ) as pitc
 								 on o.person_id = pitc.person_id
@@ -155,8 +160,8 @@ FROM (
 									from obs os
 									INNER JOIN patient ON os.person_id = patient.patient_id
 									where os.concept_id = 2137 and os.value_coded = 2146
-									AND MONTH(os.obs_datetime) = MONTH(CAST("#endDate#" AS DATE)) 
-                            		AND YEAR(os.obs_datetime) = YEAR(CAST("#endDate#" AS DATE))
+									AND CAST(os.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+					    AND CAST(os.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 									AND patient.voided = 0 AND os.voided = 0
 								 ) as repeater
 								 on o.person_id = repeater.person_id
@@ -165,6 +170,7 @@ FROM (
 								 INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
 								 INNER JOIN person_name ON person.person_id = person_name.person_id AND person_name.preferred = 1
 								 INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1
+								 INNER JOIN location l on o.location_id = l.location_id and l.retired=0
 								 INNER JOIN reporting_age_group AS observed_age_group ON
 								  CAST("#endDate#" AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
 								  AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
@@ -174,7 +180,7 @@ FROM (
 
 	UNION ALL
 
-	(SELECT Id, patientIdentifier AS "Patient_Identifier", patientName AS "Patient_Name", Age, Gender, age_group, 'PITC' AS 'HIV_Testing_Initiation'
+	(SELECT Id, patientIdentifier AS "Patient_Identifier", patientName AS "Patient_Name", Age, Gender, age_group,location_name, 'PITC' AS 'HIV_Testing_Initiation'
 				, 'Repeat' AS 'Testing_History' , HIV_Status, current_conc, sort_order
 		FROM
 						(select distinct patient.patient_id AS Id,
@@ -185,6 +191,7 @@ FROM (
 											   person.gender AS Gender,
 											   observed_age_group.name AS age_group,
 											   pitc.current_conc,
+											   l.name as location_name,
 											   observed_age_group.sort_order AS sort_order
 
 						from obs o
@@ -192,8 +199,8 @@ FROM (
 								 INNER JOIN patient ON o.person_id = patient.patient_id 
 								 AND o.concept_id = 2165 and o.value_coded = 1016
 								 AND patient.voided = 0 AND o.voided = 0
-								 AND MONTH(o.obs_datetime) = MONTH(CAST("#endDate#" AS DATE)) 
-                            	 AND YEAR(o.obs_datetime) = YEAR(CAST("#endDate#" AS DATE))
+								 AND CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+					    AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 								 
 								 -- PROVIDER INITIATED TESTING AND COUNSELING
 								 Inner Join (
@@ -201,8 +208,8 @@ FROM (
 									from obs os
 									INNER JOIN patient ON os.person_id = patient.patient_id
 									where os.concept_id = 4228 and os.value_coded = 4227
-									AND MONTH(os.obs_datetime) = MONTH(CAST("#endDate#" AS DATE)) 
-                            		AND YEAR(os.obs_datetime) = YEAR(CAST("#endDate#" AS DATE))
+									AND CAST(os.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+					    AND CAST(os.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 									AND patient.voided = 0 AND os.voided = 0
 								 ) as pitc
 								 on o.person_id = pitc.person_id
@@ -213,8 +220,8 @@ FROM (
 									from obs os
 									INNER JOIN patient ON os.person_id = patient.patient_id
 									where os.concept_id = 2137 and os.value_coded = 2147
-									AND MONTH(os.obs_datetime) = MONTH(CAST("#endDate#" AS DATE)) 
-                            		AND YEAR(os.obs_datetime) = YEAR(CAST("#endDate#" AS DATE))
+									AND CAST(os.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+					    AND CAST(os.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 									AND patient.voided = 0 AND os.voided = 0
 								 ) as repeater
 								 on o.person_id = repeater.person_id
@@ -223,6 +230,7 @@ FROM (
 								 INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
 								 INNER JOIN person_name ON person.person_id = person_name.person_id AND person_name.preferred = 1
 								 INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1
+								 INNER JOIN location l on o.location_id = l.location_id and l.retired=0
 								 INNER JOIN reporting_age_group AS observed_age_group ON
 								  CAST("#endDate#" AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
 								  AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
@@ -232,7 +240,7 @@ FROM (
 
 	UNION ALL
 
-	(SELECT Id, patientIdentifier AS "Patient_Identifier", patientName AS "Patient_Name", Age, Gender, age_group, 'CITC' AS 'HIV_Testing_Initiation'
+	(SELECT Id, patientIdentifier AS "Patient_Identifier", patientName AS "Patient_Name", Age, Gender, age_group,location_name, 'CITC' AS 'HIV_Testing_Initiation'
 				, 'Repeat' AS 'Testing_History' , HIV_Status, current_conc, sort_order
 		FROM
 						(select distinct patient.patient_id AS Id,
@@ -243,6 +251,7 @@ FROM (
 											   person.gender AS Gender,
 											   observed_age_group.name AS age_group,
 											   pitc.current_conc,
+											   l.name as location_name,
 											   observed_age_group.sort_order AS sort_order
 
 						from obs o
@@ -250,8 +259,8 @@ FROM (
 								 INNER JOIN patient ON o.person_id = patient.patient_id 
 								 AND o.concept_id = 2165 and o.value_coded = 1738
 								 AND patient.voided = 0 AND o.voided = 0
-								 AND MONTH(o.obs_datetime) = MONTH(CAST("#endDate#" AS DATE)) 
-                            	 AND YEAR(o.obs_datetime) = YEAR(CAST("#endDate#" AS DATE))
+								 AND CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+					    AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 								 
 								 -- CLIENT INITIATED TESTING AND COUNSELING
 								 Inner Join (
@@ -259,8 +268,8 @@ FROM (
 									from obs os
 									INNER JOIN patient ON os.person_id = patient.patient_id
 									where os.concept_id = 4228 and os.value_coded = 4226
-									AND MONTH(os.obs_datetime) = MONTH(CAST("#endDate#" AS DATE)) 
-                            		AND YEAR(os.obs_datetime) = YEAR(CAST("#endDate#" AS DATE))
+									AND CAST(os.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+					    AND CAST(os.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 									AND patient.voided = 0 AND os.voided = 0
 								 ) as pitc
 								 on o.person_id = pitc.person_id
@@ -271,8 +280,8 @@ FROM (
 									from obs os
 									INNER JOIN patient ON os.person_id = patient.patient_id
 									where os.concept_id = 2137 and os.value_coded = 2146
-									AND MONTH(os.obs_datetime) = MONTH(CAST("#endDate#" AS DATE)) 
-                            		AND YEAR(os.obs_datetime) = YEAR(CAST("#endDate#" AS DATE))
+									AND CAST(os.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+					    AND CAST(os.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 									AND patient.voided = 0 AND os.voided = 0
 								 ) as repeater
 								 on o.person_id = repeater.person_id
@@ -281,6 +290,7 @@ FROM (
 								 INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
 								 INNER JOIN person_name ON person.person_id = person_name.person_id AND person_name.preferred = 1
 								 INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1
+								  INNER JOIN location l on o.location_id = l.location_id and l.retired=0
 								 INNER JOIN reporting_age_group AS observed_age_group ON
 								  CAST("#endDate#" AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
 								  AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
@@ -289,7 +299,7 @@ FROM (
 		ORDER BY HTSClients_HIV_Status.HIV_Status, HTSClients_HIV_Status.Age)
 
 	UNION ALL
-	(SELECT Id, patientIdentifier AS "Patient_Identifier", patientName AS "Patient_Name", Age, Gender, age_group, 'CITC' AS 'HIV_Testing_Initiation'
+	(SELECT Id, patientIdentifier AS "Patient_Identifier", patientName AS "Patient_Name", Age, Gender, age_group,location_name, 'CITC' AS 'HIV_Testing_Initiation'
 				, 'Repeat' AS 'Testing_History' , HIV_Status, current_conc, sort_order
 		FROM
 						(select distinct patient.patient_id AS Id,
@@ -300,6 +310,7 @@ FROM (
 											   person.gender AS Gender,
 											   observed_age_group.name AS age_group,
 											   pitc.current_conc,
+											   l.name as location_name,
 											   observed_age_group.sort_order AS sort_order
 
 						from obs o
@@ -307,8 +318,8 @@ FROM (
 								 INNER JOIN patient ON o.person_id = patient.patient_id 
 								 AND o.concept_id = 2165 and o.value_coded = 1738
 								 AND patient.voided = 0 AND o.voided = 0
-								 AND MONTH(o.obs_datetime) = MONTH(CAST("#endDate#" AS DATE)) 
-                            	 AND YEAR(o.obs_datetime) = YEAR(CAST("#endDate#" AS DATE))
+								 AND CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+					    AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 								 
 								 -- CLIENT INITIATED TESTING AND COUNSELING
 								 Inner Join (
@@ -316,8 +327,8 @@ FROM (
 									from obs os
 									INNER JOIN patient ON os.person_id = patient.patient_id
 									where os.concept_id = 4228 and os.value_coded = 4226
-									AND MONTH(os.obs_datetime) = MONTH(CAST("#endDate#" AS DATE)) 
-                            		AND YEAR(os.obs_datetime) = YEAR(CAST("#endDate#" AS DATE))
+									AND CAST(os.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+					    AND CAST(os.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 									AND patient.voided = 0 AND os.voided = 0
 								 ) as pitc
 								 on o.person_id = pitc.person_id
@@ -328,8 +339,8 @@ FROM (
 									from obs os
 									INNER JOIN patient ON os.person_id = patient.patient_id
 									where os.concept_id = 2137 and os.value_coded = 2147
-									AND MONTH(os.obs_datetime) = MONTH(CAST("#endDate#" AS DATE)) 
-                            		AND YEAR(os.obs_datetime) = YEAR(CAST("#endDate#" AS DATE))
+									AND CAST(os.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+					    AND CAST(os.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 									AND patient.voided = 0 AND os.voided = 0
 								 ) as repeater
 								 on o.person_id = repeater.person_id
@@ -338,6 +349,7 @@ FROM (
 								 INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
 								 INNER JOIN person_name ON person.person_id = person_name.person_id AND person_name.preferred = 1
 								 INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1
+								 INNER JOIN location l on o.location_id = l.location_id and l.retired=0
 								 INNER JOIN reporting_age_group AS observed_age_group ON
 								  CAST("#endDate#" AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
 								  AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
@@ -347,7 +359,7 @@ FROM (
 
 	UNION ALL
 
-	(SELECT Id, patientIdentifier AS "Patient_Identifier", patientName AS "Patient_Name", Age, Gender, age_group, 'CITC' AS 'HIV_Testing_Initiation'
+	(SELECT Id, patientIdentifier AS "Patient_Identifier", patientName AS "Patient_Name", Age, Gender, age_group,location_name, 'CITC' AS 'HIV_Testing_Initiation'
 				, 'Repeat' AS 'Testing_History' , HIV_Status, current_conc, sort_order
 		FROM
 						(select distinct patient.patient_id AS Id,
@@ -358,6 +370,7 @@ FROM (
 											   person.gender AS Gender,
 											   observed_age_group.name AS age_group,
 											   pitc.current_conc,
+											   l.name as location_name,
 											   observed_age_group.sort_order AS sort_order
 
 						from obs o
@@ -365,8 +378,8 @@ FROM (
 								 INNER JOIN patient ON o.person_id = patient.patient_id 
 								 AND o.concept_id = 2165 and o.value_coded = 1016
 								 AND patient.voided = 0 AND o.voided = 0
-								 AND MONTH(o.obs_datetime) = MONTH(CAST("#endDate#" AS DATE)) 
-                            	 AND YEAR(o.obs_datetime) = YEAR(CAST("#endDate#" AS DATE))
+								 AND CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+					    AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 								 
 								 -- CLIENT INITIATED TESTING AND COUNSELING
 								 Inner Join (
@@ -374,8 +387,8 @@ FROM (
 									from obs os
 									INNER JOIN patient ON os.person_id = patient.patient_id
 									where os.concept_id = 4228 and os.value_coded = 4226
-									AND MONTH(os.obs_datetime) = MONTH(CAST("#endDate#" AS DATE)) 
-                            		AND YEAR(os.obs_datetime) = YEAR(CAST("#endDate#" AS DATE))
+									AND CAST(os.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+					    AND CAST(os.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 									AND patient.voided = 0 AND os.voided = 0
 								 ) as pitc
 								 on o.person_id = pitc.person_id
@@ -386,8 +399,8 @@ FROM (
 									from obs os
 									INNER JOIN patient ON os.person_id = patient.patient_id
 									where os.concept_id = 2137 and os.value_coded = 2146
-									AND MONTH(os.obs_datetime) = MONTH(CAST("#endDate#" AS DATE)) 
-                            		AND YEAR(os.obs_datetime) = YEAR(CAST("#endDate#" AS DATE))
+									AND CAST(os.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+					    AND CAST(os.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 									AND patient.voided = 0 AND os.voided = 0
 								 ) as repeater
 								 on o.person_id = repeater.person_id
@@ -396,6 +409,7 @@ FROM (
 								 INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
 								 INNER JOIN person_name ON person.person_id = person_name.person_id AND person_name.preferred = 1
 								 INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1
+								 INNER JOIN location l on o.location_id = l.location_id and l.retired=0
 								 INNER JOIN reporting_age_group AS observed_age_group ON
 								  CAST("#endDate#" AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
 								  AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
@@ -404,7 +418,7 @@ FROM (
 		ORDER BY HTSClients_HIV_Status.HIV_Status, HTSClients_HIV_Status.Age)
 	UNION ALL
 
-	(SELECT Id, patientIdentifier AS "Patient_Identifier", patientName AS "Patient_Name", Age, Gender, age_group, 'CITC' AS 'HIV_Testing_Initiation'
+	(SELECT Id, patientIdentifier AS "Patient_Identifier", patientName AS "Patient_Name", Age, Gender, age_group,location_name, 'CITC' AS 'HIV_Testing_Initiation'
 				, 'Repeat' AS 'Testing_History' , HIV_Status, current_conc, sort_order
 		FROM
 						(select distinct patient.patient_id AS Id,
@@ -415,6 +429,7 @@ FROM (
 											   person.gender AS Gender,
 											   observed_age_group.name AS age_group,
 											   pitc.current_conc,
+											   l.name as location_name,
 											   observed_age_group.sort_order AS sort_order
 
 						from obs o
@@ -422,8 +437,8 @@ FROM (
 								 INNER JOIN patient ON o.person_id = patient.patient_id 
 								 AND o.concept_id = 2165 and o.value_coded = 1016
 								 AND patient.voided = 0 AND o.voided = 0
-								 AND MONTH(o.obs_datetime) = MONTH(CAST("#endDate#" AS DATE)) 
-                            	 AND YEAR(o.obs_datetime) = YEAR(CAST("#endDate#" AS DATE))
+								 AND CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+					    AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 								 
 								 -- CLIENT INITIATED TESTING AND COUNSELING
 								 Inner Join (
@@ -431,8 +446,8 @@ FROM (
 									from obs os
 									INNER JOIN patient ON os.person_id = patient.patient_id
 									where os.concept_id = 4228 and os.value_coded = 4226
-									AND MONTH(os.obs_datetime) = MONTH(CAST("#endDate#" AS DATE)) 
-                            		AND YEAR(os.obs_datetime) = YEAR(CAST("#endDate#" AS DATE))
+									AND CAST(os.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+					    AND CAST(os.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 									AND patient.voided = 0 AND os.voided = 0
 								 ) as pitc
 								 on o.person_id = pitc.person_id
@@ -443,8 +458,8 @@ FROM (
 									from obs os
 									INNER JOIN patient ON os.person_id = patient.patient_id
 									where os.concept_id = 2137 and os.value_coded = 2147
-									AND MONTH(os.obs_datetime) = MONTH(CAST("#endDate#" AS DATE)) 
-                            		AND YEAR(os.obs_datetime) = YEAR(CAST("#endDate#" AS DATE))
+									AND CAST(os.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+					    AND CAST(os.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 									AND patient.voided = 0 AND os.voided = 0
 								 ) as repeater
 								 on o.person_id = repeater.person_id
@@ -453,6 +468,7 @@ FROM (
 								 INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
 								 INNER JOIN person_name ON person.person_id = person_name.person_id AND person_name.preferred = 1
 								 INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1
+								 INNER JOIN location l on o.location_id = l.location_id and l.retired=0
 								 INNER JOIN reporting_age_group AS observed_age_group ON
 								  CAST("#endDate#" AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
 								  AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
@@ -468,4 +484,4 @@ ORDER BY HTS_Status_Detailed.HIV_Testing_Initiation
 			, HTS_Status_Detailed.HIV_Status
 
 
-									
+						
