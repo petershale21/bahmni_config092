@@ -6,7 +6,7 @@ SELECT distinct patientIdentifier,TB_Number, patientName, Age,age_group, Gender,
 						patient_identifier.identifier AS patientIdentifier,
 						pi2.identifier AS TB_Number,
 						concat(person_name.given_name, ' ', person_name.family_name) AS patientName,
-						floor(datediff(CAST('2022-09-30' AS DATE), person.birthdate)/365) AS Age,
+						floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age,
 						observed_age_group.name AS age_group,
 						person.gender AS Gender,
 						observed_age_group.sort_order AS sort_order 
@@ -19,12 +19,12 @@ SELECT distinct patientIdentifier,TB_Number, patientName, Age,age_group, Gender,
 						LEFT JOIN patient_identifier pi2 ON pi2.patient_id = o.person_id AND pi2.identifier_type in (7)
 						AND o.voided=0
 						INNER JOIN reporting_age_group AS observed_age_group ON
-						CAST('2022-09-30' AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
+						CAST('#endDate#' AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
 						AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
 						WHERE observed_age_group.report_group_name = 'Modified_Ages'
 						AND o.concept_id in (4153, 1158)
-						AND CAST(o.obs_datetime AS DATE) >= CAST('2022-09-01' AS DATE)
-						AND CAST(o.obs_datetime AS DATE) <= CAST('2022-09-30' AS DATE)
+						AND CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+						AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 						AND patient.voided = 0 AND o.voided = 0
 						Group by o.person_id) AS TB_TESTING
 )
@@ -43,7 +43,7 @@ Left Outer Join
      SUBSTRING(MAX(CONCAT(oss.obs_datetime, oss.value_datetime)), 20) as start_date
      from obs oss
      where oss.concept_id = 2237 and oss.voided=0
-     and oss.obs_datetime < cast('2022-09-30' as date)
+     and oss.obs_datetime < cast('#endDate#' as date)
      group by oss.person_id
     )latest
     on latest.person_id = o.person_id 
@@ -57,8 +57,8 @@ Left Outer Join
 	from obs o
 	where o.concept_id = 3789 and o.value_coded = 3791
 	and o.voided = 0
-	and o.obs_datetime >= cast('2022-09-01' as date)
-	and o.obs_datetime <= cast('2022-09-30' as date)
+	and o.obs_datetime >= cast('#startDate#' as date)
+	and o.obs_datetime <= cast('#endDate#' as date)
 	group by o.person_id
 ) as died
 on diagnosis_type.Id = died.person_id
@@ -206,7 +206,7 @@ left outer join
 									inner join 
 									(select person_id, max(obs_datetime), SUBSTRING(MAX(CONCAT(obs_datetime, obs_id)), 20) AS observation_id
 									from obs where concept_id = 3753
-									and obs_datetime <= cast('2022-09-30' as date)
+									and obs_datetime <= cast('#endDate#' as date)
 									and voided = 0
 									group by person_id) as A
 									on A.observation_id = B.obs_group_id
@@ -215,8 +215,8 @@ left outer join
                                     and voided = 0	
 									group by B.person_id	
 								) as active_clients
-								-- where active_clients.latest_follow_up >= cast('2022-09-30' as date)
-                                where DATEDIFF(CAST('2022-09-30' AS DATE),latest_follow_up) <=28 
+								-- where active_clients.latest_follow_up >= cast('#endDate#' as date)
+                                where DATEDIFF(CAST('#endDate#' AS DATE),latest_follow_up) <=28 
 
     ) As Active
 
@@ -234,7 +234,7 @@ left outer join
 									inner join 
 									(select person_id, max(obs_datetime), SUBSTRING(MAX(CONCAT(obs_datetime, obs_id)), 20) AS observation_id
 									from obs where concept_id = 3753
-									and obs_datetime <= cast('2022-09-30' as date)
+									and obs_datetime <= cast('#endDate#' as date)
 									and voided = 0
 									group by person_id) as A
 									on A.observation_id = B.obs_group_id
@@ -243,7 +243,7 @@ left outer join
                                     and voided = 0	
 									group by B.person_id	
 								) as active_clients
-                                where DATEDIFF(CAST('2022-09-30' AS DATE),latest_follow_up) > 28
+                                where DATEDIFF(CAST('#endDate#' AS DATE),latest_follow_up) > 28
 
 
     ) As Missed
