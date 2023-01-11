@@ -146,7 +146,7 @@ on diagnosis_type.Id = phenotypic.person_id
 Left Outer Join
 (
 -- TB Treatment Outcome
- select o.person_id,case
+ select o.person_id,o.value_coded, case
  when o.value_coded = 1068 then "Cured"
  when o.value_coded = 2242 then "Completed"
  when o.value_coded = 3650 then "Died"
@@ -156,7 +156,7 @@ Left Outer Join
 else "N/A" 
 end AS TB_Treatment_Outcome
 from obs o
-where o.concept_id = 3776 and o.voided = 0
+where o.concept_id = 3792 and o.voided = 0
 Group by o.person_id
 ) outcome
 on diagnosis_type.Id = outcome.person_id
