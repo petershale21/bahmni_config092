@@ -1,4 +1,4 @@
-SELECT patientIdentifier AS "Patient Identifier", patientName AS "Patient Name", Gender, age_group, 'Seen' AS 'Program_Status'
+SELECT patientIdentifier AS "Patient Identifier", patientName AS "Patient Name", Gender, age_group, 'Seen for PNC' AS 'Program_Status'
 FROM
                 (select distinct patient.patient_id AS Id,
 									   patient_identifier.identifier AS patientIdentifier,
@@ -32,4 +32,4 @@ FROM
 						 INNER JOIN reporting_age_group AS observed_age_group ON
 						  CAST('#endDate#' AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
 						  AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
-                   WHERE observed_age_group.report_group_name = 'Modified_Ages') as newly_initiated
+                   WHERE observed_age_group.report_group_name = 'Modified_Ages') as seen_for_pnc
