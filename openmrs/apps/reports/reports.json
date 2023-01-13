@@ -918,6 +918,34 @@
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/PMTCT_HEI_POS_pivot.sql"
         }
     },
+    "pnc_seen_list": {
+        "name": "MCH-014 | PNC SEEN (List)",
+        "type": "MRSGeneric",
+        "config": {
+            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/PNC_Seen.sql"
+        }
+    },
+    "fp_seen_list": {
+        "name": "MCH-015 | Family Planning SEEN (List)",
+        "type": "MRSGeneric",
+        "config": {
+            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/FP_Seen.sql"
+        }
+    },
+    "under5_seen_list": {
+        "name": "MCH-016 | Under5 SEEN (List)",
+        "type": "MRSGeneric",
+        "config": {
+            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/Under5_Seen.sql"
+        }
+    },
+    "hei_seen_list": {
+        "name": "MCH-017 | HIV Exposed Infant SEEN (List)",
+        "type": "MRSGeneric",
+        "config": {
+            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/HEI_Seen.sql"
+        }
+    },
     "arv_list": {
         "name": "PHARM-001 | Pharmacy ARV Regimen",
         "type": "ERPGeneric",
