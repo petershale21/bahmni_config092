@@ -57,7 +57,8 @@
            		"National ID",
 			"HIV Program ID",
 			"TB Program ID",
-			"New HIV Program ID"
+			"New HIV Program ID",
+			"File Number"
        		]
     	},
 		"programDisplayControl": {
