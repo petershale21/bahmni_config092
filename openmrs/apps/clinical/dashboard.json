@@ -9,7 +9,12 @@
                 "type": "patientInformation",
                 "displayOrder": 0,
                 "ageLimit": 100,
-                "patientAttributes": [],
+                "patientAttributes": [
+                    "occupation",
+                    "isMarried",
+                    "extraAddressInfo",
+                    "primaryRelative" 
+                ],
                 "addressFields": [
                     "address1",
                     "address2",
