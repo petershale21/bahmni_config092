@@ -1,4 +1,4 @@
-SELECT distinct patientIdentifier,TB_Number, patientName, Age,age_group, Gender, Linkage, High_Risk_Populations, TB_Start_Date, Site, X_Ray_Results,Diagnostic_Genotypic_Test_Results, Diagnostic_Phenotypic_Test_Results, TB_Treatment_Outcome, Action_Treatment_Failures_or_Drug_Resistant, HIV_Status, Clients_ON_ART, Prevention_of_OIs, HIV
+SELECT distinct patientIdentifier,TB_Number, patientName, Age,age_group, Gender, Linkage, High_Risk_Populations, TB_Start_Date, Site, TB_Treatment_History, X_Ray_Results,Diagnostic_Genotypic_Test_Results, Diagnostic_Phenotypic_Test_Results, TB_Treatment_Outcome, Action_Treatment_Failures_or_Drug_Resistant, HIV_Status, Clients_ON_ART, Prevention_of_OIs
  FROM (
 (Select distinct Id, TB_Number, patientIdentifier , patientName, Age, age_group, Gender
 		From(
@@ -117,15 +117,29 @@ on diagnosis_type.Id = x_ray.person_id
 
 Left Outer Join
 (
--- XRAY Results
+-- Genoty Results
  select o.person_id,case
- when o.value_coded = 3824 then "GeneXpert test type"
- when o.value_coded = 3825 then "Line Probe Assay test type"
+ when o.value_coded = 3816 then "MTB Detected,RS"
+ when o.value_coded = 3817 then "MTB Detected,RR"
+ when o.value_coded = 3818 then "MTB Detected,RSI"
+ when o.value_coded = 3820 then "MTB not Detected"
 else "N/A" 
 end AS Diagnostic_Genotypic_Test_Results
 from obs o
-where o.concept_id = 4673 and o.voided = 0
-Group by o.person_id
+inner join 
+		(
+		 select oss.person_id, MAX(oss.obs_datetime) as max_observation,
+		 SUBSTRING(MAX(CONCAT(oss.obs_datetime, oss.value_coded)), 20) as latest_results
+		 from obs oss
+		 where oss.concept_id = 3787 and oss.voided=0
+		 and oss.obs_datetime >= cast('#startDate#' as date)
+		 and oss.obs_datetime <= cast('#endDate#' as date)
+		 group by oss.person_id
+		)latest 
+	on latest.person_id = o.person_id
+	where concept_id = 3787
+	and o.obs_datetime = max_observation
+	and o.voided = 0
 ) Genotypic
 on diagnosis_type.Id = Genotypic.person_id
 
@@ -192,13 +206,13 @@ left outer join
 
 on Status.person_id = diagnosis_type.Id
 
--- Active on ART (Initiated, Seen, Missed)
+-- Active on ART (Initiated, Seen, Defaulted)
 left outer join
 (
     Select Clients_ON_ART, Person_id
     FROM
     (
-        select active_clients.person_id AS Person_id, "Active" AS "Clients_ON_ART"
+        select active_clients.person_id AS Person_id, "Already on ART" AS "Clients_ON_ART"
     -- , active_clients.latest_follow_up
 								from
 								(select B.person_id, B.obs_group_id, B.value_datetime AS latest_follow_up
@@ -218,7 +232,44 @@ left outer join
 								-- where active_clients.latest_follow_up >= cast('#endDate#' as date)
                                 where DATEDIFF(CAST('#endDate#' AS DATE),latest_follow_up) <=28 
 
+								-- Initiated
+								and active_clients.person_id not in (
+								select distinct os.person_id
+								from obs os
+								where concept_id = 2249
+								AND MONTH(os.value_datetime) = MONTH(CAST('#endDate#' AS DATE)) 
+								AND YEAR(os.value_datetime) = YEAR(CAST('#endDate#' AS DATE))
+								AND os.voided = 0
+								)
+
     ) As Active
+
+	UNION
+
+	Select Clients_ON_ART, Person_id
+    FROM
+    (
+        select o.person_id AS Person_id, "New_ART" AS "Clients_ON_ART"
+    -- , active_clients.latest_follow_up
+						from obs o
+						-- CLIENTS NEWLY INITIATED ON ART
+						 INNER JOIN patient ON o.person_id = patient.patient_id 
+						 AND (o.concept_id = 2249 
+
+						AND MONTH(o.value_datetime) = MONTH(CAST('#endDate#' AS DATE)) 
+						AND YEAR(o.value_datetime) = YEAR(CAST('#endDate#' AS DATE))
+						 )
+						 AND patient.voided = 0 AND o.voided = 0
+						 AND o.person_id not in (
+							select distinct os.person_id from obs os
+							where os.concept_id = 3634 
+							AND os.value_coded = 2095 
+							and os.voided = 0
+							AND MONTH(os.obs_datetime) = MONTH(CAST('#endDate#' AS DATE)) 
+							AND YEAR(os.obs_datetime) = YEAR(CAST('#endDate#' AS DATE))
+						 )
+
+    ) As Initiated
 
     UNION
 
@@ -269,30 +320,30 @@ on diagnosis_type.Id = prevention.person_id
 Left Outer Join
 (
 -- Site
- select o.person_id,case
- when o.value_coded = 3773 then "Extra Pulmonary"
- when o.value_coded = 2095 then "Pulmonary"
+ select o.person_id,
+ case
+ when o.value_coded = 2233 then "Extra Pulmonary"
+ when o.value_coded = 1018 then "Pulmonary"
 else "N/A" 
 end AS Site
 from obs o
-where o.concept_id = 	3788 and o.voided = 0
+where o.concept_id = 3788 and o.voided = 0
 Group by o.person_id
 ) P_EP
 on diagnosis_type.Id = P_EP.person_id
 
-
 Left Outer Join
 (
--- HIV Status
+-- TB_Treatment_History
  select o.person_id,case
- when o.value_coded = 4323 then "Known Positive"
- when o.value_coded = 4664 then "New Positive"
- when o.value_coded = 4324 then "Known Negative"
- when o.value_coded = 4665 then "New Negative"
+ when o.value_coded = 1034 then "New Patient"
+ when o.value_coded = 1084 then "Relapse"
+ when o.value_coded = 3786 then "Treatment after loss to follow up"
+ when o.value_coded = 1037 then "Treatment after failure"
 else "N/A" 
-end AS HIV
+end AS TB_Treatment_History
 from obs o
-where o.concept_id = 4666 and o.voided = 0
+where o.concept_id = 3785 and o.voided = 0
 Group by o.person_id
-) H
-on diagnosis_type.Id = H.person_id
+) History_TB_Treatment
+on diagnosis_type.Id = History_TB_Treatment.person_id
