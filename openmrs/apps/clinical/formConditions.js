@@ -148,10 +148,10 @@ Bahmni.ConceptSet.FormConditions.rules = {
                 var conditions = { show: [], hide: [] };
                 if (!result || result == 'New Negative' || result == 'Known Negative') {
                         conditions.hide.push("TB, HIV Management");
-                        conditions.hide.push("TB, Prevention of Opportunistic Infections")
+                        conditions.hide.push("TB, Prevention of OIs")
                 } else {
                         conditions.show.push("TB, HIV Management");
-                        conditions.show.push("TB, Prevention of Opportunistic Infections")
+                        conditions.show.push("TB, Prevention of OIs")
                 }
                 return conditions;
         },
