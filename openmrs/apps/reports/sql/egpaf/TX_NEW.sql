@@ -17,22 +17,10 @@ FROM
 							select distinct os.person_id from obs os
 							where 
 								os.concept_id = 3634 AND os.value_coded = 2095 
-								AND (os.obs_datetime BETWEEN CAST('#startDate#' AS DATE) AND CAST('#endDate#' AS DATE))
+								AND CAST(os.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+					    	    AND CAST(os.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 						 )
-						 AND o.person_id not in 
-								(
-								select distinct person_id 
-													from person
-													where death_date < CAST('#endDate#' AS DATE)
-													and dead = 1
-								)
-						AND o.person_id not in 
-								(
-								select distinct os.person_id 
-							   from obs os
-							   where os.concept_id = 4155 and os.value_coded = 2146
-							   AND os.obs_datetime BETWEEN CAST('#startDate#' AS DATE) AND CAST('#endDate#' AS DATE)
-						)	
+				
 						 
 						 INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
 						 INNER JOIN person_name ON person.person_id = person_name.person_id
