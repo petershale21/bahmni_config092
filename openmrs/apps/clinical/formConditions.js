@@ -148,8 +148,10 @@ Bahmni.ConceptSet.FormConditions.rules = {
                 var conditions = { show: [], hide: [] };
                 if (!result || result == 'New Negative' || result == 'Known Negative') {
                         conditions.hide.push("TB, HIV Management");
+                        conditions.hide.push("TB, Prevention of OIs")
                 } else {
                         conditions.show.push("TB, HIV Management");
+                        conditions.show.push("TB, Prevention of OIs")
                 }
                 return conditions;
         },
@@ -711,6 +713,11 @@ Bahmni.ConceptSet.FormConditions.rules = {
                   conditions.show.push("HPV Results");
 
                  }
+
+                 else if (CancerAssessment == "Both") {
+                    conditions.show.push("Results of Pap Smear");
+                    conditions.show.push("VIA Test");
+                }
 
                 else {
                         conditions.hide.push("VIA Test");

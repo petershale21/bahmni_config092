@@ -220,13 +220,7 @@
 			"TB Treatment, TB Regimen":{
 				"multiSelect" : true
 			},
-			"Other TB Management":{
-				"multiSelect" : true
-			},
 
-			"TB, HIV Management":{
-				"multiSelect" : true
-			},
 			"Phase of TB Treatment" : {
 
                 "required" : true
