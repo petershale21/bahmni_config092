@@ -59,8 +59,8 @@ UNION ALL
 
 
 (SELECT 'Total' AS AgeGroup
-		, IF(Totals.Id IS NULL, 0, SUM(IF(Totals.Program_Status = 'Initiated' AND Totals.Gender = 'M', 1, 0))) AS 'Initiated_Males'
-		, IF(Totals.Id IS NULL, 0, SUM(IF(Totals.Program_Status = 'Initiated' AND Totals.Gender = 'F', 1, 0))) AS 'Initiated_Females'
+		, IF(Totals.Id IS NULL, 0, SUM(IF(Totals.Program_Status = 'TX_NEW' AND Totals.Gender = 'M', 1, 0))) AS 'Initiated_Males'
+		, IF(Totals.Id IS NULL, 0, SUM(IF(Totals.Program_Status = 'TX_NEW' AND Totals.Gender = 'F', 1, 0))) AS 'Initiated_Females'
 		, IF(Totals.Id IS NULL, 0, SUM(1)) as 'Total'
 		, 99 AS 'sort_order'
 		
