@@ -645,6 +645,13 @@
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/weekly_ppr_report_pivot.sql"
         }
     },
+    "PrEp report": {
+        "name": "ART-078 | PrEP New (List)",
+        "type": "MRSGeneric",
+        "config": {
+            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/prep_new.sql"
+        }
+    },
     "htsfinalhivstatusbyservicepointlist": {
         "name": "HTS-001 | HTS Final HIV Status (List)",
         "type": "MRSGeneric",
@@ -975,7 +982,7 @@
         }
     },
     "TB_Outcomes": {
-        "name": "TB-001 | TB Outcomes (List)",
+        "name": "TB-001 | TB Outcomes (Pivot)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/TB_Outcomes.sql"
@@ -1156,6 +1163,14 @@
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/TB_DQA.sql/"
         }
+}
+,
+"TB_Outcome": {
+    "name": "TB-026 | TB Outcome (List)",
+    "type": "MRSGeneric",
+    "config": {
+    "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/TB_outcome_list.sql/"
+    }
 }
 }
 
