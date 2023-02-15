@@ -1,4 +1,4 @@
-SELECT  Id, patientIdentifier , patientName, Age, Gender, age_group, 'PrEP_New' AS 'Program_Status', sort_order, Location
+SELECT patientIdentifier , patientName, Age, Gender, age_group, 'PrEP_New' AS 'Program_Status', Location
 	FROM
                 (select distinct patient.patient_id AS Id,
 									   patient_identifier.identifier AS patientIdentifier,
