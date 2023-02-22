@@ -552,6 +552,52 @@
 			},
 			"Under5, Base Doses":{
 				"multiSelect": true
+			},
+			"LD, Mode of Delivery":{
+				"multiSelect" : true
+			},
+			"LD, Intrapartum and immediate postpartum complications": {
+				"multiSelect": true
+			},
+			"LD, Intrapartum and immediate postpartum interventions": {
+				"multiSelect": true
+			},
+			"LD, Infant details": {
+				"allowAddMore": true
+			},
+			"LD, Discharge Condition of the Baby" : {
+				"allowAddMore": true,
+				"required": true
+			},
+			"LD, Breast-feeding Initiation" : {
+				"required": true
+			},
+			"LD, Suspected/ Presumptive cause of death Baby" : {
+				"allowAddMore": true
+			},
+			"LD, Screened at Maternity" : {
+				"required": true
+			},
+			"LD, HIV Test Results" : {
+				"required": true
+			},
+			"LD, Postpartum HIV Test" : {
+				"required": true
+			},
+			"LD, Postpartum HIV Test Results" : {
+				"required": true
+			},
+			"LD, Postpartum ART Initiation" : {
+				"required": true
+			},
+			"LD, Condition of the Baby" : {
+				"required": true
+			},
+			"LD, Infant Sex" : {
+				"required": true
+			},
+			"LD, Discharge Condition of the Mother" : {
+				"required": true
 			}
 		},
 		"visitPage": {
