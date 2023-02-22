@@ -598,6 +598,12 @@
 			},
 			"LD, Discharge Condition of the Mother" : {
 				"required": true
+			},
+			"LD, ART Received at ANC" : {
+				"required": true
+			},
+			"LD, ART initiated during labour" : {
+				"required": true
 			}
 		},
 		"visitPage": {

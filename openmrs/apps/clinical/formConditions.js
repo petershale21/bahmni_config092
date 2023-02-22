@@ -2442,6 +2442,19 @@ Bahmni.ConceptSet.FormConditions.rules = {
                          conditions.hide.push("LD, Postpartum ART Initiation");
                   }
                    return conditions;
+             },
+             'LD, ART Received at ANC' : function(formName, formFieldValues){
+                 var conditions = { show: [], hide: [], assignedValues: [] };
+                 var conditionConcept = formFieldValues["LD, ART Received at ANC"];
+
+                 if(conditionConcept == "Yes"){
+                    conditions.assignedValues.push({ field: "LD, ART initiated during labour", fieldValue: "Already on ART", autocalculate:true});
+                 } else if(conditionConcept == "Not Applicable"){
+                    conditions.assignedValues.push({ field: "LD, ART initiated during labour", fieldValue: "Not Applicable", autocalculate:true});
+                 } else {
+                    conditions.assignedValues.push({ field: "LD, ART initiated during labour", fieldValue: "", autocalculate:true});
+                 }
+                return conditions;
              }
              ///////////////END OF LABOUR AND DELIVERY REGISTER CONDITIONS////////////////
 };
