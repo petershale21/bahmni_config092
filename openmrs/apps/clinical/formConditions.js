@@ -465,9 +465,10 @@ Bahmni.ConceptSet.FormConditions.rules = {
 
         'ANC, Syphilis Screening Results': function (formName, formFieldValues) {
                 var SyphilisScreening = formFieldValues['ANC, Syphilis Screening Results'];
+                var conditions = { show: [], hide: [] };
 
                 if (formName == "ANC, Investigations and Immunisations") {
-                        var conditions = { show: [], hide: [] };
+
 
                         if (SyphilisScreening == "Reactive") {
                                 conditions.show.push("ANC, Syphilis Screening Treatment");
@@ -477,6 +478,14 @@ Bahmni.ConceptSet.FormConditions.rules = {
                                 conditions.hide.push("ANC, Syphilis Screening Treatment");
                         }
                 }
+                 if ( (formName == "LD, Syphillis Screening") || (formName == "Labour and Delivery Register")){
+
+                         if (SyphilisScreening == "Not Done" || SyphilisScreening == "undefined"){
+                                   conditions.show.push("LD, Screened at Maternity");
+                         } else {
+                                   conditions.hide.push("LD, Screened at Maternity");
+                         }
+                 }
                 return conditions;
         },
 
@@ -2347,5 +2356,106 @@ Bahmni.ConceptSet.FormConditions.rules = {
 
         }
         return conditions;
-    }
+    },
+    /////////////////////////////////////////////////////////////////
+        //LABOUR AND DELIVERY REGISTER
+        //MALFORMATIONS
+        'LD, Visible malformations Present': function(formName, formFieldValues) {
+                var conditions = { show: [], hide: [] };
+                var conditionConcept = formFieldValues['LD, Visible malformations Present'];
+
+                if (conditionConcept){
+                        conditions.show.push("LD, Visible malformations Description");
+                } else {
+                     conditions.hide.push("LD, Visible malformations Description");
+                 }
+
+                return conditions;
+            },
+            //FEEDING OPTIONS AT BIRTH
+             'LD, Feeding Options at birth': function(formName, formFieldValues) {
+                        var conditions = { show: [], hide: [] };
+                        var conditionConcept = formFieldValues['LD, Feeding Options at birth'];
+
+                        if (conditionConcept == "Birth, Exclusive Breastfeeding" || conditionConcept == "Birth, Mixed Feeding"){
+                                conditions.show.push("LD, Breast-feeding Initiation");
+                        } else {
+                             conditions.hide.push("LD, Breast-feeding Initiation");
+                         }
+
+                        return conditions;
+              },
+             'ANC, Partner HIV Status' : function(formName, formFieldValues){
+                   var conditions = { show: [], hide: [] };
+                   if( (formName == "LD,  HIV Status at Maternity") || (formName == "Labour and Delivery Register")){
+                        var conditionConcept = formFieldValues["ANC, Partner HIV Status"];
+
+                        if( (conditionConcept == "Positive") || (conditionConcept == "Known Positive") || (conditionConcept == "undefined") ){
+                              conditions.hide.push("LD, Maternity");
+                        } else {
+                              conditions.show.push("LD, Maternity");
+                        }
+                   }
+
+                   return conditions;
+             },
+             'ANC, HIV Test Done' : function(formName, formFieldValues) {
+                    var conditions = { show: [], hide: [], assignedValues: [], disable: [] };
+                    if(formName == "LD, Maternity"){
+                        var conditionConcept = formFieldValues["ANC, HIV Test Done"];
+                        if(conditionConcept == "Yes") {
+                              conditions.assignedValues.push({ field: "LD, HIV Test Results", fieldValue: "", autocalculate:true});
+                        }
+                        if(conditionConcept == "No" || conditionConcept == "Declined") {
+                              conditions.assignedValues.push({ field: "LD, HIV Test Results", fieldValue: "Unknown", autocalculate:true});
+                        }
+                        if(conditionConcept == "Not Applicable") {
+                            conditions.assignedValues.push({ field: "LD, HIV Test Results", fieldValue: "Not Applicable", autocalculate:true});
+                        }
+                    }
+                    return conditions;
+             },
+             'LD, Postpartum HIV Test' : function (formName, formFieldValues){
+                 var conditions = { show: [], hide: [], assignedValues: [], disable: [] };
+                 if( (formName == "LD, Maternal Morbidity and Mortality") || (formName == "Labour and Delivery Register")){
+                 var conditionConcept = formFieldValues["LD, Postpartum HIV Test"];
+                     if(conditionConcept == "Yes"){
+                         conditions.show.push("LD, Postpartum HIV Test Results");
+                     } else {
+                          conditions.hide.push("LD, Postpartum HIV Test Results");
+                     }
+                 }
+                 return conditions;
+             },
+             'LD, Postpartum HIV Test Results' : function(formName, formFieldValues){
+                  var conditions = { show: [], hide: [], assignedValues: []};
+                  var postPartumHIVTestResults = formFieldValues["LD, Postpartum HIV Test Results"];
+
+                  if( (postPartumHIVTestResults == "Negative") || (postPartumHIVTestResults == "Positive")){
+                        conditions.show.push("LD, Postpartum ART Initiation");
+                        if(postPartumHIVTestResults == "Negative"){
+                           conditions.assignedValues.push({ field: "LD, Postpartum ART Initiation", fieldValue: "Not Applicable", autocalculate:true});
+                        } else {
+                           conditions.assignedValues.push({ field: "LD, Postpartum ART Initiation", fieldValue: "", autocalculate:true});
+                        }
+                  } else {
+                         conditions.hide.push("LD, Postpartum ART Initiation");
+                  }
+                   return conditions;
+             },
+             'LD, ART Received at ANC' : function(formName, formFieldValues){
+                 var conditions = { show: [], hide: [], assignedValues: [] };
+                 var conditionConcept = formFieldValues["LD, ART Received at ANC"];
+
+                 if(conditionConcept == "Yes"){
+                    conditions.assignedValues.push({ field: "LD, ART initiated during labour", fieldValue: "Already on ART", autocalculate:true});
+                 } else if(conditionConcept == "Not Applicable"){
+                    conditions.assignedValues.push({ field: "LD, ART initiated during labour", fieldValue: "Not Applicable", autocalculate:true});
+                 } else {
+                    conditions.assignedValues.push({ field: "LD, ART initiated during labour", fieldValue: "", autocalculate:true});
+                 }
+                return conditions;
+             }
+
+             ///////////////END OF LABOUR AND DELIVERY REGISTER CONDITIONS////////////////
 };
