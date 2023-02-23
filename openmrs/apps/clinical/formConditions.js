@@ -2385,20 +2385,20 @@ Bahmni.ConceptSet.FormConditions.rules = {
 
                         return conditions;
               },
-              //SYPHILLS SCREENING
-             /*'ANC, Syphilis Screening Results': function(formName, formFieldValues) {
+             'ANC, Partner HIV Status' : function(formName, formFieldValues){
                    var conditions = { show: [], hide: [] };
+                   if( (formName == "LD,  HIV Status at Maternity") || (formName == "Labour and Delivery Register")){
+                        var conditionConcept = formFieldValues["ANC, Partner HIV Status"];
 
-                   if ( (formName == "LD, Syphillis Screening") || (formName == "Labour and Delivery Register")){
-                   var conditionConcept = formFieldValues['ANC, Syphilis Screening Results'];
-                          if (conditionConcept == "Not Done" || conditionConcept == "undefined"){
-                                   conditions.show.push("LD, Screened at Maternity");
-                           } else {
-                                   conditions.hide.push("LD, Screened at Maternity");
-                           }
+                        if( (conditionConcept == "Positive") || (conditionConcept == "Known Positive") || (conditionConcept == "undefined") ){
+                              conditions.hide.push("LD, Maternity");
+                        } else {
+                              conditions.show.push("LD, Maternity");
+                        }
                    }
-                           return conditions;
-             },*/
+
+                   return conditions;
+             },
              'ANC, HIV Test Done' : function(formName, formFieldValues) {
                     var conditions = { show: [], hide: [], assignedValues: [], disable: [] };
                     if(formName == "LD, Maternity"){
@@ -2456,5 +2456,6 @@ Bahmni.ConceptSet.FormConditions.rules = {
                  }
                 return conditions;
              }
+
              ///////////////END OF LABOUR AND DELIVERY REGISTER CONDITIONS////////////////
 };
