@@ -960,6 +960,22 @@
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/Under5_Seen.sql"
         }
     },
+    "delivery_modeOfDelivery": {
+        
+        "name": "MCH-020 | Labour and deliverY (List)",
+        "type": "MRSGeneric",
+        "config": {
+            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/labourAndDeliveryPivot.sql"
+        }
+    },
+    "delivery_modeOfDeliveryPivot": {
+        
+        "name": "MCH-021 | Labour and delivery (Pivot)",
+        "type": "MRSGeneric",
+        "config": {
+            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/labourAndDeliveryPivot.sql"
+        }
+    },
     "arv_list": {
         "name": "PHARM-001 | Pharmacy ARV Regimen",
         "type": "ERPGeneric",
