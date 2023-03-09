@@ -943,7 +943,14 @@
         "name": "MCH-015 | FP SEEN (List)",
         "type": "MRSGeneric",
         "config": {
-            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/FP_Seen.sql"
+            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/familyPlanningList.sql"
+        }
+    },
+    "fp_seen_pivot": {
+        "name": "MCH-015 | FP SEEN (Pivot)",
+        "type": "MRSGeneric",
+        "config": {
+            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/familyPlanningPivot.sql"
         }
     },
     "hei_seen_list": {
