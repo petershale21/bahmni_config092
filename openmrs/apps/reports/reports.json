@@ -862,6 +862,13 @@
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/Infant_PNC.sql"
         }
     },
+    "PNC_pivot": {
+        "name": "MCH-003A | Post Natal Care Pivot (PNC)",
+        "type": "MRSGeneric",
+        "config": {
+            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/PNC_pivot.sql"
+        }
+    },
     "ANC1": {
         "name": "MCH-004 | Ante Natal Care (ANC) (Pivot)",
         "type": "MRSGeneric",
