@@ -936,7 +936,7 @@
         "name": "MCH-014 | PNC SEEN (List)",
         "type": "MRSGeneric",
         "config": {
-            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/PNC_Seen.sql"
+            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/PNC_list.sql"
         }
     },
     "fp_seen_list": {
@@ -954,10 +954,31 @@
         }
     },
     "under5_seen_list": {
-        "name": "MCH-017 | Under5 SEEN (List)",
+        "name": "MCH-017 | Child Attendance - Under5 (List)",
         "type": "MRSGeneric",
         "config": {
-            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/Under5_Seen.sql"
+            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/child_health_list.sql"
+        }
+    },
+    "under5_seen_list": {
+        "name": "MCH-018 | Child Health Attendance - Under5 (pivot)",
+        "type": "MRSGeneric",
+        "config": {
+            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/child_health_pivot.sql"
+        }
+    },
+    "under5_seen_list": {
+        "name": "MCH-019 | Child Health Attendance - Under5 (pivot)",
+        "type": "MRSGeneric",
+        "config": {
+            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/child_health_pivot.sql"
+        }
+    },
+    "under5_seen_list": {
+        "name": "MCH-020 | Nutrition - Under5 (List)",
+        "type": "MRSGeneric",
+        "config": {
+            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/nutrition_list.sql"
         }
     },
     "arv_list": {
