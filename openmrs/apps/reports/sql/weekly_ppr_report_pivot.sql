@@ -105,6 +105,8 @@ FROM
 								) as active_clients
 								where active_clients.latest_follow_up < cast('#endDate#' as date)
 								and DATEDIFF(CAST('#endDate#' AS DATE),latest_follow_up) > 0
+								AND latest_follow_up >= CAST('#startDate#' as date)
+                				AND latest_follow_up < CAST('#endDate#' as date)
 								AND patient.voided = 0 AND o.voided = 0
 								AND CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
 								AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
@@ -236,7 +238,7 @@ from obs o
 								 inner join person p on oss.person_id=p.person_id and oss.concept_id = 3752 and oss.voided=0
 								 and oss.obs_datetime < cast('#startDate#' as DATE)
 								 group by p.person_id
-								 having datediff(CAST(DATE_ADD(CAST('#startDate#' AS DATE), INTERVAL -1 DAY) AS DATE), latest_follow_up) > 28) as Missed_Greater_Than_28Days
+								 having datediff(CAST(DATE_ADD(CAST('#startDate#' AS DATE), INTERVAL -1 DAY) AS DATE), latest_follow_up) > 91) as Missed_Greater_Than_91Days
 						 )
 
 						 -- Client Seen: As either patient OR Treatment Buddy
@@ -487,6 +489,8 @@ FROM
 								) as active_clients
 								where active_clients.latest_follow_up < cast('#endDate#' as date)
 								and DATEDIFF(CAST('#endDate#' AS DATE),latest_follow_up) > 0
+								AND latest_follow_up >= CAST('#startDate#' as date)
+                				AND latest_follow_up < CAST('#endDate#' as date)
 								AND patient.voided = 0 AND o.voided = 0
 								AND CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
 								AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
@@ -618,7 +622,7 @@ from obs o
 								 inner join person p on oss.person_id=p.person_id and oss.concept_id = 3752 and oss.voided=0
 								 and oss.obs_datetime < cast('#startDate#' as DATE)
 								 group by p.person_id
-								 having datediff(CAST(DATE_ADD(CAST('#startDate#' AS DATE), INTERVAL -1 DAY) AS DATE), latest_follow_up) > 28) as Missed_Greater_Than_28Days
+								 having datediff(CAST(DATE_ADD(CAST('#startDate#' AS DATE), INTERVAL -1 DAY) AS DATE), latest_follow_up) > 91) as Missed_Greater_Than_91Days
 						 )
 
 						 -- Client Seen: As either patient OR Treatment Buddy
