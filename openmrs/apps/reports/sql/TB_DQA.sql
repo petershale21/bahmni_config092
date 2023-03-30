@@ -1,4 +1,7 @@
-SELECT distinct patientIdentifier,TB_Number, patientName, Age,age_group, Gender, Linkage, High_Risk_Populations, TB_Start_Date, Site, TB_Treatment_History, X_Ray_Results,Diagnostic_Genotypic_Test_Results, Diagnostic_Phenotypic_Test_Results, TB_Treatment_Outcome, Action_Treatment_Failures_or_Drug_Resistant, HIV_Status, HIV_Management, Prevention_of_OIs
+SELECT distinct patientIdentifier,TB_Number, patientName, Age,age_group, Gender, Linkage, High_Risk_Populations, TB_Start_Date, Site, 
+	TB_Treatment_History, X_Ray_Results, Diagnostic_Genotypic_Test_Type, Diagnostic_Genotypic_Test_Results, Diagnostic_Phenotypic_Test_Type, 
+	Diagnostic_Phenotypic_Test_Results, TB_Treatment_Outcome, Action_Treatment_Failures_or_Drug_Resistant, HIV_Status, HIV_Management, 
+	Prevention_of_OIs
  FROM (
 (Select distinct Id, TB_Number, patientIdentifier , patientName, Age, age_group, Gender
 		From(
@@ -43,6 +46,7 @@ Left Outer Join
      SUBSTRING(MAX(CONCAT(oss.obs_datetime, oss.value_datetime)), 20) as start_date
      from obs oss
      where oss.concept_id = 2237 and oss.voided=0
+	 and oss.obs_datetime < cast('#startDate#' as date)
      and oss.obs_datetime < cast('#endDate#' as date)
      group by oss.person_id
     )latest
@@ -115,27 +119,57 @@ on diagnosis_type.Id = x_ray.person_id
 
 Left Outer Join
 (
+-- Genotypic Type
+ select o.person_id,case
+ when o.value_coded = 3824 then "GeneXpert"
+ when o.value_coded = 3825 then "Line Probe Assay"
+else "N/A" 
+end AS Diagnostic_Genotypic_Test_Type
+from obs o
+inner join 
+		(
+		 select oss.person_id, MAX(oss.obs_datetime) as max_observation,
+		 SUBSTRING(MAX(CONCAT(oss.obs_datetime, oss.value_coded)), 20) as latest_Type
+		 from obs oss
+		 where oss.concept_id = 3814 and oss.voided=0
+		 and oss.obs_datetime >= cast('#startDate#' as date)
+		 and oss.obs_datetime <= cast('#endDate#' as date)
+		 group by oss.person_id
+		)latest 
+	on latest.person_id = o.person_id
+	where concept_id = 3814 
+	and o.obs_datetime = max_observation
+	and o.voided = 0
+) Genotypic_Type
+on diagnosis_type.Id = Genotypic_Type.person_id
+
+Left Outer Join
+(
 -- Genoty Results
  select o.person_id,case
  when o.value_coded = 3816 then "MTB Detected,RS"
  when o.value_coded = 3817 then "MTB Detected,RR"
  when o.value_coded = 3818 then "MTB Detected,RSI"
  when o.value_coded = 3820 then "MTB not Detected"
+ when o.value_coded = 1738 then "Positive"
+ when o.value_coded = 1016 then "Negative"
+ when o.value_coded = 3801 then "Contaminated"
 else "N/A" 
 end AS Diagnostic_Genotypic_Test_Results
 from obs o
 inner join 
 		(
 		 select oss.person_id, MAX(oss.obs_datetime) as max_observation,
-		 SUBSTRING(MAX(CONCAT(oss.obs_datetime, oss.value_coded)), 20) as latest_results
+		 SUBSTRING(MAX(CONCAT(oss.obs_datetime, oss.value_coded)), 20) as latest_results, oss.concept_id
 		 from obs oss
-		 where oss.concept_id = 3787 and oss.voided=0
+		 where oss.concept_id in (3787, 3805) and oss.voided=0
+		 and oss.person_id = 6839
 		 and oss.obs_datetime >= cast('#startDate#' as date)
 		 and oss.obs_datetime <= cast('#endDate#' as date)
 		 group by oss.person_id
 		)latest 
 	on latest.person_id = o.person_id
-	where concept_id = 3787
+	where concept_id in (3787, 3805) 
 	and o.obs_datetime = max_observation
 	and o.voided = 0
 ) Genotypic
@@ -143,28 +177,53 @@ on diagnosis_type.Id = Genotypic.person_id
 
 Left Outer Join
 (
--- Diagnostic phenotypic test results
+-- Diagnostic phenotypic test Type
  select o.person_id,case
  when o.value_coded = 3819 then "Sputum smear microscopy"
  when o.value_coded = 1045 then "Sputum Culture"
 else "N/A" 
-end AS Diagnostic_Phenotypic_Test_Results
+end AS Diagnostic_Phenotypic_Test_Type
 from obs o
 where o.concept_id = 3815 and o.voided = 0
 Group by o.person_id
-) phenotypic
-on diagnosis_type.Id = phenotypic.person_id
+) phenotypic_type
+on diagnosis_type.Id = phenotypic_type.person_id
+
+Left Outer Join
+(
+	-- Diagnostic phenotypic test results
+	select o.person_id,case 
+		when o.value_coded = 1016 then "Negative"
+		when o.value_coded = 3828 then "Scanty 1"
+		when o.value_coded = 3829 then "Scanty 2"
+		when o.value_coded = 3830 then "Scanty 3"
+		when o.value_coded = 3831 then "Scanty 4"
+		when o.value_coded = 3832 then "Scanty 5"
+		when o.value_coded = 3833 then "Scanty 6"
+		when o.value_coded = 3834 then "Scanty 7"
+		when o.value_coded = 3835 then "Scanty 8"
+		when o.value_coded = 3836 then "Scanty 9"
+		when o.value_coded = 3837 then "Pos 1+"
+		when o.value_coded = 3838 then "Pos 2+"
+		when o.value_coded = 3839 then "Pos 3+"
+	else "N/A" 
+	end AS Diagnostic_Phenotypic_Test_Results
+	from obs o
+	where o.concept_id = 3840 and o.voided = 0
+	Group by o.person_id
+) phenotypic_results
+on diagnosis_type.Id = phenotypic_results.person_id
 
 Left Outer Join
 (
 -- TB Treatment Outcome
  select o.person_id,o.value_coded, case
- when o.value_coded = 1068 then "Cured"
- when o.value_coded = 2242 then "Completed"
- when o.value_coded = 3650 then "Died"
- when o.value_coded = 2302 then "Lost to Follow-up"
- when o.value_coded = 3793 then "Failed treatment"
- when o.value_coded = 3794 then "Failed treatment and is resistant"
+	when o.value_coded = 1068 then "Cured"
+	when o.value_coded = 2242 then "Completed"
+	when o.value_coded = 3650 then "Died"
+	when o.value_coded = 2302 then "Lost to Follow-up"
+	when o.value_coded = 3793 then "Failed treatment"
+	when o.value_coded = 3794 then "Failed treatment and is resistant"
 else "N/A" 
 end AS TB_Treatment_Outcome
 from obs o
@@ -179,8 +238,8 @@ Left Outer Join
 (
 -- Action taken for treatment Failures and/or Drug resistant
  select o.person_id,case
- when o.value_coded = 3707 then "Restarted on First Line Drugs"
- when o.value_coded = 3808 then "Started on Second Line Drugs"
+	when o.value_coded = 3707 then "Restarted on First Line Drugs"
+	when o.value_coded = 3808 then "Started on Second Line Drugs"
 else "N/A" 
 end AS Action_Treatment_Failures_or_Drug_Resistant
 from obs o
@@ -214,8 +273,8 @@ left outer join
 (
 	-- HIV Management
  select o.person_id,case
- when o.value_coded = 4669 then "TB, New ART"
- when o.value_coded = 4670 then "TB, Already on ART"
+	when o.value_coded = 4669 then "TB, New ART"
+	when o.value_coded = 4670 then "TB, Already on ART"
 else "N/A"
 end AS HIV_Management
 from obs o
@@ -228,8 +287,8 @@ Left Outer Join
 (
 -- Prevention of OIs
  select o.person_id,case
- when o.value_coded = 2330 then "OI, Provided CPT"
- when o.value_coded = 4619 then "Dapsone"
+	when o.value_coded = 2330 then "OI, Provided CPT"
+	when o.value_coded = 4619 then "Dapsone"
 else "N/A"
 end AS Prevention_of_OIs
 from obs o
@@ -244,8 +303,8 @@ Left Outer Join
 -- Site
  select o.person_id,
  case
- when o.value_coded = 2233 then "Extra Pulmonary"
- when o.value_coded = 1018 then "Pulmonary"
+	when o.value_coded = 2233 then "Extra Pulmonary"
+	when o.value_coded = 1018 then "Pulmonary"
 else "N/A" 
 end AS Site
 from obs o
@@ -258,10 +317,10 @@ Left Outer Join
 (
 -- TB_Treatment_History
  select o.person_id,case
- when o.value_coded = 1034 then "New Patient"
- when o.value_coded = 1084 then "Relapse"
- when o.value_coded = 3786 then "Treatment after loss to follow up"
- when o.value_coded = 1037 then "Treatment after failure"
+	when o.value_coded = 1034 then "New Patient"
+	when o.value_coded = 1084 then "Relapse"
+	when o.value_coded = 3786 then "Treatment after loss to follow up"
+	when o.value_coded = 1037 then "Treatment after failure"
 else "N/A" 
 end AS TB_Treatment_History
 from obs o
