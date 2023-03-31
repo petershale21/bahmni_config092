@@ -4,10 +4,10 @@ SELECT DISTINCT
 					, reg.name as "Name"
 					, reg.gender as "Gender"
 					, reg.age as "Age"
-					, IF(tb_consultation.id is not null, 'Consulted', 'Not Consulted') AS status
+					, IF(pnc_consultation.id is not null, 'Consulted', 'Not Consulted') AS Status
 			FROM
 					(
-						-- REGISTERED TB CLIENTS
+						-- Registered Postnatal Clients
 						(SELECT DISTINCT
 								p.person_id as id,
 								concat(pn.given_name,' ', ifnull(pn.family_name,'')) as name,
@@ -23,17 +23,16 @@ SELECT DISTINCT
 								JOIN patient_identifier pi on v.patient_id = pi.patient_id and pi.identifier_type=3 and pi.preferred=1
 								JOIN patient_identifier_type pit on pi.identifier_type = pit.patient_identifier_type_id
 								JOIN encounter en on en.visit_id = v.visit_id and en.voided=0 and en.encounter_type = 2
-								JOIN visit_type vt on v.visit_type_id=vt.visit_type_id AND vt.visit_type_id in (11,13)
+								JOIN visit_type vt on v.visit_type_id=vt.visit_type_id AND vt.visit_type_id = 17
 								JOIN obs o on o.encounter_id=en.encounter_id
 								JOIN location l on v.location_id = l.location_id and l.retired=0
 								WHERE en.encounter_datetime >= CAST('#startDate#' AS DATE) and en.encounter_datetime <= CAST('#endDate#' AS DATE)
 								
 								) reg
 								
-						 						
 
 					LEFT JOIN 
-					-- CONSULTED CLIENTS
+					-- Postnatal CONSULTED CLIENTS
 					(SELECT DISTINCT
 							p.person_id as id,
 							concat(pn.given_name,' ', ifnull(pn.family_name,'')) as name,
@@ -51,8 +50,8 @@ SELECT DISTINCT
 							JOIN encounter en on en.visit_id = v.visit_id and en.voided=0 and en.encounter_type = 1
 							JOIN obs o on o.encounter_id=en.encounter_id 
 							JOIN location l on v.location_id = l.location_id and l.retired=0
-                            Where o.concept_id in (4153, 1158)
+                            Where o.concept_id = 4386
 							AND en.encounter_datetime >= CAST('#startDate#' AS DATE) and en.encounter_datetime <= CAST('#endDate#' AS DATE)
-							) tb_consultation
+							) pnc_consultation
 					
-					ON reg.id = tb_consultation.id)
+					ON reg.id = pnc_consultation.id)
