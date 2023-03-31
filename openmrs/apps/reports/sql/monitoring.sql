@@ -870,25 +870,71 @@ ON previous.Id = results_rece.person_id
 
 -- results
 left outer join
-(select o.person_id,case 
- when o.value_coded = 4263 then "Undetectale"
- when o.value_coded = 4264 then "less than 20"
- when o.value_coded = 4265 then "Greater or equal to 20"
-else "other" 
-end AS VL_result
+(SELECT distinct person_id, VL_result
+From
+((select o.person_id, max_observation, "Undetectable" as "VL_result"
+	from obs o
+	inner join
+		(select person_id, max(obs_datetime)as max_observation, SUBSTRING(MAX(CONCAT(obs_datetime, obs_id)), 20) AS observation_id
+			from obs where concept_id = 4273
+			and obs_datetime <= cast('#endDate#' as date)
+			and voided = 0
+			-- Viral Load Undetectable
+			group by person_id) as latest_vl_result
+		on latest_vl_result.person_id = o.person_id
+		where o.concept_id = 4266 and o.value_coded = 4263
+		and o.obs_datetime = max_observation
+			)
+
+UNION
+
+(select o.person_id, max_observation, "Less than 20" as "VL_result"
+	from obs o
+	inner join
+		(select person_id, max(obs_datetime)as max_observation, SUBSTRING(MAX(CONCAT(obs_datetime, obs_id)), 20) AS observation_id
+			from obs where concept_id = 4273
+			and obs_datetime <= cast('#endDate#' as date)
+			and voided = 0
+			-- Viral Load < 20
+			group by person_id) as latest_vl_result
+		on latest_vl_result.person_id = o.person_id
+		where o.concept_id = 4266 and o.value_coded = 4264
+		and o.obs_datetime = max_observation
+		 )
+
+UNION
+
+(Select greater_than_20.person_id, max_observation, Viral_Load
+from
+(select o.person_id, max_observation
 from obs o
-inner join 
-		(
-		 select oss.person_id, MAX(oss.obs_datetime) as max_observation,
-		 SUBSTRING(MAX(CONCAT(oss.obs_datetime, oss.value_coded)), 20) as latest_results
-		 from obs oss
-		 where oss.concept_id = 4266 and oss.voided=0
-		 and oss.obs_datetime < cast('#endDate#' as date)
-		 group by oss.person_id
-		)latest 
-	on latest.person_id = o.person_id
-	where concept_id = 4266
-	and  o.obs_datetime = max_observation	
+inner join
+	(select person_id, max(obs_datetime)as max_observation, SUBSTRING(MAX(CONCAT(obs_datetime, obs_id)), 20) AS observation_id
+		from obs where concept_id = 4273
+		and obs_datetime <= cast('#endDate#' as date)
+		and voided = 0
+		-- Viral Load >=20
+		group by person_id) as latest_vl_result
+	on latest_vl_result.person_id = o.person_id
+	where o.concept_id = 4266 and o.value_coded = 4265
+	and o.obs_datetime = max_observation) greater_than_20
+	inner join 
+	(select o.person_id, value_numeric as Viral_load
+		from obs o
+		-- Viral Load copies per ml recorded
+		inner join
+			(select person_id, max(obs_datetime)as max_observation, SUBSTRING(MAX(CONCAT(obs_datetime, obs_id)), 20) AS observation_id
+				from obs where concept_id = 4273
+				and obs_datetime <= cast('#endDate#' as date)
+				and voided = 0
+				group by person_id) as latest_vl_result
+			on latest_vl_result.person_id = o.person_id
+			where o.concept_id = 2254 
+			and o.obs_datetime = max_observation
+		 )numeric_value
+	on greater_than_20.person_id = numeric_value.person_id
+		 )
+)viral_load_result	
 	)results
 ON previous.Id = results.person_id
 
