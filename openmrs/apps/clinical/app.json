@@ -117,7 +117,10 @@
       "HTC, HIVST Results": {
 				"required": true
 			},
-
+            "HTC, Kit Collected For": {
+                "required": true
+            },
+            
 			"HTC, Distribution Mode": {
 				"multiSelect": true,
 				"required": true
