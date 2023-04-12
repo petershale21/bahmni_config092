@@ -175,6 +175,12 @@
 			"Family Planing Counselling" : {
 				"required": true
 			},
+            "FP Counselling Services Done" : {
+                "multiSelect": true
+            },
+            "IUCD/Implant Check-up": {
+                "allowFutureDates": true
+            },
 			"FP, Family Planning Method" : {
 				"required": true
 			},
