@@ -841,232 +841,239 @@
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/HTS_TST_Other_pivot.sql"
         }
     },
-    "HEI": {
-        "name": "MCH-001 | HIV Exposed Infants (HEI)",
+    "HEI_List": {
+        "name": "MCH-001 | HIV Exposed Infants (HEI) - List",
         "type": "MRSGeneric",
         "config": {
-            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/HEI.sql"
+            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/eMTCT_list.sql"
         }
     },
-    "PNC1": {
-        "name": "MCH-002 | Mother Post Natal Care (PNC)",
+    "HEI_Pivott": {
+        "name": "MCH-002 | HIV Exposed Infants (HEI) - Pivot",
         "type": "MRSGeneric",
         "config": {
-            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/PNC.sql"
+            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/eMTCT_pivot.sql"
         }
     },
-    "PNC2": {
-        "name": "MCH-003 | Child Post Natal Care (PNC)",
-        "type": "MRSGeneric",
-        "config": {
-            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/Infant_PNC.sql"
-        }
-    },
-    "PNC_pivot": {
-        "name": "MCH-003A | Post Natal Care Pivot (PNC)",
-        "type": "MRSGeneric",
-        "config": {
-            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/PNC_pivot.sql"
-        }
-    },
-    "ANC1": {
-        "name": "MCH-004 | Ante Natal Care (ANC) (Pivot)",
-        "type": "MRSGeneric",
-        "config": {
-            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/ANC.sql"
-        }
-    },
-    "ANC2": {
-        "name": "MCH-005 | Ante Natal Care (ANC) (List)",
+    "ANC_list": {
+        "name": "MCH-003 | AnteNatal Care (ANC) - List",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/ANC_List.sql"
         }
     },
+    "ANC_pivot": {
+        "name": "MCH-004 | AnteNatal Care (ANC) - Pivot",
+        "type": "MRSGeneric",
+        "config": {
+            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/ANC.sql"
+        }
+    },
+    "PNC_list": {
+        "name": "MCH-005 | Post Natal Care (PNC) - List",
+        "type": "MRSGeneric",
+        "config": {
+            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/PNC_list.sql"
+        }
+    },
+    "PNC_pivot": {
+        "name": "MCH-006 | Post Natal Care (PNC) - Pivot",
+        "type": "MRSGeneric",
+        "config": {
+            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/PNC_pivot.sql"
+        }
+    },
+    "Under5_list": {
+        "name": "MCH-007| Child Health (Under5) - List",
+        "type": "MRSGeneric",
+        "config": {
+            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/child_health_list.sql"
+        }
+    },
+    "Under5_pivot": {
+        "name": "MCH-008 | Child Health (Under5) - Pivot",
+        "type": "MRSGeneric",
+        "config": {
+            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/child_health_pivot.sql"
+        }
+    },
+    "Delivery_list": {
+        "name": "MCH-009 | Labour and Delivery - List",
+        "type": "MRSGeneric",
+        "config": {
+            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/labourAndDeliveryList.sql"
+        }
+    },
+    "Delivery_pivot": {
+        "name": "MCH-010 | Labour and Delivery - Pivot",
+        "type": "MRSGeneric",
+        "config": {
+            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/labourAndDeliveryPivot.sql"
+        }
+    },
+    "FP_list": {
+        "name": "MCH-011 | Family Planning - List",
+        "type": "MRSGeneric",
+        "config": {
+            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/familyPlanningList.sql"
+        }
+    },
+    "FP_pivot": {
+        "name": "MCH-012 | Family Planning - Pivot",
+        "type": "MRSGeneric",
+        "config": {
+            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/familyPlanningPivot.sql"
+        }
+    },
+    "Nutrition_list": {
+        "name": "MCH-013 | Nutrition - List",
+        "type": "MRSGeneric",
+        "config": {
+            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/nutrition_list.sql"
+        }
+    },
+    "Nutrition_pivot": {
+        "name": "MCH-014 | Nutrition - Pivot",
+        "type": "MRSGeneric",
+        "config": {
+            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/nutrition_pivot.sql"
+        }
+    },
     "pmtct_stat_denominator_list": {
-        "name": "MCH-006 | PMTCT STAT DINOMINATOR (List)",
+        "name": "MCH-015 | PMTCT STAT DINOMINATOR (List)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/PMTCT_STAT_Denominator_list.sql"
         }
     },
     "pmtct_stat_denominator_pivot": {
-        "name": "MCH-007 | PMTCT STAT DINOMINATOR (Pivot)",
+        "name": "MCH-016 | PMTCT STAT DINOMINATOR (Pivot)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/PMTCT_STAT_Denominator_pivot.sql"
         }
     },
     "pmtct_stat_list": {
-        "name": "MCH-008 | PMTCT STAT (List)",
+        "name": "MCH-017 | PMTCT STAT (List)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/PMTCT_STAT_list.sql"
         }
     },
     "pmtct_stat_pivot": {
-        "name": "MCH-009 | PMTCT STAT (Pivot)",
+        "name": "MCH-018 | PMTCT STAT (Pivot)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/PMTCT_STAT_pivot.sql"
         }
     },
     "pmtct_eid_list": {
-        "name": " MCH-010 | PMTCT EID (List)",
+        "name": " MCH-019 | PMTCT EID (List)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/PMTCT_EID_list.sql"
         }
     },
     "pmtct_eid_pivot": {
-        "name": "MCH-011 | PMTCT EID (PIVOT)",
+        "name": "MCH-020 | PMTCT EID (PIVOT)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/PMTCT_EID_pivot.sql"
         }
     },
     "pmtct_hei_pos_list": {
-        "name": "MCH-012 | PMTCT HEI POS (List)",
+        "name": "MCH-021 | PMTCT HEI POS (List)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/PMTCT_HEI_POS_list.sql"
         }
     },
     "pmtct_hei_pos_pivot": {
-        "name": "MCH-013 | PMTCT HEI POS (Pivot)",
+        "name": "MCH-022 | PMTCT HEI POS (Pivot)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/PMTCT_HEI_POS_pivot.sql"
         }
     },
-    "pnc_seen_list": {
-        "name": "MCH-014 | PNC SEEN (List)",
-        "type": "MRSGeneric",
-        "config": {
-            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/PNC_list.sql"
-        }
-    },
-    "fp_seen_list": {
-        "name": "MCH-015 | FP SEEN (List)",
-        "type": "MRSGeneric",
-        "config": {
-            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/FP_Seen.sql"
-        }
-    },
-    "hei_seen_list": {
-        "name": "MCH-016 | HIV Exposed Infants SEEN (List)",
-        "type": "MRSGeneric",
-        "config": {
-            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/HEI_Seen.sql"
-        }
-    },
-    "under5_seen_list": {
-        "name": "MCH-017 | Child Attendance - Under5 (List)",
-        "type": "MRSGeneric",
-        "config": {
-            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/child_health_list.sql"
-        }
-    },
-    "under5_seen_pivot": {
-        "name": "MCH-018 | Child Health Attendance - Under5 (Pivot)",
-        "type": "MRSGeneric",
-        "config": {
-            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/child_health_pivot.sql"
-        }
-    },
-    "nutrition_list": {
-        "name": "MCH-019 | Nutrition (List)",
-        "type": "MRSGeneric",
-        "config": {
-            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/nutrition_list.sql"
-        }
-    },
-    "nutrition_pivot": {
-        "name": "MCH-020 | Nutrition (Pivot)",
-        "type": "MRSGeneric",
-        "config": {
-            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/nutrition_pivot.sql"
-        }
-    },
     "completeness_anc_list": {
-        "name": "MCH-021 | Registered ANC Visits with ANC Consultation (List)",
+        "name": "MCH-023 | Registered ANC Visits with ANC Consultation (List)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/ANC_Registration_vs_Consultation_list.sql"
         }
     },
     "completeness_anc_pivot": {
-        "name": "MCH-022 | Registered ANC Visits with ANC Consultation (Pivot)",
+        "name": "MCH-024 | Registered ANC Visits with ANC Consultation (Pivot)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/ANC_Registration_vs_Consultation_pivot.sql"
         }
     },
     "completeness_under5_list": {
-        "name": "MCH-023 | Registered Under5 Visits with Under5 Consultation (List)",
+        "name": "MCH-025 | Registered Under5 Visits with Under5 Consultation (List)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/Under5_Registration_Vs_Consultation_list.sql"
         }
     },
     "completeness_under5_pivot": {
-        "name": "MCH-024 | Registered Under5 Visits with Under5 Consultation (Pivot)",
+        "name": "MCH-026 | Registered Under5 Visits with Under5 Consultation (Pivot)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/Under5_Registration_Vs_Consultation_pivot.sql"
         }
     },
     "completeness_pnc_list": {
-        "name": "MCH-025 | Registered PNC Visits with PNC Consultation (List)",
+        "name": "MCH-027 | Registered PNC Visits with PNC Consultation (List)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/PNC_Registration_vs_Consultation_list.sql"
         }
     },
     "completeness_pnc_pivot": {
-        "name": "MCH-026 | Registered PNC Visits with PNC Consultation (Pivot)",
+        "name": "MCH-028 | Registered PNC Visits with PNC Consultation (Pivot)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/PNC_Registration_vs_Consultation_pivot.sql"
         }
     },
     "completeness_fp_list": {
-        "name": "MCH-027 | Registered FP Visits with FP Consultation (List)",
+        "name": "MCH-029 | Registered FP Visits with FP Consultation (List)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/FP_Registration_vs_Consultation_list.sql"
         }
     },
     "completeness_fp_pivot": {
-        "name": "MCH-028 | Registered FP Visits with FP Consultation (Pivot)",
+        "name": "MCH-030 | Registered FP Visits with FP Consultation (Pivot)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/FP_Registration_vs_Consultation_pivot.sql"
         }
     },
     "completeness_cervical_list": {
-        "name": "MCH-029 | Registered Cervical Cancer Screening Visits with Consultation (List)",
+        "name": "MCH-031 | Registered Cervical Cancer Screening Visits with Consultation (List)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/Cervical_Registration_vs_Consultation_list.sql"
         }
     },
     "completeness_cervical_pivot": {
-        "name": "MCH-030 | Registered Cervical Cancer Screening Visits with Consultation (Pivot)",
+        "name": "MCH-032 | Registered Cervical Cancer Screening Visits with Consultation (Pivot)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/Cervical_Registration_vs_Consultation_pivot.sql"
         }
     },
     "completeness_hei_list": {
-        "name": "MCH-031 | Registered HEI Visits with HEI Consultation (List)",
+        "name": "MCH-033 | Registered HEI Visits with HEI Consultation (List)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/HEI_Registration_vs_Consultation_list.sql"
         }
     },
     "completeness_hei_pivot": {
-        "name": "MCH-032 | Registered HEI Visits with HEI Consultation (Pivot)",
+        "name": "MCH-034 | Registered HEI Visits with HEI Consultation (Pivot)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/HEI_Registration_vs_Consultation_pivot.sql"
