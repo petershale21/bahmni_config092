@@ -48,47 +48,62 @@ Bahmni.ConceptSet.FormConditions.rules = {
 
                 return conditions;
         },
+        'TB History of previous treatment' : function (formName, formFieldValues) {
+                    var conditionConcept = formFieldValues['TB History of previous treatment'];
+                    var conditions = { show: [], hide: [] };
+                    if (conditionConcept == "Other Answer"){
+                       conditions.show.push("TB History of previous treatment Specify");
+                    } else {
+                       conditions.hide.push("TB History of previous treatment Specify");
+                    }
+                    return conditions;
+         },
         'Intervention(action taken)' : function (formName, formFieldValues) {
                 var conditionConcept = formFieldValues['Intervention(action taken)'];
-                            var conditions = { show: [], hide: [] };
-                             if (conditionConcept == "Yes"){
-                                  conditions.show.push("Intervention(action taken) Specify");
-                             } else {
-                              conditions.hide.push("Intervention(action taken) Specify");
-                             }
-                            return conditions;
-                },
+                var conditions = { show: [], hide: [] };
+
+                if (conditionConcept == "Yes"){
+                    conditions.show.push("Intervention(action taken) Specify");
+                } else {
+                     conditions.hide.push("Intervention(action taken) Specify");
+                }
+
+                return conditions;
+        },
         /*** TB COMORBIDITY ***/
-                'TB Comorbidities, Clinical Status' : function (formName, formFieldValues) {
-                       var conditionConcept = formFieldValues['TB Comorbidities, Clinical Status'];
-                       var conditions = { show: [], hide: [] };
-                      if (conditionConcept){
-                           conditions.show.push("Drug");
-                           conditions.show.push("Dosage");
-                       } else {
-                            conditions.hide.push("Drug");
-                            conditions.hide.push("Dosage");
-                       }
-                       return conditions;
-                },
-                /**** AUTOFILL WEIGHT VALUES */
-                'WEIGHT': function (formName, formFieldValues) {
-                        var conditions = { assignedValues: [] , disable: [] };
-                        if (formName == "Vitals" || formName == "HIV Treatment and Care Progress Template"){
-                                conditions.assignedValues.push(
-                                { field: "WEIGHT",
-                                  fieldValue :
-                                        {
-                                           isAutoFill: true,
-                                           scopedEncounter:"CurrentVisit",
-                                           isFilledOnRetrospectiveMode: false,
-                                           enableDefaultValue:false,
-                                           enableEditAfterAutoFill: false
-                                        }
-                                });
-                        }
-                        return conditions;
-                },
+        'TB Comorbidities, Clinical Status' : function (formName, formFieldValues) {
+               var conditionConcept = formFieldValues['TB Comorbidities, Clinical Status'];
+               var conditions = { show: [], hide: [] };
+
+               if (conditionConcept){
+                  conditions.show.push("Drug");
+                  conditions.show.push("Dosage");
+               } else {
+                   conditions.hide.push("Drug");
+                   conditions.hide.push("Dosage");
+               }
+
+               return conditions;
+        },
+        /**** AUTOFILL WEIGHT VALUES */
+        'WEIGHT': function (formName, formFieldValues) {
+               var conditions = { assignedValues: [] , disable: [] };
+               if (formName == "Vitals" || formName == "HIV Treatment and Care Progress Template"){
+                    conditions.assignedValues.push(
+                    { field: "WEIGHT",
+                      fieldValue :
+                      {
+                         isAutoFill: true,
+                         scopedEncounter:"CurrentVisit",
+                         isFilledOnRetrospectiveMode: false,
+                         enableDefaultValue:false,
+                         enableEditAfterAutoFill: false
+                      }
+                    });
+               }
+
+               return conditions;
+        },
 
         'HTC, Patient type': function (formName, formFieldValues) {
                 var conditionConcept = formFieldValues['HTC, Patient type'];
