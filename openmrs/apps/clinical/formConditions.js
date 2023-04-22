@@ -27,14 +27,50 @@ Bahmni.ConceptSet.FormConditions.rules = {
                 var conditionConcept = formFieldValues['TB Transfer in'];
                 var conditions = { show: [], hide: [] };
 
-                if (conditionConcept == "Transfer In") {
-                        conditions.show.push("HIVTC, Transferred in from");
-                } else {
-                        conditions.hide.push("HIVTC, Transferred in from");
-                }
+                 switch (conditionConcept) {
+                                                        case "Transfer In":
+                                                        case "Moved in":
+                                                                conditions.show.push("HIVTC, Transferred in from");
+                                                                conditions.hide.push("TB, Transferred In From Outside Country");
+                                                                conditions.hide.push("TB, Transferred In From Outside Facility");
+                                                                break;
+
+                                                        case "Transfer in from outside Lesotho":
+                                                                conditions.hide.push("HIVTC, Transferred in from");
+                                                                conditions.show.push("TB, Transferred In From Outside Country");
+                                                                conditions.show.push("TB, Transferred In From Outside Facility");
+                                                                break;
+                                                        default:
+                                                                conditions.hide.push("HIVTC, Transferred in from");
+                                                                conditions.hide.push("TB, Transferred In From Outside Country");
+                                                                conditions.hide.push("TB, Transferred In From Outside Facility");
+                                                }
 
                 return conditions;
         },
+        'Intervention(action taken)' : function (formName, formFieldValues) {
+                var conditionConcept = formFieldValues['Intervention(action taken)'];
+                            var conditions = { show: [], hide: [] };
+                             if (conditionConcept == "Yes"){
+                                  conditions.show.push("Intervention(action taken) Specify");
+                             } else {
+                              conditions.hide.push("Intervention(action taken) Specify");
+                             }
+                            return conditions;
+                },
+        /*** TB COMORBIDITY ***/
+                'TB Comorbidities, Clinical Status' : function (formName, formFieldValues) {
+                       var conditionConcept = formFieldValues['TB Comorbidities, Clinical Status'];
+                       var conditions = { show: [], hide: [] };
+                      if (conditionConcept){
+                           conditions.show.push("Drug");
+                           conditions.show.push("Dosage");
+                       } else {
+                            conditions.hide.push("Drug");
+                            conditions.hide.push("Dosage");
+                       }
+                       return conditions;
+                },
                 /**** AUTOFILL WEIGHT VALUES */
                 'WEIGHT': function (formName, formFieldValues) {
                         var conditions = { assignedValues: [] , disable: [] };
