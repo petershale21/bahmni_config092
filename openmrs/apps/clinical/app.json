@@ -201,7 +201,7 @@
 			},
 			"ANC, Estimated Date of Delivery" : {
 				"allowFutureDates": true,
-				"required": true
+				"required": false
 			},
 			"EIM, Follow up date" : {
 				"allowFutureDates": true
@@ -237,22 +237,22 @@
 				"multiSelect": true
 			},
 			"HIVTC, Viral Load Blood drawn date" : {
-			"required": true
+			"required": false
 			},
 
 			"HIVTC, Viral Load Monitoring Type" : {
-			"required": true
+			"required": false
 			},
 
 			"HIVTC, Viral Load Result" : {
-			"required" : true
+			"required" : false
 			},
 
 			"HIVTC, Viral Load Data" : {
-					"required" : true
+					"required" : false
 			},
 			"HIVTC, Viral load blood results return date" : {
-					"required" : true
+					"required" : false
 			},
       "Follow up Date" : {
         "allowFutureDates": true
@@ -445,7 +445,7 @@
 				"required": true
 			},
 			"ANC, Last Normal Menstrual Period": {
-				"required": true
+				"required": false
 			},
 			
 			"HTC, Referred Facility": {
