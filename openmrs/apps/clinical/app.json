@@ -170,7 +170,7 @@
 				"dropdown": true
 			},
 			"Family Planing Counselling" : {
-				"required": true
+				"required": false
 			},
 			"FP, Family Planning Method" : {
 				"required": true
