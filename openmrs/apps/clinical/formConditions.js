@@ -613,8 +613,28 @@ Bahmni.ConceptSet.FormConditions.rules = {
                                 conditions.hide.push("ANC Register");
                                 return conditions;
                         }
+                        
                 }
 
+        },
+
+        'ANC, HIV Test Result': function (formName, formFieldValues) {
+                var ANC_HIV_Test_Result = formFieldValues['ANC, HIV Test Result'];
+                var conditions = { show: [], hide: [] };
+
+                if (
+                        (formName == "ANC, ANC Program") ||
+                        (formName == "ANC Register") ||
+                        (formName == "ANC HIV Testing Services") ||
+                        (formName == "ANC, Initial Test during this pregnancy")                        
+                        ) {
+                        if (ANC_HIV_Test_Result == "Positive") {
+                                conditions.show.push("HIVTC, Viral Load Monitoring Template");
+                        } else {
+                                conditions.hide.push("HIVTC, Viral Load Monitoring Template");
+                        }
+                }
+                return conditions;
         },
 
         'PNC, HIV Status Known Before Visit': function (formName, formFieldValues) {
