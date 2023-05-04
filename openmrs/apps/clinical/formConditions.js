@@ -85,6 +85,21 @@ Bahmni.ConceptSet.FormConditions.rules = {
 
                return conditions;
         },
+        /*** TB Intensive Care ***/
+        'TB Intensive Phase, ART Treatment' : function (formName, formFieldValues) {
+             var conditionConcept = formFieldValues['TB Intensive Phase, ART Treatment'];
+             var conditions = { show: [], hide: [] };
+
+             if(conditionConcept == "Yes") {
+                conditions.show.push("HIVTC, ART Regimen");
+                conditions.show.push("TB Intensive Phase, ART Regimen, Daily Dosage");
+             } else {
+                conditions.hide.push("HIVTC, ART Regimen");
+                conditions.hide.push("TB Intensive Phase, ART Regimen, Daily Dosage");
+             }
+
+             return conditions;
+        },
         /**** AUTOFILL WEIGHT VALUES */
         'WEIGHT': function (formName, formFieldValues) {
                var conditions = { assignedValues: [] , disable: [] };

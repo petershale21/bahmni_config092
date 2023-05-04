@@ -563,6 +563,30 @@
 			"Under5, Base Doses":{
 				"multiSelect": true
 			},
+			"Under5, 12 - 14 Months":{
+				"multiSelect": true
+			},
+			"Under5, 18-20 Months":{
+				"multiSelect": true
+			},
+			"Under5, 24-26 Months":{
+				"multiSelect": true
+			},
+			"Under5, 30-32 Months":{
+				"multiSelect": true
+			},
+			"Under5, 36-38 Months":{
+				"multiSelect": true
+			},
+			"Under5, 42-44 Months":{
+				"multiSelect": true
+			},
+			"Under5, 48-50 Months":{
+				"multiSelect": true
+			},
+			"Under5, 54-56 Months":{
+				"multiSelect": true
+			},
 			"LD, Mode of Delivery":{
 				"multiSelect" : true
 			},
