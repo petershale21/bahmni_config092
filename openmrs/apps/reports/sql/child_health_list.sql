@@ -1,4 +1,4 @@
-Select distinct Id, patientIdentifier , patientName, Months, Gender, Base_Dose, 1st_Dose, 2nd_Dose, 3rd_Dose, Fully_Immunized, Measles_1st_Dose, Measles_2nd_Dose, Dt_1st_Dose
+Select distinct patientIdentifier as Patient_Identifier , patientName, Months, Gender, Base_Dose, 1st_Dose, 2nd_Dose, 3rd_Dose, Fully_Immunized, Measles_1stDose, Measles_2nd_Dose, Dt_1stDose
 From
 (
 	select distinct patient.patient_id AS Id,
@@ -36,56 +36,57 @@ Group by o.person_id
 ) BaseDose
 on Child.Id = BaseDose.person_id
 
-left outer join 
 
-(
-	-- 1st Dose
- select o.person_id,case
- when o.value_coded = 4454 then "Polio(OPV)"
- when o.value_coded = 4456 then "Pentavalent"
- when o.value_coded = 4457 then "Rotavirus(RV)"
- when o.value_coded = 4458 then "Pneumococal(PCV)"
-else "N/A"
-end AS 1st_Dose
-from obs o
-where o.concept_id = 4455 and o.voided = 0
-Group by o.person_id
-) 1stDose
-on Child.Id = 1stDose.person_id
+ -- 1st Dose
+left outer join
+	(
+		select person_id, value_coded as 1st_Code, CAST(obs_datetime AS Date) as feeding_obs_date
+		from obs 
+		where concept_id = 4455 and voided = 0
+	) As 1stDose
+	
+	inner join
+	(
+		select concept_id, name AS 1st_Dose
+			from concept_name
+				where name in ('Polio(OPV)', 'Pentavalent', 'Rotavirus(RV)', 'Pneumococal(PCV)') 
+	) 1st_Dose_Concepts
+	on 1st_Dose_Concepts.concept_id = 1stDose.1st_Code
+	on 1stDose.person_id = Child.Id
 
-left outer join 
+ -- 2nd Dose
+left outer join
+	(
+		select person_id, value_coded as 2nd_Code, CAST(obs_datetime AS Date) as feeding_obs_date
+		from obs 
+		where concept_id = 4459 and voided = 0
+	) As 2nd_Dose
+	
+	inner join
+	(
+		select concept_id, name AS 2nd_Dose
+			from concept_name 
+				where name in ('Polio(OPV)', 'Pentavalent', 'Rotavirus(RV)', 'Pneumococal(PCV)') 
+	) 2nd_Dose_Concepts
+	on 2nd_Dose_Concepts.concept_id = 2nd_Dose.2nd_Code
+	on 2nd_Dose.person_id = Child.Id
 
-(
-	-- 2nd Dose
- select o.person_id,case
- when o.value_coded = 4454 then "Polio(OPV)"
- when o.value_coded = 4456 then "Pentavalent"
- when o.value_coded = 4457 then "Rotavirus(RV)"
- when o.value_coded = 4458 then "Pneumococal(PCV)"
-else "N/A"
-end AS 2nd_Dose
-from obs o
-where o.concept_id = 4459 and o.voided = 0
-Group by o.person_id
-) 2ndDose
-on Child.Id = 2ndDose.person_id
-
-left outer join 
-
-(
-	-- 3rd Dose
- select o.person_id,case
- when o.value_coded = 4454 then "Polio(OPV)"
- when o.value_coded = 4456 then "Pentavalent"
- when o.value_coded = 4457 then "Rotavirus(RV)"
- when o.value_coded = 4458 then "Pneumococal(PCV)"
-else "N/A"
-end AS 3rd_Dose
-from obs o
-where o.concept_id = 4459 and o.voided = 0
-Group by o.person_id
-) 3rdDose
-on Child.Id = 3rdDose.person_id
+ -- 3rd Dose
+left outer join
+	(
+		select person_id, value_coded as 3rd_Code, CAST(obs_datetime AS Date) as feeding_obs_date
+		from obs 
+		where concept_id = 4460 and voided = 0
+	) As 3rd_Dose
+	
+	inner join
+	(
+		select concept_id, name AS 3rd_Dose
+			from concept_name 
+				where name in ('Polio(OPV)', 'Pentavalent', 'Rotavirus(RV)', 'Pneumococal(PCV)') 
+	) 3rd_Dose_Concepts
+	on 3rd_Dose_Concepts.concept_id = 3rd_Dose.3rd_Code
+	on 3rd_Dose.person_id = Child.Id
 
 left outer join 
 (
@@ -108,7 +109,7 @@ left outer join
  when o.value_coded = 1 then "Yes"
  when o.value_coded = 2 then "No"
 else "N/A"
-end AS Measles_1st_Dose
+end AS Measles_1stDose
 from obs o
 where o.concept_id = 4461 and o.voided = 0
 Group by o.person_id
@@ -134,7 +135,7 @@ left outer join
  select o.person_id,case
  when o.value_coded = 4484 then "DT Booster"
 else "N/A"
-end AS Dt_1st_Dose
+end AS Dt_1stDose
 from obs o
 where o.concept_id = 4487 and o.voided = 0
 Group by o.person_id
