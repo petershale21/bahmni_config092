@@ -212,6 +212,12 @@
 				"allowFutureDates": true,
 				"required": false
 			},
+            "ANC, Estimated Delivery Date" : {
+				"allowFutureDates": true,
+				"required": false
+			},
+            
+
 			"EIM, Follow up date" : {
 				"allowFutureDates": true
 			},
