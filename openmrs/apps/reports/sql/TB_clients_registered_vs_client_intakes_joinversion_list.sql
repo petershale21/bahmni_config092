@@ -1,150 +1,36 @@
-SELECT DISTINCT
-		location_name
-		, Identifier
-		, Name
-		, Gender
-		, Age
-		, Status
-FROM 
-(
 
-		SELECT DISTINCT
-				location_name
-				, id
-				, identifier as Identifier
-				, name as Name
-				, gender as Gender
-				, age as Age
-				, status as Status
+SELECT distinct patientIdentifier AS "Patient Identifier", TB_Number AS "TB Number", patientName AS "Patient Name", Age, Gender, location_name AS "Location", Status
 
-		FROM
-		(
+FROM
+        (
+		SELECT distinct 
+			pi1.identifier AS patientIdentifier,
+			pi2.identifier AS TB_Number,
+			concat(pn.given_name, ' ', pn.family_name) AS patientName,
+			floor(datediff(CAST('#endDate#' AS DATE), p.birthdate)/365) AS Age,
+			p.gender AS Gender,
+			l.name as location_name,
+			if(o.person_id in 
+                      (select person_id from obs where concept_id = 4153  and voided = 0
+                        -- TB Intake form captured within a year of the start date
+                         and CAST(obs_datetime AS DATE) >= DATE_ADD(CAST('#startDate#'AS DATE), INTERVAL -12 MONTH) ),"Intake","No Intake") as Status
+							
+		FROM person p
+		
+		INNER JOIN obs o ON o.person_id = p.person_id AND o.voided = 0 
+    AND o.person_id in 
+                    (select person_id from obs where concept_id = 1158
+                    and CAST(obs_datetime AS Date) >= CAST('#startDate#'AS DATE) 
+                    and CAST(obs_datetime AS Date) <= CAST('#endDate#'AS DATE)
+                    and voided = 0)
+		INNER JOIN person_name pn ON p.person_id = pn.person_id and pn.preferred  = 1
+		INNER JOIN patient_identifier pi1 ON pi1.patient_id = p.person_id AND pi1.voided = 0 and pi1.preferred = 1 AND pi1.identifier_type = 3
+		LEFT JOIN patient_identifier pi2 ON pi2.patient_id = p.person_id AND pi2.identifier_type = 7
+		JOIN location l on o.location_id = l.location_id and l.retired=0
+		WHERE p.voided = 0
+		group by pi1.identifier
 
-			SELECT DISTINCT
-					reg.location_name
-					, reg.id
-					, reg.name
-					, reg.gender
-					, reg.age
-					, reg.identifier
-					, IF(init.id is not null, 'Intake', 'No Intake') AS status
-			FROM
-					((SELECT DISTINCT
-							p.person_id as id,
-							concat(pn.given_name,' ', ifnull(pn.family_name,'')) as name,
-							p.gender AS gender,				
-							floor(datediff(CAST('2021-06-30' AS DATE), p.birthdate)/365) AS age,				
-							pi.identifier as identifier,
-							concat("",p.uuid) as uuid,
-							concept_id,
-							l.name as location_name
-					FROM visit v
-							JOIN person_name pn on v.patient_id = pn.person_id and pn.voided=0
-							JOIN person p on p.person_id = v.patient_id
-							JOIN patient_identifier pi on v.patient_id = pi.patient_id 
-							JOIN patient_identifier_type pit on pi.identifier_type = pit.patient_identifier_type_id
-							JOIN encounter en on en.visit_id = v.visit_id and en.voided=0
-							JOIN obs o on o.encounter_id=en.encounter_id				
-							JOIN location l on v.location_id = l.location_id and l.retired=0
-					WHERE en.encounter_datetime <= CAST('2021-06-30' AS DATE)and o.date_created <= CAST('2021-06-30' AS DATE)) reg
+			
+		) AS Intakes_Done
 
-					LEFT JOIN 
-
-					(SELECT DISTINCT
-							p.person_id as id,
-							concat(pn.given_name,' ', ifnull(pn.family_name,'')) as name,
-							p.gender AS gender,
-							floor(datediff(CAST('2021-06-30' AS DATE), p.birthdate)/365) AS age,				
-							pi.identifier as identifier,
-							concat("",p.uuid) as uuid,
-							concept_id,
-							l.name as location_name
-					FROM visit v
-							JOIN person_name pn on v.patient_id = pn.person_id and pn.voided=0
-							JOIN person p on p.person_id = v.patient_id
-							JOIN patient_identifier pi on v.patient_id = pi.patient_id
-							JOIN patient_identifier_type pit on pi.identifier_type = pit.patient_identifier_type_id
-							JOIN encounter en on en.visit_id = v.visit_id and en.voided=0
-							JOIN obs o on o.encounter_id=en.encounter_id and o.concept_id=4153
-							JOIN location l on v.location_id = l.location_id and l.retired=0
-					WHERE en.encounter_datetime <= CAST('2021-06-30' AS DATE) and o.date_created <= CAST('2021-06-30' AS DATE)) init
-					
-					ON reg.id = init.id)			
-					
-		) AS IntakesRegistered
-		GROUP BY IntakesRegistered.id
-		HAVING IntakesRegistered.status = 'Intake'
-
-
-		UNION 
-
-		SELECT DISTINCT
-				location_name
-				, id
-				, identifier as Identifier
-				, name as Name
-				, gender as Gender
-				, age as Age
-				, status as Status
-
-		FROM
-		(
-
-			SELECT DISTINCT
-					reg.location_name
-					, reg.id
-					, reg.name
-					, reg.gender
-					, reg.age
-					, reg.identifier
-					, IF(init.id is not null, 'Intake', 'No Intake') AS status
-			FROM
-					((SELECT DISTINCT
-							p.person_id as id,
-							concat(pn.given_name,' ', ifnull(pn.family_name,'')) as name,
-							p.gender AS gender,				
-							floor(datediff(CAST('2021-06-30' AS DATE), p.birthdate)/365) AS age,				
-							pi.identifier as identifier,
-							concat("",p.uuid) as uuid,
-							concept_id,
-							l.name as location_name
-					FROM visit v
-							JOIN person_name pn on v.patient_id = pn.person_id and pn.voided=0
-							JOIN person p on p.person_id = v.patient_id
-							JOIN patient_identifier pi on v.patient_id = pi.patient_id 
-							JOIN patient_identifier_type pit on pi.identifier_type = pit.patient_identifier_type_id
-							JOIN encounter en on en.visit_id = v.visit_id and en.voided=0
-							JOIN obs o on o.encounter_id=en.encounter_id				
-							JOIN location l on v.location_id = l.location_id and l.retired=0
-					WHERE en.encounter_datetime <= CAST('2021-06-30' AS DATE)and o.date_created <= CAST('2021-06-30' AS DATE)) reg
-
-					LEFT JOIN 
-
-					(SELECT DISTINCT
-							p.person_id as id,
-							concat(pn.given_name,' ', ifnull(pn.family_name,'')) as name,
-							p.gender AS gender,
-							floor(datediff(CAST('2021-06-30' AS DATE), p.birthdate)/365) AS age,				
-							pi.identifier as identifier,
-							concat("",p.uuid) as uuid,
-							concept_id,
-							l.name as location_name
-					FROM visit v
-							JOIN person_name pn on v.patient_id = pn.person_id and pn.voided=0
-							JOIN person p on p.person_id = v.patient_id
-							JOIN patient_identifier pi on v.patient_id = pi.patient_id 
-							JOIN patient_identifier_type pit on pi.identifier_type = pit.patient_identifier_type_id
-							JOIN encounter en on en.visit_id = v.visit_id and en.voided=0
-							JOIN obs o on o.encounter_id=en.encounter_id and o.concept_id=4153
-							JOIN location l on v.location_id = l.location_id and l.retired=0
-					WHERE en.encounter_datetime <= CAST('2021-06-30' AS DATE) and o.date_created <= CAST('2021-06-30' AS DATE)) init
-					
-					ON reg.id = init.id)			
-					
-		) AS IntakesRegistered
-		WHERE IntakesRegistered.id in (select distinct os.person_id from obs os where os.concept_id=1158)
-		GROUP BY IntakesRegistered.id
-
-) AS RegistrationVsIntakes
-ORDER BY  RegistrationVsIntakes.id, RegistrationVsIntakes.location_name, RegistrationVsIntakes.status
-
+ORDER BY 7,3
