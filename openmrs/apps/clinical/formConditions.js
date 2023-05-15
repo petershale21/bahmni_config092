@@ -2525,7 +2525,41 @@ Bahmni.ConceptSet.FormConditions.rules = {
                     conditions.assignedValues.push({ field: "LD, ART initiated during labour", fieldValue: "", autocalculate:true});
                  }
                 return conditions;
-             }
-
+             },
              ///////////////END OF LABOUR AND DELIVERY REGISTER CONDITIONS////////////////
+             'Under5 Number': function (formName, formFieldValues) {
+                   var conditions = { assignedValues: [] , disable: [] };
+                   if (formName == "under5 Register"){
+                      conditions.assignedValues.push(
+                      { field: "Under5 Number",
+                      fieldValue :
+                               {
+                                  isAutoFill: true,
+                                  scopedEncounter:"latestvisit",
+                                  isFilledOnRetrospectiveMode: true,
+                                  enableDefaultValue:true,
+                                  enableEditAfterAutoFill: true
+                              }
+                      });
+                   }
+                   return conditions;
+             },
+             'ANC, Unique Number' : function (formName, formFieldValues) {
+                   var conditions = { assignedValues: [] , disable: [] };
+                   if (formName == "under5 Register"){
+                       conditions.assignedValues.push(
+                       { field: "ANC, Unique Number",
+                         fieldValue :
+                                    {
+                                      isAutoFill: true,
+                                      scopedEncounter:"latestvisit",
+                                      isFilledOnRetrospectiveMode: true,
+                                      enableDefaultValue:true,
+                                      enableEditAfterAutoFill: true
+                                    }
+                       });
+                   }
+
+                   return conditions;
+             }
 };
