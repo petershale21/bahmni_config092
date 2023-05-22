@@ -25,6 +25,13 @@
 							AND MONTH(os.obs_datetime) = MONTH(CAST('#endDate#' AS DATE)) 
 							AND YEAR(os.obs_datetime) = YEAR(CAST('#endDate#' AS DATE))
 						 )	
+
+						 and o.person_id not in (
+									select person_id 
+									from person 
+									where death_date <= cast('#endDate#' as date)
+									and dead = 1 and voided = 0
+						 )
 						 
 						 INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
 						 INNER JOIN person_name ON person.person_id = person_name.person_id AND person_name.preferred = 1

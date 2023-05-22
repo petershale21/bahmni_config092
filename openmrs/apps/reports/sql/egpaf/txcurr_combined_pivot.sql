@@ -54,6 +54,13 @@ FROM
 							AND MONTH(os.obs_datetime) = MONTH(CAST('#endDate#' AS DATE)) 
 							AND YEAR(os.obs_datetime) = YEAR(CAST('#endDate#' AS DATE))
 						 )	
+
+						 and o.person_id not in (
+									select person_id 
+									from person 
+									where death_date <= cast('#endDate#' as date)
+									and dead = 1 and voided = 0
+						 )
 						 
 						 INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
 						 INNER JOIN person_name ON person.person_id = person_name.person_id AND person_name.preferred = 1
@@ -245,15 +252,23 @@ FROM
 		and active_clients.person_id not in (
 							
 									-- TOUTS
-									select distinct(person_id)
-									from
-									(
-										select os.person_id, CAST(max(os.obs_datetime) AS DATE) as latest_transferout
-										from obs os
-										where os.concept_id=2398 and os.voided = 0
-										group by os.person_id
-										having latest_transferout <= CAST('#endDate#' AS DATE)
-									) as TOUTS
+										select tout_clients.person_id
+                                from
+                                (select B.person_id, B.obs_group_id, B.obs_datetime AS latest_consultation
+                                    from obs B
+                                    inner join
+                                    (select person_id, max(obs_datetime), SUBSTRING(max(CONCAT(obs_datetime, obs_id)), 20) AS observation_id
+                                    from obs where concept_id = 2403
+                                    and obs_datetime <= cast('#endDate#' as date)
+                                    and voided = 0
+                                    group by person_id) as A
+                                    on A.observation_id = B.obs_group_id
+                                    where concept_id = 2398
+                                    and A.observation_id = B.obs_group_id
+                                    and voided = 0
+                                    group by B.person_id
+                                ) as tout_clients
+                                where tout_clients.latest_consultation < cast('#endDate#' as date)
 										
 										)
 			
@@ -447,6 +462,13 @@ FROM
 							AND MONTH(os.obs_datetime) = MONTH(CAST('#endDate#' AS DATE)) 
 							AND YEAR(os.obs_datetime) = YEAR(CAST('#endDate#' AS DATE))
 						 )	
+
+						 and o.person_id not in (
+									select person_id 
+									from person 
+									where death_date <= cast('#endDate#' as date)
+									and dead = 1 and voided = 0
+						 )
 						 
 						 INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
 						 INNER JOIN person_name ON person.person_id = person_name.person_id AND person_name.preferred = 1
@@ -639,15 +661,23 @@ FROM
 		and active_clients.person_id not in (
 							
 									-- TOUTS
-									select distinct(person_id)
-									from
-									(
-										select os.person_id, CAST(max(os.obs_datetime) AS DATE) as latest_transferout
-										from obs os
-										where os.concept_id=2398 and os.voided = 0
-										group by os.person_id
-										having latest_transferout <= CAST('#endDate#' AS DATE)
-									) as TOUTS
+									select tout_clients.person_id
+                                from
+                                (select B.person_id, B.obs_group_id, B.obs_datetime AS latest_consultation
+                                    from obs B
+                                    inner join
+                                    (select person_id, max(obs_datetime), SUBSTRING(max(CONCAT(obs_datetime, obs_id)), 20) AS observation_id
+                                    from obs where concept_id = 2403
+                                    and obs_datetime <= cast('#endDate#' as date)
+                                    and voided = 0
+                                    group by person_id) as A
+                                    on A.observation_id = B.obs_group_id
+                                    where concept_id = 2398
+                                    and A.observation_id = B.obs_group_id
+                                    and voided = 0
+                                    group by B.person_id
+                                ) as tout_clients
+                                where tout_clients.latest_consultation < cast('#endDate#' as date)
 										
 										)
 			
@@ -784,4 +814,3 @@ ORDER BY Seen_Previous_ART_Clients.patientName)
  )
 ) AS Total_Aggregated_TxCurr
 ORDER BY Total_Aggregated_TxCurr.sort_order
-

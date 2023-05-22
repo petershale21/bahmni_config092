@@ -1252,7 +1252,7 @@
         "name": "TB-019 | TB Intakes (List)",
         "type": "MRSGeneric",
         "config": {
-            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/TB_Patients_List.sql"
+            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/TB_clients_registered_vs_client_intakes_joinversion_list.sql"
         }
     },
     "TB_Clients_Registered_Vs_Clients_Intakes_Pivot": {
