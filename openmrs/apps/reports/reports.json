@@ -652,6 +652,20 @@
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/prep_new.sql"
         }
     },
+    "visitors_list": {
+        "name": "ART-080 | Visitors Report (List)",
+        "type": "MRSGeneric",
+        "config": {
+            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/visitors.sql"
+        }
+    },
+    "visitors_pivot": {
+        "name": "ART-081 | Visitors Report (Pivot)",
+        "type": "MRSGeneric",
+        "config": {
+            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/visitors_pivot.sql"
+        }
+    },
     "htsfinalhivstatusbyservicepointlist": {
         "name": "HTS-001 | HTS Final HIV Status (List)",
         "type": "MRSGeneric",
