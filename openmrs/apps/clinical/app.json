@@ -242,6 +242,9 @@
                 "required" : true
 
             },
+            "TB, Index Contact Information" : {
+                "allowAddMore" : true
+            },
 			"ARV drugs No. of days dispensed" : {
 				"required": false
 			},
