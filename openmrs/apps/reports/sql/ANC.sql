@@ -24,8 +24,7 @@ FROM
 	( 
 		SELECT Id, ANC_visit,ageGroup
 		FROM
-		(
-			-- <15yrs 
+		( 
 			-- First visit
 			select o.person_id as Id,'First_Visit' as ANC_visit,'Under15' as ageGroup
 			from obs o
@@ -58,12 +57,13 @@ FROM
 									floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age								   
 									from obs o
 									INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
-									INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3	
+									INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3
+										
 								) as a
 								WHERE age < 15
 												)
 			AND o.person_id in (select o.person_id from obs o where concept_id = 2423 and value_numeric < 13)
-			WHERE concept_id = 4658 and value_coded in (4659,4660)
+			WHERE concept_id = 4658 and value_coded in (4659)
 			AND obs_datetime BETWEEN '#startDate#' and '#endDate#'
 			
 
@@ -81,11 +81,12 @@ FROM
 									from obs o
 									INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
 									INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3	
+									WHERE o.concept_id = 4658 and o.value_coded = 4659
 								) as a
 								WHERE age < 15
 												)
 			AND o.person_id in (select o.person_id from obs o where concept_id = 2423 and value_numeric >= 13 and value_numeric <= 25)
-			WHERE concept_id = 4658 and value_coded in (4659,4660)
+			WHERE concept_id = 4658 and value_coded in (4659)
 			AND obs_datetime BETWEEN '#startDate#' and '#endDate#'
 			
 
@@ -102,11 +103,12 @@ FROM
 									from obs o
 									INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
 									INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3	
+									WHERE o.concept_id = 4658 and o.value_coded = 4659
 								) as a
 								WHERE age < 15
 					      )
 			AND o.person_id in (select o.person_id from obs o where concept_id = 2423 and value_numeric > 25)
-			WHERE concept_id = 4658 and value_coded in (4659,4660)
+			WHERE concept_id = 4658 and value_coded in (4659)
 			AND obs_datetime BETWEEN '#startDate#' and '#endDate#'
 			
 
@@ -611,12 +613,13 @@ FROM
 									from obs o
 									INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
 									INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3	
+									
 								) as a
 								WHERE age > 14
 							and age <20
 												)
 			AND o.person_id in (select o.person_id from obs o where concept_id = 2423 and value_numeric < 13)
-			WHERE concept_id = 4658 and value_coded in (4659,4660)
+			WHERE concept_id = 4658 and value_coded in (4659)
 			AND obs_datetime BETWEEN '#startDate#' and '#endDate#'
 			
 
@@ -634,12 +637,13 @@ FROM
 									from obs o
 									INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
 									INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3	
+								
 								) as a
 								WHERE age > 14
 							and age <20
 												)
 			AND o.person_id in (select o.person_id from obs o where concept_id = 2423 and value_numeric >= 13 and value_numeric <= 25)
-			WHERE concept_id = 4658 and value_coded in (4659,4660)
+			WHERE concept_id = 4658 and value_coded in (4659)
 			AND obs_datetime BETWEEN '#startDate#' and '#endDate#'
 			
 
@@ -656,12 +660,13 @@ FROM
 									from obs o
 									INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
 									INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3	
+									
 								) as a
 								WHERE age > 14
 							and age <20
 					      )
 			AND o.person_id in (select o.person_id from obs o where concept_id = 2423 and value_numeric > 25)
-			WHERE concept_id = 4658 and value_coded in (4659,4660)
+			WHERE concept_id = 4658 and value_coded in (4659)
 			AND obs_datetime BETWEEN '#startDate#' and '#endDate#'
 			
 
@@ -1186,11 +1191,12 @@ FROM
 									from obs o
 									INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
 									INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3	
+								
 								) as a
 								WHERE age >=20
 												)
 			AND o.person_id in (select o.person_id from obs o where concept_id = 2423 and value_numeric < 13)
-			WHERE concept_id = 4658 and value_coded in (4659,4660)
+			WHERE concept_id = 4658 and value_coded in (4659)
 			AND obs_datetime BETWEEN '#startDate#' and '#endDate#' 
 			
 
@@ -1208,11 +1214,12 @@ FROM
 									from obs o
 									INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
 									INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3	
+								
 								) as a
 								WHERE age >=20
 												)
 			AND o.person_id in (select o.person_id from obs o where concept_id = 2423 and value_numeric >= 13 and value_numeric <= 25)
-			WHERE concept_id = 4658 and value_coded in (4659,4660)
+			WHERE concept_id = 4658 and value_coded in (4659)
 			AND obs_datetime BETWEEN '#startDate#' and '#endDate#'
 			
 
@@ -1229,11 +1236,12 @@ FROM
 									from obs o
 									INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
 									INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3	
+									
 								) as a
 								WHERE age >=20
 												)
 			AND o.person_id in (select o.person_id from obs o where concept_id = 2423 and value_numeric > 25)
-			WHERE concept_id = 4658 and value_coded in (4659,4660)
+			WHERE concept_id = 4658 and value_coded in (4659)
 			AND obs_datetime BETWEEN '#startDate#' and '#endDate#'
 			
 
