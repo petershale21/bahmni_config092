@@ -238,9 +238,10 @@
 			},
 
 			"Phase of TB Treatment" : {
-
                 "required" : true
-
+            },
+            "TB, Prevention of OIs" : {
+                "multiSelect" : true
             },
             "TB, Index Contact Information" : {
                 "allowAddMore" : true
