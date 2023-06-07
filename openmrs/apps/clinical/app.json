@@ -229,6 +229,11 @@
 			"EIM, Symptoms or physical exam finding suggestive of HIV infection" :{
 				"multiSelect" : true
 			},
+
+			"Testing Eligibility, Last 12 Months":{
+				"multiSelect" : true
+			},
+			
 			"Other TB Management" : {
 				"multiSelect" : true
 			},
