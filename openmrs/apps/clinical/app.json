@@ -647,6 +647,10 @@
 			},
 			"LD, ART initiated during labour" : {
 				"required": true
+			},
+			"Testing Eligibility, Last 12 Months":
+			{
+				"musltiselect": true
 			}
 		},
 		"visitPage": {
