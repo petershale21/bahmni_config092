@@ -1,391 +1,122 @@
-select distinct patientIdentifier,
-				patientName,
-				Age,
-				ANC_visit,
-				Trimester,
-				Estimated_Date_Delivery,
-				Gestational_Period,
-				High_Risk_Pregnancy,
-				Syphilis_Screening_Results,
-				Syphilis_Treatment_Completed,
-				Haemoglobin,
-				HIV_Status_Known_Before_Visit,
-				Final_HIV_Status,
-				Subsequent_HIV_Test_Results,
-				MUAC,
-				Tuberculosis,
-				Iron,
-				Folate,
-				Blood_Group
+SELECT distinct ID, patientIdentifier, patientName, Age, Visit_type, Trimester, Estimated_Date_Delivery, High_Risk_Pregnancy, Syphilis_Screening_Results,
+		Syphilis_Treatment_Completed, Haemoglobin, HIV_Status_Known_Before_Visit, Final_HIV_Status, Subsequent_HIV_Test_Results , MUAC, TB_Status,
+		Iron, Folate, Blood_Group
+
+FROM
+(
+select distinct patient.patient_id AS Id,
+						patient_identifier.identifier AS patientIdentifier,
+						concat(person_name.given_name, ' ', person_name.family_name) AS patientName,
+						floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age
+from obs o
+    -- ANC Clients
+     INNER JOIN patient ON o.person_id = patient.patient_id
+		AND o.person_id in
+			(
+				select latest_consultation.person_id
+                from
+				(
+					select B.person_id, B.obs_group_id, B.obs_datetime
+									from obs B
+									inner join 
+									(select person_id, max(obs_datetime), SUBSTRING(MAX(CONCAT(obs_datetime, obs_id)), 20) AS observation_id
+									from obs where concept_id = 4663
+									and obs_datetime >= cast('#startDate#' as date)
+									and obs_datetime <= cast('#endDate#' as date)
+									and voided = 0
+									group by person_id) as A
+									on A.observation_id = B.obs_group_id
+									where concept_id = 4658
+									and A.observation_id = B.obs_group_id
+                                    and voided = 0	
+									group by B.person_id
+
+				) AS latest_consultation
 				
-from obs o
-inner join
-(
-
-SELECT ID, patientIdentifier , patientName, Age, ANC_visit, Trimester
-FROM
-(
--- FIRST ANC, 1ST TRIMESTER
-select distinct patient.patient_id AS Id,
-						patient_identifier.identifier AS patientIdentifier,
-						concat(person_name.given_name, ' ', person_name.family_name) AS patientName,
-						floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age,
-						(select name from concept_name cn where cn.concept_id = 4659 and concept_name_type='FULLY_SPECIFIED') AS ANC_visit,
-                        '1st_trimester' as 'Trimester'
-from obs o
-    -- First ANC Clients
-     INNER JOIN patient ON o.person_id = patient.patient_id 
-	    AND o.concept_id = 4658 and o.value_coded = 4659
+			) 
 	    AND patient.voided = 0 AND o.voided = 0
-	    AND CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
-		AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
-
-    -- 1st trimester
-    AND o.person_Id in (select id
-								FROM
-								( 
-									select distinct o.person_id AS Id,
-									floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age
-
-									from obs o
-									INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
-									INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3	
-								) as a
-												)
     INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
 	INNER JOIN person_name ON person.person_id = person_name.person_id AND person_name.preferred = 1
     INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1
-    AND o.person_id in (select o.person_id from obs o where concept_id = 2423 and value_numeric < 13)
 	WHERE CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
 	AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE) 
-)AS first_anc_1st_trimester
+)AS ANC_Clients
 
+left outer join 
 
-UNION
-
--- SUBSEQUENT, 1ST TRIMESTER
-SELECT ID, patientIdentifier , patientName, Age, ANC_visit, Trimester
-FROM
 (
-select distinct patient.patient_id AS Id,
-						patient_identifier.identifier AS patientIdentifier,
-						concat(person_name.given_name, ' ', person_name.family_name) AS patientName,
-						floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age,
-						(select name from concept_name cn where cn.concept_id = 4660 and concept_name_type='FULLY_SPECIFIED') AS ANC_visit,
-                        '1st_trimester' as 'Trimester'
+	-- Visit type (First visit or subsequent visit)
+ select o.person_id,case
+ when o.value_coded = 4659 then "First Visit"
+ when o.value_coded = 4660 then "Subsequent Visit"
+else "N/A"
+end AS Visit_type
 from obs o
-    -- First ANC Clients
-     INNER JOIN patient ON o.person_id = patient.patient_id 
-	    AND o.concept_id = 4658 and o.value_coded = 4660
-	    AND patient.voided = 0 AND o.voided = 0
-	    AND CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
-		AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
+where o.concept_id = 4658 and o.voided = 0
+and CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+and CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE) 
+Group by o.person_id
+) VisitType
+on ANC_Clients.Id = VisitType.person_id
 
-    -- 1st trimester
-    AND o.person_Id in (select id
-								FROM
-								( 
-									select distinct o.person_id AS Id,
-									floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age
+left outer join 
 
-									from obs o
-									INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
-									INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3	
-								) as a
-												)
-    INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
-	INNER JOIN person_name ON person.person_id = person_name.person_id AND person_name.preferred = 1
-    INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1
-    AND o.person_id in (select o.person_id from obs o where concept_id = 2423 and value_numeric < 13)
-	WHERE CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
-	AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
-)AS subsequent_1st_trimester
-
-
-UNION
-SELECT ID,patientIdentifier ,patientName, Age, ANC_visit, Trimester
-FROM
 (
--- FIRST ANC, 2ND TRIMESTER
-select distinct patient.patient_id AS Id,
-						patient_identifier.identifier AS patientIdentifier,
-						concat(person_name.given_name, ' ', person_name.family_name) AS patientName,
-						floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age,
-						(select name from concept_name cn where cn.concept_id = 4659 and concept_name_type='FULLY_SPECIFIED') AS ANC_visit,
-                        '2nd_trimester' as 'Trimester'
+	-- Trimester for First visit
+ select o.person_id,case
+ when o.value_numeric < 12 then "1st Trimester"
+ when o.value_numeric > 11 
+ and o.value_numeric < 25 then "2nd Trimetser"
+ when o.value_numeric > 24 then "3rd Trimester"
+else "N/A"
+end AS Trimester
 from obs o
-    -- First ANC Clients
-     INNER JOIN patient ON o.person_id = patient.patient_id 
-	    AND o.concept_id = 4658 and o.value_coded = 4659
-	    AND patient.voided = 0 AND o.voided = 0
-	    AND CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
-		AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
-
-    -- 2nd trimester
-    AND o.person_Id in (select id
-								FROM
-								( 
-									select distinct o.person_id AS Id,
-									floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age
-
-									from obs o
-									INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
-									INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3	
-								) as a
-												)
-    INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
-	INNER JOIN person_name ON person.person_id = person_name.person_id AND person_name.preferred = 1
-    INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1
-    AND o.person_id in (select o.person_id from obs o where concept_id = 2423 and value_numeric >= 13 and value_numeric < 25)
-	WHERE CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
-	AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
-)AS first_2nd_trimester
-
-
-UNION
-
-SELECT ID, patientIdentifier, patientName, Age, ANC_visit, Trimester
-FROM
-(
--- SUBSEQUENT, 2ND TRIMESTER
-
-select distinct patient.patient_id AS Id,
-						patient_identifier.identifier AS patientIdentifier,
-						concat(person_name.given_name, ' ', person_name.family_name) AS patientName,
-						floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age,
-						(select name from concept_name cn where cn.concept_id = 4660 and concept_name_type='FULLY_SPECIFIED') AS ANC_visit,
-                        '2nd_trimester' as 'Trimester'
-from obs o
-    -- First ANC Clients
-     INNER JOIN patient ON o.person_id = patient.patient_id 
-	    AND o.concept_id = 4658 and o.value_coded = 4660
-	    AND patient.voided = 0 AND o.voided = 0
-	    AND CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
-		AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
-
-    -- 1st trimester
-    AND o.person_Id in (select id
-								FROM
-								( 
-									select distinct o.person_id AS Id,
-									floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age
-
-									from obs o
-									INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
-									INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3	
-								) as a
-												)
-    INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
-	INNER JOIN person_name ON person.person_id = person_name.person_id AND person_name.preferred = 1
-    INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1
-    AND o.person_id in (select o.person_id from obs o where concept_id = 2423 and value_numeric >= 13 and value_numeric < 25)
-	WHERE CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
-	AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
-) AS subsquent_2nd_trimester
-
-    UNION
-
-SELECT ID, patientIdentifier,patientName, Age, ANC_visit, Trimester
-FROM
-(
-    -- FIRST ANC, 3RD TRIMESTER
-select distinct patient.patient_id AS Id,
-						patient_identifier.identifier AS patientIdentifier,
-						concat(person_name.given_name, ' ', person_name.family_name) AS patientName,
-						floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age,
-						(select name from concept_name cn where cn.concept_id = 4659 and concept_name_type='FULLY_SPECIFIED') AS ANC_visit,
-                        '3rd_trimester' as 'Trimester'
-from obs o
-    -- First ANC Clients
-     INNER JOIN patient ON o.person_id = patient.patient_id 
-	    AND o.concept_id = 4658 and o.value_coded = 4659
-	    AND patient.voided = 0 AND o.voided = 0
-	    AND CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
-		AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
-
-    -- 3rd trimester
-    AND o.person_Id in (select id
-								FROM
-								( 
-									select distinct o.person_id AS Id,
-									floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age
-
-									from obs o
-									INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
-									INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3	
-								) as a
-												)
-    INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
-	INNER JOIN person_name ON person.person_id = person_name.person_id AND person_name.preferred = 1
-    INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1
-    AND o.person_id in (select o.person_id from obs o where concept_id = 2423 and value_numeric > 25)
-	WHERE CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
-	AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
-)AS first_3rd_trimester
-
-
-UNION
-
-
-SELECT ID, patientIdentifier,patientName, Age, ANC_visit, Trimester
-FROM
-(
--- SUBSEQUENT, 3RD TRIMESTER
-
-select distinct patient.patient_id AS Id,
-						patient_identifier.identifier AS patientIdentifier,
-						concat(person_name.given_name, ' ', person_name.family_name) AS patientName,
-						floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age,
-						(select name from concept_name cn where cn.concept_id = 4660 and concept_name_type='FULLY_SPECIFIED') AS ANC_visit,
-                        '3rd_trimester' as 'Trimester'
-from obs o
-    -- Subsequent ANC Clients
-     INNER JOIN patient ON o.person_id = patient.patient_id 
-	    AND o.concept_id = 4658 and o.value_coded = 4660
-	    AND patient.voided = 0 AND o.voided = 0
-	    AND CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
-		AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
-
-    -- 3rd trimester
-    AND o.person_Id in (select id
-								FROM
-								( 
-									select distinct o.person_id AS Id,
-									floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age
-
-									from obs o
-									INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
-									INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3	
-								) as a
-												)
-    INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
-	INNER JOIN person_name ON person.person_id = person_name.person_id AND person_name.preferred = 1
-    INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1
-    AND o.person_id in (select o.person_id from obs o where concept_id = 2423 and value_numeric > 25)
-	WHERE CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
-	AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE) 
-
-)AS subsequent_3rd_trimester
-
-UNION
-
-SELECT ID, patientIdentifier,patientName, Age, ANC_visit, Trimester
-FROM
-(
--- FIRST ANC NO GESTATIONAL PERIOD
-select distinct patient.patient_id AS Id,
-						patient_identifier.identifier AS patientIdentifier,
-						concat(person_name.given_name, ' ', person_name.family_name) AS patientName,
-						floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age,
-						(select name from concept_name cn where cn.concept_id = 4659 and concept_name_type='FULLY_SPECIFIED') AS ANC_visit,
-                        'NULL' as 'Trimester'
-from obs o
-    -- First ANC Clients
-     INNER JOIN patient ON o.person_id = patient.patient_id 
-	    AND o.concept_id = 4658 and o.value_coded = 4659
-	    AND patient.voided = 0 AND o.voided = 0
-	    AND CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
-		AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
-
-    -- no trimester
-    AND o.person_Id in (select id
-								FROM
-								( 
-									select distinct o.person_id AS Id,
-									floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age
-
-									from obs o
-									INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
-									INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3	
-								) as a
-												)
-    INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
-	INNER JOIN person_name ON person.person_id = person_name.person_id AND person_name.preferred = 1
-    INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1
-    AND o.person_id not in (select o.person_id from obs o where concept_id = 2423)
-	WHERE CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
-	AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
-)AS first_no_trimester
-
-
-UNION
-
-SELECT ID, patientIdentifier,patientName, Age, ANC_visit, Trimester
-FROM
-(
--- SUBSEQUENT, NO GESTATIONAL PERIOD
-
-select distinct patient.patient_id AS Id,
-						patient_identifier.identifier AS patientIdentifier,
-						concat(person_name.given_name, ' ', person_name.family_name) AS patientName,
-						floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age,
-						(select name from concept_name cn where cn.concept_id = 4660 and concept_name_type='FULLY_SPECIFIED') AS ANC_visit,
-                        'NULL' as 'Trimester'
-from obs o
-    -- Subsequent ANC Clients
-     INNER JOIN patient ON o.person_id = patient.patient_id 
-	    AND o.concept_id = 4658 and o.value_coded = 4660
-	    AND patient.voided = 0 AND o.voided = 0
-	    AND CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
-		AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
-
-    -- no trimester
-    AND o.person_Id in (select id
-								FROM
-								( 
-									select distinct o.person_id AS Id,
-									floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age
-
-									from obs o
-									INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
-									INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3	
-								) as a
-												)
-    INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
-	INNER JOIN person_name ON person.person_id = person_name.person_id AND person_name.preferred = 1
-    INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1
-    AND o.person_id not in (select o.person_id from obs o where concept_id = 2423)
-	WHERE CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
-	AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
-)AS subsquent_no_trimester
-) AS ANC
-ON o.person_id = ID
-
--- Gestational period
-left outer join
-	(
-	select person_id, value_numeric as Gestational_Period
-	from obs where concept_id = 2423 and voided = 0
-	)current_gestation
-	on ANC.Id = current_gestation.person_id
+where o.concept_id = 2423 and o.voided = 0
+and CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+and CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
+Group by o.person_id
+) Gestational_Period
+on ANC_Clients.Id = Gestational_Period.person_id
 
 -- EDD
 left outer join
 	(
 	select person_id,CAST(value_datetime AS DATE) as Estimated_Date_Delivery
 	from obs where concept_id = 4627 and voided = 0
-	)intake_date
-	on ANC.Id = intake_date.person_id
+	)edd_date
+	on ANC_Clients.Id = edd_date.person_id
 
--- High Risk Pregnancy
 left outer join
-	(
-	select person_id, value_coded as Risk_Code
-	from obs where concept_id = 4352 and voided = 0
-	)High_Risk_Preg
 
-	inner join
 	(
-		select concept_id, name AS High_Risk_Pregnancy
-			from concept_name 
-				where name in ('No Risk', 'Age less than 16 years', 'Age more than 40 years', 'History 3 or more consecutive spontaneous miscarriages',
-								'Birth Weight< 2500g', 'Birth Weight > 4500g', 'Previous Hx of Hypertension/pre-eclampsia/eclampsia', 'Isoimmunization Rh(-)',
-								'Renal Disease', 'Cardiac Disease', 'Diabetes', 'Known Substance Abuse', 'Pelvic Mass', 'Other Medical Problems', 
-								'Previous Surgery on Reproductive Tract', 'Other Answer') 
-	) concept_name
-	on concept_name.concept_id = High_Risk_Preg.Risk_Code 
-
-on High_Risk_Preg.person_id = ANC.Id
+	-- Syphilis Treatment Completed
+		select o.person_id,case
+		when o.value_coded = 4353 then "No Risk"
+		when o.value_coded = 4354 then "Age less than 16 years"
+		when o.value_coded = 4355 then "Age more than 40 years"
+		when o.value_coded = 4356 then "Previous SB or NND"
+		when o.value_coded = 4357 then "History 3 or more consecutive spontaneous miscarriages"
+		when o.value_coded = 4358 then "Birth Weight< 2500g"
+		when o.value_coded = 4359 then "Birth Weight > 4500g"
+		when o.value_coded = 4360 then "Previous Hx of Hypertension/pre-eclampsia/eclampsia"
+		when o.value_coded = 4361 then "Isoimmunization Rh(-)"
+		when o.value_coded = 1050 then "Renal Disease"
+		when o.value_coded = 4362 then "Cardiac Disease"
+		when o.value_coded = 1048 then "Diabetes"
+		when o.value_coded = 4363 then "Known Substance Abuse"
+		when o.value_coded = 4364 then "Pelvic Mass"
+		when o.value_coded = 4365 then "Other Medical Problems"
+		when o.value_coded = 4366 then "Previous Surgery on Reproductive Tract"
+		when o.value_coded = 1033 then "Other Answer"
+		else "N/A"
+		end AS High_Risk_Pregnancy
+		from obs o
+		where o.concept_id = 4352 and o.voided = 0
+		and o.obs_datetime >= CAST('#startDate#' AS DATE)
+		and o.obs_datetime <= CAST('#endDate#'AS DATE)
+		Group by o.person_id
+		) High_Risk_Preg
+		on ANC_Clients.Id = High_Risk_Preg.person_id
 
 -- Syphilis_Screening_Results
 left outer join
@@ -410,27 +141,25 @@ left outer join
 
 	) Syphilis_Screening_Res
 
-on Syphilis_Screening_Res.person_id = ANC.Id
+on Syphilis_Screening_Res.person_id = ANC_Clients.Id
 
--- Syphilis Treatment Completed
 left outer join
-	(
-	select person_id, value_coded as Treatment_Code
-	from obs os
-	where concept_id = 1732 and voided = 0
-	and os.obs_datetime >= CAST('#startDate#' AS DATE)
-    and os.obs_datetime <= CAST('#endDate#'AS DATE)
-	)Syphilis_Treatment_Comp
 
-	inner join
 	(
-		select concept_id, name AS Syphilis_Treatment_Completed
-			from concept_name 
-				where name in ('Yes','No','Not Applicable') 
-	) treatment_concept
-	on treatment_concept.concept_id = Syphilis_Treatment_Comp.Treatment_Code 
-
-on Syphilis_Treatment_Comp.person_id = ANC.Id
+	-- Syphilis Treatment Completed
+		select o.person_id,case
+		when o.value_coded = 2146 then "Yes"
+		when o.value_coded = 2147 then "No"
+		when o.value_coded = 1975 then "Not applicable"
+		else "N/A"
+		end AS Syphilis_Treatment_Completed
+		from obs o
+		where o.concept_id = 1732 and o.voided = 0
+		and o.obs_datetime >= CAST('#startDate#' AS DATE)
+		and o.obs_datetime <= CAST('#endDate#'AS DATE)
+		Group by o.person_id
+		) Syphilis_Treatment_Comp
+		on ANC_Clients.Id = Syphilis_Treatment_Comp.person_id
 
 -- ANEMIA HAEMOGLOBIN
 left outer join
@@ -439,7 +168,7 @@ left outer join
 	from obs o
 	where concept_id = 3204 and voided = 0
 	)Haemoglobin_Anemia
-	on ANC.Id = Haemoglobin_Anemia.person_id
+	on ANC_Clients.Id = Haemoglobin_Anemia.person_id
  
 -- HIV Status Known Before Visit	
 left outer join
@@ -459,7 +188,7 @@ left outer join
 	) hiv_concept_name
 	on hiv_concept_name.concept_id = HIV_Status.Status_Code 
 
-on HIV_Status.person_id = ANC.Id
+on HIV_Status.person_id = ANC_Clients.Id
 
 -- Final HIV Status	
 left outer join
@@ -477,26 +206,28 @@ left outer join
 	) final_hiv_concept_name
 	on final_hiv_concept_name.concept_id = F_HIV_Status.Final_Status_Code 
 
-on F_HIV_Status.person_id = ANC.Id
+on F_HIV_Status.person_id = ANC_Clients.Id
 
 -- Subsequent HIV Test Results
 
 left outer join
-	(
-	select person_id, value_coded as Subsequent_Final_Status
-	from obs os
-	where concept_id = 4325 and voided = 0
-	)Subsequent_HIV_Status
 
-	inner join
 	(
-		select concept_id, name AS Subsequent_HIV_Test_Results
-			from concept_name 
-				where name in ('Positive', 'Negative', 'Declined', 'Not Applicable') 
-	) subsequent_hiv_concept
-	on subsequent_hiv_concept.concept_id = Subsequent_HIV_Status.Subsequent_Final_Status 
-
-on Subsequent_HIV_Status.person_id = ANC.Id
+	-- Syphilis Treatment Completed
+		select o.person_id,case
+		when o.value_coded = 1738 then "Positive"
+		when o.value_coded = 1016 then "Negative"
+        when o.value_coded = 4321 then "Decline"
+		when o.value_coded = 1975 then "Not applicable"
+		else "N/A"
+		end AS Subsequent_HIV_Test_Results
+		from obs o
+		where o.concept_id = 4325 and o.voided = 0
+		and o.obs_datetime >= CAST('#startDate#' AS DATE)
+		and o.obs_datetime <= CAST('#endDate#'AS DATE)
+		Group by o.person_id
+		) Subsequent_HIV_Status
+		on ANC_Clients.Id = Subsequent_HIV_Status.person_id
 
 -- MUAC
 left outer join
@@ -504,88 +235,75 @@ left outer join
 	select person_id, value_numeric as MUAC
 	from obs where concept_id = 2086 and voided = 0
 	)Muac
-	on ANC.Id = Muac.person_id
+	on ANC_Clients.Id = Muac.person_id
 
 -- TB Status
 
 left outer join
 	(
-	select person_id, value_coded as TB_Status
-	from obs os
-	where concept_id = 3710 and voided = 0
-	)TB_Status
+	-- TB Status
+		select o.person_id,case
+		when o.value_coded = 3709 then "No signs"
+		when o.value_coded = 1876 then "Suspected"
+		when o.value_coded = 3639 then "On TB treatment"
+		else "N/A"
+		end AS TB_Status
+		from obs o
+		where o.concept_id = 3710 and o.voided = 0
+		Group by o.person_id
+		) TBStatus
+		on ANC_Clients.Id = TBStatus.person_id
 
-	inner join
+left outer join 
 	(
-		select concept_id, name AS Tuberculosis
-			from concept_name 
-				where name in ('No signs', 'Suspected / Probable', 'On TB treatment') 
-	) tb_concept
-	on tb_concept.concept_id = TB_Status.TB_Status 
+	-- Iron
+		select o.person_id,case
+		when o.value_coded = 4668 then "Prophylaxis"
+		when o.value_coded = 1067 then "On Treatment"
+		when o.value_coded = 4298 then "Not Given"
+		else "N/A"
+		end AS Iron
+		from obs o
+		where o.concept_id = 4299 and o.voided = 0
+		Group by o.person_id
+		) IronStatus
+		on ANC_Clients.Id = IronStatus.person_id
 
-on TB_Status.person_id = ANC.Id
-
--- Iron
-left outer join
+left outer join 
 	(
-	select person_id, value_coded as Iron_Status
-	from obs os
-	where concept_id = 4299 and voided = 0
-	and os.obs_datetime >= CAST('#startDate#' AS DATE)
-    and os.obs_datetime <= CAST('#endDate#'AS DATE)
-	)Iron_Status
+	-- Folate
+		select o.person_id,case
+		when o.value_coded = 4668 then "Prophylaxis"
+		when o.value_coded = 1067 then "On Treatment"
+		when o.value_coded = 4298 then "Not Given"
+		else "N/A"
+		end AS Folate
+		from obs o
+		where o.concept_id = 4300 and o.voided = 0
+		and o.obs_datetime >= CAST('#startDate#' AS DATE)
+    	and o.obs_datetime <= CAST('#endDate#'AS DATE)
+		Group by o.person_id
+		) Folate_Status
+		on ANC_Clients.Id = Folate_Status.person_id
 
-	inner join
+left outer join 
 	(
-		select concept_id, name AS Iron
-			from concept_name 
-				where name in ('Prophylaxis', '	On Treatment', 'Not Dispensed') 
-	) iron_concept
-	on iron_concept.concept_id = Iron_Status.Iron_Status 
-
-on Iron_Status.person_id = ANC.Id
-
--- Folate
-left outer join
-	(
-	select person_id, value_coded as Folate_Status
-	from obs os
-	where concept_id = 4300 and voided = 0
-	and os.obs_datetime >= CAST('#startDate#' AS DATE)
-    and os.obs_datetime <= CAST('#endDate#'AS DATE)
-	)Folate_Status
-
-	inner join
-	(
-		select concept_id, name AS Folate
-			from concept_name 
-				where name in ('Prophylaxis', '	On Treatment', 'Not Dispensed') 
-	) folate_concept
-	on folate_concept.concept_id = Folate_Status.Folate_Status 
-
-on Folate_Status.person_id = ANC.Id
-
--- Blood Group
-left outer join
-	(
-	select person_id, value_coded as Blood_Group_Status
-	from obs os
-	where concept_id = 1179 and voided = 0
-	and os.obs_datetime >= CAST('#startDate#' AS DATE)
-    and os.obs_datetime <= CAST('#endDate#'AS DATE)
-	)Blood_Group_Status
-
-	inner join
-	(
-		select concept_id, name AS Blood_Group
-			from concept_name 
-				where name in ('Blood Group, A+', 'Blood Group, A-', '	Blood Group, B+', 'Blood Group, B-',
-								 'Blood Group, O+', 'Blood Group, O-', 'Blood Group, AB+', 'Blood Group, AB-') 
-	) blood_group_concept
-	on blood_group_concept.concept_id = Blood_Group_Status.Blood_Group_Status 
-
-on Blood_Group_Status.person_id = ANC.Id
-
-
-
-
+	-- Blood Group
+		select o.person_id,case
+		when o.value_coded = 4309 then "Blood Group, A+"
+		when o.value_coded = 4310 then "Blood Group, A-"
+		when o.value_coded = 4311 then "Blood Group, B+"
+		when o.value_coded = 4312 then "Blood Group, B-"
+		when o.value_coded = 4313 then "Blood Group, O+"
+		when o.value_coded = 4314 then "Blood Group, O-"
+		when o.value_coded = 4315 then "Blood Group, AB+"
+		when o.value_coded = 4316 then "Blood Group, AB-"
+		else "N/A"
+		end AS Blood_Group
+		from obs o
+		where o.concept_id = 1179 and o.voided = 0
+		and o.obs_datetime >= CAST('#startDate#' AS DATE)
+    	and o.obs_datetime <= CAST('#endDate#'AS DATE)
+		Group by o.person_id
+		) Blood_Group_Status
+		on ANC_Clients.Id = Blood_Group_Status.person_id
