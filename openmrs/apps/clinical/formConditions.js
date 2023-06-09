@@ -1281,12 +1281,12 @@ Bahmni.ConceptSet.FormConditions.rules = {
 
 /*--- EDD generic autocalculation----*/
            'ANC, Last Normal Menstrual Period' : function (formName, formFieldValues) {
-                if(formName=="ANC, Obstetric History") {
+                if(formName=="ANC, Obstetric History" || formName=="ANC, Examinations") {
                          var LNMP = formFieldValues['ANC, Last Normal Menstrual Period'];
                          var conditions = { assignedValues: [], error: [] };
                          var dateUtil = Bahmni.Common.Util.DateUtil;
                          var LNMPDate = new Date(LNMP);
-                         var EDDWithTime = dateUtil.addMonths(LNMPDate,9);
+                         var EDDWithTime = dateUtil.addDays(LNMPDate,280);
                          var EDDWithoutTime = dateUtil.getDateWithoutTime(EDDWithTime);
 
                          if(LNMP) {
@@ -2389,21 +2389,21 @@ Bahmni.ConceptSet.FormConditions.rules = {
         }
         return conditions;
 },
- 'ANC, Last Normal Menstrual Period': function(formName, formFieldValues) {
-        var conditions = { assignedValues: [], disable: [] };
-        var conditionConcept;
-        if (formName == "ANC, Obstetric History"){ 
-            conditions.assignedValues.push({
-                field: "ANC, Last Normal Menstrual Period",
-                fieldValue: {
-                    isAutoFill: true,
-                    scopedEncounter: "latestvisit",
-                }
-            });
+//  'ANC, Last Normal Menstrual Period': function(formName, formFieldValues) {
+//         var conditions = { assignedValues: [], disable: [] };
+//         var conditionConcept;
+//         if (formName == "ANC, Obstetric History"){ 
+//             conditions.assignedValues.push({
+//                 field: "ANC, Last Normal Menstrual Period",
+//                 fieldValue: {
+//                     isAutoFill: true,
+//                     scopedEncounter: "latestvisit",
+//                 }
+//             });
 
-        }
-        return conditions;
-    },
+//         }
+//         return conditions;
+//     },
     /////////////////////////////////////////////////////////////////
         //LABOUR AND DELIVERY REGISTER
         //MALFORMATIONS
