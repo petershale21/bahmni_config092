@@ -1317,6 +1317,13 @@
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/TB_DQA.sql/"
         }
+},
+"TB_TPT_UPTAKE": {
+    "name": "TB-027 | TB - TPT Uptake",
+    "type": "MRSGeneric",
+    "config": {
+        "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/tpt_uptake.sql"
+    }
 }
 }
 
