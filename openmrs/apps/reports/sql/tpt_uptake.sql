@@ -213,6 +213,7 @@ inner join
 	on latest.person_id = o.person_id
 	where concept_id = 2149
 	and  o.obs_datetime = max_observation
+	and o.voided = 0
 	) pregnancy_status
 ON tpt_uptake.Id = pregnancy_status.person_id
 
@@ -225,30 +226,80 @@ From
 	inner join
 		(select person_id, max(obs_datetime)as max_observation, SUBSTRING(MAX(CONCAT(obs_datetime, obs_id)), 20) AS observation_id
 			from obs where concept_id = 4930  -- IPT form
+			and cast(obs_datetime as date) >= cast('#startDate#' as date)
 			and cast(obs_datetime as date) <= cast('#endDate#' as date)
 			and voided = 0
 			-- IPT information filled in TPT form
-			group by person_id) as latest_vl_result
-		on latest_vl_result.person_id = o.person_id
+			group by person_id) as tpt_result
+		on tpt_result.person_id = o.person_id
 		where o.concept_id = 2227 
+		and cast(obs_datetime as date) >= cast('#startDate#' as date)
+		and cast(obs_datetime as date) <= cast('#endDate#' as date)
+		and o.person_id in (
+							select distinct os.person_id
+							from obs os
+                             -- HIV Negative
+							where os.concept_id = 4521 and os.value_coded = 1016 
+                            and os.voided = 0
+							AND CAST(os.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+							AND CAST(os.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
+		)
 		and o.obs_datetime = max_observation
 			)
 
 UNION
 
-(select o.person_id, max_observation, "HIV Positive" as "HIV_Status"
+(
+	select person_id, max_observation, "HIV Positive" as "HIV_Status"
+	from(
+	(select distinct o.person_id, max_observation-- , "HIV Positive" as "HIV_Status"
 	from obs o
 	inner join
 		(select person_id, max(obs_datetime)as max_observation, SUBSTRING(MAX(CONCAT(obs_datetime, obs_id)), 20) AS observation_id
 			from obs where concept_id = 3753 -- Patient Register in HIV followup form
+			-- and cast(obs_datetime as date) >= cast('#startDate#' as date)
 			and cast(obs_datetime as date) <= cast('#endDate#' as date)
 			and voided = 0
 			-- IPT information filled in HIV followup form
-			group by person_id) as latest_vl_result
-		on latest_vl_result.person_id = o.person_id
-		where o.concept_id = 2227 
-		and o.obs_datetime = max_observation
-		 )
+			group by person_id) as tpt_result
+			on tpt_result.person_id = o.person_id
+			where o.concept_id = 2227 
+			and cast(o.obs_datetime as date) >= cast('#startDate#' as date)
+			and cast(o.obs_datetime as date) <= cast('#endDate#' as date)
+			and o.obs_datetime = max_observation)
+
+			UNION
+			
+	 (select o.person_id, max_observation-- , "HIV Positive" as "HIV_Status"
+				from obs o
+				inner join
+					(select person_id, max(obs_datetime)as max_observation, SUBSTRING(MAX(CONCAT(obs_datetime, obs_id)), 20) AS observation_id
+						from obs where concept_id = 4930  -- IPT form
+						and cast(obs_datetime as date) >= cast('#startDate#' as date)
+						and cast(obs_datetime as date) <= cast('#endDate#' as date)
+						and voided = 0
+						-- IPT information filled in TPT form
+						group by person_id) as tpt_result
+					on tpt_result.person_id = o.person_id
+					where o.concept_id = 2227 -- Started IPT
+					-- and cast(obs_datetime as date) >= cast('#startDate#' as date)
+					and cast(obs_datetime as date) <= cast('#endDate#' as date)
+					and o.person_id in (
+										select distinct os.person_id
+										from obs os
+										-- HIV Positive
+										where os.concept_id = 4521 and os.value_coded = 1738 
+										and os.voided = 0
+										AND CAST(os.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+										AND CAST(os.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
+					)
+					and o.obs_datetime = max_observation
+
+			
+	)
+	)hiv_pos
+)
+
 )hiv_status
 )status_recorded
 on tpt_uptake.Id = status_recorded.person_id
