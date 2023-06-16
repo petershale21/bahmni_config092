@@ -88,7 +88,7 @@ Bahmni.ConceptSet.FormConditions.rules = {
         /**** AUTOFILL WEIGHT VALUES */
         'WEIGHT': function (formName, formFieldValues) {
                var conditions = { assignedValues: [] , disable: [] };
-               if (formName == "Vitals" || formName == "HIV Treatment and Care Progress Template"){
+               if (formName == "ANC, ANC Program" || formName == "HIV Treatment and Care Progress Template" || formName == "Vitals"){
                     conditions.assignedValues.push(
                     { field: "WEIGHT",
                       fieldValue :
@@ -101,10 +101,66 @@ Bahmni.ConceptSet.FormConditions.rules = {
                       }
                     });
                }
-
                return conditions;
         },
 
+        /*** AUTOFILL MUAC VALUES ****/
+
+        'IMAM, MUAC': function (formName, formFieldValues) {
+                var conditions = { assignedValues: [] , disable: [] };
+                if (formName == "ANC, ANC Program"){
+                     conditions.assignedValues.push(
+                     { field: "IMAM, MUAC",
+                       fieldValue :
+                       {
+                          isAutoFill: true,
+                          scopedEncounter:"CurrentVisit",
+                          isFilledOnRetrospectiveMode: false,
+                          enableDefaultValue:false,
+                          enableEditAfterAutoFill: false
+                       }
+                     });
+                }
+                return conditions;
+        },
+         
+        /*** AUTOFILL Blood Pressure values VALUES ****
+         'Diastolic Data': function (formName, formFieldValues) {
+                var conditions = { assignedValues: [] , disable: [] };
+                if (formName == "ANC, ANC Program" || formName == "Vitals" || formName == "Blood Pressure"){
+                     conditions.assignedValues.push(
+                     { field: "Diastolic Data",
+                       fieldValue :
+                       {
+                          isAutoFill: true,
+                          scopedEncounter:"CurrentVisit",
+                          isFilledOnRetrospectiveMode: false,
+                          enableDefaultValue:false,
+                          enableEditAfterAutoFill: false
+                       }
+                     });
+                }
+                return conditions;
+         },
+         
+         'Systolic Data': function (formName, formFieldValues) {
+                var conditions = { assignedValues: [] , disable: [] };
+                if (formName == "ANC, ANC Program" || formName == "Vitals"){
+                     conditions.assignedValues.push(
+                     { field: "Systolic Data",
+                       fieldValue :
+                       {
+                          isAutoFill: true,
+                          scopedEncounter:"CurrentVisit",
+                          isFilledOnRetrospectiveMode: false,
+                          enableDefaultValue:false,
+                          enableEditAfterAutoFill: false
+                       }
+                     });
+                }
+                return conditions;
+         },
+***/
         'HTC, Patient type': function (formName, formFieldValues) {
                 var conditionConcept = formFieldValues['HTC, Patient type'];
                 var conditions = { show: [], hide: [],   assignedValues: [] };
@@ -284,13 +340,13 @@ Bahmni.ConceptSet.FormConditions.rules = {
 
         'ANC, Gravida': function (formName, formFieldValues) {
                 var ANCGravida = formFieldValues['ANC, Gravida'];
-                var conditions = { show: [], hide: [], disable: [] };
-
-                if  ((formName == "ANC, Obstetric History") || (formName == "ANC, Program")){
+                var AncVisits = formFieldValues['ANC, Visit Types'];
+                var conditions = { show: [], hide: [], disable: [], assignedValues: [] };
+                
+               
+                if (formName == "ANC, Obstetric History"){
                         
                         if (ANCGravida > "1") {
-                                conditions.show.push("ANC, Alive");
-                                conditions.show.push("ANC, Number of Miscarriages");
                                 conditions.show.push("ANC, Parity");
                                 conditions.show.push("ANC, History of Past Pregnancies");
                         }
@@ -301,49 +357,116 @@ Bahmni.ConceptSet.FormConditions.rules = {
                                 conditions.hide.push("ANC, Number of Miscarriages");
                                 conditions.hide.push("ANC, History of Past Pregnancies");
                                 
-                        }
-                        return conditions;
+                        }                        
                 }
+                if (formName == "ANC, Examinations"){
+                        if(AncVisits == "ANC, Subsequent Visit"){
+                                conditions.assignedValues.push({
+                                        field: "ANC, Gravida",
+                                        fieldValue:{
+                                                isAutoFill:true,
+                                                scopedEncounter:"latestvisit",
+                                                isFilledOnRetrospectiveMode:true,
+                                                enableDefaultValue: true,
+                                                enableEditAfterAutoFill: true
+                                        }
+                                });
+                                
+                                conditions.assignedValues.push({
+                                        field: "ANC, Number of Miscarriages",
+                                        fieldValue:{
+                                                isAutoFill:true,
+                                                scopedEncounter:"latestvisit",
+                                                isFilledOnRetrospectiveMode:true,
+                                                enableDefaultValue: true,
+                                                enableEditAfterAutoFill: true
+                                        }
+                                });
+                        }
+                        if (ANCGravida > "1") {
+                                conditions.show.push("ANC, Number of Miscarriages");
+                                conditions.show.push("ANC, Parity");
+                        }
+                
+                        else {
+
+                                conditions.hide.push("ANC, Parity");
+                                conditions.hide.push("ANC, Number of Miscarriages");                
+                        }
+                }
+                return conditions;
 
         },
+
         'ANC, Parity': function (formName, formFieldValues) {
                 var ANCGravida1 = formFieldValues['ANC, Gravida'];
                 var ANCParity = formFieldValues['ANC, Parity'];
-                var conditions = { show: [], hide: [], disable: [], enable: [] };
-                if (formName == "ANC, Obstetric History" ) {
+                var AncVisits = formFieldValues['ANC, Visit Types'];
+                var conditions = { show: [], hide: [], disable: [], enable: [], assignedValues: [] };
 
+                if (formName == "ANC, Obstetric History") {
                         if (ANCParity >= ANCGravida1) {
                                 alert("Parity should be less than Gravida");
+                                conditions.hide.push("ANC, Alive");
+                                conditions.hide.push("ANC, Number of Miscarriages");
+                        }
+                        else if (ANCParity < ANCGravida1) {
+                                conditions.enable.push("ANC, Alive");
+                        }
+                        else{
                                 conditions.disable.push("ANC, Alive");
+                                conditions.hide.push("ANC, Alive");
+                        }
+                }
+                if (formName == "ANC, Examinations"){
+                        if(AncVisits == "ANC Subsequent Visit"){
+                                conditions.assignedValues.push({
+                                        field: "ANC, Parity",
+                                        fieldValue:{
+                                                isAutoFill:true,
+                                                scopedEncounter:"latestvisit",
+                                                isFilledOnRetrospectiveMode:true,
+                                                enableDefaultValue: true,
+                                                enableEditAfterAutoFill: true
+                                        }
+                                });
+                        }
+                        if (ANCParity >= ANCGravida1) {
+                                alert("Parity should be less than Gravida");
                                 conditions.disable.push("ANC, Number of Miscarriages");
                         }
-                        if (ANCParity < ANCGravida1) {
-                                conditions.enable.push("ANC, Alive");
+                        else if (ANCParity < ANCGravida1) {
                                 conditions.enable.push("ANC, Number of Miscarriages");
                         }
-                        return conditions;
+                        else{
+                                conditions.disable.push("ANC, Number of Miscarriages");
+                                conditions.hide.push("ANC, Number of Miscarriages");
+                        }
                 }
+                return conditions;
 
         },
-        'ANC, Alive': function (formName, formFieldValues) {
+
+        'ANC, Alive': function(formName, formFieldValues){
                 var ANCAlive = formFieldValues['ANC, Alive'];
                 var ANCParity = formFieldValues['ANC, Parity'];
-                var conditions = { show: [], hide: [], disable: [], enable: [], assignedValues: []};
-                if (formName == "ANC, Obstetric History") {
-
-                        if (ANCAlive > ANCParity) {
-                                alert("Children alive should be less or equal to number of parities");
-                                conditions.disable.push("ANC, Number of Miscarriages");
-                        }
-                        else if (ANCParity >= ANCAlive) {
-
+                var conditions = { show: [], hide: [], enable: [], disable: [], assignedValues: [] };
+                if(formName == "ANC, Obstetric History"){
+                        
+                        if(ANCAlive < ANCParity){ 
+                                conditions.show.push("ANC, Number of Miscarriages");
                                 conditions.enable.push("ANC, Number of Miscarriages");
                         }
-                        return conditions;
-                }
+                        else if(ANCAlive > ANCParity){
+                                alert("Parity should be more or equal to alive")
+                                conditions.hide.push("ANC, Number of Miscarriages");
+                        } 
+                        else{
+                                conditions.hide.push("ANC, Number of Miscarriages");
+                        }
+                }return conditions;
 
         },
-
 
         'ANC, Family Planning Ever Used': function (formName, formFieldValues) {
                 var FPUsed = formFieldValues['ANC, Family Planning Ever Used'];
@@ -601,41 +724,7 @@ Bahmni.ConceptSet.FormConditions.rules = {
                 return conditions;
 
         },
-
-        'PNC, HIV Status Known Before 1st Visit': function (formName, formFieldValues){
-                var status = formFieldValues['PNC, HIV Status Known Before 1st Visit']
-                var conditions = { show: [], hide: [], assignedValues: [] };
-                
-                if(formName == 'ANC HIV Testing Services'){
-                        if(status == "Positive"){
-                                conditions.show.push("HIV Prophylaxis/Treatment");
-                                conditions.hide.push("ANC, Initiated on Prep");
-                                conditions.hide.push("PMTCT, ART start date");
-                                conditions.hide.push("HIVTC, ART Regimen");
-                                conditions.hide.push("HIV, Program ID");
-                                conditions.hide.push("PMTCT, WHO clinical staging");
-                                conditions.show.push("ANC, Initial Test during this pregnancy");
-                                conditions.hide.push("ANC, HIV Test Done");
-                                conditions.hide.push("ANC, HIV Test Result");
-                                conditions.hide.push("ANC, HIV Result Received");
-                                conditions.hide.push("Subsequent HIV Test Results");
-                                conditions.show.push("HIVTC, Viral Load Monitoring Template");
-                        }
-                        else if((status == "Negative")||(status == "Unknown")){
-                                conditions.show.push("ANC, Initial Test during this pregnancy");
-                                conditions.hide.push("ANC, HIV Test Result");
-                                conditions.hide.push("ANC, HIV Result Received");
-                                conditions.hide.push("Subsequent HIV Test Results");
-                                conditions.hide.push("HIV Prophylaxis/Treatment");
-                                conditions.hide.push("HIVTC, Viral Load Monitoring Template");
-                        }
-                        else{
-                                conditions.hide.push("ANC, Initial Test during this pregnancy");
-                        }
-                }
-                return conditions;
-        },
-
+        
         'ANC, Initiated on ART': function(formName, formFieldValues){
                 var initiation = formFieldValues['ANC, Initiated on ART'];
                 var conditions = { show: [], hide: [], disable: []};
@@ -665,6 +754,7 @@ Bahmni.ConceptSet.FormConditions.rules = {
 
                 if (formName == 'ANC, Initial Test during this pregnancy'){
                         if((result == "Positive")||(result == "Negative")){
+                                conditions.hide.push("ANC, HIV Result Received");
                                 conditions.show.push("ANC, HIV Result Received");
                         }
                         else{
@@ -680,11 +770,15 @@ Bahmni.ConceptSet.FormConditions.rules = {
                 var result = formFieldValues['ANC, HIV Test Result'];
 
                 if (formName == 'ANC, Initial Test during this pregnancy'){
+                        if(!result_recieved){
+                                conditions.hide.push("Subsequent HIV Test Results");
+                        }
                         if(result_recieved == "Yes"){
                                 conditions.show.push("HIV Prophylaxis/Treatment");
+                                
                                 if(result == "Positive"){
                                         conditions.show.push("ANC, Initiated on ART");
-                                        conditions.hide.push("ANC, Initiated on Prep");
+                                        conditions.hide.push("ANC, Initiated in Prep");
                                         conditions.hide.push("PMTCT, ART start date");
                                         conditions.hide.push("HIVTC, ART Regimen");
                                         conditions.hide.push("HIV, Program ID");
@@ -700,7 +794,7 @@ Bahmni.ConceptSet.FormConditions.rules = {
                                         conditions.hide.push("HIVTC, ART Regimen");
                                         conditions.hide.push("HIV, Program ID");
                                         conditions.hide.push("PMTCT, WHO clinical staging");
-                                        conditions.show.push("ANC, Initiated on Prep");
+                                        conditions.show.push("ANC, Initiated in Prep");
                                         conditions.hide.push("HIVTC, Viral Load Monitoring Template");
                                 }
                         }
@@ -1119,17 +1213,45 @@ Bahmni.ConceptSet.FormConditions.rules = {
                 return conditions;
         },
         'PNC, HIV Status Known Before Visit': function (formName, formFieldValues) {
-                var conditionConcept = formFieldValues['PNC, HIV Status Known Before Visit'];
-                var conditions = { show: [], hide: [] };
+                var status = formFieldValues['PNC, HIV Status Known Before Visit'];
+                var conditions = { show: [], hide: [], assignedValues: [] };
                 if (formName == "HIV Prevention, Care, and Treatment") {
-                if (conditionConcept == "Positive") {
-                        conditions.hide.push("Tested in PNC");
-                } else {
-                        conditions.show.push("Tested in PNC");
-                }
-
+                        if (status == "Positive") {
+                                conditions.hide.push("Tested in PNC");
+                        } 
+                        else {
+                                conditions.show.push("Tested in PNC");
+                        }
+                }              
+                if(formName == 'ANC HIV Testing Services'){
+                        
+                        if(status == "Positive"){
+                                conditions.show.push("HIV Prophylaxis/Treatment");
+                                conditions.hide.push("ANC, Initiated in Prep");
+                                conditions.hide.push("PMTCT, ART start date");
+                                conditions.hide.push("HIVTC, ART Regimen");
+                                conditions.hide.push("HIV, Program ID");
+                                conditions.hide.push("PMTCT, WHO clinical staging");
+                                conditions.show.push("ANC, Initial Test during this pregnancy");
+                                conditions.hide.push("ANC, HIV Test Done");
+                                conditions.hide.push("ANC, HIV Test Result");
+                                conditions.hide.push("ANC, HIV Result Received");
+                                conditions.hide.push("Subsequent HIV Test Results");
+                                conditions.show.push("HIVTC, Viral Load Monitoring Template");
+                        }
+                        else if((status == "Negative")||(status == "Unknown")){
+                                conditions.show.push("ANC, Initial Test during this pregnancy");
+                                conditions.hide.push("ANC, HIV Test Result");
+                                conditions.hide.push("ANC, HIV Result Received");
+                                conditions.hide.push("Subsequent HIV Test Results");
+                                conditions.hide.push("HIV Prophylaxis/Treatment");
+                                conditions.hide.push("HIVTC, Viral Load Monitoring Template");
+                        }
+                        else{
+                                conditions.hide.push("ANC, Initial Test during this pregnancy");
+                        }
+                }        
                 return conditions;
-        }
         },
 
         /*---------------------HIV Care and Treatment-------------------*/
@@ -1339,25 +1461,33 @@ Bahmni.ConceptSet.FormConditions.rules = {
                          return conditions;
                  }
              },
-
 /*--- EDD generic autocalculation----*/
-           'ANC, Last Normal Menstrual Period' : function (formName, formFieldValues) {
+        'ANC, Last Normal Menstrual Period' : function (formName, formFieldValues) {
                 if(formName=="ANC, Obstetric History" || formName=="ANC, Examinations") {
-                         var LNMP = formFieldValues['ANC, Last Normal Menstrual Period'];
-                         var conditions = { assignedValues: [], error: [] };
-                         var dateUtil = Bahmni.Common.Util.DateUtil;
-                         var LNMPDate = new Date(LNMP);
-                         var EDDWithTime = dateUtil.addDays(LNMPDate,280);
-                         var EDDWithoutTime = dateUtil.getDateWithoutTime(EDDWithTime);
-
-                         if(LNMP) {
-
-                            conditions.assignedValues.push({ field: "ANC, Estimated Date of Delivery", fieldValue:EDDWithoutTime ,autocalculate:true});
-
-                         }
-                         return conditions;
-                 }
-             },
+                        var LNMP = formFieldValues['ANC, Last Normal Menstrual Period'];
+                        var conditions = { assignedValues: [], error: [] };
+                        var dateUtil = Bahmni.Common.Util.DateUtil;
+                        var LNMPDate = new Date(LNMP);
+                        var EDDWithTime = dateUtil.addDays(LNMPDate,280);
+                        var EDDWithoutTime = dateUtil.getDateWithoutTime(EDDWithTime);
+                        var AncVisits = formFieldValues["ANC, Visit Types"];
+                        if (AncVisits == "Subsquent Visit"){
+                                conditions.assignedValues.push({
+                                        field: "ANC, Parity",
+                                        fieldValue:{
+                                                isAutoFill:true,
+                                                scopedEncounter:"latestvisit",
+                                                isFilledOnRetrospectiveMode:true,
+                                                enableDefaultValue: true,
+                                                enableEditAfterAutoFill: true
+                                        }
+                                });
+                        }
+                        if(LNMP) {
+                                conditions.assignedValues.push({ field: "ANC, Estimated Date of Delivery", fieldValue:EDDWithoutTime ,autocalculate:true});
+                        }
+                }return conditions;
+     },
 
         'HIVTC, Enhanced adherence counseling done': function (formName, formFieldValues) {
                 var conditionConcept = formFieldValues['HIVTC, Enhanced adherence counseling done'];
@@ -2450,21 +2580,7 @@ Bahmni.ConceptSet.FormConditions.rules = {
         }
         return conditions;
 },
-//  'ANC, Last Normal Menstrual Period': function(formName, formFieldValues) {
-//         var conditions = { assignedValues: [], disable: [] };
-//         var conditionConcept;
-//         if (formName == "ANC, Obstetric History"){ 
-//             conditions.assignedValues.push({
-//                 field: "ANC, Last Normal Menstrual Period",
-//                 fieldValue: {
-//                     isAutoFill: true,
-//                     scopedEncounter: "latestvisit",
-//                 }
-//             });
-
-//         }
-//         return conditions;
-//     },
+ 
     /////////////////////////////////////////////////////////////////
         //LABOUR AND DELIVERY REGISTER
         //MALFORMATIONS
