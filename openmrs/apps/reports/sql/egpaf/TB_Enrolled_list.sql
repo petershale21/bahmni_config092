@@ -1,4 +1,4 @@
-SELECT distinct Patient_Identifier, Patient_Name, Age , Gender, age_group, TB_Treatment_History, Key_Populations, HIV_Status, Clients_ON_ART, TB_Diagnosis
+SELECT distinct Patient_Identifier, Patient_Name, Age , Gender, age_group, TB_Treatment_History, Key_Populations, HIV_Status, Clients_ON_ART, TB_Diagnosis, Prophylaxis_Provided
 FROM
 (
     (SELECT distinct Id, patientIdentifier AS "Patient_Identifier", patientName AS "Patient_Name", Age , Gender, age_group, 'New Patient' AS 'TB_Treatment_History'
@@ -439,3 +439,34 @@ left outer JOIN
 )diagnosis_type
 )diagnosis
 on diagnosis.person_id = TB_HISTORY.Id
+Left outer JOIN
+(
+    Select person_id, Prophylaxis_Provided
+    From(
+        (select distinct o.person_id, "Provided Cotrim Prohylaxis" as "Prophylaxis_Provided" 
+        FROM obs o
+        where o.concept_id = 5415 and o.value_coded = 2330
+        and o.obs_datetime >= CAST('#startDate#' AS DATE)
+        and o.obs_datetime <= CAST('#endDate#' AS DATE)
+        and o.voided = 0
+         )
+        UNION
+        (select distinct o.person_id, "Dapsone" as "Prophylaxis_Provided" 
+        FROM obs o
+        where o.concept_id = 5415 and o.value_coded = 4619
+        and o.obs_datetime >= CAST('#startDate#' AS DATE)
+        and o.obs_datetime <= CAST('#endDate#' AS DATE)
+        and o.voided = 0
+         )
+        UNION
+        (select distinct o.person_id, "N/A" as "Prophylaxis_Provided" 
+        FROM obs o
+        where o.concept_id not in (5415)
+        and o.obs_datetime >= CAST('#startDate#' AS DATE)
+        and o.obs_datetime <= CAST('#endDate#' AS DATE)
+        and o.voided = 0
+         )
+    )Prophylaxis
+    Group by person_id
+)prophy
+On prophy.person_id = TB_HISTORY.Id
