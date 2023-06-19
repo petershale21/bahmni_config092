@@ -1,6 +1,6 @@
-SELECT distinct Id, patientIdentifier, patientName, Age,age_group, Gender, diagnosis_type.TB_DIAGNOSIS, test_result, TB_Start_Date, TB_Treatment_Initiation, Key_Populations
+SELECT distinct Id, patientIdentifier, patientName, Age,age_group, Gender, diagnosis_type.Presumptive_Case, Diagnosis, TB_Start_Date, Died_Before_Treatment, Key_Populations, Referred_By
  FROM (
-(Select distinct Id, patientIdentifier , patientName, Age, age_group, Gender, "GeneXpert" AS "TB_DIAGNOSIS"
+(Select distinct Id, patientIdentifier , patientName, Age, age_group, Gender, "GeneXpert" AS "Presumptive_Case"
 		From(
 				select distinct patient.patient_id AS Id,
 						patient_identifier.identifier AS patientIdentifier,
@@ -29,7 +29,7 @@ SELECT distinct Id, patientIdentifier, patientName, Age,age_group, Gender, diagn
 
 UNION
 
-(Select distinct Id, patientIdentifier , patientName, Age, age_group, Gender, "LPA" AS "TB_DIAGNOSIS"
+(Select distinct Id, patientIdentifier , patientName, Age, age_group, Gender, "LPA" AS "Presumptive_Case"
 		From(
 				select distinct patient.patient_id AS Id,
 						patient_identifier.identifier AS patientIdentifier,
@@ -58,7 +58,7 @@ UNION
 
 UNION
 
-(Select distinct Id, patientIdentifier , patientName, Age, age_group, Gender, "Sputum Smear Microscopy" AS "TB_DIAGNOSIS"
+(Select distinct Id, patientIdentifier , patientName, Age, age_group, Gender, "Sputum Smear Microscopy" AS "Presumptive_Case"
 		From(
 				select distinct patient.patient_id AS Id,
 						patient_identifier.identifier AS patientIdentifier,
@@ -87,7 +87,7 @@ UNION
 
 UNION
 
-(Select distinct Id, patientIdentifier , patientName, Age, age_group, Gender, "Sputum_Culture" AS "TB_DIAGNOSIS"
+(Select distinct Id, patientIdentifier , patientName, Age, age_group, Gender, "Sputum_Culture" AS "Presumptive_Case"
 		From(
 				select distinct patient.patient_id AS Id,
 						patient_identifier.identifier AS patientIdentifier,
@@ -116,7 +116,7 @@ UNION
 
 UNION
 
-(Select distinct Id, patientIdentifier , patientName, Age, age_group, Gender, "X-Ray" AS "TB_DIAGNOSIS"
+(Select distinct Id, patientIdentifier , patientName, Age, age_group, Gender, "X-Ray" AS "Presumptive_Case"
 		From(
 				select distinct patient.patient_id AS Id,
 						patient_identifier.identifier AS patientIdentifier,
@@ -146,7 +146,7 @@ UNION
 
 left outer join
 -- TEST RESULTS
-(select person_id, test_result
+(select person_id, Diagnosis
 from
 (
 (
@@ -166,7 +166,7 @@ from
  when o.value_coded = 3838 then "Pos 2+"
  when o.value_coded = 3839 then "Pos 3+"
 else "N/A" 
-end AS test_result
+end AS Diagnosis
 from obs o
 inner join 
 		(
@@ -194,7 +194,7 @@ UNION
  when o.value_coded = 3818 then "MTB Detected,RSI"
  when o.value_coded = 3820 then "MTB not Detected"
 else "N/A" 
-end AS test_result
+end AS Diagnosis
 from obs o
 inner join 
 		(
@@ -221,7 +221,7 @@ UNION
  when o.value_coded = 1016 then "Negative"
  when o.value_coded = 3801 then "Contaminated"
 else "N/A" 
-end AS test_result
+end AS Diagnosis
 from obs o
 inner join 
 		(
@@ -245,7 +245,7 @@ on test_result.person_id = diagnosis_type.Id
 Left Outer Join
 (
 -- TB Treatment Start Date
-	select o.person_id, CAST(start_date AS DATE) as TB_Start_Date
+	(select o.person_id, CAST(start_date AS DATE) as TB_Start_Date
 	from obs o
     inner join 
     (
@@ -256,20 +256,39 @@ Left Outer Join
      and oss.obs_datetime < cast('#endDate#' as date)
      group by oss.person_id
     )latest
-    on latest.person_id = o.person_id 
-) as tb_start_date
-on diagnosis_type.Id = tb_start_date.person_id
-
-Left Outer Join
-(
--- Died before treatment
-	select o.person_id, "Died Before Treatment" as "TB_Treatment_Initiation"
+    on latest.person_id = o.person_id)
+	UNION
+	(
+		select o.person_id, "N/A" as "TB_Start_Date"
 	from obs o
 	where o.concept_id = 3789 and o.value_coded = 3791
 	and o.voided = 0
 	and o.obs_datetime >= cast('#startDate#' as date)
 	and o.obs_datetime <= cast('#endDate#' as date)
 	group by o.person_id
+	) 
+) as tb_start_date
+on diagnosis_type.Id = tb_start_date.person_id
+
+Left Outer Join
+(
+-- Died before treatment
+	(select o.person_id, "Yes" as "Died_Before_Treatment"
+	from obs o
+	where o.concept_id = 3789 and o.value_coded = 3791
+	and o.voided = 0
+	and o.obs_datetime >= cast('#startDate#' as date)
+	and o.obs_datetime <= cast('#endDate#' as date)
+	group by o.person_id)
+	UNION(
+		select o.person_id, "No" as "Died_Before_Treatment"
+	from obs o
+	where o.concept_id = 3789 and o.value_coded not in (3791)
+	and o.voided = 0
+	and o.obs_datetime >= cast('#startDate#' as date)
+	and o.obs_datetime <= cast('#endDate#' as date)
+	group by o.person_id
+	)
 ) as died
 on diagnosis_type.Id = died.person_id
 
@@ -294,3 +313,24 @@ where o.concept_id = 3776 and o.voided = 0
 Group by o.person_id
 ) risk
 on diagnosis_type.Id = risk.person_id
+Left Outer Join
+(
+-- Referred By
+	(select distinct o.person_id, "CHW" as "Referred_By"
+	from obs o
+	where o.concept_id = 3780 and o.value_coded = 3784
+	and o.voided = 0
+	and o.obs_datetime >= cast('#startDate#' as date)
+	and o.obs_datetime <= cast('#endDate#' as date)
+	group by o.person_id)
+	UNION(
+		select distinct o.person_id, "CBO or CSO" as "Referred_By"
+	from obs o
+	where o.concept_id = 3780 and o.value_coded not in (3637)
+	and o.voided = 0
+	and o.obs_datetime >= cast('#startDate#' as date)
+	and o.obs_datetime <= cast('#endDate#' as date)
+	group by o.person_id
+	)
+) as referred
+on diagnosis_type.Id = referred.person_id
