@@ -19,16 +19,16 @@ FROM (
 								 INNER JOIN patient ON o.person_id = patient.patient_id 
 								 AND o.concept_id = 4845 and value_coded = 4822
 								 AND patient.voided = 0 AND o.voided = 0
-								 AND MONTH(o.obs_datetime) = MONTH(CAST('#endDate#' AS DATE)) 
-								 AND YEAR(o.obs_datetime) = YEAR(CAST('#endDate#' AS DATE)) 
+								 AND CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+                				 AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 								 
 								 -- HAS HIV POSITIVE RESULTS 
 								 AND o.person_id in (
 									select  os.person_id
 									from obs os
 									where os.concept_id = 4844 and os.value_coded = 1738
-									AND MONTH(os.obs_datetime) = MONTH(CAST('#endDate#' AS DATE)) 
-								 AND YEAR(os.obs_datetime) = YEAR(CAST('#endDate#' AS DATE))
+									AND CAST(os.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+                				 AND CAST(os.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 									AND patient.voided = 0 AND os.voided = 0
 								 )
 								 
@@ -59,16 +59,16 @@ UNION ALL
 								 INNER JOIN patient ON o.person_id = patient.patient_id 
 								 AND o.concept_id = 4845 and value_coded = 4822
 								 AND patient.voided = 0 AND o.voided = 0
-								 AND MONTH(o.obs_datetime) = MONTH(CAST('#endDate#' AS DATE)) 
-								 AND YEAR(o.obs_datetime) = YEAR(CAST('#endDate#' AS DATE))
+								 AND CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+                				 AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 								 
 								 -- HAS HIV NEGATIVE RESULTS 
 								 AND o.person_id in (
 									select  os.person_id
 									from obs os
 									where os.concept_id = 4844 and os.value_coded = 1016
-									AND MONTH(os.obs_datetime) = MONTH(CAST('#endDate#' AS DATE)) 
-								 AND YEAR(os.obs_datetime) = YEAR(CAST('#endDate#' AS DATE))
+									AND CAST(os.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+                				 AND CAST(os.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 									AND patient.voided = 0 AND os.voided = 0
 								 )
 								 
@@ -99,16 +99,16 @@ UNION ALL
 								 INNER JOIN patient ON o.person_id = patient.patient_id 
 								 AND o.concept_id = 4845 and value_coded = 4822
 								 AND patient.voided = 0 AND o.voided = 0
-								 AND MONTH(o.obs_datetime) = MONTH(CAST('#endDate#' AS DATE)) 
-								 AND YEAR(o.obs_datetime) = YEAR(CAST('#endDate#' AS DATE))
+								 AND CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+                				 AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 								 
 								 -- HAS HIV UNKNOWN RESULTS 
 								    AND o.person_id in (
 									select  os.person_id
 									from obs os
 									where os.concept_id = 4844 and os.value_coded = 2148
-									AND MONTH(o.obs_datetime) = MONTH(CAST('#endDate#' AS DATE)) 
-								    AND YEAR(o.obs_datetime) = YEAR(CAST('#endDate#' AS DATE))
+									AND CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+                				 AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 									AND patient.voided = 0 AND os.voided = 0
 								 )
 								 
@@ -139,8 +139,8 @@ Left outer join
                 
                 AND o.voided=0
 				where o.concept_id = 4833  and o.value_coded = 4834
-				AND MONTH(o.obs_datetime) = MONTH(CAST('#endDate#' AS DATE)) 
-				AND YEAR(o.obs_datetime) = YEAR(CAST('#endDate#' AS DATE))
+				AND CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+                AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 				AND patient.voided = 0 AND o.voided = 0
 				Group by o.person_id
  ) as pri_distributed
@@ -158,8 +158,8 @@ Left outer join
                 
                 AND o.voided=0
 				where o.concept_id = 4836  and o.value_coded in (4837, 4838, 4839)
-				AND MONTH(o.obs_datetime) = MONTH(CAST('#endDate#' AS DATE)) 
-				AND YEAR(o.obs_datetime) = YEAR(CAST('#endDate#' AS DATE))
+				AND CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+                AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 				AND patient.voided = 0 AND o.voided = 0
 				Group by o.person_id
  ) as sec_distributed
@@ -177,8 +177,8 @@ Left outer join
     INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1
                 
     AND o.voided=0
-    AND MONTH(o.obs_datetime) = MONTH(CAST('#endDate#' AS DATE)) 
-    AND YEAR(o.obs_datetime) = YEAR(CAST('#endDate#' AS DATE))
+    AND CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+    AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 								                
     where concept_id in (4844) and value_coded not in (2148)
     AND patient.voided = 0 AND o.voided = 0
@@ -229,16 +229,16 @@ FROM (
 								 INNER JOIN patient ON o.person_id = patient.patient_id 
 								 AND o.concept_id = 4845 and value_coded = 4822
 								 AND patient.voided = 0 AND o.voided = 0
-								 AND MONTH(o.obs_datetime) = MONTH(CAST('#endDate#' AS DATE)) 
-								 AND YEAR(o.obs_datetime) = YEAR(CAST('#endDate#' AS DATE)) 
+								 AND CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+                				 AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 								 
 								 -- HAS HIV POSITIVE RESULTS 
 								 AND o.person_id in (
 									select  os.person_id
 									from obs os
 									where os.concept_id = 4844 and os.value_coded = 1738
-									AND MONTH(os.obs_datetime) = MONTH(CAST('#endDate#' AS DATE)) 
-								 AND YEAR(os.obs_datetime) = YEAR(CAST('#endDate#' AS DATE))
+									AND CAST(os.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+                				 AND CAST(os.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 									AND patient.voided = 0 AND os.voided = 0
 								 )
 								 
@@ -269,16 +269,16 @@ UNION ALL
 								 INNER JOIN patient ON o.person_id = patient.patient_id 
 								 AND o.concept_id = 4845 and value_coded = 4822
 								 AND patient.voided = 0 AND o.voided = 0
-								 AND MONTH(o.obs_datetime) = MONTH(CAST('#endDate#' AS DATE)) 
-								 AND YEAR(o.obs_datetime) = YEAR(CAST('#endDate#' AS DATE))
+								 AND CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+                				 AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 								 
 								 -- HAS HIV NEGATIVE RESULTS 
 								 AND o.person_id in (
 									select  os.person_id
 									from obs os
 									where os.concept_id = 4844 and os.value_coded = 1016
-									AND MONTH(os.obs_datetime) = MONTH(CAST('#endDate#' AS DATE)) 
-								 AND YEAR(os.obs_datetime) = YEAR(CAST('#endDate#' AS DATE))
+									AND CAST(os.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+                				 AND CAST(os.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 									AND patient.voided = 0 AND os.voided = 0
 								 )
 								 
@@ -309,16 +309,16 @@ UNION ALL
 								 INNER JOIN patient ON o.person_id = patient.patient_id 
 								 AND o.concept_id = 4845 and value_coded = 4822
 								 AND patient.voided = 0 AND o.voided = 0
-								 AND MONTH(o.obs_datetime) = MONTH(CAST('#endDate#' AS DATE)) 
-								 AND YEAR(o.obs_datetime) = YEAR(CAST('#endDate#' AS DATE))
+								 AND CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+                				 AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 								 
 								 -- HAS HIV UNKNOWN RESULTS 
 								    AND o.person_id in (
 									select  os.person_id
 									from obs os
 									where os.concept_id = 4844 and os.value_coded = 2148
-									AND MONTH(o.obs_datetime) = MONTH(CAST('#endDate#' AS DATE)) 
-								    AND YEAR(o.obs_datetime) = YEAR(CAST('#endDate#' AS DATE))
+									AND CAST(os.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+                				 AND CAST(os.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 									AND patient.voided = 0 AND os.voided = 0
 								 )
 								 
@@ -349,8 +349,8 @@ Left outer join
                 
                 AND o.voided=0
 				where o.concept_id = 4833  and o.value_coded = 4834
-				AND MONTH(o.obs_datetime) = MONTH(CAST('#endDate#' AS DATE)) 
-				AND YEAR(o.obs_datetime) = YEAR(CAST('#endDate#' AS DATE))
+				AND CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+                AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 				AND patient.voided = 0 AND o.voided = 0
 				Group by o.person_id
  ) as pri_distributed
@@ -368,8 +368,8 @@ Left outer join
                 
                 AND o.voided=0
 				where o.concept_id = 4836  and o.value_coded in (4837, 4838, 4839)
-				AND MONTH(o.obs_datetime) = MONTH(CAST('#endDate#' AS DATE)) 
-				AND YEAR(o.obs_datetime) = YEAR(CAST('#endDate#' AS DATE))
+				AND CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+                AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 				AND patient.voided = 0 AND o.voided = 0
 				Group by o.person_id
  ) as sec_distributed
@@ -387,8 +387,8 @@ Left outer join
     INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1
                 
     AND o.voided=0
-    AND MONTH(o.obs_datetime) = MONTH(CAST('#endDate#' AS DATE)) 
-    AND YEAR(o.obs_datetime) = YEAR(CAST('#endDate#' AS DATE))
+    AND CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+    AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 								                
     where concept_id in (4844) and value_coded not in (2148)
     AND patient.voided = 0 AND o.voided = 0
