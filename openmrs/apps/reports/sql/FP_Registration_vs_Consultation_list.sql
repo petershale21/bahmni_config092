@@ -10,7 +10,7 @@ SELECT DISTINCT
 						-- REGISTERED Family Planning Clients
 						(SELECT DISTINCT
 								p.person_id as id,
-								concat(pn.given_name,' ', ifnull(pn.family_name,'')) as name,s
+								concat(pn.given_name,' ', ifnull(pn.family_name,'')) as name,
 								p.gender AS gender,				
 								floor(datediff(CAST('#endDate#' AS DATE), p.birthdate)/365) AS age,				
 								pi.identifier as identifier,
