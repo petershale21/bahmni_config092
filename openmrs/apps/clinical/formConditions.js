@@ -1201,6 +1201,21 @@ Bahmni.ConceptSet.FormConditions.rules = {
                 }
         },
 
+        'Is Client Visitor': function(formName, formFieldValues){
+                var conditionConcept = formFieldValues['Is Client Visitor'];
+                var conditions = { show:[], hide:[]};
+
+                if(formName == 'HIV Treatment and Care Progress Template'){
+                    if (conditionConcept == 'True'){
+                        conditions.show.push('HIVTC, Transferred in from');
+                    }
+                    else {
+                        conditions.hide.push('HIVTC, Transferred in from');
+                    }
+                }
+            return conditions;
+        },
+
         'TB Status': function (formName, formFieldValues) {
                 var conditionConcept = formFieldValues['TB Status'];
                 var conditions = { show: [], hide: [] };
