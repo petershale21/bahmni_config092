@@ -1100,6 +1100,13 @@
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/HEI_Registration_vs_Consultation_pivot.sql"
         }
     },
+    "ANC_DQA_List": {
+        "name": "MCH-035 | ANC Data Quality Assessment",
+        "type": "MRSGeneric",
+        "config": {
+            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/ANC_DQA.sql"
+        }
+    },
     "arv_list": {
         "name": "PHARM-001 | Pharmacy ARV Regimen",
         "type": "ERPGeneric",
