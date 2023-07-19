@@ -8,9 +8,16 @@ SELECT distinct patientIdentifier
 			   ,Gravida
 			   ,Parity
 			   ,Gestation_Age
+			   ,Iron
+			   ,Folate
+			   ,Calcium
 			   ,EDD
+			   ,MUAC
 			   ,Syphilis_Screening_Results
 			   ,Syphilis_Treatment_Completed
+			   ,Rhesus_Factor
+			   ,TT_Current_Doses
+			   ,TT_Current_Doses
 			   ,HIV_Status_Known_Before_Visit
 			   ,Initial_HIV_Test_Done_During_Pregnancy
 			   ,Initial_HIV_Test_Results 
@@ -20,6 +27,7 @@ SELECT distinct patientIdentifier
 			   ,TB_Treatment 
 			   ,Baseline_Viral_Load_Results
 			   ,Subsequent_Viral_Load_Results
+			   ,TB_Status
 			   ,Initiated_on_CTX
 			   ,Initiated_on_PrEP
 			   ,Initiated_on_ART
@@ -146,7 +154,6 @@ left outer join
 				SUBSTRING(MAX(CONCAT(oss.obs_datetime, oss.value_coded)), 20) as Syphilis_Coded
 				from obs oss
 				where oss.concept_id = 4305 and oss.voided=0
-				-- and oss.obs_datetime >= CAST('2023-06-01' AS DATE)
 				and oss.obs_datetime <= cast('#endDate#' as date)
 				group by oss.person_id
 				)latest 
@@ -173,7 +180,6 @@ left outer join
 				SUBSTRING(MAX(CONCAT(oss.obs_datetime, oss.value_coded)), 20) as treatment_Coded
 				from obs oss
 				where oss.concept_id = 1732 and oss.voided=0
-				-- and oss.obs_datetime >= CAST('2023-06-01' AS DATE)
 				and oss.obs_datetime <= cast('#endDate#' as date)
 				group by oss.person_id
 				)latest 
@@ -200,7 +206,6 @@ left outer join
 				SUBSTRING(MAX(CONCAT(oss.obs_datetime, oss.value_coded)), 20) as Status_Coded
 				from obs oss
 				where oss.concept_id = 4427 and oss.voided=0
-				-- and oss.obs_datetime >= CAST('2023-06-01' AS DATE)
 				and oss.obs_datetime <= cast('#endDate#' as date)
 				group by oss.person_id
 				)latest 
@@ -225,7 +230,6 @@ left outer join
 				SUBSTRING(MAX(CONCAT(oss.obs_datetime, oss.value_coded)), 20) as Final_Status_Coded
 				from obs oss
 				where oss.concept_id = 2165 and oss.voided=0
-				-- and oss.obs_datetime >= CAST('2023-06-01' AS DATE)
 				and oss.obs_datetime <= cast('#endDate#' as date)
 				group by oss.person_id
 				)latest 
@@ -252,7 +256,6 @@ left outer join
 				SUBSTRING(MAX(CONCAT(oss.obs_datetime, oss.value_coded)), 20) as Subsequent_Status_Coded
 				from obs oss
 				where oss.concept_id = 	4325 and oss.voided=0
-				-- and oss.obs_datetime >= CAST('2023-06-01' AS DATE)
 				and oss.obs_datetime <= cast('#endDate#' as date)
 				group by oss.person_id
 				)latest 
@@ -280,7 +283,6 @@ left outer join
 				SUBSTRING(MAX(CONCAT(oss.obs_datetime, oss.value_coded)), 20) as Pregnancy_Status_Coded
 				from obs oss
 				where oss.concept_id = 	1726 and oss.voided=0
-				-- and oss.obs_datetime >= CAST('2023-06-01' AS DATE)
 				and oss.obs_datetime <= cast('#endDate#' as date)
 				group by oss.person_id
 				)latest 
@@ -308,7 +310,6 @@ left outer join
 				SUBSTRING(MAX(CONCAT(oss.obs_datetime, oss.value_coded)), 20) as Initial_Test_Coded
 				from obs oss
 				where oss.concept_id = 	1740 and oss.voided=0
-				-- and oss.obs_datetime >= CAST('2023-06-01' AS DATE)
 				and oss.obs_datetime <= cast('#endDate#' as date)
 				group by oss.person_id
 				)latest 
@@ -340,7 +341,6 @@ left outer join
 				SUBSTRING(MAX(CONCAT(oss.obs_datetime, oss.value_coded)), 20) as TB_Treatment_Coded
 				from obs oss
 				where oss.concept_id = 	4337 and oss.voided=0
-				-- and oss.obs_datetime >= CAST('2023-06-01' AS DATE)
 				and oss.obs_datetime <= cast('#endDate#' as date)
 				group by oss.person_id
 				)latest 
@@ -367,8 +367,8 @@ left outer join
 				SUBSTRING(MAX(CONCAT(oss.obs_datetime, oss.value_coded)), 20) as Baseline_Viral_Coded
 				from obs oss
 				where oss.concept_id = 4266 -- Results
-				-- and oss.obs_datetime >= CAST('2023-06-01' AS DATE)
-				and oss.obs_datetime <= cast('2023-06-30' as date)
+				-- and oss.obs_datetime >= CAST('#startDate#' AS DATE)
+				and oss.obs_datetime <= cast('#endDate#' as date)
 				group by oss.person_id
 				)latest 
 			on latest.person_id = o.person_id
@@ -394,7 +394,7 @@ left outer join
 				SUBSTRING(MAX(CONCAT(oss.obs_datetime, oss.value_coded)), 20) as Subsequent_Viral_Coded
 				from obs oss
 				where oss.concept_id = 4266 -- Results
-				and oss.obs_datetime <= cast('2023-06-30' as date)
+				and oss.obs_datetime <= cast('#endDate#' as date)
 				group by oss.person_id
 				)latest 
 			on latest.person_id = o.person_id
@@ -421,7 +421,7 @@ left outer join
 				SUBSTRING(MAX(CONCAT(oss.obs_datetime, oss.value_coded)), 20) as WHO_Staging_Coded
 				from obs oss
 				where oss.concept_id = 2342 -- WHO Clinical Staging
-				and oss.obs_datetime <= cast('2023-06-30' as date)
+				and oss.obs_datetime <= cast('#endDate#' as date)
 				group by oss.person_id
 				)latest 
 			on latest.person_id = o.person_id
@@ -447,7 +447,7 @@ left outer join
 				SUBSTRING(MAX(CONCAT(oss.obs_datetime, oss.value_coded)), 20) as Initiated_CTX_Coded
 				from obs oss
 				where oss.concept_id = 4214 -- Initiated on CTX
-				and oss.obs_datetime <= cast('2023-06-30' as date)
+				and oss.obs_datetime <= cast('#endDate#' as date)
 				group by oss.person_id
 				)latest 
 			on latest.person_id = o.person_id
@@ -475,7 +475,7 @@ left outer join
 				SUBSTRING(MAX(CONCAT(oss.obs_datetime, oss.value_coded)), 20) as Initiated_ART_Coded
 				from obs oss
 				where oss.concept_id = 4343 -- Initiated on ART
-				and oss.obs_datetime <= cast('2023-06-30' as date)
+				and oss.obs_datetime <= cast('#endDate#' as date)
 				group by oss.person_id
 				)latest 
 			on latest.person_id = o.person_id
@@ -501,7 +501,7 @@ left outer join
 				SUBSTRING(MAX(CONCAT(oss.obs_datetime, oss.value_coded)), 20) as Initiated_PrEP_Coded
 				from obs oss
 				where oss.concept_id = 5482 -- Initiated on PrEP
-				and oss.obs_datetime <= cast('2023-06-30' as date)
+				and oss.obs_datetime <= cast('#endDate#' as date)
 				group by oss.person_id
 				)latest 
 			on latest.person_id = o.person_id
@@ -590,3 +590,199 @@ inner join
 	and  o.obs_datetime = max_observation
 	) GBV_Counselling
 ON anc_patients.Id = GBV_Counselling.person_id
+
+
+-- Iron
+
+left outer join
+
+(select
+       o.person_id,
+       case
+           when o.value_coded = 4668 then "Prophylaxis"
+           when o.value_coded = 1067 then "On Treatment"
+		   when o.value_coded = 4298 then "Not Given"
+           else ""
+       end AS Iron
+from obs o
+inner join
+		(
+		 select oss.person_id, MAX(oss.obs_datetime) as max_observation,
+		 SUBSTRING(MAX(CONCAT(oss.obs_datetime, oss.obs_id)), 20) as observation_id
+		 from obs oss
+		 where oss.concept_id = 4299 and oss.voided=0
+		and cast(oss.obs_datetime as date) <= cast('#endDate#' as date)
+		 group by oss.person_id
+		)latest
+	on latest.person_id = o.person_id
+	where concept_id = 	4299
+	and  o.obs_datetime = max_observation
+	) Iron
+ON anc_patients.Id = Iron.person_id
+
+-- Folate
+
+left outer join
+
+(select
+       o.person_id,
+       case
+           when o.value_coded = 4668 then "Prophylaxis"
+           when o.value_coded = 1067 then "On Treatment"
+		   when o.value_coded = 4298 then "Not Given"
+           else ""
+       end AS Folate
+from obs o
+inner join
+		(
+		 select oss.person_id, MAX(oss.obs_datetime) as max_observation,
+		 SUBSTRING(MAX(CONCAT(oss.obs_datetime, oss.obs_id)), 20) as observation_id
+		 from obs oss
+		 where oss.concept_id = 4300 and oss.voided=0
+		and cast(oss.obs_datetime as date) <= cast('#endDate#' as date)
+		 group by oss.person_id
+		)latest
+	on latest.person_id = o.person_id
+	where concept_id = 	4300
+	and  o.obs_datetime = max_observation
+	) Folate
+ON anc_patients.Id = Folate.person_id
+
+-- Calcium
+
+left outer join
+
+(select
+       o.person_id,
+       case
+           when o.value_coded = 4668 then "Prophylaxis"
+           when o.value_coded = 1067 then "On Treatment"
+		   when o.value_coded = 4298 then "Not Given"
+           else ""
+       end AS Calcium
+from obs o
+inner join
+		(
+		 select oss.person_id, MAX(oss.obs_datetime) as max_observation,
+		 SUBSTRING(MAX(CONCAT(oss.obs_datetime, oss.obs_id)), 20) as observation_id
+		 from obs oss
+		 where oss.concept_id = 5418 and oss.voided=0
+		and cast(oss.obs_datetime as date) <= cast('#endDate#' as date)
+		 group by oss.person_id
+		)latest
+	on latest.person_id = o.person_id
+	where concept_id = 5418
+	and  o.obs_datetime = max_observation
+	) Calcium
+ON anc_patients.Id = Calcium.person_id
+
+-- MUAC
+left outer join
+(select o.person_id, muac as MUAC
+from obs o 
+inner join 
+		(
+		 select oss.person_id, MAX(oss.obs_datetime) as max_observation,
+		 SUBSTRING(MAX(CONCAT(oss.obs_datetime, oss.value_numeric)), 20) as muac
+		 from obs oss
+		 where oss.concept_id = 2086 and oss.voided=0
+		 and oss.obs_datetime < cast('#endDate#' as date)
+		 group by oss.person_id
+		)latest 
+	on latest.person_id = o.person_id
+	where concept_id = 2086
+	and  o.obs_datetime = max_observation	
+	)muac
+ON anc_patients.Id = muac.person_id
+
+
+-- Rhesus
+left outer join
+
+(select
+       o.person_id,
+       case
+           when value_coded = 5332 then "Rh+"
+           when value_coded = 5333 then "Rh-"
+           else ""
+       end AS Rhesus_Factor
+from obs o
+inner join
+		(
+		 select oss.person_id, MAX(oss.obs_datetime) as max_observation,
+		 SUBSTRING(MAX(CONCAT(oss.obs_datetime, oss.obs_id)), 20) as observation_id
+		 from obs oss
+		 where oss.concept_id = 5331 and oss.voided=0
+		 and cast(oss.obs_datetime as date) <= cast('#endDate#' as date)
+		 group by oss.person_id
+		)latest
+	on latest.person_id = o.person_id
+	where concept_id = 5331
+	and  o.obs_datetime = max_observation
+	) Rhesus
+ON anc_patients.Id = Rhesus.person_id
+
+-- TT Previous Doses
+left outer join
+(select o.person_id, TT_Previous as TT_Previous_Doses
+from obs o 
+inner join 
+		(
+		 select oss.person_id, MAX(oss.obs_datetime) as max_observation,
+		 SUBSTRING(MAX(CONCAT(oss.obs_datetime, oss.value_numeric)), 20) as TT_Previous
+		 from obs oss
+		 where oss.concept_id = 4318 and oss.voided=0
+		 and oss.obs_datetime < cast('#endDate#' as date)
+		 group by oss.person_id
+		)latest 
+	on latest.person_id = o.person_id
+	where concept_id = 4318
+	and  o.obs_datetime = max_observation	
+	)TT_Previous_Doses
+ON anc_patients.Id = TT_Previous_Doses.person_id
+
+-- TT Current Doses
+left outer join
+(select o.person_id, TT_Current as TT_Current_Doses
+from obs o 
+inner join 
+		(
+		 select oss.person_id, MAX(oss.obs_datetime) as max_observation,
+		 SUBSTRING(MAX(CONCAT(oss.obs_datetime, oss.value_numeric)), 20) as TT_Current
+		 from obs oss
+		 where oss.concept_id = 4319 and oss.voided=0
+		 and oss.obs_datetime < cast('#endDate#' as date)
+		 group by oss.person_id
+		)latest 
+	on latest.person_id = o.person_id
+	where concept_id = 4319
+	and  o.obs_datetime = max_observation	
+	)TT_Current_Doses
+ON anc_patients.Id = TT_Current_Doses.person_id
+
+-- TB STATUS
+left outer join
+
+(select
+       o.person_id,
+       case
+           when value_coded = 3709 then "No Signs"
+           when value_coded = 1876 then "TB Suspect"
+		   when value_coded = 3639 then "On TB Treatment"
+           else ""
+       end AS TB_Status
+from obs o
+inner join
+		(
+		 select oss.person_id, MAX(oss.obs_datetime) as max_observation,
+		 SUBSTRING(MAX(CONCAT(oss.obs_datetime, oss.obs_id)), 20) as observation_id
+		 from obs oss
+		 where oss.concept_id = 3710 and oss.voided=0
+		 and cast(oss.obs_datetime as date) <= cast('#endDate#' as date)
+		 group by oss.person_id
+		)latest
+	on latest.person_id = o.person_id
+	where concept_id = 3710
+	and  o.obs_datetime = max_observation
+	) TBStatus
+ON anc_patients.Id = TBStatus.person_id
