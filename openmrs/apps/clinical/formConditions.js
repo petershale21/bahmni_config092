@@ -1,3 +1,5 @@
+var visitTypeTracker = '';  //This variable tracks the ANC Program visit type
+var LNMPtracker = ''; 
 Bahmni.ConceptSet.FormConditions.rules = {
 
 
@@ -712,7 +714,9 @@ Bahmni.ConceptSet.FormConditions.rules = {
                                 conditions.show.push("ANC Register");  
                         }
                         else if (AncVisits == "ANC, Subsequent Visit") {
-                                conditions.show.push("ANC Register")
+                                conditions.show.push("ANC Register");
+                                conditions.hide.push("ANC, TT Doses Previous");
+                                conditions.hide.push("ANC From Lesotho");
                                 conditions.hide.push("Lesotho Obstetric Record");
                         }
                         else {
@@ -1222,9 +1226,27 @@ Bahmni.ConceptSet.FormConditions.rules = {
                         else {
                                 conditions.show.push("Tested in PNC");
                         }
-                }              
+                }
+                
+                if (formName == "ANC, ANC Program"){
+                    conditions.assignedValues.push({
+                        field: "PNC, HIV Status Known Before Visit",
+                        fieldValue: {
+                            isAutoFill: true,
+                            scopedEncounter: "latestvisit",
+                            isFilledOnRetrospectiveMode: true,
+                            enableDefaultValue:true,
+                            enableEditAfterAutoFill: true
+                        }
+                    });
+                    conditions.show.push("Subsequent HIV Test Results");
+
+
+                }
+    
+
                 if(formName == 'ANC HIV Testing Services'){
-                        
+
                         if(status == "Positive"){
                                 conditions.show.push("HIV Prophylaxis/Treatment");
                                 conditions.hide.push("ANC, Initiated in Prep");
@@ -1250,9 +1272,34 @@ Bahmni.ConceptSet.FormConditions.rules = {
                         else{
                                 conditions.hide.push("ANC, Initial Test during this pregnancy");
                         }
-                }        
+                }
+                
                 return conditions;
         },
+        'Blood Group': function(formName, formFieldValues) {
+            var conditions = { assignedValues: [], disable: [] };
+            if (formName == "ANC, ANC Program") {
+                conditions.assignedValues.push({
+                    field: "Blood Group",
+                    fieldValue: {
+                        isAutoFill: true,
+                        scopedEncounter: "latestvisit",
+                        isFilledOnRetrospectiveMode: true,
+                        enableDefaultValue: true,
+                        enableEditAfterAutoFill: true,
+                    }
+                });
+            }
+            return conditions;
+        },
+        'ANC, TT Doses Previous': function(formName, formFieldValues) {
+            var conditions = { hide: [] };
+            if (formName == "ANC, ANC Program" && visitTypeTracker == "ANC, Subsequent Visit"){
+                conditions.hide.push("ANC, TT Doses Previous");
+            }
+            return conditions;
+        },
+        
 
         /*---------------------HIV Care and Treatment-------------------*/
 
@@ -1463,10 +1510,12 @@ Bahmni.ConceptSet.FormConditions.rules = {
              },
 /*--- EDD generic autocalculation----*/
         'ANC, Last Normal Menstrual Period' : function (formName, formFieldValues) {
+                var conditions = { assignedValues: [], error: [] };
+                var LNMP = formFieldValues['ANC, Last Normal Menstrual Period'];
+                var dateUtil = Bahmni.Common.Util.DateUtil;
+
                 if(formName=="ANC, Obstetric History" || formName=="ANC, Examinations") {
-                        var LNMP = formFieldValues['ANC, Last Normal Menstrual Period'];
-                        var conditions = { assignedValues: [], error: [] };
-                        var dateUtil = Bahmni.Common.Util.DateUtil;
+
                         var LNMPDate = new Date(LNMP);
                         var EDDWithTime = dateUtil.addDays(LNMPDate,280);
                         var EDDWithoutTime = dateUtil.getDateWithoutTime(EDDWithTime);
@@ -1486,8 +1535,40 @@ Bahmni.ConceptSet.FormConditions.rules = {
                         if(LNMP) {
                                 conditions.assignedValues.push({ field: "ANC, Estimated Date of Delivery", fieldValue:EDDWithoutTime ,autocalculate:true});
                         }
-                }return conditions;
+                }
+                if (formName == "ANC, ANC Program"){
+                    conditions.assignedValues.push({
+                        field: "ANC, Last Normal Menstrual Period",
+                        fieldValue: {
+                            isAutoFill: true,
+                            scopedEncounter: "latestvisit",
+                            isFilledOnRetrospectiveMode: true,
+                            enableDefaultValue: true,
+                            enableEditAfterAutoFill: true
+                        }
+                    });
+    
+                }
+                return conditions;
      },
+        'ANC, Estimated Date of Delivery' : function (formName, formFieldValues) {
+            var conditions = { assignedValues: [], disable: [] };
+            var conditionConcept;
+            if (formName == "ANC, ANC Program") {
+                conditions.assignedValues.push({
+                    field: "ANC, Estimated Date of Delivery",
+                    fieldValue: {
+                        isAutoFill: true,
+                        scopedEncounter: "latestvisit",
+                        isFilledOnRetrospectiveMode: true,
+                        enableDefaultValue: true,
+                        enableEditAfterAutoFill: true
+                    }
+                });
+
+            }
+            return conditions;
+        },
 
         'HIVTC, Enhanced adherence counseling done': function (formName, formFieldValues) {
                 var conditionConcept = formFieldValues['HIVTC, Enhanced adherence counseling done'];
@@ -1659,7 +1740,7 @@ Bahmni.ConceptSet.FormConditions.rules = {
         //                 }
         //         }
 
-        // },
+        // },ANC, Estimated Date of Delivery
 
 
         'HTC, Initial HIV Test Determine': function (formName, formFieldValues, patient) {
