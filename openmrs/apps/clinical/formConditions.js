@@ -1,5 +1,4 @@
 var visitTypeTracker = '';  //This variable tracks the ANC Program visit type
-var LNMPtracker = ''; 
 Bahmni.ConceptSet.FormConditions.rules = {
 
 
