@@ -1,7 +1,4 @@
 SELECT Total_Child_HEI.AgeGroup
-		, Total_Child_HEI.New_Patients_tested_using_WRD
-		, Total_Child_HEI.Relapse_Patients_tested_using_WRD
-		, Total_Child_HEI.Unknown_exposure_at_Penta_1
 		, Total_Child_HEI.Started_NVP_less_6_weeks
 		, Total_Child_HEI.Started_CTX_4_to_6_weeks
 		, Total_Child_HEI.Initial_NAT_Test_birth
@@ -20,9 +17,6 @@ FROM
 
 (
 	SELECT ageGroup, 
-IF(Id IS NULL, 0, SUM(IF(HEI = 'New Patients tested using WRD', 1, 0))) AS New_Patients_tested_using_WRD,
-IF(Id IS NULL, 0, SUM(IF(HEI = 'Relapse Patients tested using WRD', 1, 0))) AS Relapse_Patients_tested_using_WRD,
-IF(Id IS NULL, 0, SUM(IF(HEI = 'Unknown exposure at Penta 1', 1, 0))) AS Unknown_exposure_at_Penta_1,
 IF(Id IS NULL, 0, SUM(IF(HEI = 'Started on NVP prophylaxis less than 6 weeks', 1, 0))) AS Started_NVP_less_6_weeks,
 IF(Id IS NULL, 0, SUM(IF(HEI = 'Started on CTX prophylaxis_4-6 weeks', 1, 0))) AS Started_CTX_4_to_6_weeks,
 IF(Id IS NULL, 0, SUM(IF(HEI = 'Initial NAT Test at birth', 1, 0))) AS Initial_NAT_Test_birth,
@@ -39,90 +33,6 @@ IF(Id IS NULL, 0, SUM(IF(HEI = 'Unknown Outcome at 18 months', 1, 0))) AS Unknow
 IF(Child_HEI.Id IS NULL, 0, SUM(1)) as 'Total'
 FROM 
 	( 
-        -- New Patients tested using WRD
-			select distinct patient.patient_id AS Id,
-						patient_identifier.identifier AS patientIdentifier,
-						concat(person_name.given_name, ' ', person_name.family_name) AS patientName,
-						floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/30) AS Months,
-						person.gender AS Gender,
-						"" as ageGroup,
-						"New Patients tested using WRD" as HEI
-				from obs o
-					INNER JOIN patient ON o.person_id = patient.patient_id
-					AND o.concept_id = 4293 and o.value_coded = 3640
-					AND o.person_id in
-										(
-											Select person_id
-												from obs o
-													where o.concept_id = 4455
-													and o.value_coded = 4456
-										)
-					AND patient.voided = 0 AND o.voided = 0
-					AND CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
-					AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
-					INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
-					INNER JOIN person_name ON person.person_id = person_name.person_id AND person_name.preferred = 1
-					INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1	AND o.voided=0
-				Group by Id
-
-				UNION
-				
-				-- Relapse Patients tested using WRD
-				select distinct patient.patient_id AS Id,
-						patient_identifier.identifier AS patientIdentifier,
-						concat(person_name.given_name, ' ', person_name.family_name) AS patientName,
-						floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/30) AS Months,
-						person.gender AS Gender,
-						"" as ageGroup,
-						"Relapse Patients tested using WRD" as HEI
-				from obs o
-					INNER JOIN patient ON o.person_id = patient.patient_id
-					AND o.concept_id = 4293 and o.value_coded = 4294
-					AND o.person_id in
-										(
-											Select person_id
-												from obs o
-													where o.concept_id = 4455
-													and o.value_coded = 4456
-										)
-					AND patient.voided = 0 AND o.voided = 0
-					AND CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
-					AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
-					INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
-					INNER JOIN person_name ON person.person_id = person_name.person_id AND person_name.preferred = 1
-					INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1	AND o.voided=0
-				Group by Id
-
-				UNION
-
-				-- Unknown exposure at Penta 1
-				select distinct patient.patient_id AS Id,
-						patient_identifier.identifier AS patientIdentifier,
-						concat(person_name.given_name, ' ', person_name.family_name) AS patientName,
-						floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/30) AS Months,
-						person.gender AS Gender,
-						"" as ageGroup,
-						"Unknown exposure at Penta 1" as HEI
-				from obs o
-					INNER JOIN patient ON o.person_id = patient.patient_id
-					AND o.concept_id = 4293 and o.value_coded = 1739
-					AND o.person_id in
-										(
-											Select person_id
-												from obs o
-													where o.concept_id = 4455
-													and o.value_coded = 4456
-										)
-					AND patient.voided = 0 AND o.voided = 0
-					AND CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
-					AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
-					INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
-					INNER JOIN person_name ON person.person_id = person_name.person_id AND person_name.preferred = 1
-					INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1	AND o.voided=0
-				Group by Id
-
-				UNION
-
 				-- Started on NVP prophylaxis less than 6 weeks
 				select distinct patient.patient_id AS Id,
 						patient_identifier.identifier AS patientIdentifier,
@@ -565,10 +475,7 @@ FROM
 UNION ALL
 
 
-(SELECT  'Total' AS AgeGroup, 
-IF(Totals.Id IS NULL, 0, SUM(IF(Totals.HEI  = 'New Patients tested using WRD', 1, 0))) AS New_Patients_tested_using_WRD,
-IF(Totals.Id IS NULL, 0, SUM(IF(Totals.HEI  = 'Relapse Patients tested using WRD', 1, 0))) AS Relapse_Patients_tested_using_WRD,
-IF(Totals.Id IS NULL, 0, SUM(IF(Totals.HEI  = 'Unknown exposure at Penta 1', 1, 0))) AS Unknown_exposure_at_Penta_1,
+(SELECT  'Total' AS AgeGroup,
 IF(Totals.Id IS NULL, 0, SUM(IF(Totals.HEI  = 'Started on NVP prophylaxis less than 6 weeks', 1, 0))) AS Started_NVP_less_6_weeks,
 IF(Totals.Id IS NULL, 0, SUM(IF(Totals.HEI  = 'Started on CTX prophylaxis_4-6 weeks', 1, 0))) AS Started_CTX_4_to_6_weeks,
 IF(Totals.Id IS NULL, 0, SUM(IF(Totals.HEI  = 'Initial NAT Test at birth', 1, 0))) AS Initial_NAT_Test_birth,
@@ -594,89 +501,6 @@ FROM
 		FROM
 		
 		(
-				-- New Patients tested using WRD
-			select distinct patient.patient_id AS Id,
-						patient_identifier.identifier AS patientIdentifier,
-						concat(person_name.given_name, ' ', person_name.family_name) AS patientName,
-						floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/30) AS Months,
-						person.gender AS Gender,
-						"" as ageGroup,
-						"New Patients tested using WRD" as HEI
-				from obs o
-					INNER JOIN patient ON o.person_id = patient.patient_id
-					AND o.concept_id = 4293 and o.value_coded = 3640
-					AND o.person_id in
-										(
-											Select person_id
-												from obs o
-													where o.concept_id = 4455
-													and o.value_coded = 4456
-										)
-					AND patient.voided = 0 AND o.voided = 0
-					AND CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
-					AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
-					INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
-					INNER JOIN person_name ON person.person_id = person_name.person_id AND person_name.preferred = 1
-					INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1	AND o.voided=0
-				Group by Id
-
-				UNION
-				
-				-- Relapse Patients tested using WRD
-				select distinct patient.patient_id AS Id,
-						patient_identifier.identifier AS patientIdentifier,
-						concat(person_name.given_name, ' ', person_name.family_name) AS patientName,
-						floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/30) AS Months,
-						person.gender AS Gender,
-						"" as ageGroup,
-						"Relapse Patients tested using WRD" as HEI
-				from obs o
-					INNER JOIN patient ON o.person_id = patient.patient_id
-					AND o.concept_id = 4293 and o.value_coded = 4294
-					AND o.person_id in
-										(
-											Select person_id
-												from obs o
-													where o.concept_id = 4455
-													and o.value_coded = 4456
-										)
-					AND patient.voided = 0 AND o.voided = 0
-					AND CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
-					AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
-					INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
-					INNER JOIN person_name ON person.person_id = person_name.person_id AND person_name.preferred = 1
-					INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1	AND o.voided=0
-				Group by Id
-
-				UNION
-
-				-- Unknown exposure at Penta 1
-				select distinct patient.patient_id AS Id,
-						patient_identifier.identifier AS patientIdentifier,
-						concat(person_name.given_name, ' ', person_name.family_name) AS patientName,
-						floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/30) AS Months,
-						person.gender AS Gender,
-						"" as ageGroup,
-						"Unknown exposure at Penta 1" as HEI
-				from obs o
-					INNER JOIN patient ON o.person_id = patient.patient_id
-					AND o.concept_id = 4293 and o.value_coded = 1739
-					AND o.person_id in
-										(
-											Select person_id
-												from obs o
-													where o.concept_id = 4455
-													and o.value_coded = 4456
-										)
-					AND patient.voided = 0 AND o.voided = 0
-					AND CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
-					AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
-					INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
-					INNER JOIN person_name ON person.person_id = person_name.person_id AND person_name.preferred = 1
-					INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1	AND o.voided=0
-				Group by Id
-
-				UNION
 
 				-- Started on NVP prophylaxis less than 6 weeks
 				select distinct patient.patient_id AS Id,

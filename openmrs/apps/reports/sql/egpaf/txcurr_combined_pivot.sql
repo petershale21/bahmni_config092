@@ -192,6 +192,15 @@ AND Clients_Seen.Id not in
 											and voided = 0
 						)
 					)
+
+AND Clients_Seen.Id not in (
+						-- Visitors
+							select distinct os.person_id from obs os
+							where os.concept_id = 5416
+							AND os.value_coded = 1 and os.voided = 0
+							AND CAST(os.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+							AND CAST(os.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
+					)
 ORDER BY Clients_Seen.patientName)
 
 UNION
@@ -278,6 +287,17 @@ FROM
 									from person 
 									where death_date <= cast('#endDate#' as date)
 									and dead = 1 and voided = 0
+						 )
+		and active_clients.person_id not in (
+									-- Visitors
+							select person_id 
+							FROM
+								(select person_id, max(obs_datetime), SUBSTRING(MAX(CONCAT(obs_datetime, obs_id)), 20) AS observation_id
+								from obs where concept_id = 5416 
+								and value_coded = 1 and voided = 0
+								and cast(obs_datetime as date) <= cast('#endDate#' as date)
+								and voided = 0
+								group by person_id)visitor
 						 )
 						 )
 						 -- end
@@ -388,6 +408,17 @@ FROM
 									where death_date <= cast('#endDate#' as date)
 									and dead = 1 and voided = 0
 						 )
+		and active_clients.person_id not in (
+									-- Visitors
+							select person_id 
+							FROM
+								(select person_id, max(obs_datetime), SUBSTRING(MAX(CONCAT(obs_datetime, obs_id)), 20) AS observation_id
+								from obs where concept_id = 5416 
+								and value_coded = 1 and voided = 0
+								and cast(obs_datetime as date) <= cast('#endDate#' as date)
+								and voided = 0
+								group by person_id)visitor
+						 )
 						 )
 						 -- end
 						 
@@ -406,8 +437,7 @@ ORDER BY Seen_Previous_ART_Clients.patientName
 
 	GROUP BY TXCURR_DETAILS.age_group
 	ORDER BY TXCURR_DETAILS.sort_order)
-	
-	
+
 UNION ALL
 
 
@@ -482,7 +512,7 @@ ORDER BY Newly_Initiated_ART_Clients.patientName)
 		UNION
 
 
-		(SELECT Id, patientIdentifier , patientName , Age, Gender, age_group, 'Seen' AS 'Program_Status', sort_order
+(SELECT Id, patientIdentifier , patientName , Age, Gender, age_group, 'Seen' AS 'Program_Status', sort_order
 FROM (
 
 select distinct patient.patient_id AS Id,
@@ -600,6 +630,15 @@ AND Clients_Seen.Id not in
 											and voided = 0
 						)
 					)
+AND Clients_Seen.Id not in (
+						-- Visitors
+						select distinct os.person_id from obs os
+							where os.concept_id = 5416
+							AND os.value_coded = 1 and os.voided = 0
+							AND CAST(os.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+							AND CAST(os.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
+
+							)
 ORDER BY Clients_Seen.patientName
 		)
 
@@ -688,6 +727,17 @@ FROM
 									where death_date <= cast('#endDate#' as date)
 									and dead = 1 and voided = 0
 						 )
+		and active_clients.person_id not in (
+									-- Visitors
+								select person_id 
+								FROM
+								(select person_id, max(obs_datetime), SUBSTRING(MAX(CONCAT(obs_datetime, obs_id)), 20) AS observation_id
+								from obs where concept_id = 5416 
+								and value_coded = 1 and voided = 0
+								and cast(obs_datetime as date) <= cast('#endDate#' as date)
+								and voided = 0
+								group by person_id)visitor
+						 )
 						 )
 						 -- end
 						 
@@ -702,7 +752,7 @@ FROM
 
 		UNION
 
-		(SELECT Id, patientIdentifier , patientName , Age, Gender, age_group, 'Seen_Prev_Months' AS 'Program_Status', sort_order
+(SELECT Id, patientIdentifier , patientName , Age, Gender, age_group, 'Seen_Prev_Months' AS 'Program_Status', sort_order
 FROM
                 (select distinct patient.patient_id AS Id,
 									   patient_identifier.identifier AS patientIdentifier,
@@ -798,6 +848,18 @@ FROM
 									where death_date <= cast('#endDate#' as date)
 									and dead = 1 and voided = 0
 						 )
+		and active_clients.person_id not in (
+									-- Visitors
+							select person_id 
+							FROM
+								(select person_id, max(obs_datetime), SUBSTRING(MAX(CONCAT(obs_datetime, obs_id)), 20) AS observation_id
+								from obs where concept_id = 5416 
+								and value_coded = 1 and voided = 0
+								and cast(obs_datetime as date) <= cast('#endDate#' as date)
+								and voided = 0
+								group by person_id)visitor
+						 )	 
+
 						 )
 						 -- end
 						 

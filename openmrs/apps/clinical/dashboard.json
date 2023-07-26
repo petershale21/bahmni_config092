@@ -85,6 +85,37 @@
                     "pivotTable": {}
                 }
             },
+            "labOrdersControl": {
+                "orderType": "Lab Order",
+                "type": "ordersControl",
+                "title": "Lab Orders",
+                "dashboardConfig": {  
+                   "conceptNames": [
+                        "eRegister Lab Order Number",
+                        "DISA, VL Result [#/vol]", 
+                        "DISA, VL Result [log#/vol]",
+                        "DISA, VL Result (low value)", 
+                        "DISA, VL Result Testdate",
+                        "DISA, VL Result Comments"
+                        ],
+                   "numberOfVisits": "4",
+                   "showHeader": true,
+                   "obsIgnoreList" : ["Supine"]
+                 } ,
+                "expandedViewConfig": {
+                     "conceptNames": [
+                        "eRegister Lab Order Number",
+                        "DISA, VL Result [#/vol]", 
+                        "DISA, VL Result [log#/vol]",
+                        "DISA, VL Result (low value)", 
+                        "DISA, VL Result Testdate",
+                        "DISA, VL Result Comments",
+                        "HIVTC, VL Pregnancy Status",
+                        "HIVTC, VL Breastfeeding Status"
+                        ],
+                      "showHeader": true
+                }
+            },
             "hivcareandtreatment": {
                 "title": "HIV Care and Treatment Follow Up",
                 "type": "hivcareandtreatment",
