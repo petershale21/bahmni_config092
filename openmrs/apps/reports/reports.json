@@ -20,6 +20,13 @@
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/seen_and_initiated_list.sql"
         }
     },
+    "txcurr_test": {
+        "name": "ART-002A | TxCurr Quarterly Test (List)",
+        "type": "MRSGeneric",
+        "config": {
+            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/testing.sql"
+        }
+    },
     "currentonart_jointmissedListSQL": {
         "name": "ART-003 | Missed Appointments Status Report (List)",
         "type": "MRSGeneric",
