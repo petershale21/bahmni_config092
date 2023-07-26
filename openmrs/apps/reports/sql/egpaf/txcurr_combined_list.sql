@@ -163,6 +163,14 @@ AND Clients_Seen.Id not in
 											and voided = 0	
 						)
 					)
+AND Clients_Seen.Id not in (
+					-- Visitors
+							select distinct os.person_id from obs os
+							where os.concept_id = 5416
+							AND os.value_coded = 1 and os.voided = 0
+							AND CAST(os.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+							AND CAST(os.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
+						)
 
 ORDER BY Clients_Seen.patientName)
 
@@ -254,6 +262,18 @@ FROM
 									and dead = 1 and voided = 0
 									
 						 )
+
+		and active_clients.person_id not in(
+									-- Visitors
+							select person_id 
+							FROM
+								(select person_id, max(obs_datetime), SUBSTRING(MAX(CONCAT(obs_datetime, obs_id)), 20) AS observation_id
+								from obs where concept_id = 5416 
+								and value_coded = 1 and voided = 0
+								and cast(obs_datetime as date) <= cast('#endDate#' as date)
+								and voided = 0
+								group by person_id)visitor
+							)				 
 						 )
 						 -- end
 						 
@@ -366,6 +386,17 @@ UNION
 									where death_date <= cast('#endDate#' as date)
 									and dead = 1 and voided = 0
 						 )
+		and active_clients.person_id not in (
+									-- Visitors
+							select person_id 
+							FROM
+								(select person_id, max(obs_datetime), SUBSTRING(MAX(CONCAT(obs_datetime, obs_id)), 20) AS observation_id
+								from obs where concept_id = 5416 
+								and value_coded = 1 and voided = 0
+								and cast(obs_datetime as date) <= cast('#endDate#' as date)
+								and voided = 0
+								group by person_id)visitor
+						 )
 						 )
 						 -- end
 						 
@@ -377,3 +408,6 @@ UNION
 						  AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
                    WHERE observed_age_group.report_group_name = 'Modified_Ages') AS Seen_Previous_ART_Clients
 ORDER BY Seen_Previous_ART_Clients.patientName)
+
+
+
