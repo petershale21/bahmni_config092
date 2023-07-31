@@ -2782,7 +2782,29 @@ Bahmni.ConceptSet.FormConditions.rules = {
                     conditions.assignedValues.push({ field: "LD, ART initiated during labour", fieldValue: "", autocalculate:true});
                  }
                 return conditions;
-             }
-
+             },
              ///////////////END OF LABOUR AND DELIVERY REGISTER CONDITIONS////////////////
+
+             ///////////////MDR-TB////////////////
+             'MDR Forms': function (formName, formFieldValues) {
+                var mdrForm = formFieldValues['MDR Forms'];
+                var conditions = {show: [], hide: []};
+                switch (mdrForm){
+                        case "MDR Baseline Form":
+                                conditions.show.push("MDR-TB, Baseline Assessment");
+                                conditions.hide.push("MDR-TB, PHQ9");
+                                console.log("show baseline, hide phq9");
+                                break;
+                        case "MDR PHQ-9 Form":
+                                conditions.show.push("MDR-TB, PHQ9");
+                                conditions.hide.push("MDR-TB, Baseline Assessment");
+                                console.log("hide baseline, show phq9");
+                                break;
+                        default:
+                                conditions.hide.push("MDR-TB, Baseline Assessment");
+                                conditions.hide.push("MDR-TB, PHQ9");
+                }
+                return conditions;
+             }
+        ///////////////END of MDR-TB////////////////
 };
