@@ -582,6 +582,13 @@
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/client_appointments.sql"
         }
     },
+    "peads_transition": {
+        "name": "ART-068 | PEADS Regimen Transition (List)",
+        "type": "MRSGeneric",
+        "config": {
+            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/peads_transition.sql"
+        }
+    },
     "ahd_list": {
         "name": "ART-069 | AHD Report (List)",
         "type": "MRSGeneric",
