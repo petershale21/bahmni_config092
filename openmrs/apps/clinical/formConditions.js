@@ -2791,18 +2791,77 @@ Bahmni.ConceptSet.FormConditions.rules = {
                 var conditions = {show: [], hide: []};
                 switch (mdrForm){
                         case "MDR Baseline Form":
-                                conditions.show.push("MDR-TB, Baseline Assessment");
+                                conditions.show.push("MDR-TB, Baseline Assessment"); //show
                                 conditions.hide.push("MDR-TB, PHQ9");
-                                console.log("show baseline, hide phq9");
+                                conditions.hide.push("MDR-TB Followup Form");
+                                conditions.hide.push("MDR-TB, followup assessment");
+                                conditions.hide.push("MDR-TB Electrocardiogram");
+                                conditions.hide.push("MDR-TB, Radiology and Other Tests");
+                                conditions.hide.push("MDR-TB, Outcome");
                                 break;
                         case "MDR PHQ-9 Form":
-                                conditions.show.push("MDR-TB, PHQ9");
                                 conditions.hide.push("MDR-TB, Baseline Assessment");
-                                console.log("hide baseline, show phq9");
+                                conditions.show.push("MDR-TB, PHQ9"); //show
+                                conditions.hide.push("MDR-TB Followup Form");
+                                conditions.hide.push("MDR-TB, followup assessment");
+                                conditions.hide.push("MDR-TB Electrocardiogram");
+                                conditions.hide.push("MDR-TB, Radiology and Other Tests");
+                                conditions.hide.push("MDR-TB, Outcome");
+                                break;
+                        case "MDR TB Followup Form":
+                                console.log("MDR-TB Followup Form");
+                                conditions.hide.push("MDR-TB, Baseline Assessment");
+                                conditions.hide.push("MDR-TB, PHQ9");
+                                conditions.show.push("MDR-TB Followup Form"); //show
+                                conditions.hide.push("MDR-TB, followup assessment");
+                                conditions.hide.push("MDR-TB Electrocardiogram");
+                                conditions.hide.push("MDR-TB, Radiology and Other Tests");
+                                conditions.hide.push("MDR-TB, Outcome");
+                                break;
+                        case "MDR Followup Assessment Form":
+                                conditions.hide.push("MDR-TB, Baseline Assessment");
+                                conditions.hide.push("MDR-TB, PHQ9");
+                                conditions.hide.push("MDR-TB Followup Form");
+                                conditions.show.push("MDR-TB, followup assessment"); //show
+                                conditions.hide.push("MDR-TB Electrocardiogram");
+                                conditions.hide.push("MDR-TB, Radiology and Other Tests");
+                                conditions.hide.push("MDR-TB, Outcome");
+                                break;
+                        case "MDR Electrocardiogram Form":
+                                conditions.hide.push("MDR-TB, Baseline Assessment");
+                                conditions.hide.push("MDR-TB, PHQ9");
+                                conditions.hide.push("MDR-TB Followup Form");
+                                conditions.hide.push("MDR-TB, followup assessment");
+                                conditions.show.push("MDR-TB Electrocardiogram"); //show
+                                conditions.hide.push("MDR-TB, Radiology and Other Tests");
+                                conditions.hide.push("MDR-TB, Outcome");
+                                break;
+                        case "MDR Radiology Form":
+                                conditions.hide.push("MDR-TB, Baseline Assessment");
+                                conditions.hide.push("MDR-TB, PHQ9");
+                                conditions.hide.push("MDR-TB Followup Form");
+                                conditions.hide.push("MDR-TB, followup assessment");
+                                conditions.hide.push("MDR-TB Electrocardiogram");
+                                conditions.show.push("MDR-TB, Radiology and Other Tests"); //show
+                                conditions.hide.push("MDR-TB, Outcome");
+                                break;
+                        case "MDR Outcome Form":
+                                conditions.hide.push("MDR-TB, Baseline Assessment");
+                                conditions.hide.push("MDR-TB, PHQ9");
+                                conditions.hide.push("MDR-TB Followup Form");
+                                conditions.hide.push("MDR-TB, followup assessment");
+                                conditions.hide.push("MDR-TB Electrocardiogram");
+                                conditions.hide.push("MDR-TB, Radiology and Other Tests");
+                                conditions.show.push("MDR-TB, Outcome"); //show
                                 break;
                         default:
                                 conditions.hide.push("MDR-TB, Baseline Assessment");
                                 conditions.hide.push("MDR-TB, PHQ9");
+                                conditions.hide.push("MDR-TB Followup Form");
+                                conditions.hide.push("MDR-TB, followup assessment");
+                                conditions.hide.push("MDR-TB Electrocardiogram");
+                                conditions.hide.push("MDR-TB, Radiology and Other Tests");
+                                conditions.hide.push("MDR-TB, Outcome");
                 }
                 return conditions;
              }
