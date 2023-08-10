@@ -17,7 +17,7 @@ FROM
 							
 		FROM person p
 		
-		INNER JOIN obs o ON o.person_id = p.person_id AND o.voided = 0 AND o.person_id in (select person_id from obs where concept_id = 2403 and voided = 0)
+		INNER JOIN obs o ON o.person_id = p.person_id AND o.voided = 0 AND o.person_id in (select person_id from obs where concept_id = 2403 and voided = 0) AND o.person_id not in (select person_id from obs where concept_id = 5416 and value_coded = 1 and voided = 0)
 		INNER JOIN person_name pn ON p.person_id = pn.person_id
 		INNER JOIN patient_identifier pi1 ON pi1.patient_id = p.person_id AND pi1.voided = 0 and pi1.preferred = 1 AND pi1.identifier_type = 3
 		LEFT JOIN patient_identifier pi2 ON pi2.patient_id = p.person_id AND pi2.identifier_type in (5,12)
