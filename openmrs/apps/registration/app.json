@@ -30,6 +30,12 @@
                     "ART_Number"
                 ]
             },
+            "mdr-tb":{
+                "title": "MDR-TB",
+                "translationKey":"MDR_TB_SECTION",
+                "attributes":["education"],
+                "order": 1
+            },
             "hidden": {
                 "attributes": [
                     "isUrban",
