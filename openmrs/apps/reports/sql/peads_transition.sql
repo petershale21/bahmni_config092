@@ -60,7 +60,7 @@ from -- obs o
 						  CAST('#endDate#' AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
 						  AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
                    WHERE observed_age_group.report_group_name = 'Modified_Ages') AS Newly_Initiated_ART_Clients
-                   where Age <=19
+                   where Age < 15
 ORDER BY Newly_Initiated_ART_Clients.Age)
 
 UNION
@@ -222,7 +222,7 @@ AND Clients_Seen.Id not in (
 
 							)    
 
-AND Age <= 19
+AND Age < 15
 ORDER BY Clients_Seen.patientName)
 
 UNION
@@ -337,7 +337,7 @@ FROM
 						  CAST('#endDate#' AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
 						  AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
                    WHERE observed_age_group.report_group_name = 'Modified_Ages') AS TwentyEightDayDefaulters
-                   WHERE Age <= 19
+                   WHERE Age < 15
 				   order by TwentyEightDayDefaulters.patientName)
 
 UNION
@@ -464,7 +464,7 @@ FROM (
                    WHERE observed_age_group.report_group_name = 'Modified_Ages')
 		   
 ) AS ARTCurrent_PrevMonths
- WHERE Age <= 19	
+ WHERE Age < 15
 ORDER BY ARTCurrent_PrevMonths.Age)
 
 ) previous
