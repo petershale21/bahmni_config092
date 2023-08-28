@@ -911,20 +911,17 @@ Bahmni.ConceptSet.FormConditions.rules = {
                   if (CancerAssessment == "Cervical VIA Test") {
                      conditions.show.push("VIA Test");
                      conditions.hide.push("Results of Pap Smear");
-                     conditions.hide.push("HPV Results");
 
                    }
                 else if (CancerAssessment == "Pap Smear") {
                      conditions.show.push("Results of Pap Smear");
                      conditions.hide.push("VIA Test");
-                     conditions.hide.push("HPV Results");
 
                 }
 
                 else if (CancerAssessment == "HPV Test") {
                   conditions.hide.push("Results of Pap Smear");
                   conditions.hide.push("VIA Test");
-                  conditions.show.push("HPV Results");
 
                  }
 
@@ -936,7 +933,6 @@ Bahmni.ConceptSet.FormConditions.rules = {
                 else {
                         conditions.hide.push("VIA Test");
                         conditions.hide.push("Results of Pap Smear");
-                        conditions.hide.push("HPV Results");
                 }
                 }
                 return conditions;
