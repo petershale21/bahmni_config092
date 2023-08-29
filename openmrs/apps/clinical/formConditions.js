@@ -343,7 +343,17 @@ Bahmni.ConceptSet.FormConditions.rules = {
                 var ANCGravida = formFieldValues['ANC, Gravida'];
                 var AncVisits = formFieldValues['ANC, Visit Types'];
                 var conditions = { show: [], hide: [], disable: [], assignedValues: [] };
-                
+
+                conditions.assignedValues.push({
+                        field: "ANC, Gravida",
+                        fieldValue:{
+                                isAutoFill:true,
+                                scopedEncounter:"latestvisit",
+                                isFilledOnRetrospectiveMode:true,
+                                enableDefaultValue: true,
+                                enableEditAfterAutoFill: true
+                        }
+                });                
                
                 if (formName == "ANC, Obstetric History"){
                         
@@ -361,29 +371,6 @@ Bahmni.ConceptSet.FormConditions.rules = {
                         }                        
                 }
                 if (formName == "ANC, Examinations"){
-                        if(AncVisits == "ANC, Subsequent Visit"){
-                                conditions.assignedValues.push({
-                                        field: "ANC, Gravida",
-                                        fieldValue:{
-                                                isAutoFill:true,
-                                                scopedEncounter:"latestvisit",
-                                                isFilledOnRetrospectiveMode:true,
-                                                enableDefaultValue: true,
-                                                enableEditAfterAutoFill: true
-                                        }
-                                });
-                                
-                                conditions.assignedValues.push({
-                                        field: "ANC, Number of Miscarriages",
-                                        fieldValue:{
-                                                isAutoFill:true,
-                                                scopedEncounter:"latestvisit",
-                                                isFilledOnRetrospectiveMode:true,
-                                                enableDefaultValue: true,
-                                                enableEditAfterAutoFill: true
-                                        }
-                                });
-                        }
                         if (ANCGravida > "1") {
                                 conditions.show.push("ANC, Number of Miscarriages");
                                 conditions.show.push("ANC, Parity");
@@ -405,6 +392,17 @@ Bahmni.ConceptSet.FormConditions.rules = {
                 var AncVisits = formFieldValues['ANC, Visit Types'];
                 var conditions = { show: [], hide: [], disable: [], enable: [], assignedValues: [] };
 
+                conditions.assignedValues.push({
+                        field: "ANC, Parity",
+                        fieldValue:{
+                                isAutoFill:true,
+                                scopedEncounter:"latestvisit",
+                                isFilledOnRetrospectiveMode:true,
+                                enableDefaultValue: true,
+                                enableEditAfterAutoFill: true
+                        }
+                });
+
                 if (formName == "ANC, Obstetric History") {
                         if (ANCParity >= ANCGravida1) {
                                 alert("Parity should be less than Gravida");
@@ -420,18 +418,6 @@ Bahmni.ConceptSet.FormConditions.rules = {
                         }
                 }
                 if (formName == "ANC, Examinations"){
-                        if(AncVisits == "ANC Subsequent Visit"){
-                                conditions.assignedValues.push({
-                                        field: "ANC, Parity",
-                                        fieldValue:{
-                                                isAutoFill:true,
-                                                scopedEncounter:"latestvisit",
-                                                isFilledOnRetrospectiveMode:true,
-                                                enableDefaultValue: true,
-                                                enableEditAfterAutoFill: true
-                                        }
-                                });
-                        }
                         if (ANCParity >= ANCGravida1) {
                                 alert("Parity should be less than Gravida");
                                 conditions.disable.push("ANC, Number of Miscarriages");
@@ -506,11 +492,23 @@ Bahmni.ConceptSet.FormConditions.rules = {
                 return conditions;
         },
 
-        'ANC, History of Miscarriages': function (formName, formFieldValues) {
-                var HistoryMis = formFieldValues['ANC, History of Miscarriages'];
+        'ANC, Number of Miscarriages': function (formName, formFieldValues) {
+                var HistoryMis = formFieldValues['ANC, Number of Miscarriages'];
+                var conditions = { show: [], hide: [], assignedValues: [] };
+
+                conditions.assignedValues.push({
+                        field: "ANC, Number of Miscarriages",
+                        fieldValue:{
+                                isAutoFill:true,
+                                scopedEncounter:"latestvisit",
+                                isFilledOnRetrospectiveMode:true,
+                                enableDefaultValue: true,
+                                enableEditAfterAutoFill: true,
+                                autocalculate: true
+                        }
+                });
 
                 if (formName == "ANC, Gynaecological History") {
-                        var conditions = { show: [], hide: [] };
 
                         if (HistoryMis == "Yes") {
                                 conditions.show.push("ANC, When")
@@ -703,14 +701,14 @@ Bahmni.ConceptSet.FormConditions.rules = {
                         conditions.hide.push("Dilation and Curettage");
                         conditions.hide.push("ANC, Type of Surgery");
                         conditions.hide.push("ANC, Initial Test during this pregnancy");
-                        conditions.hide.push("Subsequent HIV Test Results");
                         conditions.hide.push("HIV Prophylaxis/Treatment");
                         conditions.hide.push("HIVTC, Viral Load Monitoring Template");
                         conditions.hide.push("ANC, Partner HIV Status");
                                 
                         if (AncVisits == "ANC, First Visit") {
                                 conditions.show.push("Lesotho Obstetric Record")
-                                conditions.show.push("ANC Register");  
+                                conditions.show.push("ANC Register");
+                                conditions.hide.push("Subsequent HIV Test Results");
                         }
                         else if (AncVisits == "ANC, Subsequent Visit") {
                                 conditions.show.push("ANC Register");
@@ -1249,7 +1247,6 @@ Bahmni.ConceptSet.FormConditions.rules = {
                             enableEditAfterAutoFill: true
                         }
                     });
-                    conditions.show.push("Subsequent HIV Test Results");
 
 
                 }
