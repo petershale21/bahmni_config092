@@ -1375,6 +1375,34 @@
         "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/MDR_TB_Clients_pivot.sql/"
     }
 },
+"TB_ART_List": {
+    "name": "TB-029 | TB ART Clients (List)",
+    "type": "MRSGeneric",
+    "config": {
+        "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/TB_ART.sql/"
+    }
+},
+"TB_ART_Pivot": {
+    "name": "TB-030 | TB ART Clients (Pivot)",
+    "type": "MRSGeneric",
+    "config": {
+        "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/TB_ART_pivot.sql/"
+    }
+},
+"LABORATORY_List": {
+    "name": "LAB-01 | Lab_Report (List)",
+    "type": "MRSGeneric",
+    "config": {
+        "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/Test_Sent_VS_Received.sql/"
+    }
+},
+"LABORATORY_Pivot": {
+    "name": "LAB-02 | Lab_Report (Pivot)",
+    "type": "MRSGeneric",
+    "config": {
+        "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/Test_Sent_VS_Received_pivot.sql/"
+    }
+},
 "Cervical_Cancer_Screening": {
     "name": "Cervical Cancer Screening (List)",
     "type": "MRSGeneric",

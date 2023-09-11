@@ -1,4 +1,5 @@
 SELECT Total_Child_Attendance.AgeGroup
+		, Total_Child_Attendance.Attendance_child_health
 		, Total_Child_Attendance.BCG
 		, Total_Child_Attendance.Polio_0
 		, Total_Child_Attendance.Polio_1
