@@ -69,5 +69,16 @@
         },
         "order": 3,
         "requiredPrivilege": "Edit Visits"
+    },
+    "MDR-TB-registration":{
+        "id": "bahmni.registration.conceptSetGroup.MDR-TB-registration",
+        "extensionPointId": "org.bahmni.registration.conceptSetGroup.observations",
+        "type": "config",
+        "extensionParams": {
+            "conceptName": "MDR-TB-registration", 
+            "translationKey": "MDR_TB_SECTION"
+        },
+        "order": 1,
+        "requiredPrivilege": "Edit Visits"
     }
 }
