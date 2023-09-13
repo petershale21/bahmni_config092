@@ -1,5 +1,5 @@
 
-(SELECT patientIdentifier AS "Patient_Identifier", patientName AS "Patient_Name", Age,DOB, Gender, Screening_Type, VIA_Result, PapSmear_Result
+(SELECT patientIdentifier AS "Patient_Identifier", patientName AS "Patient_Name", Age,DOB, Gender, Screening_Status, Screening_Type, VIA_Result, PapSmear_Result
     FROM
                 (select distinct patient.patient_id AS Id,
 									   patient_identifier.identifier AS patientIdentifier,
@@ -61,6 +61,32 @@ left outer join
 
 )via_result
 on via_result.person_id = Cervical_Cancer_Screened.Id
+
+left outer join 
+
+(select
+       o.person_id,
+       case
+           when o.value_coded = 2147 then "New"
+		   when o.value_coded = 2146 then "Repeat"
+           else ""
+       end AS Screening_Status
+from obs o
+inner join
+		(
+		 select oss.person_id, MAX(oss.obs_datetime) as max_observation,
+		 SUBSTRING(MAX(CONCAT(oss.obs_datetime, oss.obs_id)), 20) as observation_id
+		 from obs oss
+		 where oss.concept_id = 4513 and oss.voided=0
+		 and cast(oss.obs_datetime as date) <= cast('#endDate#' as date)
+		 group by oss.person_id
+		)latest
+	on latest.person_id = o.person_id
+	where concept_id = 4513
+	and  o.obs_datetime = max_observation
+
+)Screening
+on Screening.person_id = Cervical_Cancer_Screened.Id
 
 left outer join 
 
