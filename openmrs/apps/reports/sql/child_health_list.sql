@@ -39,53 +39,40 @@ on Child.Id = BaseDose.person_id
 
  -- 1st Dose
 left outer join
-	(
-		select person_id, value_coded as 1st_Code, CAST(obs_datetime AS Date) as feeding_obs_date
-		from obs 
-		where concept_id = 4455 and voided = 0
-	) As 1stDose
-	
-	inner join
-	(
-		select concept_id, name AS 1st_Dose
-			from concept_name
-				where name in ('Polio(OPV)', 'Pentavalent', 'Rotavirus(RV)', 'Pneumococal(PCV)') 
-	) 1st_Dose_Concepts
-	on 1st_Dose_Concepts.concept_id = 1stDose.1st_Code
+	(select person_id, value_coded as 1st_Code, group_concat(distinct name separator ', ') as 1st_dose, CAST(obs_datetime AS Date) as feeding_obs_date
+	  from obs join concept_name cn on obs.value_coded = cn.concept_id
+	  where obs.concept_id = 4455
+		and obs.voided = 0
+		and name in ('Polio(OPV)', 'Pentavalent', 'Rotavirus(RV)', 'Pneumococal(PCV)')
+		group by person_id
+
+	) 1stDose
 	on 1stDose.person_id = Child.Id
 
  -- 2nd Dose
 left outer join
 	(
-		select person_id, value_coded as 2nd_Code, CAST(obs_datetime AS Date) as feeding_obs_date
-		from obs 
-		where concept_id = 4459 and voided = 0
+		select person_id, value_coded as 2nd_Code, group_concat(distinct name separator ', ') as 2nd_dose, CAST(obs_datetime AS Date) as feeding_obs_date
+	  from obs join concept_name cn on obs.value_coded = cn.concept_id
+	  where obs.concept_id = 4459
+		and obs.voided = 0
+		and name in ('Polio(OPV)', 'Pentavalent', 'Rotavirus(RV)', 'Pneumococal(PCV)')
+		group by person_id
+
 	) As 2nd_Dose
-	
-	inner join
-	(
-		select concept_id, name AS 2nd_Dose
-			from concept_name 
-				where name in ('Polio(OPV)', 'Pentavalent', 'Rotavirus(RV)', 'Pneumococal(PCV)') 
-	) 2nd_Dose_Concepts
-	on 2nd_Dose_Concepts.concept_id = 2nd_Dose.2nd_Code
 	on 2nd_Dose.person_id = Child.Id
 
  -- 3rd Dose
 left outer join
 	(
-		select person_id, value_coded as 3rd_Code, CAST(obs_datetime AS Date) as feeding_obs_date
-		from obs 
-		where concept_id = 4460 and voided = 0
+		elect person_id, value_coded as 3rd_Code, group_concat(distinct name separator ', ') as 3rd_dose, CAST(obs_datetime AS Date) as feeding_obs_date
+	  from obs join concept_name cn on obs.value_coded = cn.concept_id
+	  where obs.concept_id = 4460
+		and obs.voided = 0
+		and name in ('Polio(OPV)', 'Pentavalent', 'Rotavirus(RV)', 'Pneumococal(PCV)')
+		group by person_id
+
 	) As 3rd_Dose
-	
-	inner join
-	(
-		select concept_id, name AS 3rd_Dose
-			from concept_name 
-				where name in ('Polio(OPV)', 'Pentavalent', 'Rotavirus(RV)', 'Pneumococal(PCV)') 
-	) 3rd_Dose_Concepts
-	on 3rd_Dose_Concepts.concept_id = 3rd_Dose.3rd_Code
 	on 3rd_Dose.person_id = Child.Id
 
 left outer join 
