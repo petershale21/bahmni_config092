@@ -4,7 +4,7 @@ From
 	select distinct patient.patient_id AS Id,
 			patient_identifier.identifier AS patientIdentifier,
 			concat(person_name.given_name, ' ', person_name.family_name) AS patientName,
-			floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/12) AS Months,
+			timestampdiff(month, person.birthdate, CAST('#endDate#' AS DATE)) AS Months,
 			person.gender AS Gender
 	from obs o
 					--  Children
