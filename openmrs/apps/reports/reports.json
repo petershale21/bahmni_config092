@@ -1400,7 +1400,7 @@
     "name": "LAB-02 | Lab_Report (Pivot)",
     "type": "MRSGeneric",
     "config": {
-        "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/Test_Sent_VS_Received_pivot.sql/"
+        "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/Test_Sent_VS_Test_Received_pivot.sql/"
     }
 },
 "Cervical_Cancer_Screening": {
