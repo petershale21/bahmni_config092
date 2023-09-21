@@ -7,7 +7,7 @@ FROM
 select distinct patient.patient_id AS Id,
 						patient_identifier.identifier AS patientIdentifier,
 						concat(person_name.given_name, ' ', person_name.family_name) AS patientName,
-						floor(datediff(CAST('2023-05-30' AS DATE), person.birthdate)/365) AS Age
+						floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age
 from obs o
     -- ANC Clients
      INNER JOIN patient ON o.person_id = patient.patient_id
@@ -21,8 +21,8 @@ from obs o
 									inner join 
 									(select person_id, max(obs_datetime), SUBSTRING(MAX(CONCAT(obs_datetime, obs_id)), 20) AS observation_id
 									from obs where concept_id = 4663
-									and obs_datetime >= cast('2023-05-01' as date)
-									and obs_datetime <= cast('2023-05-30' as date)
+									and obs_datetime >= cast('#startDate#' as date)
+									and obs_datetime <= cast('#endDate#' as date)
 									and voided = 0
 									group by person_id) as A
 									on A.observation_id = B.obs_group_id
@@ -38,8 +38,8 @@ from obs o
     INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
 	INNER JOIN person_name ON person.person_id = person_name.person_id AND person_name.preferred = 1
     INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1
-	WHERE CAST(o.obs_datetime AS DATE) >= CAST('2023-05-01' AS DATE)
-	AND CAST(o.obs_datetime AS DATE) <= CAST('2023-05-30' AS DATE) 
+	WHERE CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+	AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE) 
 )AS ANC_Clients
 
 left outer join 
@@ -53,8 +53,8 @@ else "N/A"
 end AS Visit_type
 from obs o
 where o.concept_id = 4658 and o.voided = 0
-and CAST(o.obs_datetime AS DATE) >= CAST('2023-05-01' AS DATE)
-and CAST(o.obs_datetime AS DATE) <= CAST('2023-05-30' AS DATE) 
+and CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+and CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE) 
 Group by o.person_id
 ) VisitType
 on ANC_Clients.Id = VisitType.person_id
@@ -72,8 +72,8 @@ else "N/A"
 end AS Trimester
 from obs o
 where o.concept_id = 2423 and o.voided = 0
-and CAST(o.obs_datetime AS DATE) >= CAST('2023-05-01' AS DATE)
-and CAST(o.obs_datetime AS DATE) <= CAST('2023-05-30' AS DATE)
+and CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+and CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 Group by o.person_id
 ) Gestational_Period
 on ANC_Clients.Id = Gestational_Period.person_id
@@ -112,8 +112,8 @@ left outer join
 		end AS High_Risk_Pregnancy
 		from obs o
 		where o.concept_id = 4352 and o.voided = 0
-		and o.obs_datetime >= CAST('2023-05-01' AS DATE)
-		and o.obs_datetime <= CAST('2023-05-30'AS DATE)
+		and o.obs_datetime >= CAST('#startDate#' AS DATE)
+		and o.obs_datetime <= CAST('#endDate#'AS DATE)
 		Group by o.person_id
 		) High_Risk_Preg
 		on ANC_Clients.Id = High_Risk_Preg.person_id
@@ -194,8 +194,8 @@ left outer join
 	select person_id, value_coded as Status_Code
 	from obs os
 	where concept_id = 4427 and voided = 0
-	and os.obs_datetime >= CAST('2023-05-01' AS DATE)
-    and os.obs_datetime <= CAST('2023-05-30'AS DATE)
+	and os.obs_datetime >= CAST('#startDate#' AS DATE)
+    and os.obs_datetime <= CAST('#endDate#'AS DATE)
 	)HIV_Status
 
 	inner join
@@ -240,8 +240,8 @@ left outer join
 		end AS Subsequent_HIV_Test_Results
 		from obs o
 		where o.concept_id = 4325 and o.voided = 0
-		and o.obs_datetime >= CAST('2023-05-01' AS DATE)
-		and o.obs_datetime <= CAST('2023-05-30'AS DATE)
+		and o.obs_datetime >= CAST('#startDate#' AS DATE)
+		and o.obs_datetime <= CAST('#endDate#'AS DATE)
 		Group by o.person_id
 		) Subsequent_HIV_Status
 		on ANC_Clients.Id = Subsequent_HIV_Status.person_id
@@ -365,8 +365,8 @@ left outer join
 		end AS Blood_Group
 		from obs o
 		where o.concept_id = 1179 and o.voided = 0
-		and o.obs_datetime >= CAST('2023-05-01' AS DATE)
-    	and o.obs_datetime <= CAST('2023-05-30'AS DATE)
+		and o.obs_datetime >= CAST('#startDate#' AS DATE)
+    	and o.obs_datetime <= CAST('#endDate#'AS DATE)
 		Group by o.person_id
 	) Blood_Group_Status
 		on ANC_Clients.Id = Blood_Group_Status.person_id
