@@ -39,25 +39,25 @@ on Child.Id = BaseDose.person_id
 
  -- 1st Dose
 left outer join
-	(select person_id, value_coded as 1st_Code, group_concat(distinct name separator ', ') as 1st_dose, CAST(obs_datetime AS Date) as feeding_obs_date
-	  from obs join concept_name cn on obs.value_coded = cn.concept_id
-	  where obs.concept_id = 4455
+	(
+	select person_id, value_coded as 1st_Code, group_concat(distinct name separator ', ') as 1st_dose, CAST(obs_datetime AS Date) as feeding_obs_date
+	from obs join concept_name cn on obs.value_coded = cn.concept_id
+	where obs.concept_id = 4455
 		and obs.voided = 0
 		and name in ('Polio(OPV)', 'Pentavalent', 'Rotavirus(RV)', 'Pneumococal(PCV)')
-		group by person_id
-
+	group by person_id
 	) 1stDose
 	on 1stDose.person_id = Child.Id
-
+	
  -- 2nd Dose
 left outer join
 	(
-		select person_id, value_coded as 2nd_Code, group_concat(distinct name separator ', ') as 2nd_dose, CAST(obs_datetime AS Date) as feeding_obs_date
-	  from obs join concept_name cn on obs.value_coded = cn.concept_id
-	  where obs.concept_id = 4459
+	select person_id, value_coded as 2nd_Code, group_concat(distinct name separator ', ') as 2nd_dose, CAST(obs_datetime AS Date) as feeding_obs_date
+	from obs join concept_name cn on obs.value_coded = cn.concept_id
+	where obs.concept_id = 4459
 		and obs.voided = 0
 		and name in ('Polio(OPV)', 'Pentavalent', 'Rotavirus(RV)', 'Pneumococal(PCV)')
-		group by person_id
+	group by person_id
 
 	) As 2nd_Dose
 	on 2nd_Dose.person_id = Child.Id
@@ -65,7 +65,7 @@ left outer join
  -- 3rd Dose
 left outer join
 	(
-		elect person_id, value_coded as 3rd_Code, group_concat(distinct name separator ', ') as 3rd_dose, CAST(obs_datetime AS Date) as feeding_obs_date
+		Select person_id, value_coded as 3rd_Code, group_concat(distinct name separator ', ') as 3rd_dose, CAST(obs_datetime AS Date) as feeding_obs_date
 	  from obs join concept_name cn on obs.value_coded = cn.concept_id
 	  where obs.concept_id = 4460
 		and obs.voided = 0
