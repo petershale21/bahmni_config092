@@ -1,4 +1,5 @@
 var visitTypeTracker = '';  //This variable tracks the ANC Program visit type
+var TBStatusTracker = ''; //This varible tracks the TB Status to allow it to be used globally
 Bahmni.ConceptSet.FormConditions.rules = {
 
 
@@ -1216,6 +1217,7 @@ Bahmni.ConceptSet.FormConditions.rules = {
         'TB Status': function (formName, formFieldValues) {
                 var conditionConcept = formFieldValues['TB Status'];
                 var conditions = { show: [], hide: [] };
+                TBStatusTracker = conditionConcept; // assign the global variable of TB status to the selected TB status
 
                 if (conditionConcept == "Suspected / Probable") {
                         conditions.show.push("TB Suspect signs");
