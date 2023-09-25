@@ -121,54 +121,72 @@ left outer join
 -- Syphilis_Screening_Results
 left outer join
 	(
-
-		select distinct a.person_id, Syphilis_Results.value_coded,
-				case 
-				when Syphilis_Results.value_coded = 4306 then 'Reactive'
-				when Syphilis_Results.value_coded = 4307 then 'Non Reactive'
-				when Syphilis_Results.value_coded = 4308 then 'Not done'
-				else 'NewResult' end as Syphilis_Screening_Results
-	from obs a
-	inner join 
-		( SELECT person_id, value_coded from obs o
-			where concept_id = 4305 and voided = 0
-			and o.obs_datetime >= CAST('#startDate#' AS DATE)
-    		and o.obs_datetime <= CAST('#endDate#'AS DATE)
-		) Syphilis_Results
-
-		ON a.person_id = Syphilis_Results.person_id
-	
-
+		select o.person_id,
+			case 
+				when latest.Syphilis_Coded = 4306 then 'Reactive'
+				when latest.Syphilis_Coded = 4307 then 'Non Reactive'
+				when latest.Syphilis_Coded = 4308 then 'Not done'
+			else 'NewResult' end as Syphilis_Screening_Results
+		from obs o 
+		inner join 
+				(
+				select oss.person_id, MAX(oss.obs_datetime) as max_observation,
+				SUBSTRING(MAX(CONCAT(oss.obs_datetime, oss.value_coded)), 20) as Syphilis_Coded
+				from obs oss
+				where oss.concept_id = 4305 and oss.voided=0
+				and oss.obs_datetime <= cast('#endDate#' as date)
+				group by oss.person_id
+				)latest 
+			on latest.person_id = o.person_id
+			where concept_id = 4305
+			and  o.obs_datetime = max_observation
 	) Syphilis_Screening_Res
-
 on Syphilis_Screening_Res.person_id = ANC_Clients.Id
 
 left outer join
-
 	(
 	-- Syphilis Treatment Completed
-		select o.person_id,case
-		when o.value_coded = 2146 then "Yes"
-		when o.value_coded = 2147 then "No"
-		when o.value_coded = 1975 then "Not applicable"
-		else "N/A"
-		end AS Syphilis_Treatment_Completed
-		from obs o
-		where o.concept_id = 1732 and o.voided = 0
-		and o.obs_datetime >= CAST('#startDate#' AS DATE)
-		and o.obs_datetime <= CAST('#endDate#'AS DATE)
-		Group by o.person_id
+	select o.person_id,
+			case 
+				when latest.treatment_Coded = 2146 then "Yes"
+				when latest.treatment_Coded = 2147 then "No"
+				when latest.treatment_Coded = 1975 then "Not applicable"
+			else 'N/A' end as Syphilis_Treatment_Completed
+		from obs o 
+		inner join 
+				(
+				select oss.person_id, MAX(oss.obs_datetime) as max_observation,
+				SUBSTRING(MAX(CONCAT(oss.obs_datetime, oss.value_coded)), 20) as treatment_Coded
+				from obs oss
+				where oss.concept_id = 1732 and oss.voided=0
+				and oss.obs_datetime <= cast('#endDate#' as date)
+				group by oss.person_id
+				)latest 
+			on latest.person_id = o.person_id
+			where concept_id = 1732
+			and  o.obs_datetime = max_observation
+		
 		) Syphilis_Treatment_Comp
 		on ANC_Clients.Id = Syphilis_Treatment_Comp.person_id
 
 -- ANEMIA HAEMOGLOBIN
 left outer join
-	(
-	select person_id,value_numeric as Haemoglobin
-	from obs o
-	where concept_id = 3204 and voided = 0
+(select o.person_id, Haemoglobin_Anemia as Haemoglobin
+from obs o 
+inner join 
+		(
+		 select oss.person_id, MAX(oss.obs_datetime) as max_observation,
+		 SUBSTRING(MAX(CONCAT(oss.obs_datetime, oss.value_numeric)), 20) as Haemoglobin_Anemia
+		 from obs oss
+		 where oss.concept_id = 3204 and oss.voided=0
+		 and oss.obs_datetime < cast('#endDate#' as date)
+		 group by oss.person_id
+		)latest 
+	on latest.person_id = o.person_id
+	where concept_id = 3204
+	and  o.obs_datetime = max_observation	
 	)Haemoglobin_Anemia
-	on ANC_Clients.Id = Haemoglobin_Anemia.person_id
+ON ANC_Clients.Id = Haemoglobin_Anemia.person_id
  
 -- HIV Status Known Before Visit	
 left outer join
@@ -213,7 +231,6 @@ on F_HIV_Status.person_id = ANC_Clients.Id
 left outer join
 
 	(
-	-- Syphilis Treatment Completed
 		select o.person_id,case
 		when o.value_coded = 1738 then "Positive"
 		when o.value_coded = 1016 then "Negative"
@@ -231,60 +248,106 @@ left outer join
 
 -- MUAC
 left outer join
-	(
-	select person_id, value_numeric as MUAC
-	from obs where concept_id = 2086 and voided = 0
-	)Muac
-	on ANC_Clients.Id = Muac.person_id
+(select o.person_id, muac as MUAC
+from obs o 
+inner join 
+		(
+		 select oss.person_id, MAX(oss.obs_datetime) as max_observation,
+		 SUBSTRING(MAX(CONCAT(oss.obs_datetime, oss.value_numeric)), 20) as muac
+		 from obs oss
+		 where oss.concept_id = 2086 and oss.voided=0
+		 and oss.obs_datetime < cast('#endDate#' as date)
+		 group by oss.person_id
+		)latest 
+	on latest.person_id = o.person_id
+	where concept_id = 2086
+	and  o.obs_datetime = max_observation	
+	)muac
+ON ANC_Clients.Id = muac.person_id
 
--- TB Status
+
+-- TB STATUS
+left outer join
+
+(select
+       o.person_id,
+       case
+           when value_coded = 3709 then "No Signs"
+           when value_coded = 1876 then "TB Suspect"
+		   when value_coded = 3639 then "On TB Treatment"
+           else ""
+       end AS TB_Status
+from obs o
+inner join
+		(
+		 select oss.person_id, MAX(oss.obs_datetime) as max_observation,
+		 SUBSTRING(MAX(CONCAT(oss.obs_datetime, oss.obs_id)), 20) as observation_id
+		 from obs oss
+		 where oss.concept_id = 3710 and oss.voided=0
+		 and cast(oss.obs_datetime as date) <= cast('#endDate#' as date)
+		 group by oss.person_id
+		)latest
+	on latest.person_id = o.person_id
+	where concept_id = 3710
+	and  o.obs_datetime = max_observation
+	) TBStatus
+ON ANC_Clients.Id = TBStatus.person_id
+
+-- Iron
+left outer join
+
+(select
+       o.person_id,
+       case
+           when o.value_coded = 4668 then "Prophylaxis"
+           when o.value_coded = 1067 then "On Treatment"
+		   when o.value_coded = 4298 then "Not Given"
+           else ""
+       end AS Iron
+from obs o
+inner join
+		(
+		 select oss.person_id, MAX(oss.obs_datetime) as max_observation,
+		 SUBSTRING(MAX(CONCAT(oss.obs_datetime, oss.obs_id)), 20) as observation_id
+		 from obs oss
+		 where oss.concept_id = 4299 and oss.voided=0
+		and cast(oss.obs_datetime as date) <= cast('#endDate#' as date)
+		 group by oss.person_id
+		)latest
+	on latest.person_id = o.person_id
+	where concept_id = 	4299
+	and  o.obs_datetime = max_observation
+	) Iron
+ON ANC_Clients.Id = Iron.person_id
+
+-- Folate
 
 left outer join
-	(
-	-- TB Status
-		select o.person_id,case
-		when o.value_coded = 3709 then "No signs"
-		when o.value_coded = 1876 then "Suspected"
-		when o.value_coded = 3639 then "On TB treatment"
-		else "N/A"
-		end AS TB_Status
-		from obs o
-		where o.concept_id = 3710 and o.voided = 0
-		Group by o.person_id
-		) TBStatus
-		on ANC_Clients.Id = TBStatus.person_id
 
-left outer join 
-	(
-	-- Iron
-		select o.person_id,case
-		when o.value_coded = 4668 then "Prophylaxis"
-		when o.value_coded = 1067 then "On Treatment"
-		when o.value_coded = 4298 then "Not Given"
-		else "N/A"
-		end AS Iron
-		from obs o
-		where o.concept_id = 4299 and o.voided = 0
-		Group by o.person_id
-		) IronStatus
-		on ANC_Clients.Id = IronStatus.person_id
+(select
+       o.person_id,
+       case
+           when o.value_coded = 4668 then "Prophylaxis"
+           when o.value_coded = 1067 then "On Treatment"
+		   when o.value_coded = 4298 then "Not Given"
+           else ""
+       end AS Folate
+from obs o
+inner join
+		(
+		 select oss.person_id, MAX(oss.obs_datetime) as max_observation,
+		 SUBSTRING(MAX(CONCAT(oss.obs_datetime, oss.obs_id)), 20) as observation_id
+		 from obs oss
+		 where oss.concept_id = 4300 and oss.voided=0
+		and cast(oss.obs_datetime as date) <= cast('#endDate#' as date)
+		 group by oss.person_id
+		)latest
+	on latest.person_id = o.person_id
+	where concept_id = 	4300
+	and  o.obs_datetime = max_observation
+	) Folate
+ON ANC_Clients.Id = Folate.person_id
 
-left outer join 
-	(
-	-- Folate
-		select o.person_id,case
-		when o.value_coded = 4668 then "Prophylaxis"
-		when o.value_coded = 1067 then "On Treatment"
-		when o.value_coded = 4298 then "Not Given"
-		else "N/A"
-		end AS Folate
-		from obs o
-		where o.concept_id = 4300 and o.voided = 0
-		and o.obs_datetime >= CAST('#startDate#' AS DATE)
-    	and o.obs_datetime <= CAST('#endDate#'AS DATE)
-		Group by o.person_id
-		) Folate_Status
-		on ANC_Clients.Id = Folate_Status.person_id
 
 left outer join 
 	(
@@ -305,5 +368,5 @@ left outer join
 		and o.obs_datetime >= CAST('#startDate#' AS DATE)
     	and o.obs_datetime <= CAST('#endDate#'AS DATE)
 		Group by o.person_id
-		) Blood_Group_Status
+	) Blood_Group_Status
 		on ANC_Clients.Id = Blood_Group_Status.person_id

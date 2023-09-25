@@ -1,9 +1,9 @@
-Select distinct patientName as "Patient_Name", Infant_Prophylaxis, First_DNA_PCR, First_DNA_PCR_Results, Second_DNA_PCR_Results,
+Select distinct Patient_Identifier, patientName as "Patient_Name", Infant_Prophylaxis, First_DNA_PCR, First_DNA_PCR_Results, Second_DNA_PCR_Results,
 				1st_Parallel_HIV_Rapid_Results, 2nd_Confirmatory_Parallel_HIV_Rapid_Results
 FROM
 (
 	select distinct patient.patient_id AS Id,
-			patient_identifier.identifier AS patientIdentifier,
+			patient_identifier.identifier AS Patient_Identifier,
 			concat(person_name.given_name, ' ', person_name.family_name) AS patientName,
 			floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/30) AS Months,
 			person.gender AS Gender,

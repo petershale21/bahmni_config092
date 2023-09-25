@@ -1,5 +1,5 @@
 
-(SELECT patientIdentifier AS "Patient Identifier", patientName AS "Patient Name", Age , Gender, age_group, 'HIV-Infected' AS 'Outcome'
+(SELECT distinct patientIdentifier AS "Patient Identifier", patientName AS "Patient Name", Age , Gender, age_group, 'HIV-Infected' AS 'Outcome'
 							 
 	FROM
 
@@ -15,23 +15,26 @@
 			from obs o
 					-- HIV EXPOSED INFANTS
 						INNER JOIN patient ON o.person_id = patient.patient_id 
-						AND o.concept_id =4558
+						AND o.concept_id = 4558
 						AND patient.voided = 0 AND o.voided = 0
-						AND o.obs_datetime BETWEEN CAST('#startDate#' AS DATE) AND CAST('#endDate#' AS DATE)
+						AND CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+						AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 						AND o.person_id in (
 							-- Infants between the 18 and 24 months
 						select distinct os.person_id 
 						from obs os
 						where os.concept_id=4587 and os.value_numeric BETWEEN 18 and 24
-						AND os.obs_datetime BETWEEN CAST('#startDate#' AS DATE) AND CAST('#endDate#' AS DATE)
+						AND CAST(os.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+						AND CAST(os.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 						AND patient.voided = 0 AND os.voided = 0
 						)
 					-- Infants infected with HIV
 						AND o.person_id in (
 						select distinct os.person_id 
 						from obs os
-						where os.concept_id = 4605 and os.value_coded in (4606,4607,4608)
-						AND os.obs_datetime BETWEEN CAST('#startDate#' AS DATE) AND CAST('#endDate#' AS DATE)
+						where os.concept_id = 4578 and os.value_coded = 1738
+						AND CAST(os.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+						AND CAST(os.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 						AND patient.voided = 0 AND os.voided = 0
 						)
 			
@@ -43,12 +46,13 @@
 						AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
 					WHERE observed_age_group.report_group_name = 'Modified_Ages'
 			) AS HTSClients_HIV_STATUS
+			Group by Id
 	ORDER BY HTSClients_HIV_STATUS.Age)
 
 
 UNION
 
-(	SELECT patientIdentifier AS "Patient Identifier", patientName AS "Patient Name", Age , Gender, age_group, 'HIV-Uninfected' AS 'Outcome'
+(	SELECT distinct patientIdentifier AS "Patient Identifier", patientName AS "Patient Name", Age , Gender, age_group, 'HIV-Uninfected' AS 'Outcome'
 							 
 					FROM
 					
@@ -63,24 +67,26 @@ UNION
   
 									from obs o
 										    -- HIV Exposed Infants
-											 INNER JOIN patient ON o.person_id = patient.patient_id 
-											  AND o.concept_id =4558
-											 AND patient.voided = 0 AND o.voided = 0
-											 AND o.obs_datetime BETWEEN CAST('#startDate#' AS DATE) AND CAST('#endDate#' AS DATE)
+											INNER JOIN patient ON o.person_id = patient.patient_id 
+											AND o.concept_id =4558
+											AND patient.voided = 0 AND o.voided = 0
+											AND CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+								 			AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 
 											 -- Infants between the 18 and 24 months
 											 AND o.person_id in (
 												select distinct os.person_id 
 												from obs os
 												where os.concept_id = 4587 and os.value_numeric BETWEEN 18 and 24
-												AND os.obs_datetime BETWEEN CAST('#startDate#' AS DATE) AND CAST('#endDate#' AS DATE)
+												AND CAST(os.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+								 				AND CAST(os.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 												AND patient.voided = 0 AND os.voided = 0
 											 )
 												-- Infants NOT infected with HIV
                                              AND o.person_id in (
 												select distinct os.person_id 
 												from obs os
-												where os.concept_id = 4605 and os.value_coded in (4609,4610,4611)
+												where os.concept_id = 4578 and os.value_coded = 1016
 												AND os.obs_datetime BETWEEN CAST('#startDate#' AS DATE) AND CAST('#endDate#' AS DATE)
 												AND patient.voided = 0 AND os.voided = 0
 											 )
@@ -94,10 +100,11 @@ UNION
 									     WHERE observed_age_group.report_group_name = 'Modified_Ages'
 										
 										 ) AS HTSClients_HIV_STATUS
+										 Group by Id
 					ORDER BY HTSClients_HIV_STATUS.Age)
  UNION
    
-   (	SELECT patientIdentifier AS "Patient Identifier", patientName AS "Patient Name", Age , Gender, age_group, 'HIV-Final Status Unknown' AS 'Outcome'
+   (	SELECT distinct patientIdentifier AS "Patient Identifier", patientName AS "Patient Name", Age , Gender, age_group, 'HIV-Final_Status_Unknown' AS 'Outcome'
 							 
 					FROM
 					
@@ -115,22 +122,25 @@ UNION
 											 INNER JOIN patient ON o.person_id = patient.patient_id 
 											  AND o.concept_id =4558
 											 AND patient.voided = 0 AND o.voided = 0
-											 AND o.obs_datetime BETWEEN CAST('#startDate#' AS DATE) AND CAST('#endDate#' AS DATE)
+											AND CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+								 			AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 
 											 -- Infants between the 18 and 24 months
 											 AND o.person_id in (
 												select distinct os.person_id 
 												from obs os
 												where os.concept_id = 4587 and os.value_numeric BETWEEN 18 and 24
-												AND os.obs_datetime BETWEEN CAST('#startDate#' AS DATE) AND CAST('#endDate#' AS DATE)
+												 AND CAST(os.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+								 				AND CAST(os.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 												AND patient.voided = 0 AND os.voided = 0
 											 )
 												-- Infants NOT infected with HIV
                                              AND o.person_id in (
 												select distinct os.person_id 
 												from obs os
-												where os.concept_id = 4605 and os.value_coded =4612
-												AND os.obs_datetime BETWEEN CAST('#startDate#' AS DATE) AND CAST('#endDate#' AS DATE)
+												where os.concept_id = 4578 and os.value_coded = 4220
+												 AND CAST(os.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+								 				AND CAST(os.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 												AND patient.voided = 0 AND os.voided = 0
 											 )
 									
@@ -143,11 +153,12 @@ UNION
 									     WHERE observed_age_group.report_group_name = 'Modified_Ages'
 									
 										 ) AS HTSClients_HIV_STATUS
+										 Group by Id
 					ORDER BY HTSClients_HIV_STATUS.Age)
 
 UNION
 
-	   (SELECT patientIdentifier AS "Patient Identifier", patientName AS "Patient Name", Age , Gender, age_group, 'Died Without Status Known' AS 'Outcome'
+	   (SELECT distinct patientIdentifier AS "Patient Identifier", patientName AS "Patient Name", Age , Gender, age_group, 'Died_Without_Status_Known' AS 'Outcome'
 							 
 					FROM
 					
@@ -165,14 +176,16 @@ UNION
 											 INNER JOIN patient ON o.person_id = patient.patient_id 
 											  AND o.concept_id =4558
 											 AND patient.voided = 0 AND o.voided = 0
-											 AND o.obs_datetime BETWEEN CAST('#startDate#' AS DATE) AND CAST('#endDate#' AS DATE)
+											AND CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+								 			AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 
 											 -- Infants between the 18 and 24 months
 											 AND o.person_id in (
 												select distinct os.person_id 
 												from obs os
 												where os.concept_id = 4587 and os.value_numeric BETWEEN 18 and 24
-												AND os.obs_datetime BETWEEN CAST('#startDate#' AS DATE) AND CAST('#endDate#' AS DATE)
+												 AND CAST(os.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+								 				AND CAST(os.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 												AND patient.voided = 0 AND os.voided = 0
 											 )
 												-- Infants Dead with Unknown HIV status
@@ -180,7 +193,8 @@ UNION
 												select distinct os.person_id 
 												from obs os
 												where os.concept_id = 4605 and os.value_coded =3650
-												AND os.obs_datetime BETWEEN CAST('#startDate#' AS DATE) AND CAST('#endDate#' AS DATE)
+												 AND CAST(os.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+								 				AND CAST(os.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 												AND patient.voided = 0 AND os.voided = 0
 											 )
 									
@@ -193,4 +207,5 @@ UNION
 									     WHERE observed_age_group.report_group_name = 'Modified_Ages'
 									
 										 ) AS HTSClients_HIV_STATUS
+										 Group by Id
 					ORDER BY HTSClients_HIV_STATUS.Age)

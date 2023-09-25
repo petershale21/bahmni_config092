@@ -1,6 +1,6 @@
-SELECT distinct Id, patientIdentifier, patientName, Age,age_group, Gender, diagnosis_type.Presumptive_Case, Diagnosis, TB_Start_Date, Died_Before_Treatment, Key_Populations, Referred_By
+SELECT distinct patientIdentifier as Patient_Identifier, patientName as Patient_Name, Age,age_group, Gender, TB_Status, IFNULL(Presumptive_Case, "N/A") as Presumptive_Case, IFNULL(Diagnosis, "N/A") as Diagnosis, IFNULL(TB_Start_Date, "N/A") as TB_Start_Date, IFNULL(Died_Before_Treatment,"N/A") as Died_Before_Treatment, IFNULL(Key_Populations,"N/A") as Key_Populations, IFNULL(Referred_By,"N/A") as Referred_By
  FROM (
-(Select distinct Id, patientIdentifier , patientName, Age, age_group, Gender, "GeneXpert" AS "Presumptive_Case"
+(Select distinct Id, patientIdentifier , patientName, Age, age_group, Gender, Sign as "TB_Status"
 		From(
 				select distinct patient.patient_id AS Id,
 						patient_identifier.identifier AS patientIdentifier,
@@ -8,7 +8,48 @@ SELECT distinct Id, patientIdentifier, patientName, Age,age_group, Gender, diagn
 						floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age,
 						observed_age_group.name AS age_group,
 						person.gender AS Gender,
-						observed_age_group.sort_order AS sort_order 
+						observed_age_group.sort_order AS sort_order, 
+						case
+						when o.value_coded = 3709 then "No Signs"
+						when o.value_coded = 1876 then "Suspected/Probable"
+						when o.value_coded = 3639 then "On TB Treatment"
+						else "N/A" 
+						end AS Sign
+					from obs o
+					--  TB Screened
+						INNER JOIN patient ON o.person_id = patient.patient_id 
+						INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
+						INNER JOIN person_name ON person.person_id = person_name.person_id AND person_name.preferred = 1
+						INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1
+						AND o.voided=0
+						INNER JOIN reporting_age_group AS observed_age_group ON
+						CAST('#endDate#' AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
+						AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
+						WHERE observed_age_group.report_group_name = 'Modified_Ages'
+						AND o.concept_id = 3710
+						AND CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+						AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
+						AND patient.voided = 0 AND o.voided = 0
+						Group by o.person_id) AS TB_TESTING
+)
+) as signs 
+left JOIN
+(Select distinct Person_Id, Presumptive_Case
+		From(
+				select distinct patient.patient_id AS Person_Id,
+						patient_identifier.identifier AS patientIdentifier,
+						concat(person_name.given_name, ' ', person_name.family_name) AS patientName,
+						floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age,
+						observed_age_group.name AS age_group,
+						person.gender AS Gender,
+						observed_age_group.sort_order AS sort_order,
+						case
+						when o.value_coded = 3824 then "GeneXpert"
+						when o.value_coded = 3825 then "Line Probe Assay"
+						when o.value_coded = 3819 then "Sputum Smear Microscopy"
+						when o.value_coded = 1045 then "X-Ray"
+						else "N/A" 
+						end AS Presumptive_Case 
 					from obs o
 					--  TB Clients diagnosed by GeneXpert
 						INNER JOIN patient ON o.person_id = patient.patient_id 
@@ -20,131 +61,14 @@ SELECT distinct Id, patientIdentifier, patientName, Age,age_group, Gender, diagn
 						CAST('#endDate#' AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
 						AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
 						WHERE observed_age_group.report_group_name = 'Modified_Ages'
-						AND o.concept_id = 3814 and o.value_coded = 3824
+						AND o.concept_id in (3814,3815)
 						AND CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
 						AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 						AND patient.voided = 0 AND o.voided = 0
 						Group by o.person_id) AS TB_TESTING
-)
-
-UNION
-
-(Select distinct Id, patientIdentifier , patientName, Age, age_group, Gender, "LPA" AS "Presumptive_Case"
-		From(
-				select distinct patient.patient_id AS Id,
-						patient_identifier.identifier AS patientIdentifier,
-						concat(person_name.given_name, ' ', person_name.family_name) AS patientName,
-						floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age,
-						observed_age_group.name AS age_group,
-						person.gender AS Gender,
-						observed_age_group.sort_order AS sort_order 
-					from obs o
-					--  TB Clients diagnosed by Line Probe Assay
-						INNER JOIN patient ON o.person_id = patient.patient_id 
-						INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
-						INNER JOIN person_name ON person.person_id = person_name.person_id AND person_name.preferred = 1
-						INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1
-						AND o.voided=0
-						INNER JOIN reporting_age_group AS observed_age_group ON
-						CAST('#endDate#' AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
-						AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
-						WHERE observed_age_group.report_group_name = 'Modified_Ages'
-						AND o.concept_id = 3814 and o.value_coded = 3825
-						AND CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
-						AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
-						AND patient.voided = 0 AND o.voided = 0
-						Group by o.person_id) AS TB_TESTING
-)
-
-UNION
-
-(Select distinct Id, patientIdentifier , patientName, Age, age_group, Gender, "Sputum Smear Microscopy" AS "Presumptive_Case"
-		From(
-				select distinct patient.patient_id AS Id,
-						patient_identifier.identifier AS patientIdentifier,
-						concat(person_name.given_name, ' ', person_name.family_name) AS patientName,
-						floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age,
-						observed_age_group.name AS age_group,
-						person.gender AS Gender,
-						observed_age_group.sort_order AS sort_order 
-					from obs o
-					--  TB Clients diagnosed by Sputum Smear Microscopy
-						INNER JOIN patient ON o.person_id = patient.patient_id 
-						INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
-						INNER JOIN person_name ON person.person_id = person_name.person_id AND person_name.preferred = 1
-						INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1
-						AND o.voided=0
-						INNER JOIN reporting_age_group AS observed_age_group ON
-						CAST('#endDate#' AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
-						AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
-						WHERE observed_age_group.report_group_name = 'Modified_Ages'
-						AND o.concept_id = 3815 and o.value_coded = 3819
-						AND CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
-						AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
-						AND patient.voided = 0 AND o.voided = 0
-						Group by o.person_id) AS TB_TESTING
-)
-
-UNION
-
-(Select distinct Id, patientIdentifier , patientName, Age, age_group, Gender, "Sputum_Culture" AS "Presumptive_Case"
-		From(
-				select distinct patient.patient_id AS Id,
-						patient_identifier.identifier AS patientIdentifier,
-						concat(person_name.given_name, ' ', person_name.family_name) AS patientName,
-						floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age,
-						observed_age_group.name AS age_group,
-						person.gender AS Gender,
-						observed_age_group.sort_order AS sort_order 
-					from obs o
-					-- TB Clients diagnosed by Sputum Culture
-						INNER JOIN patient ON o.person_id = patient.patient_id 
-						INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
-						INNER JOIN person_name ON person.person_id = person_name.person_id AND person_name.preferred = 1
-						INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1
-						AND o.voided=0
-						INNER JOIN reporting_age_group AS observed_age_group ON
-						CAST('#endDate#' AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
-						AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
-						WHERE observed_age_group.report_group_name = 'Modified_Ages'
-						AND o.concept_id = 3815 and o.value_coded = 1045
-						AND CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
-						AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
-						AND patient.voided = 0 AND o.voided = 0
-						Group by o.person_id) AS TB_TESTING
-)
-
-UNION
-
-(Select distinct Id, patientIdentifier , patientName, Age, age_group, Gender, "X-Ray" AS "Presumptive_Case"
-		From(
-				select distinct patient.patient_id AS Id,
-						patient_identifier.identifier AS patientIdentifier,
-						concat(person_name.given_name, ' ', person_name.family_name) AS patientName,
-						floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age,
-						observed_age_group.name AS age_group,
-						person.gender AS Gender,
-						observed_age_group.sort_order AS sort_order 
-					from obs o
-					-- TB Clients diagnosed by X-Ray
-						INNER JOIN patient ON o.person_id = patient.patient_id 
-						INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
-						INNER JOIN person_name ON person.person_id = person_name.person_id AND person_name.preferred = 1
-						INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1
-						AND o.voided=0
-						INNER JOIN reporting_age_group AS observed_age_group ON
-						CAST('#endDate#' AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
-						AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
-						WHERE observed_age_group.report_group_name = 'Modified_Ages'
-						AND o.concept_id = 3815 and o.value_coded = 1045
-						AND CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
-						AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
-						AND patient.voided = 0 AND o.voided = 0
-						Group by o.person_id) AS TB_TESTING
-)
-)diagnosis_type
-
-left outer join
+)presumptive 
+on signs.Id = presumptive.Person_Id
+Left Join 
 -- TEST RESULTS
 (select person_id, Diagnosis
 from
@@ -240,8 +164,7 @@ inner join
 	)
 )test
 )test_result
-on test_result.person_id = diagnosis_type.Id
-
+on signs.Id = test_result.person_id
 Left Outer Join
 (
 -- TB Treatment Start Date
@@ -268,8 +191,7 @@ Left Outer Join
 	group by o.person_id
 	) 
 ) as tb_start_date
-on diagnosis_type.Id = tb_start_date.person_id
-
+on signs.Id = tb_start_date.person_id
 Left Outer Join
 (
 -- Died before treatment
@@ -290,8 +212,7 @@ Left Outer Join
 	group by o.person_id
 	)
 ) as died
-on diagnosis_type.Id = died.person_id
-
+on signs.Id = died.person_id
 Left Outer Join
 (
 -- High Risk Population
@@ -310,9 +231,11 @@ else "N/A"
 end AS Key_Populations
 from obs o
 where o.concept_id = 3776 and o.voided = 0
+and o.obs_datetime >= cast('#startDate#' as date)
+and o.obs_datetime <= cast('#endDate#' as date)
 Group by o.person_id
 ) risk
-on diagnosis_type.Id = risk.person_id
+on signs.Id = risk.person_id
 Left Outer Join
 (
 -- Referred By
@@ -333,4 +256,4 @@ Left Outer Join
 	group by o.person_id
 	)
 ) as referred
-on diagnosis_type.Id = referred.person_id
+on signs.Id = referred.person_id
