@@ -21,6 +21,17 @@
         "order": 2,
         "requiredPrivilege": "Add Patients"
     },
+    "createCag":{
+        "id": "bahmni.registration.navigation.cag.create",
+        "extensionPointId": "org.bahmni.registration.navigation",
+        "type": "link",
+        "translationKey": "REGISTRATION_CREATE_NEW_CAG_CONFIG_KEY",
+        "url": "/cag/new",
+        "icon": "fa-plus",
+        "shortcutKey": "REGISTRATION_CREATE_NEW_CAG_CONFIG_KEY",
+        "order": 2,
+        "requiredPrivilege": "Add Patients"
+    },
     "view":{
         "id": "bahmni.patient.search.result.action.edit",
         "extensionPointId": "org.bahmni.registration.patient.search.result.action",
