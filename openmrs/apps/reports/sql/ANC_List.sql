@@ -1,4 +1,4 @@
-SELECT distinct ID, patientIdentifier, patientName, Age, Visit_type, Trimester, Estimated_Date_Delivery, High_Risk_Pregnancy, Syphilis_Screening_Results,
+SELECT distinct patientIdentifier, patientName, Age, Visit_type, Trimester, Estimated_Date_Delivery, High_Risk_Pregnancy, Syphilis_Screening_Results,
 		Syphilis_Treatment_Completed, Haemoglobin, HIV_Status_Known_Before_Visit, Final_HIV_Status, Subsequent_HIV_Test_Results , MUAC, TB_Status,
 		Iron, Folate, Blood_Group
 
@@ -83,6 +83,8 @@ left outer join
 	(
 	select person_id,CAST(value_datetime AS DATE) as Estimated_Date_Delivery
 	from obs where concept_id = 4627 and voided = 0
+	and CAST(obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+ 	and CAST(obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 	)edd_date
 	on ANC_Clients.Id = edd_date.person_id
 
