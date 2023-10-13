@@ -1409,6 +1409,12 @@
     "config": {
         "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/cervical_scrn_list.sql/"
     }
+},
+"Cervical_Cancer_Screening_Power": {
+    "name": "Cervical Cancer Screening (Pivot)",
+    "type": "MRSGeneric",
+    "config": {
+        "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/cervical_cancer_pivot.sql/"
+    }
 }
 }
-
