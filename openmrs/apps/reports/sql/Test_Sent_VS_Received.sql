@@ -1,14 +1,15 @@
-Select Id, patientIdentifier as "Patient Identifier", ART_Number as "ART Number", patientName as "Patient Name",age_group, Age, Gender, date_collected as "Date Specimen Collected",Test, received,sort_order
+Select patientIdentifier as "Patient Identifier", ART_Number as "ART Number", patientName as "Patient Name",age_group, Age, Gender, 
+        date_collected as "Date Specimen Collected",Test,Results, sort_order
 From
 (select distinct patient.patient_id AS Id,
                 patient_identifier.identifier AS patientIdentifier,
                 p.identifier as ART_Number,
-                concat(person_name.given_name, ' ', person_name.family_name) AS patientName,
+                concat(person_name.given_name, " ", person_name.family_name) AS patientName,
                 floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age,
                 person.gender AS Gender,
-                o.date_created as date_collected,
+                cast(o.date_created as date) as date_collected,
                 observed_age_group.name AS age_group,
-                "TestDone" AS Test,
+                "Done" AS Test,
                 observed_age_group.sort_order AS sort_order
 
             from orders o
@@ -21,19 +22,34 @@ From
                     CAST('#endDate#' AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
                     AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
                     AND o.concept_id = 5484
-                    AND CAST(o.date_created AS DATE)>= CAST('#startDate#' AS DATE)
-					AND CAST(o.date_created AS DATE) <= CAST('#endDate#' AS DATE)
                     LEFT OUTER JOIN patient_identifier p ON p.patient_id = person.person_id AND p.identifier_type = 5
-                WHERE observed_age_group.report_group_name = 'Modified_Ages') as test
+                WHERE observed_age_group.report_group_name = 'Modified_Ages'
+                AND CAST(o.date_created AS DATE) >= CAST('#startDate#' AS DATE)
+                AND CAST(o.date_created AS DATE) <= CAST('#endDate#' AS DATE)) as test
 Left Outer Join
 (
-    select distinct o.person_id,
-     case
-		when o.concept_id = 5486 then "Received"
-        else "Pending" 
-		end AS received
-    from obs o
+    Select pId, Results
+    From
+      (
+        select oss.person_id as pId, concat(oss.value_numeric, " ", "copies/ml")  as Results
+            from obs oss
+            where oss.concept_id = 5485
+            and oss.voided=0
+            and cast(oss.obs_datetime as date) <= cast('#endDate#' as date)
+            group by oss.person_id
+
+    UNION
+
+    select oss.person_id as pId, "LDL"  as Results
+            from obs oss
+            where oss.concept_id = 5489
+            and oss.voided=0
+            and cast(oss.obs_datetime as date)  <= cast('#endDate#' as date)
+            group by oss.person_id
+
+      ) As received_results
+    
 
 ) as received
-on test.Id = received.person_id
+on test.Id = received.pId
 
