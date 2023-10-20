@@ -168,6 +168,7 @@
         "order": 6,
         "requiredPrivilege": "app:clinical"
     },
+    
     "cagClinicalPatientSearch": {
       "id": "bahmni.clinical.patients.search.CagPatients",
       "extensionPointId": "org.bahmni.patient.search",
