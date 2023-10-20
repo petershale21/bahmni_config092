@@ -168,6 +168,19 @@
         "order": 6,
         "requiredPrivilege": "app:clinical"
     },
+    "cagClinicalPatientSearch": {
+      "id": "bahmni.clinical.patients.search.CagPatients",
+      "extensionPointId": "org.bahmni.patient.search",
+      "type": "config",
+      "extensionParams": {
+              "searchHandler": "emrapi.sqlSearch.cag",
+              "translationKey": "MODULE_LABEL_CAG",
+              "forwardUrl": "#/default/patient/{{patientUuid}}/dashboard"
+      },
+      "label": "Viral Load",
+      "order": 6,
+      "requiredPrivilege": "app:clinical"
+  },
 
     "bahmniClinicalPatientsSearchTBIntakeOrFollUpPatients": {
         "id": "bahmni.clinical.patients.search.TBIntakeOrFollUpPatients",
