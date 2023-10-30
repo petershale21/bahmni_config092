@@ -1,5 +1,5 @@
 Select patientIdentifier as "Patient Identifier", ART_Number as "ART Number", patientName as "Patient Name",age_group, Age, Gender, 
-        date_collected as "Date Specimen Collected",Test,Results, sort_order
+        date_collected as "Date Specimen Collected",Test,Results,date_received as "Date Results Received", sort_order
 From
 (select distinct patient.patient_id AS Id,
                 patient_identifier.identifier AS patientIdentifier,
@@ -53,3 +53,29 @@ Left Outer Join
 ) as received
 on test.Id = received.pId
 
+Left Outer Join
+(
+    Select pId, date_received
+    From
+      (
+        select oss.person_id as pId, cast(oss.obs_datetime as date) as date_received
+            from obs oss
+            where oss.concept_id = 5485
+            and oss.voided=0
+            and cast(oss.obs_datetime as date) <= cast('#endDate#' as date)
+            group by oss.person_id
+
+    UNION
+
+    select oss.person_id as pId, cast(oss.obs_datetime as date) as date_received
+            from obs oss
+            where oss.concept_id = 5489
+            and oss.voided=0
+            and cast(oss.obs_datetime as date)  <= cast('#endDate#' as date)
+            group by oss.person_id
+
+      ) As received_date
+    
+
+) as date_rec
+on test.Id = date_rec.pId
