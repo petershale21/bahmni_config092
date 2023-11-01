@@ -1,1722 +1,222 @@
 SELECT ageGroup, 
-IF(Id IS NULL, 0, SUM(IF(ANC_visit = 'First_Visit', 1, 0))) AS ANC_1st_visits,
-IF(Id IS NULL, 0, SUM(IF(ANC_visit = '1st_trimester_visits', 1, 0))) AS 1st_trimester_visits,
-IF(Id IS NULL, 0, SUM(IF(ANC_visit = '2nd_trimester_visits', 1, 0))) AS 2nd_trimester_visits,
-IF(Id IS NULL, 0, SUM(IF(ANC_visit = '3rd_trimester_visits', 1, 0))) AS 3rd_trimester_visits,
-IF(Id IS NULL, 0, SUM(IF(ANC_visit = 'high_risk_pregnancy', 1, 0))) AS high_risk_pregnancy,
-IF(Id IS NULL, 0, SUM(IF(ANC_visit = 'followUp_visit', 1, 0))) AS Subsequent_visit,
-IF(Id IS NULL, 0, SUM(IF(ANC_visit = 'Syphilis_Positive_Results_less_36_Weeks', 1, 0))) AS Syphilis_Positive_Results_less_36_Weeks,
-IF(Id IS NULL, 0, SUM(IF(ANC_visit = 'Syphilis_Positive_Results_Greater_36_Weeks', 1, 0))) AS Syphilis_Positive_Results_Greater_36_Weeks,
-IF(Id IS NULL, 0, SUM(IF(ANC_visit = 'Syphilis_Treatment_Completed', 1, 0))) AS Syphilis_Treatment_Completed,
-IF(Id IS NULL, 0, SUM(IF(ANC_visit = 'Haemoglobin_less_12gdl_less_36_weeks', 1, 0))) AS Haemoglobin_less_12gdl_less_36_weeks,
-IF(Id IS NULL, 0, SUM(IF(ANC_visit = 'Haemoglobin_Greater_12gdl_less_36_weeks', 1, 0))) AS Haemoglobin_Greater_12gdl_less_36_weeks,
-IF(Id IS NULL, 0, SUM(IF(ANC_visit = 'Haemoglobin_less_12gdl_Greater_36_weeks', 1, 0))) AS Haemoglobin_less_12gdl_Greater_36_weeks,
-IF(Id IS NULL, 0, SUM(IF(ANC_visit = 'Haemoglobin_Greater_12gdl_Greater_36_weeks', 1, 0))) AS Haemoglobin_Greater_12gdl_Greater_36_weeks,
-IF(Id IS NULL, 0, SUM(IF(ANC_visit = 'MUAC_less_23', 1, 0))) AS MUAC_less_23,
-IF(Id IS NULL, 0, SUM(IF(ANC_visit = 'Suspected_with_TB', 1, 0))) AS Suspected_with_TB,
-IF(Id IS NULL, 0, SUM(IF(ANC_visit = 'tetatus_protected', 1, 0))) AS tetatus_protected,
-IF(Id IS NULL, 0, SUM(IF(ANC_visit = 'Iron_folate', 1, 0))) AS Iron_folate,
-IF(Id IS NULL, 0, SUM(IF(ANC_visit = 'HIV_positive_male_partner', 1, 0))) AS HIV_positive_male_partner,
-IF(Id IS NULL, 0, SUM(IF(ANC_visit = 'TB_Treatment', 1, 0))) AS TB_Treatment,
-IF(Id IS NULL, 0, SUM(IF(ANC_visit = 'ON_INH', 1, 0))) AS ON_INH,
-IF(Id IS NULL, 0, SUM(IF(ANC_visit = 'pregnancy_complications', 1, 0))) AS pregnancy_complications
+IF(Id IS NULL, 0, SUM(IF(Visit_type = 'First Visit', 1, 0))) AS ANC_1st_visits,
+IF(Id IS NULL, 0, SUM(IF(Trimester = '1st Trimester', 1, 0))) AS 1st_trimester_visits,
+IF(Id IS NULL, 0, SUM(IF(Trimester = '2nd Trimester', 1, 0))) AS 2nd_trimester_visits,
+IF(Id IS NULL, 0, SUM(IF(Trimester = '3rd Trimester', 1, 0))) AS 3rd_trimester_visits,
+IF(Id IS NULL, 0, SUM(IF(High_Risk_Pregnancy != 'N/A', 1, 0))) AS high_risk_pregnancy,
+IF(Id IS NULL, 0, SUM(IF(Visit_type = 'Subsequent Visit', 1, 0))) AS Subsequent_visit,
+IF(Id IS NULL, 0, SUM(IF(Syphilis_Screening_Results = 'Reactive', 1, 0))) AS Syphilis_Positive_Results,
+IF(Id IS NULL, 0, SUM(IF(Syphilis_Treatment_Completed = 'Yes', 1, 0))) AS Syphilis_Treatment_Completed,
+IF(Id IS NULL, 0, SUM(IF(Haemoglobin <= 12, 1, 0))) AS Haemoglobin_less_12gdl,
+IF(Id IS NULL, 0, SUM(IF(Haemoglobin > 12 , 1, 0))) AS Haemoglobin_Greater_12gdl,
+IF(Id IS NULL, 0, SUM(IF(MUAC < 23 , 1, 0))) AS MUAC_less_23,
+IF(Id IS NULL, 0, SUM(IF(TB_Status = 'TB Suspect', 1, 0))) AS Suspected_with_TB,
+IF(Id IS NULL, 0, SUM(IF(TB_Status = 'On TB Treatment', 1, 0))) AS TB_Treatment,
+IF(Id IS NULL, 0, SUM(IF(Iron = 'Prophylaxis', 1, 0))) AS Iron_Prophylaxis,
+IF(Id IS NULL, 0, SUM(IF(Iron = 'On Treatment', 1, 0))) AS Iron_Treatment,
+IF(Id IS NULL, 0, SUM(IF(Folate = 'Prophylaxis', 1, 0))) AS Iron_Prophylaxis,
+IF(Id IS NULL, 0, SUM(IF(Folate = 'On Treatment', 1, 0))) AS Iron_Treatment
 FROM 
 	( 
-		SELECT Id, ANC_visit,ageGroup
-		FROM
-		( 
-			-- First visit
-			select o.person_id as Id,'First_Visit' as ANC_visit,'Under15' as ageGroup
-			from obs o
-			INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0 
-			AND o.person_Id in (select id
-						FROM
-						( 
-							select distinct o.person_id AS Id,
-								floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age								   
-							from obs o
-							INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
-							INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3	
-						) as a
-						WHERE age < 15
-				      	   )
-			WHERE concept_id = 4658 and value_coded = 4659
-			AND obs_datetime BETWEEN '#startDate#' and '#endDate#'
-
-			UNION
-			
-			-- visits in first trimester 4658 and value_coded in (4659,4660)
-			
-			select o.person_id as Id,'1st_trimester_visits' as ANC_visit,'Under15' as ageGroup
-			from obs o
-			INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0 
-			AND o.person_Id in (select id
-								FROM
-								( 
-									select distinct o.person_id AS Id,
-									floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age								   
-									from obs o
-									INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
-									INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3
-										
-								) as a
-								WHERE age < 15
-												)
-			AND o.person_id in (select o.person_id from obs o where concept_id = 2423 and value_numeric < 13)
-			WHERE concept_id = 4658 and value_coded in (4659)
-			AND obs_datetime BETWEEN '#startDate#' and '#endDate#'
-			
-
-			UNION
-			-- visits in second
-			
-			select o.person_id as Id,'2nd_trimester_visits' as ANC_visit,'Under15' as ageGroup
-			from obs o
-			INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0 
-			AND o.person_Id in (select id
-								FROM
-								( 
-									select distinct o.person_id AS Id,
-									floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age								   
-									from obs o
-									INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
-									INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3	
-									WHERE o.concept_id = 4658 and o.value_coded = 4659
-								) as a
-								WHERE age < 15
-												)
-			AND o.person_id in (select o.person_id from obs o where concept_id = 2423 and value_numeric >= 13 and value_numeric <= 25)
-			WHERE concept_id = 4658 and value_coded in (4659)
-			AND obs_datetime BETWEEN '#startDate#' and '#endDate#'
-			
-
-			UNION
-			-- visits in third
-			select o.person_id as Id,'3rd_trimester_visits' as ANC_visit,'Under15' as ageGroup
-			from obs o
-			INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0 
-			AND o.person_Id in (select id
-								FROM
-								( 
-									select distinct o.person_id AS Id,
-									floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age								   
-									from obs o
-									INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
-									INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3	
-									WHERE o.concept_id = 4658 and o.value_coded = 4659
-								) as a
-								WHERE age < 15
-					      )
-			AND o.person_id in (select o.person_id from obs o where concept_id = 2423 and value_numeric > 25)
-			WHERE concept_id = 4658 and value_coded in (4659)
-			AND obs_datetime BETWEEN '#startDate#' and '#endDate#'
-			
-
-			UNION
-			-- high risk pregnancies
-			
-			select o.person_id as Id,'high_risk_pregnancy' as ANC_visit,'Under15' as ageGroup
-			from obs o
-			INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0 
-			AND o.person_Id in (select id
-								FROM
-								( 
-									select distinct o.person_id AS Id,
-									floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age								   
-									from obs o
-									INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
-									INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3	
-								) as a
-								WHERE age < 15
-												)
-			WHERE concept_id = 4352 and value_coded != 4353
-			AND obs_datetime BETWEEN '#startDate#' and '#endDate#'
-			
-
-			UNION
-			-- total ANC follow up visits 2nd,3rd,4th
-			
-			select o.person_id as Id,'followUp_visit' as ANC_visit,'Under15' as ageGroup
-			from obs o
-			INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
-			AND o.person_Id in (select id
-								FROM
-								( 
-									select distinct o.person_id AS Id,
-									floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age
-									from obs o
-									INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
-									INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3	
-								) as a
-								WHERE age < 15
-												)							
-			where concept_id = 4658 and value_coded = 4660
-			AND obs_datetime BETWEEN '#startDate#' and '#endDate#'
-			
-
-			UNION
-			-- syphilis Positive Results <36 weeks
-			
-			select distinct a.person_id, 'Syphilis_Positive_Results_less_36_Weeks' as ANC_visit,'Under15' as ageGroup
-			from obs a
-			INNER JOIN person ON person.person_id = a.person_id AND person.voided = 0
-			AND a.person_Id in (select id
-								FROM
-								( 
-									select distinct o.person_id AS Id,
-									floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age								   
-									from obs o
-									INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
-									INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3	
-								) as a
-								WHERE Age < 15
-							)
-			AND a.person_Id in (select Id
-								FROM
-								( 
-									select distinct o.person_id AS Id, o.value_numeric as Gestational_Period
-										from obs o
-										where o.concept_id = 2423 and o.voided = 0
-										and o.obs_datetime >= CAST('#startDate#' AS DATE)
-										and o.obs_datetime <= CAST('#endDate#' AS DATE)	
-								) as Ges_Period
-								WHERE Gestational_Period < 36
-							)
-			where concept_id = 4305 and value_coded =4306
-			and a.obs_datetime >= CAST('#startDate#' AS DATE)
-    		and a.obs_datetime <= CAST('#endDate#'AS DATE)
-
-			
-			UNION
-			-- syphilis Positive Results >36 weeks
-			
-			select distinct a.person_id, 'Syphilis_Positive_Results_Greater_36_Weeks' as ANC_visit,'Under15' as ageGroup
-			from obs a
-			INNER JOIN person ON person.person_id = a.person_id AND person.voided = 0
-			AND a.person_Id in (select id
-								FROM
-								( 
-									select distinct o.person_id AS Id,
-									floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age								   
-									from obs o
-									INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
-									INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3	
-								) as a
-								WHERE Age < 15
-							)
-			AND a.person_Id in (select Id
-								FROM
-								( 
-									select distinct o.person_id AS Id, o.value_numeric as Gestational_Period
-										from obs o
-										where o.concept_id = 2423 and o.voided = 0
-										and o.obs_datetime >= CAST('#startDate#' AS DATE)
-										and o.obs_datetime <= CAST('#endDate#' AS DATE)	
-								) as Ges_Period
-								WHERE Gestational_Period >= 36
-							)
-			where concept_id = 4305 and value_coded =4306
-			and a.obs_datetime >= CAST('#startDate#' AS DATE)
-    		and a.obs_datetime <= CAST('#endDate#'AS DATE)
-
-			UNION
-
-			-- Syphilis Treatment Completed
-			select distinct a.person_id, 'Syphilis_Treatment_Completed' as ANC_visit,'Under15' as ageGroup
-			from obs a
-			INNER JOIN person ON person.person_id = a.person_id AND person.voided = 0
-			AND a.person_Id in (select id
-								FROM
-								( 
-									select distinct o.person_id AS Id,
-									floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age								   
-									from obs o
-									INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
-									INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3	
-								) as a
-								WHERE Age < 15
-							)
-			where concept_id = 1732 and value_coded = 2146
-			and a.obs_datetime >= CAST('#startDate#' AS DATE)
-    		and a.obs_datetime <= CAST('#endDate#'AS DATE)
-
-			UNION
-			-- Haemoglobin_less_12gdl_less_36_weeks
-			select distinct a.person_id, 'Haemoglobin_less_12gdl_less_36_weeks' as ANC_visit,'Under15' as ageGroup
-			from obs a
-			INNER JOIN person ON person.person_id = a.person_id AND person.voided = 0
-			AND a.person_Id in (select id
-								FROM
-								( 
-									select distinct o.person_id AS Id,
-									floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age								   
-									from obs o
-									INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
-									INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3	
-								) as a
-								WHERE Age < 15
-							)
-			AND a.person_Id in (select Id
-								FROM
-								( 
-									select distinct o.person_id AS Id, o.value_numeric as Gestational_Period
-										from obs o
-										where o.concept_id = 2423 and o.voided = 0
-										and o.obs_datetime >= CAST('#startDate#' AS DATE)
-										and o.obs_datetime <= CAST('#endDate#' AS DATE)	
-								) as Ges_Period
-								WHERE Gestational_Period < 36
-							)
-			AND a.person_Id in (select Id
-								FROM
-								( 
-									select distinct o.person_id AS Id, o.value_numeric as Haemoglobin
-										from obs o
-										where o.concept_id = 3204 
-										and o.voided = 0
-										and o.obs_datetime >= CAST('#startDate#' AS DATE)
-										and o.obs_datetime <= CAST('#endDate#' AS DATE)	
-								) as Haemo
-								WHERE Haemoglobin < 12
-							)
-			UNION
-			-- Haemoglobin_less_12gdl_Greater_36_weeks
-			select distinct a.person_id, 'Haemoglobin_Greater_12gdl_less_36_weeks' as ANC_visit,'Under15' as ageGroup
-			from obs a
-			INNER JOIN person ON person.person_id = a.person_id AND person.voided = 0
-			AND a.person_Id in (select id
-								FROM
-								( 
-									select distinct o.person_id AS Id,
-									floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age								   
-									from obs o
-									INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
-									INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3	
-								) as a
-								WHERE Age < 15
-							)
-			AND a.person_Id in (select Id
-								FROM
-								( 
-									select distinct o.person_id AS Id, o.value_numeric as Gestational_Period
-										from obs o
-										where o.concept_id = 2423 and o.voided = 0
-										and o.obs_datetime >= CAST('#startDate#' AS DATE)
-										and o.obs_datetime <= CAST('#endDate#' AS DATE)	
-								) as Ges_Period
-								WHERE Gestational_Period < 36
-							)
-			AND a.person_Id in (select Id
-								FROM
-								( 
-									select distinct o.person_id AS Id, o.value_numeric as Haemoglobin
-										from obs o
-										where o.concept_id = 3204 
-										and o.voided = 0
-										and o.obs_datetime >= CAST('#startDate#' AS DATE)
-										and o.obs_datetime <= CAST('#endDate#' AS DATE)	
-								) as Haemo
-								WHERE Haemoglobin >= 12
-							)
-			UNION
-			-- Haemoglobin_less_12gdl_Greater_36_weeks
-
-			select distinct a.person_id, 'Haemoglobin_less_12gdl_Greater_36_weeks' as ANC_visit,'Under15' as ageGroup
-			from obs a
-			INNER JOIN person ON person.person_id = a.person_id AND person.voided = 0
-			AND a.person_Id in (select id
-								FROM
-								( 
-									select distinct o.person_id AS Id,
-									floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age								   
-									from obs o
-									INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
-									INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3	
-								) as a
-								WHERE Age <15
-							)
-			AND a.person_Id in (select Id
-								FROM
-								( 
-									select distinct o.person_id AS Id, o.value_numeric as Gestational_Period
-										from obs o
-										where o.concept_id = 2423 and o.voided = 0
-										and o.obs_datetime >= CAST('#startDate#' AS DATE)
-										and o.obs_datetime <= CAST('#endDate#' AS DATE)	
-								) as Ges_Period
-								WHERE Gestational_Period < 36
-							)
-			AND a.person_Id in (select Id
-								FROM
-								( 
-									select distinct o.person_id AS Id, o.value_numeric as Haemoglobin
-										from obs o
-										where o.concept_id = 3204 
-										and o.voided = 0
-										and o.obs_datetime >= CAST('#startDate#' AS DATE)
-										and o.obs_datetime <= CAST('#endDate#' AS DATE)	
-								) as Haemo
-								WHERE Haemoglobin < 12
-							)
-			UNION
-			-- Haemoglobin_Greater_12gdl_Greater_36_weeks
-
-			select distinct a.person_id, 'Haemoglobin_Greater_12gdl_Greater_36_weeks' as ANC_visit,'Under15' as ageGroup
-			from obs a
-			INNER JOIN person ON person.person_id = a.person_id AND person.voided = 0
-			AND a.person_Id in (select id
-								FROM
-								( 
-									select distinct o.person_id AS Id,
-									floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age								   
-									from obs o
-									INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
-									INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3	
-								) as a
-								WHERE Age >=20
-							)
-			AND a.person_Id in (select Id
-								FROM
-								( 
-									select distinct o.person_id AS Id, o.value_numeric as Gestational_Period
-										from obs o
-										where o.concept_id = 2423 and o.voided = 0
-										and o.obs_datetime >= CAST('#startDate#' AS DATE)
-										and o.obs_datetime <= CAST('#endDate#' AS DATE)	
-								) as Ges_Period
-								WHERE Gestational_Period >= 36
-							)
-			AND a.person_Id in (select Id
-								FROM
-								( 
-									select distinct o.person_id AS Id, o.value_numeric as Haemoglobin
-										from obs o
-										where o.concept_id = 3204 
-										and o.voided = 0
-										and o.obs_datetime >= CAST('#startDate#' AS DATE)
-										and o.obs_datetime <= CAST('#endDate#' AS DATE)	
-								) as Haemo
-								WHERE Haemoglobin >= 12
-							)
-			UNION
-
-			select distinct a.person_id, 'MUAC_less_23' as ANC_visit,'Under15' as ageGroup
-			from obs a
-			INNER JOIN person ON person.person_id = a.person_id AND person.voided = 0
-			AND a.person_Id in (select id
-								FROM
-								( 
-									select distinct o.person_id AS Id,
-									floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age								   
-									from obs o
-									INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
-									INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3	
-								) as a
-								WHERE Age < 15
-							)
-			AND a.person_Id in (Select Id
-									FROM
-									(	select person_id as Id, value_numeric as MUAC
-											from obs o 
-											where concept_id = 2086 and voided = 0
-											and o. obs_datetime >= CAST('#startDate#' AS DATE)
-											and o. obs_datetime <= CAST('#endDate#'AS DATE)
-											and o.value_numeric <23
-									) as muac
-									)
-
-			UNION
-
-			select distinct a.person_id, 'Suspected_with_TB' as ANC_visit,'Under15' as ageGroup
-			from obs a
-			INNER JOIN person ON person.person_id = a.person_id AND person.voided = 0
-			AND a.person_Id in (select id
-								FROM
-								( 
-									select distinct o.person_id AS Id,
-									floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age								   
-									from obs o
-									INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
-									INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3	
-								) as a
-								WHERE Age < 15
-							)
-			AND a.person_Id in (Select Id
-									FROM
-									(	select person_id as Id, value_coded as TB_Status
-										from obs os
-										where concept_id = 3710 and voided = 0
-										)TB_Status
-
-										inner join
-										(
-											select concept_id, name AS Tuberculosis
-												from concept_name 
-													where name in ('No signs', 'Suspected / Probable', 'On TB treatment') 
-										) tb_concept
-										on tb_concept.concept_id = TB_Status.TB_Status 
-										where tb_concept.Tuberculosis = 'Suspected / Probable'
-									) 
-
-			UNION
-			-- Pregnancies protected against tetatus
-			
-			select o.person_id as Id,'tetatus_protected' as ANC_visit,'Under15' as ageGroup
-			from obs o
-			INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
-			AND o.person_Id in (select id
-								FROM
-								( 
-									select distinct o.person_id AS Id,
-									floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age								   
-									from obs o
-									INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
-									INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3	
-								) as a
-								WHERE age < 15
-												)
-			where concept_id = 4317
-			AND obs_datetime BETWEEN '#startDate#' and '#endDate#'
-			
-
-			UNION
-			-- Provided with Iron 4299 and Folate 4300
-			
-			select o.person_id as Id,'Iron_folate' as ANC_visit,'Under15' as ageGroup
-			from obs o
-			INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
-			AND o.person_Id in (select id
-								FROM
-								( 
-									select distinct o.person_id AS Id,
-									floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age								   
-									from obs o
-									INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
-									INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3	
-								) as a
-								WHERE age < 15
-												)
-			and concept_id in (4300,4299) AND value_coded in (4668)
-			AND obs_datetime BETWEEN '#startDate#' and '#endDate#'
-			
-
-			UNION
-			-- 
-			select o.person_id as Id,'HIV_positive_male_partner' as ANC_visit,'Under15' as ageGroup
-			from obs o
-			INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
-			AND o.person_Id in (select id
-								FROM
-								( 
-									select distinct o.person_id AS Id,
-									floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age								   
-									from obs o
-									INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
-									INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3	
-								) as a
-								WHERE age < 15
-												)
-			where concept_id = 1741 and value_coded in ( 1738,4323)
-			AND obs_datetime BETWEEN '#startDate#' and '#endDate#'
-
-			UNION
-			-- Referred for TB treatment
-			select o.person_id as Id,'TB_Treatment' as ANC_visit,'Under15' as ageGroup
-			from obs o
-			INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
-			AND o.person_Id in (select id
-								FROM
-								( 
-									select distinct o.person_id AS Id,
-									floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age								   
-									from obs o
-									INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
-									INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3	
-								) as a
-								WHERE age < 15
-												)
-			where concept_id = 4337 and value_coded != 1975
-			AND obs_datetime BETWEEN '#startDate#' and '#endDate#'
-
-			UNION
-			-- Initiated on INH
-			select o.person_id as Id,'ON_INH' as ANC_visit,'Under15' as ageGroup
-			from obs o
-			INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
-			AND o.person_Id in (select id
-								FROM
-								( 
-									select distinct o.person_id AS Id,
-									floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age								   
-									from obs o
-									INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
-									INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3	
-								) as a
-								WHERE age < 15
-												)
-			where concept_id = 4337 and value_coded = 4333
-			AND obs_datetime BETWEEN '#startDate#' and '#endDate#'
-
-			UNION
-			-- total pregnancy complications
-			select o.person_id as Id,'pregnancy_complications' as ANC_visit,'Under15' as ageGroup
-			from obs o
-			INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
-			AND o.person_Id in (select id
-								FROM
-								( 
-									select distinct o.person_id AS Id,
-									floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age								   
-									from obs o
-									INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
-									INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3	
-								) as a
-								WHERE age < 15
-												)
-			where (concept_id = 4367 and value_coded != 4368)
-			AND obs_datetime BETWEEN '#startDate#' and '#endDate#'
-			
-			UNION
-
-			-- ------------------------------------- 15-19years -------------------------------
-			-- First visit
-			select o.person_id as Id,'First_Visit' as ANC_visit,'15-19years' as ageGroup
-			from obs o
-			INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0 
-			AND o.person_Id in (select id
-						FROM
-						( 
-							select distinct o.person_id AS Id,
-								floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age								   
-							from obs o
-							INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
-							INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3	
-						) as a
-						WHERE age > 14
-							and age <20
-				      	   )
-			WHERE concept_id = 4658 and value_coded = 4659
-			AND obs_datetime BETWEEN '#startDate#' and '#endDate#'
-
-			UNION
-			
-			-- visits in first trimester 4658 and value_coded in (4659,4660)
-			
-			select o.person_id as Id,'1st_trimester_visits' as ANC_visit,'15-19years' as ageGroup
-			from obs o
-			INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0 
-			AND o.person_Id in (select id
-								FROM
-								( 
-									select distinct o.person_id AS Id,
-									floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age								   
-									from obs o
-									INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
-									INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3	
-									
-								) as a
-								WHERE age > 14
-							and age <20
-												)
-			AND o.person_id in (select o.person_id from obs o where concept_id = 2423 and value_numeric < 13)
-			WHERE concept_id = 4658 and value_coded in (4659)
-			AND obs_datetime BETWEEN '#startDate#' and '#endDate#'
-			
-
-			UNION
-			-- visits in second
-			
-			select o.person_id as Id,'2nd_trimester_visits' as ANC_visit,'15-19years' as ageGroup
-			from obs o
-			INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0 
-			AND o.person_Id in (select id
-								FROM
-								( 
-									select distinct o.person_id AS Id,
-									floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age								   
-									from obs o
-									INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
-									INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3	
-								
-								) as a
-								WHERE age > 14
-							and age <20
-												)
-			AND o.person_id in (select o.person_id from obs o where concept_id = 2423 and value_numeric >= 13 and value_numeric <= 25)
-			WHERE concept_id = 4658 and value_coded in (4659)
-			AND obs_datetime BETWEEN '#startDate#' and '#endDate#'
-			
-
-			UNION
-			-- visits in third
-			select o.person_id as Id,'3rd_trimester_visits' as ANC_visit,'15-19years' as ageGroup
-			from obs o
-			INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0 
-			AND o.person_Id in (select id
-								FROM
-								( 
-									select distinct o.person_id AS Id,
-									floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age								   
-									from obs o
-									INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
-									INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3	
-									
-								) as a
-								WHERE age > 14
-							and age <20
-					      )
-			AND o.person_id in (select o.person_id from obs o where concept_id = 2423 and value_numeric > 25)
-			WHERE concept_id = 4658 and value_coded in (4659)
-			AND obs_datetime BETWEEN '#startDate#' and '#endDate#'
-			
-
-			UNION
-			-- high risk pregnancies
-			
-			select o.person_id as Id,'high_risk_pregnancy' as ANC_visit,'15-19years' as ageGroup
-			from obs o
-			INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0 
-			AND o.person_Id in (select id
-								FROM
-								( 
-									select distinct o.person_id AS Id,
-									floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age								   
-									from obs o
-									INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
-									INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3	
-								) as a
-								WHERE age > 14
-							and age <20
-												)
-			WHERE concept_id = 4352 and value_coded != 4353
-			AND obs_datetime BETWEEN '#startDate#' and '#endDate#'
-			
-
-			UNION
-			-- total ANC follow up visits 2nd,3rd,4th
-			
-			select o.person_id as Id,'followUp_visit' as ANC_visit,'15-19years' as ageGroup
-			from obs o
-			INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
-			AND o.person_Id in (select id
-								FROM
-								( 
-									select distinct o.person_id AS Id,
-									floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age
-									from obs o
-									INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
-									INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3	
-								) as a
-								WHERE age > 14
-							and age <20
-												)							
-			where concept_id = 4658 and value_coded = 4660
-			AND obs_datetime BETWEEN '#startDate#' and '#endDate#'
-			
-
-			UNION
-
-			-- syphilis Positive Results <36 weeks
-			
-			select distinct a.person_id, 'Syphilis_Positive_Results_less_36_Weeks' as ANC_visit,'15-19years' as ageGroup
-			from obs a
-			INNER JOIN person ON person.person_id = a.person_id AND person.voided = 0
-			AND a.person_Id in (select id
-								FROM
-								( 
-									select distinct o.person_id AS Id,
-									floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age								   
-									from obs o
-									INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
-									INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3	
-								) as a
-								WHERE Age > 14
-								and Age <20
-							)
-			AND a.person_Id in (select Id
-								FROM
-								( 
-									select distinct o.person_id AS Id, o.value_numeric as Gestational_Period
-										from obs o
-										where o.concept_id = 2423 and o.voided = 0
-										and o.obs_datetime >= CAST('#startDate#' AS DATE)
-										and o.obs_datetime <= CAST('#endDate#' AS DATE)	
-								) as Ges_Period
-								WHERE Gestational_Period < 36
-							)
-			where concept_id = 4305 and value_coded =4306
-			and a.obs_datetime >= CAST('#startDate#' AS DATE)
-    		and a.obs_datetime <= CAST('#endDate#'AS DATE)
-
-			UNION
-
-			-- syphilis Positive Results >36 weeks
-			
-			select distinct a.person_id, 'Syphilis_Positive_Results_Greater_36_Weeks' as ANC_visit,'15-19years' as ageGroup
-			from obs a
-			INNER JOIN person ON person.person_id = a.person_id AND person.voided = 0
-			AND a.person_Id in (select id
-								FROM
-								( 
-									select distinct o.person_id AS Id,
-									floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age								   
-									from obs o
-									INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
-									INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3	
-								) as a
-								WHERE Age > 14
-								and Age <20
-							)
-			AND a.person_Id in (select Id
-								FROM
-								( 
-									select distinct o.person_id AS Id, o.value_numeric as Gestational_Period
-										from obs o
-										where o.concept_id = 2423 and o.voided = 0
-										and o.obs_datetime >= CAST('#startDate#' AS DATE)
-										and o.obs_datetime <= CAST('#endDate#' AS DATE)	
-								) as Ges_Period
-								WHERE Gestational_Period > 36
-							)
-			where concept_id = 4305 and value_coded =4306
-			and a.obs_datetime >= CAST('#startDate#' AS DATE)
-    		and a.obs_datetime <= CAST('#endDate#'AS DATE)
-
-			UNION
-
-			-- Syphilis Treatment Completed
-			select distinct a.person_id, 'Syphilis_Treatment_Completed' as ANC_visit,'15-19years' as ageGroup
-			from obs a
-			INNER JOIN person ON person.person_id = a.person_id AND person.voided = 0
-			AND a.person_Id in (select id
-								FROM
-								( 
-									select distinct o.person_id AS Id,
-									floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age								   
-									from obs o
-									INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
-									INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3	
-								) as a
-								WHERE Age > 14
-								and Age <20
-							)
-			where concept_id = 1732 and value_coded = 2146
-			and a.obs_datetime >= CAST('#startDate#' AS DATE)
-    		and a.obs_datetime <= CAST('#endDate#'AS DATE)
-
-			UNION
-			-- Haemoglobin_less_12gdl_less_36_weeks
-
-			select distinct a.person_id, 'Haemoglobin_less_12gdl_less_36_weeks' as ANC_visit,'15-19years' as ageGroup
-			from obs a
-			INNER JOIN person ON person.person_id = a.person_id AND person.voided = 0
-			AND a.person_Id in (select id
-								FROM
-								( 
-									select distinct o.person_id AS Id,
-									floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age								   
-									from obs o
-									INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
-									INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3	
-								) as a
-								WHERE Age > 14
-								and Age <20
-							)
-			AND a.person_Id in (select Id
-								FROM
-								( 
-									select distinct o.person_id AS Id, o.value_numeric as Gestational_Period
-										from obs o
-										where o.concept_id = 2423 and o.voided = 0
-										and o.obs_datetime >= CAST('#startDate#' AS DATE)
-										and o.obs_datetime <= CAST('#endDate#' AS DATE)	
-								) as Ges_Period
-								WHERE Gestational_Period < 36
-							)
-			AND a.person_Id in (select Id
-								FROM
-								( 
-									select distinct o.person_id AS Id, o.value_numeric as Haemoglobin
-										from obs o
-										where o.concept_id = 3204 
-										and o.voided = 0
-										and o.obs_datetime >= CAST('#startDate#' AS DATE)
-										and o.obs_datetime <= CAST('#endDate#' AS DATE)	
-								) as Haemo
-								WHERE Haemoglobin < 12
-							)
-			UNION
-			-- Haemoglobin_less_12gdl_Greater_36_weeks
-
-			select distinct a.person_id, 'Haemoglobin_Greater_12gdl_less_36_weeks' as ANC_visit,'15-19years' as ageGroup
-			from obs a
-			INNER JOIN person ON person.person_id = a.person_id AND person.voided = 0
-			AND a.person_Id in (select id
-								FROM
-								( 
-									select distinct o.person_id AS Id,
-									floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age								   
-									from obs o
-									INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
-									INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3	
-								) as a
-								WHERE Age > 14
-								and Age <20
-							)
-			AND a.person_Id in (select Id
-								FROM
-								( 
-									select distinct o.person_id AS Id, o.value_numeric as Gestational_Period
-										from obs o
-										where o.concept_id = 2423 and o.voided = 0
-										and o.obs_datetime >= CAST('#startDate#' AS DATE)
-										and o.obs_datetime <= CAST('#endDate#' AS DATE)	
-								) as Ges_Period
-								WHERE Gestational_Period < 36
-							)
-			AND a.person_Id in (select Id
-								FROM
-								( 
-									select distinct o.person_id AS Id, o.value_numeric as Haemoglobin
-										from obs o
-										where o.concept_id = 3204 
-										and o.voided = 0
-										and o.obs_datetime >= CAST('#startDate#' AS DATE)
-										and o.obs_datetime <= CAST('#endDate#' AS DATE)	
-								) as Haemo
-								WHERE Haemoglobin >= 12
-							)
-
-			UNION
-			-- Haemoglobin_less_12gdl_Greater_36_weeks
-
-			select distinct a.person_id, 'Haemoglobin_less_12gdl_less_36_weeks' as ANC_visit,'15-19years' as ageGroup
-			from obs a
-			INNER JOIN person ON person.person_id = a.person_id AND person.voided = 0
-			AND a.person_Id in (select id
-								FROM
-								( 
-									select distinct o.person_id AS Id,
-									floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age								   
-									from obs o
-									INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
-									INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3	
-								) as a
-								WHERE Age > 14
-								and Age <20
-							)
-			AND a.person_Id in (select Id
-								FROM
-								( 
-									select distinct o.person_id AS Id, o.value_numeric as Gestational_Period
-										from obs o
-										where o.concept_id = 2423 and o.voided = 0
-										and o.obs_datetime >= CAST('#startDate#' AS DATE)
-										and o.obs_datetime <= CAST('#endDate#' AS DATE)	
-								) as Ges_Period
-								WHERE Gestational_Period >= 36
-							)
-			AND a.person_Id in (select Id
-								FROM
-								( 
-									select distinct o.person_id AS Id, o.value_numeric as Haemoglobin
-										from obs o
-										where o.concept_id = 3204 
-										and o.voided = 0
-										and o.obs_datetime >= CAST('#startDate#' AS DATE)
-										and o.obs_datetime <= CAST('#endDate#' AS DATE)	
-								) as Haemo
-								WHERE Haemoglobin < 12
-							)
-			UNION
-			-- Haemoglobin_Greater_12gdl_Greater_36_weeks
-
-			select distinct a.person_id, 'Haemoglobin_Greater_12gdl_less_36_weeks' as ANC_visit,'15-19years' as ageGroup
-			from obs a
-			INNER JOIN person ON person.person_id = a.person_id AND person.voided = 0
-			AND a.person_Id in (select id
-								FROM
-								( 
-									select distinct o.person_id AS Id,
-									floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age								   
-									from obs o
-									INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
-									INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3	
-								) as a
-								WHERE Age > 14
-								and Age <20
-							)
-			AND a.person_Id in (select Id
-								FROM
-								( 
-									select distinct o.person_id AS Id, o.value_numeric as Gestational_Period
-										from obs o
-										where o.concept_id = 2423 and o.voided = 0
-										and o.obs_datetime >= CAST('#startDate#' AS DATE)
-										and o.obs_datetime <= CAST('#endDate#' AS DATE)	
-								) as Ges_Period
-								WHERE Gestational_Period >= 36
-							)
-			AND a.person_Id in (select Id
-								FROM
-								( 
-									select distinct o.person_id AS Id, o.value_numeric as Haemoglobin
-										from obs o
-										where o.concept_id = 3204 
-										and o.voided = 0
-										and o.obs_datetime >= CAST('#startDate#' AS DATE)
-										and o.obs_datetime <= CAST('#endDate#' AS DATE)	
-								) as Haemo
-								WHERE Haemoglobin >= 12
-							)
-
-			
-			UNION
-			select distinct a.person_id, 'MUAC_less_23' as ANC_visit,'15-19years' as ageGroup
-			from obs a
-			INNER JOIN person ON person.person_id = a.person_id AND person.voided = 0
-			AND a.person_Id in (select id
-								FROM
-								( 
-									select distinct o.person_id AS Id,
-									floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age								   
-									from obs o
-									INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
-									INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3	
-								) as a
-								WHERE age > 14
-							and age <20
-							)
-			AND a.person_Id in (Select Id
-									FROM
-									(	select person_id as Id, value_numeric as MUAC
-											from obs o 
-											where concept_id = 2086 and voided = 0
-											and o. obs_datetime >= CAST('#startDate#' AS DATE)
-											and o. obs_datetime <= CAST('#endDate#'AS DATE)
-											and o.value_numeric <23
-									)AS MUAC
-									)
-
-			UNION
-
-			select distinct a.person_id, 'Suspected_with_TB' as ANC_visit,'15-19years' as ageGroup
-			from obs a
-			INNER JOIN person ON person.person_id = a.person_id AND person.voided = 0
-			AND a.person_Id in (select id
-								FROM
-								( 
-									select distinct o.person_id AS Id,
-									floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age								   
-									from obs o
-									INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
-									INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3	
-								) as a
-								WHERE age > 14
-							and age <20
-							)
-			AND a.person_Id in (Select Id
-									FROM
-									(	select person_id as Id, value_coded as TB_Status
-										from obs os
-										where concept_id = 3710 and voided = 0
-										)TB_Status
-
-										inner join
-										(
-											select concept_id, name AS Tuberculosis
-												from concept_name 
-													where name in ('No signs', 'Suspected / Probable', 'On TB treatment') 
-										) tb_concept
-										on tb_concept.concept_id = TB_Status.TB_Status 
-										where tb_concept.Tuberculosis = 'Suspected / Probable'
-									) 
-
-			UNION
-			-- Pregnancies protected against tetatus
-			
-			select o.person_id as Id,'tetatus_protected' as ANC_visit,'15-19years' as ageGroup
-			from obs o
-			INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
-			AND o.person_Id in (select id
-								FROM
-								( 
-									select distinct o.person_id AS Id,
-									floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age								   
-									from obs o
-									INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
-									INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3	
-								) as a
-								WHERE age > 14
-							and age <20
-												)
-			where concept_id = 4317
-			AND obs_datetime BETWEEN '#startDate#' and '#endDate#'
-			
-
-			UNION
-			-- Provided with Iron 4299 and Folate 4300
-			
-			select o.person_id as Id,'Iron_folate' as ANC_visit,'15-19years' as ageGroup
-			from obs o
-			INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
-			AND o.person_Id in (select id
-								FROM
-								( 
-									select distinct o.person_id AS Id,
-									floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age								   
-									from obs o
-									INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
-									INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3	
-								) as a
-								WHERE age > 14
-							and age <20
-												)
-			and concept_id in (4300,4299) AND value_coded in (4668)
-			AND obs_datetime BETWEEN '#startDate#' and '#endDate#'
-			
-
-			UNION
-			-- 
-			select o.person_id as Id,'HIV_positive_male_partner' as ANC_visit,'15-19years' as ageGroup
-			from obs o
-			INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
-			AND o.person_Id in (select id
-								FROM
-								( 
-									select distinct o.person_id AS Id,
-									floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age								   
-									from obs o
-									INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
-									INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3	
-								) as a
-								WHERE age > 14
-							and age <20
-												)
-			where concept_id = 1741 and value_coded in ( 1738,4323)
-			AND obs_datetime BETWEEN '#startDate#' and '#endDate#'
-
-			UNION
-			-- Referred for TB treatment
-			select o.person_id as Id,'TB_Treatment' as ANC_visit,'15-19years' as ageGroup
-			from obs o
-			INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
-			AND o.person_Id in (select id
-								FROM
-								( 
-									select distinct o.person_id AS Id,
-									floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age								   
-									from obs o
-									INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
-									INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3	
-								) as a
-								WHERE age > 14
-							and age <20
-												)
-			where concept_id = 4337 and value_coded != 1975
-			AND obs_datetime BETWEEN '#startDate#' and '#endDate#'
-
-			UNION
-			-- Initiated on INH
-			select o.person_id as Id,'ON_INH' as ANC_visit,'15-19years' as ageGroup
-			from obs o
-			INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
-			AND o.person_Id in (select id
-								FROM
-								( 
-									select distinct o.person_id AS Id,
-									floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age								   
-									from obs o
-									INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
-									INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3	
-								) as a
-								WHERE age > 14
-							and age <20
-												)
-			where concept_id = 4337 and value_coded = 4333
-			AND obs_datetime BETWEEN '#startDate#' and '#endDate#'
-
-			UNION
-			-- total pregnancy complications
-			select o.person_id as Id,'pregnancy_complications' as ANC_visit,'15-19years' as ageGroup
-			from obs o
-			INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
-			AND o.person_Id in (select id
-								FROM
-								( 
-									select distinct o.person_id AS Id,
-									floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age								   
-									from obs o
-									INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
-									INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3	
-								) as a
-								WHERE age > 14
-							and age <20
-												)
-			where (concept_id = 4367 and value_coded != 4368)
-			AND obs_datetime BETWEEN '#startDate#' and '#endDate#'
-			
-			UNION
-
-			-- -------------------------------- above 20 ----------------------------------------------
-			-- First Visit
-			select o.person_id as Id,'First_Visit' as ANC_visit,'Above20' as ageGroup
-			from obs o
-			INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0 
-			AND o.person_Id in (select id
-								FROM
-								( 
-									select distinct o.person_id AS Id,
-									floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age								   
-									from obs o
-									INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
-									INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3	
-								) as a
-								WHERE age >=20
-												)
-			WHERE concept_id = 4658 and value_coded = 4659
-			AND obs_datetime BETWEEN '#startDate#' and '#endDate#' 
-
-			UNION
-
-			-- 1st trimester visits
-			select o.person_id as Id,'1st_trimester_visits' as ANC_visit,'Above20' as ageGroup
-			from obs o
-			INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0 
-			AND o.person_Id in (select id
-								FROM
-								( 
-									select distinct o.person_id AS Id,
-									floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age								   
-									from obs o
-									INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
-									INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3	
-								
-								) as a
-								WHERE age >=20
-												)
-			AND o.person_id in (select o.person_id from obs o where concept_id = 2423 and value_numeric < 13)
-			WHERE concept_id = 4658 and value_coded in (4659)
-			AND obs_datetime BETWEEN '#startDate#' and '#endDate#' 
-			
-
-			UNION
-			-- visits in second Trimester
-			
-			select o.person_id as Id,'2nd_trimester_visits' as ANC_visit,'Above20' as ageGroup
-			from obs o
-			INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0 
-			AND o.person_Id in (select id
-								FROM
-								( 
-									select distinct o.person_id AS Id,
-									floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age								   
-									from obs o
-									INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
-									INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3	
-								
-								) as a
-								WHERE age >=20
-												)
-			AND o.person_id in (select o.person_id from obs o where concept_id = 2423 and value_numeric >= 13 and value_numeric <= 25)
-			WHERE concept_id = 4658 and value_coded in (4659)
-			AND obs_datetime BETWEEN '#startDate#' and '#endDate#'
-			
-
-			UNION
-			-- visits in third
-			select o.person_id as Id,'3rd_trimester_visits' as ANC_visit,'Above20' as ageGroup
-			from obs o
-			INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0 
-			AND o.person_Id in (select id
-								FROM
-								( 
-									select distinct o.person_id AS Id,
-									floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age								   
-									from obs o
-									INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
-									INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3	
-									
-								) as a
-								WHERE age >=20
-												)
-			AND o.person_id in (select o.person_id from obs o where concept_id = 2423 and value_numeric > 25)
-			WHERE concept_id = 4658 and value_coded in (4659)
-			AND obs_datetime BETWEEN '#startDate#' and '#endDate#'
-			
-
-			UNION
-			-- high risk pregnancies
-			
-			select o.person_id as Id,'high_risk_pregnancy' as ANC_visit,'Above20' as ageGroup
-			from obs o
-			INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0 
-			AND o.person_Id in (select id
-								FROM
-								( 
-									select distinct o.person_id AS Id,
-									floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age								   
-									from obs o
-									INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
-									INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3	
-								) as a
-								WHERE age >=20
-												)
-			WHERE concept_id = 4352 and value_coded != 4353
-			AND obs_datetime BETWEEN '#startDate#' and '#endDate#'
-			
-
-			UNION
-			-- total ANC follow up visits 2nd,3rd,4th
-			
-			select o.person_id as Id,'followUp_visit' as ANC_visit,'Above20' as ageGroup
-			from obs o
-			INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
-			AND o.person_Id in (select id
-								FROM
-								( 
-									select distinct o.person_id AS Id,
-									floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age								   
-									from obs o
-									INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
-									INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3	
-								) as a
-								WHERE age >=20
-												)
-			where concept_id = 4658 and value_coded = 4660
-			AND obs_datetime BETWEEN '#startDate#' and '#endDate#'
-			
-
-			UNION
-			-- Syphilis_Positive_Results_less_36_Weeks
-			
-			select distinct a.person_id, 'Syphilis_Positive_Results_less_36_Weeks' as ANC_visit,'Above20' as ageGroup
-			from obs a
-			INNER JOIN person ON person.person_id = a.person_id AND person.voided = 0
-			AND a.person_Id in (select id
-								FROM
-								( 
-									select distinct o.person_id AS Id,
-									floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age								   
-									from obs o
-									INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
-									INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3	
-								) as a
-								WHERE Age <=20
-							)
-			AND a.person_Id in (select Id
-								FROM
-								( 
-									select distinct o.person_id AS Id, o.value_numeric as Gestational_Period
-										from obs o
-										where o.concept_id = 2423 and o.voided = 0
-										and o.obs_datetime >= CAST('#startDate#' AS DATE)
-										and o.obs_datetime <= CAST('#endDate#' AS DATE)	
-								) as Ges_Period
-								WHERE Gestational_Period < 36
-							)
-			where concept_id = 4305 and value_coded =4306
-			and a.obs_datetime >= CAST('#startDate#' AS DATE)
-    		and a.obs_datetime <= CAST('#endDate#'AS DATE)
-			
-
-			UNION
-			-- Syphilis_Positive_Results_Greater_36_Weeks
-			
-			select distinct a.person_id, 'Syphilis_Positive_Results_Greater_36_Weeks' as ANC_visit,'Above20' as ageGroup
-			from obs a
-			INNER JOIN person ON person.person_id = a.person_id AND person.voided = 0
-			AND a.person_Id in (select id
-								FROM
-								( 
-									select distinct o.person_id AS Id,
-									floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age								   
-									from obs o
-									INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
-									INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3	
-								) as a
-								WHERE Age <=20
-							)
-			AND a.person_Id in (select Id
-								FROM
-								( 
-									select distinct o.person_id AS Id, o.value_numeric as Gestational_Period
-										from obs o
-										where o.concept_id = 2423 and o.voided = 0
-										and o.obs_datetime >= CAST('#startDate#' AS DATE)
-										and o.obs_datetime <= CAST('#endDate#' AS DATE)	
-								) as Ges_Period
-								WHERE Gestational_Period > 36
-							)
-			where concept_id = 4305 and value_coded =4306
-			and a.obs_datetime >= CAST('#startDate#' AS DATE)
-    		and a.obs_datetime <= CAST('#endDate#'AS DATE)
-
-			UNION
-
-			-- Syphilis Treatment Completed
-			select distinct a.person_id, 'Syphilis_Treatment_Completed' as ANC_visit,'15-19years' as ageGroup
-			from obs a
-			INNER JOIN person ON person.person_id = a.person_id AND person.voided = 0
-			AND a.person_Id in (select id
-								FROM
-								( 
-									select distinct o.person_id AS Id,
-									floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age								   
-									from obs o
-									INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
-									INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3	
-								) as a
-								WHERE  Age >= 20
-							)
-			where concept_id = 1732 and value_coded = 2146
-			and a.obs_datetime >= CAST('#startDate#' AS DATE)
-    		and a.obs_datetime <= CAST('#endDate#'AS DATE)
-
-			UNION
-			-- Haemoglobin_less_12gdl_less_36_weeks
-
-			select distinct a.person_id, 'Haemoglobin_less_12gdl_less_36_weeks' as ANC_visit,'Above20' as ageGroup
-			from obs a
-			INNER JOIN person ON person.person_id = a.person_id AND person.voided = 0
-			AND a.person_Id in (select id
-								FROM
-								( 
-									select distinct o.person_id AS Id,
-									floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age								   
-									from obs o
-									INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
-									INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3	
-								) as a
-								WHERE Age >=20
-							)
-			AND a.person_Id in (select Id
-								FROM
-								( 
-									select distinct o.person_id AS Id, o.value_numeric as Gestational_Period
-										from obs o
-										where o.concept_id = 2423 and o.voided = 0
-										and o.obs_datetime >= CAST('#startDate#' AS DATE)
-										and o.obs_datetime <= CAST('#endDate#' AS DATE)	
-								) as Ges_Period
-								WHERE Gestational_Period < 36
-							)
-			AND a.person_Id in (select Id
-								FROM
-								( 
-									select distinct o.person_id AS Id, o.value_numeric as Haemoglobin
-										from obs o
-										where o.concept_id = 3204 
-										and o.voided = 0
-										and o.obs_datetime >= CAST('#startDate#' AS DATE)
-										and o.obs_datetime <= CAST('#endDate#' AS DATE)	
-								) as Haemo
-								WHERE Haemoglobin < 12
-							)
-			UNION
-			-- Haemoglobin_Greater_12gdl_less_36_weeks
-
-			select distinct a.person_id, 'Haemoglobin_Greater_12gdl_less_36_weeks' as ANC_visit,'Above20' as ageGroup
-			from obs a
-			INNER JOIN person ON person.person_id = a.person_id AND person.voided = 0
-			AND a.person_Id in (select id
-								FROM
-								( 
-									select distinct o.person_id AS Id,
-									floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age								   
-									from obs o
-									INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
-									INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3	
-								) as a
-								WHERE Age >=20
-							)
-			AND a.person_Id in (select Id
-								FROM
-								( 
-									select distinct o.person_id AS Id, o.value_numeric as Gestational_Period
-										from obs o
-										where o.concept_id = 2423 and o.voided = 0
-										and o.obs_datetime >= CAST('#startDate#' AS DATE)
-										and o.obs_datetime <= CAST('#endDate#' AS DATE)	
-								) as Ges_Period
-								WHERE Gestational_Period < 36
-							)
-			AND a.person_Id in (select Id
-								FROM
-								( 
-									select distinct o.person_id AS Id, o.value_numeric as Haemoglobin
-										from obs o
-										where o.concept_id = 3204 
-										and o.voided = 0
-										and o.obs_datetime >= CAST('#startDate#' AS DATE)
-										and o.obs_datetime <= CAST('#endDate#' AS DATE)	
-								) as Haemo
-								WHERE Haemoglobin >= 12
-							)
-
-		    UNION
-			-- Haemoglobin_less_12gdl_Greater_36_weeks
-
-			select distinct a.person_id, 'Haemoglobin_less_12gdl_Greater_36_weeks' as ANC_visit,'Above20' as ageGroup
-			from obs a
-			INNER JOIN person ON person.person_id = a.person_id AND person.voided = 0
-			AND a.person_Id in (select id
-								FROM
-								( 
-									select distinct o.person_id AS Id,
-									floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age								   
-									from obs o
-									INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
-									INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3	
-								) as a
-								WHERE Age >=20
-							)
-			AND a.person_Id in (select Id
-								FROM
-								( 
-									select distinct o.person_id AS Id, o.value_numeric as Gestational_Period
-										from obs o
-										where o.concept_id = 2423 and o.voided = 0
-										and o.obs_datetime >= CAST('#startDate#' AS DATE)
-										and o.obs_datetime <= CAST('#endDate#' AS DATE)	
-								) as Ges_Period
-								WHERE Gestational_Period >= 36
-							)
-			AND a.person_Id in (select Id
-								FROM
-								( 
-									select distinct o.person_id AS Id, o.value_numeric as Haemoglobin
-										from obs o
-										where o.concept_id = 3204 
-										and o.voided = 0
-										and o.obs_datetime >= CAST('#startDate#' AS DATE)
-										and o.obs_datetime <= CAST('#endDate#' AS DATE)	
-								) as Haemo
-								WHERE Haemoglobin < 12
-							)
-			UNION
-			-- Haemoglobin_Greater_12gdl_Greater_36_weeks
-
-			select distinct a.person_id, 'Haemoglobin_Greater_12gdl_less_36_weeks' as ANC_visit,'Above20' as ageGroup
-			from obs a
-			INNER JOIN person ON person.person_id = a.person_id AND person.voided = 0
-			AND a.person_Id in (select id
-								FROM
-								( 
-									select distinct o.person_id AS Id,
-									floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age								   
-									from obs o
-									INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
-									INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3	
-								) as a
-								WHERE Age >=20
-							)
-			AND a.person_Id in (select Id
-								FROM
-								( 
-									select distinct o.person_id AS Id, o.value_numeric as Gestational_Period
-										from obs o
-										where o.concept_id = 2423 and o.voided = 0
-										and o.obs_datetime >= CAST('#startDate#' AS DATE)
-										and o.obs_datetime <= CAST('#endDate#' AS DATE)	
-								) as Ges_Period
-								WHERE Gestational_Period >= 36
-							)
-			AND a.person_Id in (select Id
-								FROM
-								( 
-									select distinct o.person_id AS Id, o.value_numeric as Haemoglobin
-										from obs o
-										where o.concept_id = 3204 
-										and o.voided = 0
-										and o.obs_datetime >= CAST('#startDate#' AS DATE)
-										and o.obs_datetime <= CAST('#endDate#' AS DATE)	
-								) as Haemo
-								WHERE Haemoglobin >= 12
-							)
-
-
-			UNION
-
-			select distinct a.person_id, 'MUAC_less_23' as ANC_visit,'Above20' as ageGroup
-			from obs a
-			INNER JOIN person ON person.person_id = a.person_id AND person.voided = 0
-			AND a.person_Id in (select id
-								FROM
-								( 
-									select distinct o.person_id AS Id,
-									floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age								   
-									from obs o
-									INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
-									INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3	
-								) as a
-								WHERE Age >=20
-							) 
-			AND a.person_Id in (Select Id
-									FROM
-									(	select person_id as Id, value_numeric as MUAC
-											from obs o 
-											where concept_id = 2086 and voided = 0
-											and o. obs_datetime >= CAST('#startDate#' AS DATE)
-											and o. obs_datetime <= CAST('#endDate#'AS DATE)
-											and o.value_numeric <23
-									) as Muac
-									)
-
-			UNION
-
-			select distinct a.person_id, 'Suspected_with_TB' as ANC_visit,'Above20' as ageGroup
-			from obs a
-			INNER JOIN person ON person.person_id = a.person_id AND person.voided = 0
-			AND a.person_Id in (select id
-								FROM
-								( 
-									select distinct o.person_id AS Id,
-									floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age								   
-									from obs o
-									INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
-									INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3	
-								) as a
-								WHERE Age >=20
-							)
-			AND a.person_Id in (Select Id
-									FROM
-									(	select person_id as Id, value_coded as TB_Status
-										from obs os
-										where concept_id = 3710 and voided = 0
-										)TB_Status
-
-										inner join
-										(
-											select concept_id, name AS Tuberculosis
-												from concept_name 
-													where name in ('No signs', 'Suspected / Probable', 'On TB treatment') 
-										) tb_concept
-										on tb_concept.concept_id = TB_Status.TB_Status 
-										where tb_concept.Tuberculosis = 'Suspected / Probable'
-									)
-
-			UNION
-			-- Pregnancies protected against tetatus
-			
-			select o.person_id as Id,'tetatus_protected' as ANC_visit,'Above20' as ageGroup
-			from obs o
-			INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
-			AND o.person_Id in (select id
-								FROM
-								( 
-									select distinct o.person_id AS Id,
-									floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age								   
-									from obs o
-									INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
-									INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3	
-								) as a
-								WHERE age >=20
-												)
-			where concept_id = 4317
-			AND obs_datetime BETWEEN '#startDate#' and '#endDate#'
-			
-
-			UNION
-			-- Provided with Iron 4299 and Folate 4300
-			
-			select o.person_id as Id,'Iron_folate' as ANC_visit,'Above20' as ageGroup
-			from obs o
-			INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
-			AND o.person_Id in (select id
-								FROM
-								( 
-									select distinct o.person_id AS Id,
-									floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age								   
-									from obs o
-									INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
-									INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3	
-								) as a
-								WHERE age >=20
-												)
-			and concept_id in (4300,4299) AND value_coded in (4668)
-			AND obs_datetime BETWEEN '#startDate#' and '#endDate#'
-			
-
-			UNION
-			-- 
-			select o.person_id as Id,'HIV_positive_male_partner' as ANC_visit,'Above20' as ageGroup
-			from obs o
-			INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
-			AND o.person_Id in (select id
-								FROM
-								( 
-									select distinct o.person_id AS Id,
-									floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age								   
-									from obs o
-									INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
-									INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3	
-								) as a
-								WHERE age >=20
-												)
-			where concept_id = 1741 and value_coded in ( 1738,4323)
-			AND obs_datetime BETWEEN '#startDate#' and '#endDate#'
-
-			UNION
-			-- Referred for TB treatment
-			select o.person_id as Id,'TB_Treatment' as ANC_visit,'Above20' as ageGroup
-			from obs o
-			INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
-			AND o.person_Id in (select id
-								FROM
-								( 
-									select distinct o.person_id AS Id,
-									floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age								   
-									from obs o
-									INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
-									INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3	
-								) as a
-								WHERE age >=20
-												)
-			where concept_id = 4337 and value_coded != 1975
-			AND obs_datetime BETWEEN '#startDate#' and '#endDate#'
-
-			UNION
-			-- Initiated on INH
-			select o.person_id as Id,'ON_INH' as ANC_visit,'Above20' as ageGroup
-			from obs o
-			INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
-			AND o.person_Id in (select id
-								FROM
-								( 
-									select distinct o.person_id AS Id,
-									floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age								   
-									from obs o
-									INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
-									INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3	
-								) as a
-								WHERE age >=20
-												)
-			where concept_id = 4337 and value_coded = 4333
-			AND obs_datetime BETWEEN '#startDate#' and '#endDate#'
-
-			UNION
-			-- total pregnancy complications
-			select o.person_id as Id,'pregnancy_complications' as ANC_visit,'Above20' as ageGroup
-			from obs o
-			INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
-			AND o.person_Id in (select id
-								FROM
-								( 
-									select distinct o.person_id AS Id,
-									floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age								   
-									from obs o
-									INNER JOIN person ON person.person_id = o.person_id AND person.voided = 0
-									INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3	
-								) as a
-								WHERE age >=20
-												)
-			where (concept_id = 4367 and value_coded != 4368)
-			AND obs_datetime BETWEEN '#startDate#' and '#endDate#'
-		)as a	
-
-
-    left outer join
+	  SELECT distinct Id,patientIdentifier, patientName, Age,ageGroup, Visit_type, Trimester, Estimated_Date_Delivery, High_Risk_Pregnancy, Syphilis_Screening_Results,
+		Syphilis_Treatment_Completed, Haemoglobin, HIV_Status_Known_Before_Visit, Final_HIV_Status, Subsequent_HIV_Test_Results , MUAC, TB_Status,
+		Iron, Folate, Blood_Group
+
+FROM
+(
+select distinct patient.patient_id AS Id,
+						patient_identifier.identifier AS patientIdentifier,
+						concat(person_name.given_name, ' ', person_name.family_name) AS patientName,
+						floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age,
+						observed_age_group.name AS ageGroup
+from obs o
+    -- ANC Clients
+     INNER JOIN patient ON o.person_id = patient.patient_id
+		AND o.person_id in
+			(
+				select latest_consultation.person_id
+                from
+				(
+					select B.person_id, B.obs_group_id, B.obs_datetime
+									from obs B
+									inner join 
+									(select person_id, max(obs_datetime), SUBSTRING(MAX(CONCAT(obs_datetime, obs_id)), 20) AS observation_id
+									from obs where concept_id = 4663
+									and obs_datetime >= cast('#startDate#' as date)
+									and obs_datetime <= cast('#endDate#' as date)
+									and voided = 0
+									group by person_id) as A
+									on A.observation_id = B.obs_group_id
+									where concept_id = 4658
+									and A.observation_id = B.obs_group_id
+                                    and voided = 0	
+									group by B.person_id
+
+				) AS latest_consultation
+				
+			) 
+	    AND patient.voided = 0 AND o.voided = 0
+    INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
+	INNER JOIN person_name ON person.person_id = person_name.person_id AND person_name.preferred = 1
+    INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1
+	INNER JOIN reporting_age_group AS observed_age_group ON
+		CAST('#endDate#' AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
+		AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
+	WHERE observed_age_group.report_group_name = 'Modified_Ages'
+	AND CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+	AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE) 
+)AS ANC_Clients
+
+left outer join 
+
+(
+	-- Visit type (First visit or subsequent visit)
+ select o.person_id,case
+ when o.value_coded = 4659 then "First Visit"
+ when o.value_coded = 4660 then "Subsequent Visit"
+else "N/A"
+end AS Visit_type
+from obs o
+where o.concept_id = 4658 and o.voided = 0
+and CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+and CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE) 
+Group by o.person_id
+) VisitType
+on ANC_Clients.Id = VisitType.person_id
+
+left outer join 
+
+(
+	-- Trimester for First visit
+ select o.person_id,case
+ when o.value_numeric < 12 then "1st Trimester"
+ when o.value_numeric > 11 
+ and o.value_numeric < 25 then "2nd Trimetser"
+ when o.value_numeric > 24 then "3rd Trimester"
+else "N/A"
+end AS Trimester
+from obs o
+where o.concept_id = 2423 and o.voided = 0
+and CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+and CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
+Group by o.person_id
+) Gestational_Period
+on ANC_Clients.Id = Gestational_Period.person_id
+
+-- EDD
+left outer join
+	(
+	select person_id,CAST(value_datetime AS DATE) as Estimated_Date_Delivery
+	from obs where concept_id = 4627 and voided = 0
+	and CAST(obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+ 	and CAST(obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
+	)edd_date
+	on ANC_Clients.Id = edd_date.person_id
+
+left outer join
+
+	(
+	-- Syphilis Treatment Completed
+		select o.person_id,case
+		when o.value_coded = 4353 then "No Risk"
+		when o.value_coded = 4354 then "Age less than 16 years"
+		when o.value_coded = 4355 then "Age more than 40 years"
+		when o.value_coded = 4356 then "Previous SB or NND"
+		when o.value_coded = 4357 then "History 3 or more consecutive spontaneous miscarriages"
+		when o.value_coded = 4358 then "Birth Weight< 2500g"
+		when o.value_coded = 4359 then "Birth Weight > 4500g"
+		when o.value_coded = 4360 then "Previous Hx of Hypertension/pre-eclampsia/eclampsia"
+		when o.value_coded = 4361 then "Isoimmunization Rh(-)"
+		when o.value_coded = 1050 then "Renal Disease"
+		when o.value_coded = 4362 then "Cardiac Disease"
+		when o.value_coded = 1048 then "Diabetes"
+		when o.value_coded = 4363 then "Known Substance Abuse"
+		when o.value_coded = 4364 then "Pelvic Mass"
+		when o.value_coded = 4365 then "Other Medical Problems"
+		when o.value_coded = 4366 then "Previous Surgery on Reproductive Tract"
+		when o.value_coded = 1033 then "Other Answer"
+		else "N/A"
+		end AS High_Risk_Pregnancy
+		from obs o
+		where o.concept_id = 4352 and o.voided = 0
+		and o.obs_datetime >= CAST('#startDate#' AS DATE)
+		and o.obs_datetime <= CAST('#endDate#'AS DATE)
+		Group by o.person_id
+		) High_Risk_Preg
+		on ANC_Clients.Id = High_Risk_Preg.person_id
+
+-- Syphilis_Screening_Results
+left outer join
+	(
+		select o.person_id,
+			case 
+				when latest.Syphilis_Coded = 4306 then 'Reactive'
+				when latest.Syphilis_Coded = 4307 then 'Non Reactive'
+				when latest.Syphilis_Coded = 4308 then 'Not done'
+			else 'NewResult' end as Syphilis_Screening_Results
+		from obs o 
+		inner join 
+				(
+				select oss.person_id, MAX(oss.obs_datetime) as max_observation,
+				SUBSTRING(MAX(CONCAT(oss.obs_datetime, oss.value_coded)), 20) as Syphilis_Coded
+				from obs oss
+				where oss.concept_id = 4305 and oss.voided=0
+				and oss.obs_datetime <= cast('#endDate#' as date)
+				group by oss.person_id
+				)latest 
+			on latest.person_id = o.person_id
+			where concept_id = 4305
+			and  o.obs_datetime = max_observation
+	) Syphilis_Screening_Res
+on Syphilis_Screening_Res.person_id = ANC_Clients.Id
+
+left outer join
+	(
+	-- Syphilis Treatment Completed
+	select o.person_id,
+			case 
+				when latest.treatment_Coded = 2146 then "Yes"
+				when latest.treatment_Coded = 2147 then "No"
+				when latest.treatment_Coded = 1975 then "Not applicable"
+			else 'N/A' end as Syphilis_Treatment_Completed
+		from obs o 
+		inner join 
+				(
+				select oss.person_id, MAX(oss.obs_datetime) as max_observation,
+				SUBSTRING(MAX(CONCAT(oss.obs_datetime, oss.value_coded)), 20) as treatment_Coded
+				from obs oss
+				where oss.concept_id = 1732 and oss.voided=0
+				and oss.obs_datetime <= cast('#endDate#' as date)
+				group by oss.person_id
+				)latest 
+			on latest.person_id = o.person_id
+			where concept_id = 1732
+			and  o.obs_datetime = max_observation
+		
+		) Syphilis_Treatment_Comp
+		on ANC_Clients.Id = Syphilis_Treatment_Comp.person_id
+
+-- ANEMIA HAEMOGLOBIN
+left outer join
+(select o.person_id, Haemoglobin_Anemia as Haemoglobin
+from obs o 
+inner join 
+		(
+		 select oss.person_id, MAX(oss.obs_datetime) as max_observation,
+		 SUBSTRING(MAX(CONCAT(oss.obs_datetime, oss.value_numeric)), 20) as Haemoglobin_Anemia
+		 from obs oss
+		 where oss.concept_id = 3204 and oss.voided=0
+		 and oss.obs_datetime < cast('#endDate#' as date)
+		 group by oss.person_id
+		)latest 
+	on latest.person_id = o.person_id
+	where concept_id = 3204
+	and  o.obs_datetime = max_observation	
+	)Haemoglobin_Anemia
+ON ANC_Clients.Id = Haemoglobin_Anemia.person_id
+ 
+-- HIV Status Known Before Visit	
+left outer join
 	(
 	select person_id, value_coded as Status_Code
 	from obs os
@@ -1732,7 +232,172 @@ FROM
 				where name in ('Positive', 'Negative', 'Unknown') 
 	) hiv_concept_name
 	on hiv_concept_name.concept_id = HIV_Status.Status_Code 
-    on HIV_Status.person_id = a.Id
+
+on HIV_Status.person_id = ANC_Clients.Id
+
+-- Final HIV Status	
+left outer join
+	(
+	select person_id, value_coded as Final_Status_Code
+	from obs os
+	where concept_id = 2165 and voided = 0
+	)F_HIV_Status
+
+	inner join
+	(
+		select concept_id, name AS Final_HIV_Status
+			from concept_name 
+				where name in ('Positive', 'Negative') 
+	) final_hiv_concept_name
+	on final_hiv_concept_name.concept_id = F_HIV_Status.Final_Status_Code 
+
+on F_HIV_Status.person_id = ANC_Clients.Id
+
+-- Subsequent HIV Test Results
+
+left outer join
+
+	(
+		select o.person_id,case
+		when o.value_coded = 1738 then "Positive"
+		when o.value_coded = 1016 then "Negative"
+        when o.value_coded = 4321 then "Decline"
+		when o.value_coded = 1975 then "Not applicable"
+		else "N/A"
+		end AS Subsequent_HIV_Test_Results
+		from obs o
+		where o.concept_id = 4325 and o.voided = 0
+		and o.obs_datetime >= CAST('#startDate#' AS DATE)
+		and o.obs_datetime <= CAST('#endDate#'AS DATE)
+		Group by o.person_id
+		) Subsequent_HIV_Status
+		on ANC_Clients.Id = Subsequent_HIV_Status.person_id
+
+-- MUAC
+left outer join
+(select o.person_id, muac as MUAC
+from obs o 
+inner join 
+		(
+		 select oss.person_id, MAX(oss.obs_datetime) as max_observation,
+		 SUBSTRING(MAX(CONCAT(oss.obs_datetime, oss.value_numeric)), 20) as muac
+		 from obs oss
+		 where oss.concept_id = 2086 and oss.voided=0
+		 and oss.obs_datetime < cast('#endDate#' as date)
+		 group by oss.person_id
+		)latest 
+	on latest.person_id = o.person_id
+	where concept_id = 2086
+	and  o.obs_datetime = max_observation	
+	)muac
+ON ANC_Clients.Id = muac.person_id
+
+
+-- TB STATUS
+left outer join
+
+(select
+       o.person_id,
+       case
+           when value_coded = 3709 then "No Signs"
+           when value_coded = 1876 then "TB Suspect"
+		   when value_coded = 3639 then "On TB Treatment"
+           else ""
+       end AS TB_Status
+from obs o
+inner join
+		(
+		 select oss.person_id, MAX(oss.obs_datetime) as max_observation,
+		 SUBSTRING(MAX(CONCAT(oss.obs_datetime, oss.obs_id)), 20) as observation_id
+		 from obs oss
+		 where oss.concept_id = 3710 and oss.voided=0
+		 and cast(oss.obs_datetime as date) <= cast('#endDate#' as date)
+		 group by oss.person_id
+		)latest
+	on latest.person_id = o.person_id
+	where concept_id = 3710
+	and  o.obs_datetime = max_observation
+	) TBStatus
+ON ANC_Clients.Id = TBStatus.person_id
+
+-- Iron
+left outer join
+
+(select
+       o.person_id,
+       case
+           when o.value_coded = 4668 then "Prophylaxis"
+           when o.value_coded = 1067 then "On Treatment"
+		   when o.value_coded = 4298 then "Not Given"
+           else ""
+       end AS Iron
+from obs o
+inner join
+		(
+		 select oss.person_id, MAX(oss.obs_datetime) as max_observation,
+		 SUBSTRING(MAX(CONCAT(oss.obs_datetime, oss.obs_id)), 20) as observation_id
+		 from obs oss
+		 where oss.concept_id = 4299 and oss.voided=0
+		and cast(oss.obs_datetime as date) <= cast('#endDate#' as date)
+		 group by oss.person_id
+		)latest
+	on latest.person_id = o.person_id
+	where concept_id = 	4299
+	and  o.obs_datetime = max_observation
+	) Iron
+ON ANC_Clients.Id = Iron.person_id
+
+-- Folate
+
+left outer join
+
+(select
+       o.person_id,
+       case
+           when o.value_coded = 4668 then "Prophylaxis"
+           when o.value_coded = 1067 then "On Treatment"
+		   when o.value_coded = 4298 then "Not Given"
+           else ""
+       end AS Folate
+from obs o
+inner join
+		(
+		 select oss.person_id, MAX(oss.obs_datetime) as max_observation,
+		 SUBSTRING(MAX(CONCAT(oss.obs_datetime, oss.obs_id)), 20) as observation_id
+		 from obs oss
+		 where oss.concept_id = 4300 and oss.voided=0
+		and cast(oss.obs_datetime as date) <= cast('#endDate#' as date)
+		 group by oss.person_id
+		)latest
+	on latest.person_id = o.person_id
+	where concept_id = 	4300
+	and  o.obs_datetime = max_observation
+	) Folate
+ON ANC_Clients.Id = Folate.person_id
+
+
+left outer join 
+	(
+	-- Blood Group
+		select o.person_id,case
+		when o.value_coded = 4309 then "Blood Group, A+"
+		when o.value_coded = 4310 then "Blood Group, A-"
+		when o.value_coded = 4311 then "Blood Group, B+"
+		when o.value_coded = 4312 then "Blood Group, B-"
+		when o.value_coded = 4313 then "Blood Group, O+"
+		when o.value_coded = 4314 then "Blood Group, O-"
+		when o.value_coded = 4315 then "Blood Group, AB+"
+		when o.value_coded = 4316 then "Blood Group, AB-"
+		else "N/A"
+		end AS Blood_Group
+		from obs o
+		where o.concept_id = 1179 and o.voided = 0
+		and o.obs_datetime >= CAST('#startDate#' AS DATE)
+    	and o.obs_datetime <= CAST('#endDate#'AS DATE)
+		Group by o.person_id
+	) Blood_Group_Status
+		on ANC_Clients.Id = Blood_Group_Status.person_id
+
 
 	)as ab 
 	group by ageGroup
