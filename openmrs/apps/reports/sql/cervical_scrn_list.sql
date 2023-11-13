@@ -54,7 +54,7 @@ left outer join
            else ""
        end AS VIA_Result
        from obs os 
-       where os.concept_id = 327
+       where os.concept_id = 327 and os.concept_id = 4511
        and os.voided = 0
        AND CAST(os.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
        AND CAST(os.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)

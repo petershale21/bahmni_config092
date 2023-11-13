@@ -1,63 +1,30 @@
-SELECT distinct ID, patientIdentifier, patientName, Age, Visit_type, Trimester, Estimated_Date_Delivery, High_Risk_Pregnancy, Syphilis_Screening_Results,
+SELECT patientIdentifier, patientName, Age, Visit_type, Trimester, Estimated_Date_Delivery, High_Risk_Pregnancy, Syphilis_Screening_Results,
 		Syphilis_Treatment_Completed, Haemoglobin, HIV_Status_Known_Before_Visit, Final_HIV_Status, Subsequent_HIV_Test_Results , MUAC, TB_Status,
 		Iron, Folate, Blood_Group
 
 FROM
 (
-select distinct patient.patient_id AS Id,
+select patient.patient_id AS Id,
 						patient_identifier.identifier AS patientIdentifier,
 						concat(person_name.given_name, ' ', person_name.family_name) AS patientName,
-						floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age
+						floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age,
+						case 
+							when o.value_coded = 4659 then 'First Visit'
+							when o.value_coded = 4660 then 'Subsequent Visit'
+						else 'N/A' end as Visit_type
 from obs o
     -- ANC Clients
      INNER JOIN patient ON o.person_id = patient.patient_id
-		AND o.person_id in
-			(
-				select latest_consultation.person_id
-                from
-				(
-					select B.person_id, B.obs_group_id, B.obs_datetime
-									from obs B
-									inner join 
-									(select person_id, max(obs_datetime), SUBSTRING(MAX(CONCAT(obs_datetime, obs_id)), 20) AS observation_id
-									from obs where concept_id = 4663
-									and obs_datetime >= cast('#startDate#' as date)
-									and obs_datetime <= cast('#endDate#' as date)
-									and voided = 0
-									group by person_id) as A
-									on A.observation_id = B.obs_group_id
-									where concept_id = 4658
-									and A.observation_id = B.obs_group_id
-                                    and voided = 0	
-									group by B.person_id
-
-				) AS latest_consultation
-				
-			) 
 	    AND patient.voided = 0 AND o.voided = 0
     INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
 	INNER JOIN person_name ON person.person_id = person_name.person_id AND person_name.preferred = 1
     INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1
-	WHERE CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
-	AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE) 
+	where concept_id =4658
+    and o.voided = 0
+	And CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+	AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
+	order by o.person_id
 )AS ANC_Clients
-
-left outer join 
-
-(
-	-- Visit type (First visit or subsequent visit)
- select o.person_id,case
- when o.value_coded = 4659 then "First Visit"
- when o.value_coded = 4660 then "Subsequent Visit"
-else "N/A"
-end AS Visit_type
-from obs o
-where o.concept_id = 4658 and o.voided = 0
-and CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
-and CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE) 
-Group by o.person_id
-) VisitType
-on ANC_Clients.Id = VisitType.person_id
 
 left outer join 
 
@@ -81,8 +48,10 @@ on ANC_Clients.Id = Gestational_Period.person_id
 -- EDD
 left outer join
 	(
-	select person_id,CAST(value_datetime AS DATE) as Estimated_Date_Delivery
+	select distinct person_id,CAST(value_datetime AS DATE) as Estimated_Date_Delivery
 	from obs where concept_id = 4627 and voided = 0
+	and CAST(obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+ 	and CAST(obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 	)edd_date
 	on ANC_Clients.Id = edd_date.person_id
 
@@ -190,48 +159,61 @@ ON ANC_Clients.Id = Haemoglobin_Anemia.person_id
  
 -- HIV Status Known Before Visit	
 left outer join
-	(
-	select person_id, value_coded as Status_Code
-	from obs os
-	where concept_id = 4427 and voided = 0
-	and os.obs_datetime >= CAST('#startDate#' AS DATE)
-    and os.obs_datetime <= CAST('#endDate#'AS DATE)
-	)HIV_Status
-
-	inner join
-	(
-		select concept_id, name AS HIV_Status_Known_Before_Visit
-			from concept_name 
-				where name in ('Positive', 'Negative', 'Unknown') 
-	) hiv_concept_name
-	on hiv_concept_name.concept_id = HIV_Status.Status_Code 
-
-on HIV_Status.person_id = ANC_Clients.Id
+(
+	select distinct o.person_id as Id,
+			case 
+				when o.value_coded = 1016 then 'Negative'
+				when o.value_coded = 1738 then 'Positive'
+				when o.value_coded = 1739 then 'Unknown'
+			else 'N/A' end as HIV_Status_Known_Before_Visit
+		from obs o 
+		inner join 
+				(
+				select oss.person_id, MAX(oss.obs_datetime) as max_observation
+				from obs oss
+				where oss.concept_id = 4427 and oss.voided=0
+				and oss.obs_datetime >= cast('#startDate#' as date)
+				and oss.obs_datetime <= cast('#endDate#' as date)
+				group by oss.person_id
+				)latest 
+			on latest.person_id = o.person_id
+			where concept_id = 4427
+			group by o.person_id
+			and  o.obs_datetime = max_observation
+	) HIV_Status
+	on ANC_Clients.Id = HIV_Status.Id
 
 -- Final HIV Status	
 left outer join
-	(
-	select person_id, value_coded as Final_Status_Code
-	from obs os
-	where concept_id = 2165 and voided = 0
-	)F_HIV_Status
-
-	inner join
-	(
-		select concept_id, name AS Final_HIV_Status
-			from concept_name 
-				where name in ('Positive', 'Negative') 
-	) final_hiv_concept_name
-	on final_hiv_concept_name.concept_id = F_HIV_Status.Final_Status_Code 
-
-on F_HIV_Status.person_id = ANC_Clients.Id
+(
+	select distinct o.person_id as Id,
+			case 
+				when o.value_coded = 1016 then 'Negative'
+				when o.value_coded = 1738 then 'Positive'
+			else 'N/A' end as Final_HIV_Status
+		from obs o 
+		inner join 
+				(
+				select oss.person_id, MAX(oss.obs_datetime) as max_observation
+				from obs oss
+				where oss.concept_id = 2165 and oss.voided=0
+				and oss.obs_datetime >= cast('#startDate#' as date)
+				and oss.obs_datetime <= cast('#endDate#' as date)
+				group by oss.person_id
+				)latest 
+			on latest.person_id = o.person_id
+			where concept_id = 2165
+			group by o.person_id
+			and  o.obs_datetime = max_observation
+	) F_HIV_Status
+	on F_HIV_Status.Id = ANC_Clients.Id
 
 -- Subsequent HIV Test Results
 
 left outer join
 
 	(
-		select o.person_id,case
+		select distinct o.person_id,case
 		when o.value_coded = 1738 then "Positive"
 		when o.value_coded = 1016 then "Negative"
         when o.value_coded = 4321 then "Decline"
@@ -248,7 +230,7 @@ left outer join
 
 -- MUAC
 left outer join
-(select o.person_id, muac as MUAC
+(select distinct o.person_id, muac as MUAC
 from obs o 
 inner join 
 		(
@@ -270,7 +252,7 @@ ON ANC_Clients.Id = muac.person_id
 left outer join
 
 (select
-       o.person_id,
+       distinct o.person_id,
        case
            when value_coded = 3709 then "No Signs"
            when value_coded = 1876 then "TB Suspect"
@@ -296,7 +278,7 @@ ON ANC_Clients.Id = TBStatus.person_id
 -- Iron
 left outer join
 
-(select
+(select distinct
        o.person_id,
        case
            when o.value_coded = 4668 then "Prophylaxis"
@@ -324,7 +306,7 @@ ON ANC_Clients.Id = Iron.person_id
 
 left outer join
 
-(select
+(select distinct
        o.person_id,
        case
            when o.value_coded = 4668 then "Prophylaxis"
@@ -352,7 +334,7 @@ ON ANC_Clients.Id = Folate.person_id
 left outer join 
 	(
 	-- Blood Group
-		select o.person_id,case
+		select distinct o.person_id,case
 		when o.value_coded = 4309 then "Blood Group, A+"
 		when o.value_coded = 4310 then "Blood Group, A-"
 		when o.value_coded = 4311 then "Blood Group, B+"
