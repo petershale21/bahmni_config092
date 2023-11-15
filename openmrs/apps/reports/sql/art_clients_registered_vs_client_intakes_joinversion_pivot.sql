@@ -26,7 +26,7 @@ FROM
 		INNER JOIN obs o ON o.person_id = p.person_id AND o.voided = 0 AND o.person_id in (select person_id from obs where concept_id = 2403 and voided = 0) AND o.person_id not in (select person_id from obs where concept_id = 5416 and value_coded = 1 and voided = 0)
 		INNER JOIN person_name pn ON p.person_id = pn.person_id
 		INNER JOIN patient_identifier pi1 ON pi1.patient_id = p.person_id AND pi1.voided = 0 and pi1.preferred = 1 AND pi1.identifier_type = 3
-		LEFT JOIN patient_identifier pi2 ON pi2.patient_id = p.person_id AND pi2.identifier_type in (5,12)
+		LEFT JOIN patient_identifier pi2 ON pi2.patient_id = p.person_id AND pi2.identifier_type = 5
 		JOIN location l on o.location_id = l.location_id and l.retired=0
 		WHERE 	p.voided = 0
 		group by pi1.identifier
@@ -49,7 +49,7 @@ UNION
 			INNER JOIN person_name ON person.person_id = person_name.person_id
 			INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3
 			JOIN location l on o.location_id = l.location_id and l.retired=0
-			WHERE p.identifier_type in (5,12) 
+			WHERE p.identifier_type = 5
 			AND o.voided = 0
 			AND o.person_id not in (select person_id from obs where concept_id = 2403 and voided = 0)
 			group by patient_identifier.identifier
@@ -87,7 +87,7 @@ FROM
 		INNER JOIN obs o ON o.person_id = p.person_id AND o.voided = 0 AND o.person_id in (select person_id from obs where concept_id = 2403 and voided = 0) AND o.person_id not in (select person_id from obs where concept_id = 5416 and value_coded = 1 and voided = 0)
 		INNER JOIN person_name pn ON p.person_id = pn.person_id
 		INNER JOIN patient_identifier pi1 ON pi1.patient_id = p.person_id AND pi1.voided = 0 and pi1.preferred = 1 AND pi1.identifier_type = 3
-		LEFT JOIN patient_identifier pi2 ON pi2.patient_id = p.person_id AND pi2.identifier_type in (5,12)
+		LEFT JOIN patient_identifier pi2 ON pi2.patient_id = p.person_id AND pi2.identifier_type = 5
 		JOIN location l on o.location_id = l.location_id and l.retired=0
 		WHERE 	p.voided = 0
 		group by pi1.identifier
@@ -110,7 +110,7 @@ UNION
 			INNER JOIN person_name ON person.person_id = person_name.person_id
 			INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3
 			JOIN location l on o.location_id = l.location_id and l.retired=0
-			WHERE p.identifier_type in (5,12) 
+			WHERE p.identifier_type = 5
 			AND o.voided = 0
 			AND o.person_id not in (select person_id from obs where concept_id = 2403 and voided = 0)
 			group by patient_identifier.identifier
