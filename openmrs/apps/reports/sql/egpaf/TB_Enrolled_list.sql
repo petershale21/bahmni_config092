@@ -277,20 +277,30 @@ on key_pop.person_id = TB_HISTORY.Id
 
 -- HIV STATUS	
 left outer join
-	(
-	select person_id, value_coded as Status_Code
-	from obs where concept_id = 4666 and voided = 0
-	)Status
-
-	inner join
-	(
-		select concept_id, name AS HIV_Status
-			from concept_name 
-				where name in ('Known Positive', 'Known Negative', 'New Positive', 'New Negative') 
-	) hiv_concept_name
-	on hiv_concept_name.concept_id = Status.Status_Code 
-
-on Status.person_id = TB_HISTORY.Id 
+(
+	select distinct o.person_id as Id,
+			case 
+				when o.value_coded = 4323 then 'Known Positive'
+				when o.value_coded = 4324 then 'Known Negative'
+				when o.value_coded = 4664 then 'New Positive'
+                when o.value_coded = 4665 then 'New Negative'
+			else 'N/A' end as HIV_Status
+		from obs o 
+		inner join 
+				(
+				select oss.person_id, MAX(oss.obs_datetime) as max_observation
+				from obs oss
+				where oss.concept_id = 4666 and oss.voided=0
+				and oss.obs_datetime >= cast('#startDate#' as date)
+				and oss.obs_datetime <= cast('#endDate#' as date)
+				group by oss.person_id
+				)latest 
+			on latest.person_id = o.person_id
+			where concept_id = 4666
+			group by o.person_id
+			and  o.obs_datetime = max_observation
+	) Status
+on Status.Id = TB_HISTORY.Id 
 
 -- Active on ART (Initiated, Seen, Missed)
 left outer join

@@ -1390,17 +1390,24 @@
     }
 },
 "LABORATORY_List": {
-    "name": "LAB-01 | Lab_Report (List)",
+    "name": "LAB-001 | Lab_Report (List)",
     "type": "MRSGeneric",
     "config": {
         "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/Test_Sent_VS_Received.sql/"
     }
 },
 "LABORATORY_Pivot": {
-    "name": "LAB-02 | Lab_Report (Pivot)",
+    "name": "LAB-002 | Lab_Report (Pivot)",
     "type": "MRSGeneric",
     "config": {
         "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/Test_Sent_VS_Test_Received_pivot.sql/"
+    }
+},
+"LABORATORY_Shipping_List": {
+    "name": "LAB-003 | Lab Shipping List",
+    "type": "MRSGeneric",
+    "config": {
+        "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/shippinglist.sql/"
     }
 },
 "Cervical_Cancer_Screening": {
