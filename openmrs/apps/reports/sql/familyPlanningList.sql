@@ -82,7 +82,7 @@ FROM
 					when value_coded = 2146 then "Yes"
 					when value_coded = 2147 then "No"
 					when value_coded = 1975 then "N/A"
-					else ""
+					else "Not Provided"
 				end AS Prep_Provided
 			from obs o
 			inner join
@@ -186,7 +186,7 @@ FROM
 						WHEN value_coded = 4306 THEN 'Reactive' 
 						WHEN value_coded = 4307 THEN 'Non-Reactive' 
 						WHEN value_coded = 4308 THEN 'Not Done' 
-						ELSE ''
+						ELSE 'Not Provided'
 				end AS STI_Screening
 				from 
 				(
