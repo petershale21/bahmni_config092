@@ -11,7 +11,8 @@
     "order": 1,
     "requiredPrivilege": "app:clinical:observationTab"
   },
-    "searchshr": {
+
+  "searchshr": {
     "id": "bahmni.clinical.sharedhealthrecord.search",
     "extensionPointId": "org.bahmni.clinical.sharedhealthrecord.board",
     "type": "link",
@@ -166,22 +167,7 @@
         "label": "Viral Load",
         "order": 6,
         "requiredPrivilege": "app:clinical"
-    },
-    
-    "cagClinicalPatientSearch": {
-      "id": "bahmni.clinical.patients.search.CagPatients",
-      "extensionPointId": "org.bahmni.patient.search",
-      "type": "config",
-      "extensionParams": {
-              "searchHandler": "emrapi.sqlSearch.cag",
-              "translationKey": "MODULE_LABEL_CAG",
-              "forwardUrl": "#/default/patient/{{patientUuid}}/dashboard"
-      },
-      "label": "Viral Load",
-      "order": 6,
-      "requiredPrivilege": "app:clinical"
-  },
-
+    },    
     "bahmniClinicalPatientsSearchTBIntakeOrFollUpPatients": {
         "id": "bahmni.clinical.patients.search.TBIntakeOrFollUpPatients",
         "extensionPointId": "org.bahmni.patient.search",
@@ -195,7 +181,6 @@
         "order": 6,
         "requiredPrivilege": "app:clinical"
     },
-
 
     "bahmniClinicalPatientsSearchHTSOnly": {
         "id": "bahmni.clinical.patients.search.htsonlypatients",
