@@ -11,6 +11,7 @@
     "order": 1,
     "requiredPrivilege": "app:clinical:observationTab"
   },
+
   "searchshr": {
     "id": "bahmni.clinical.sharedhealthrecord.search",
     "extensionPointId": "org.bahmni.clinical.sharedhealthrecord.board",
