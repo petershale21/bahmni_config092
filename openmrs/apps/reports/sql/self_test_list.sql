@@ -1,9 +1,9 @@
 
-Select  Patient_Identifier, Patient_Name,Age, Gender, age_group,HIV_Testing_Initiation, HIV_Status, Distribution_Date, IFNULL(Primary_Distributed,0) AS "Primary Distributed", IFNULL(Secondary_Distributed,0) AS "Secondary Distributed", IFNULL(Kits_Returned,0) AS "Returned Kits"
+Select distinct Patient_Identifier, Patient_Name,Age, Gender, age_group,HIV_Testing_Initiation, HIV_Status, Distribution_Date,Location_Name,IFNULL(Primary_Distributed,0) AS "Primary Distributed", IFNULL(Secondary_Distributed,0) AS "Secondary Distributed", IFNULL(Kits_Returned,0) AS "Returned Kits"
 from(
-SELECT Id,Patient_Identifier, Patient_Name, Age, Gender, age_group, HIV_Testing_Initiation  , HIV_Status
+SELECT distinct Id,Patient_Identifier, Patient_Name, Age, Gender, age_group, HIV_Testing_Initiation  , HIV_Status
 FROM (
-(SELECT Id,patientIdentifier AS "Patient_Identifier", patientName AS "Patient_Name", Age, Gender, age_group, 'Self-test' AS 'HIV_Testing_Initiation'
+(SELECT distinct Id,patientIdentifier AS "Patient_Identifier", patientName AS "Patient_Name", Age, Gender, age_group, 'Self-test' AS 'HIV_Testing_Initiation'
                           , HIV_Status, sort_order
 		FROM
 						(select  patient.patient_id AS Id,
@@ -204,12 +204,36 @@ left outer join
   and  o.obs_datetime = max_observation 
   ) as distibutedDate
 	on SelfTest.Id = distibutedDate.person_id
+-- Location
+Left Outer Join 
+(
+  select o.person_id, l.name as Location_Name, SUBSTRING((CONCAT(o.obs_datetime, o.encounter_id)), 20) as locations 
+  from obs o 
+  INNER JOIN location l on o.location_id = l.location_id and l.retired=0
+  AND o.person_id in (
+                  select distinct os.person_id
+                  from obs os
+                  INNER JOIN patient ON os.person_id = patient.patient_id
+                  where os.concept_id = 2386
+                  AND patient.voided = 0 AND os.voided = 0
+                 )
+  AND o.encounter_id not in (
+    select distinct os.encounter_id
+    from obs os
+    INNER JOIN patient ON os.person_id = patient.patient_id
+    where os.concept_id = 4663
+    AND patient.voided = 0 AND os.voided = 0
+    )
+    and o.voided = 0
+  Group by person_id
+) as loc
+on SelfTest.Id = loc.person_id
 
 -- TOTALS
 
 	UNION ALL
 
-	Select  'Total' AS Patient_Identifier, ' ' AS Patient_Name,' ' AS Age,' ' AS Gender, '' AS age_group,' ' AS HIV_Testing_Initiation, ' ' AS HIV_Status, ' ' AS Distribution_Date,Sum(IFNULL(Primary_Distributed,0)) AS "Primary Distributed", Sum(IFNULL(Secondary_Distributed,0)) AS "Secondary Distributed", Sum(IFNULL(Kits_Returned,0)) AS "Returned Kits"
+	Select  'Total' AS Patient_Identifier, ' ' AS Patient_Name,' ' AS Age,' ' AS Gender, '' AS age_group,' ' AS HIV_Testing_Initiation, ' ' AS HIV_Status, ' ' AS Distribution_Date,Location_Name,Sum(IFNULL(Primary_Distributed,0)) AS "Primary Distributed", Sum(IFNULL(Secondary_Distributed,0)) AS "Secondary Distributed", Sum(IFNULL(Kits_Returned,0)) AS "Returned Kits"
 from(
 SELECT Id,Patient_Identifier, Patient_Name, Age, Gender, age_group, HIV_Testing_Initiation  , HIV_Status
 FROM (
@@ -307,7 +331,7 @@ UNION ALL
 						from obs o
 								-- HTS SELF TEST STRATEGY
 								 INNER JOIN patient ON o.person_id = patient.patient_id 
-								 AND o.concept_id = 4845 and value_coded = 4822
+								 AND o.concept_id = 4845 and o.value_coded = 4822
 								 AND patient.voided = 0 AND o.voided = 0
 								 AND CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
                 				 AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
@@ -336,6 +360,7 @@ UNION ALL
 Group by Id
 ORDER BY HTS_Status_Detailed.HIV_Testing_Initiation
 			, HTS_Status_Detailed.sort_order) AS SelfTest
+
 
 -- Number of Primary Distributed Kits	
 Left outer join
@@ -412,5 +437,30 @@ left outer join
   on latest.person_id = o.person_id
   where concept_id = 4824
   and  o.obs_datetime = max_observation 
+  and o.voided = 0
   ) as distibutedDate
 	on SelfTest.Id = distibutedDate.person_id
+	-- Location
+Left Outer Join 
+(
+  select o.person_id, l.name as Location_Name, SUBSTRING((CONCAT(o.obs_datetime, o.encounter_id)), 20) as locations 
+  from obs o 
+  INNER JOIN location l on o.location_id = l.location_id and l.retired=0
+  AND o.person_id in (
+                  select distinct os.person_id
+                  from obs os
+                  INNER JOIN patient ON os.person_id = patient.patient_id
+                  where os.concept_id = 2386
+                  AND patient.voided = 0 AND os.voided = 0
+                 )
+  AND o.encounter_id not in (
+    select distinct os.encounter_id
+    from obs os
+    INNER JOIN patient ON os.person_id = patient.patient_id
+    where os.concept_id = 4663
+    AND patient.voided = 0 AND os.voided = 0
+    )
+    and o.voided = 0
+  Group by person_id
+) as loc
+on SelfTest.Id = loc.person_id

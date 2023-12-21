@@ -1389,6 +1389,20 @@
         "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/TB_ART_pivot.sql/"
     }
 },
+"TB_Prev_List": {
+    "name": "TB-031 | TB Prevention (List)",
+    "type": "MRSGeneric",
+    "config": {
+        "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/TB_Prev.sql/"
+    }
+},
+"TX_TB_List": {
+    "name": "TB-032 | TX_TB (List)",
+    "type": "MRSGeneric",
+    "config": {
+        "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/TX_TB.sql/"
+    }
+},
 "LABORATORY_List": {
     "name": "LAB-001 | Lab_Report (List)",
     "type": "MRSGeneric",
