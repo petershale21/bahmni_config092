@@ -666,15 +666,22 @@
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/prep_new.sql"
         }
     },
+    "PrEP_curr": {
+        "name": "ART-081 | PrEP Current (List)",
+        "type": "MRSGeneric",
+        "config": {
+            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/prep_ct_list.sql"
+        }
+    },
     "visitors_list": {
-        "name": "ART-081 | Visitors Report (List)",
+        "name": "ART-082 | Visitors Report (List)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/visitors.sql"
         }
     },
     "visitors_pivot": {
-        "name": "ART-082 | Visitors Report (Pivot)",
+        "name": "ART-083 | Visitors Report (Pivot)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/visitors_pivot.sql"
@@ -1044,92 +1051,99 @@
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/PMTCT_FO_pivot.sql"
         }
     },
+    "pmtct_art_list": {
+        "name": "MCH-025 | PMTCT ART (List)",
+        "type": "MRSGeneric",
+        "config": {
+            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/PMTCT_ART.sql"
+        }
+    },
     "completeness_anc_list": {
-        "name": "MCH-025 | Registered ANC Visits with ANC Consultation (List)",
+        "name": "MCH-026 | Registered ANC Visits with ANC Consultation (List)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/ANC_Registration_vs_Consultation_list.sql"
         }
     },
     "completeness_anc_pivot": {
-        "name": "MCH-026 | Registered ANC Visits with ANC Consultation (Pivot)",
+        "name": "MCH-027 | Registered ANC Visits with ANC Consultation (Pivot)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/ANC_Registration_vs_Consultation_pivot.sql"
         }
     },
     "completeness_under5_list": {
-        "name": "MCH-027 | Registered Under5 Visits with Under5 Consultation (List)",
+        "name": "MCH-028 | Registered Under5 Visits with Under5 Consultation (List)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/Under5_Registration_Vs_Consultation_list.sql"
         }
     },
     "completeness_under5_pivot": {
-        "name": "MCH-028 | Registered Under5 Visits with Under5 Consultation (Pivot)",
+        "name": "MCH-029 | Registered Under5 Visits with Under5 Consultation (Pivot)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/Under5_Registration_Vs_Consultation_pivot.sql"
         }
     },
     "completeness_pnc_list": {
-        "name": "MCH-029 | Registered PNC Visits with PNC Consultation (List)",
+        "name": "MCH-030 | Registered PNC Visits with PNC Consultation (List)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/PNC_Registration_vs_Consultation_list.sql"
         }
     },
     "completeness_pnc_pivot": {
-        "name": "MCH-030 | Registered PNC Visits with PNC Consultation (Pivot)",
+        "name": "MCH-031 | Registered PNC Visits with PNC Consultation (Pivot)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/PNC_Registration_vs_Consultation_pivot.sql"
         }
     },
     "completeness_fp_list": {
-        "name": "MCH-031 | Registered FP Visits with FP Consultation (List)",
+        "name": "MCH-032 | Registered FP Visits with FP Consultation (List)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/FP_Registration_vs_Consultation_list.sql"
         }
     },
     "completeness_fp_pivot": {
-        "name": "MCH-032 | Registered FP Visits with FP Consultation (Pivot)",
+        "name": "MCH-033 | Registered FP Visits with FP Consultation (Pivot)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/FP_Registration_vs_Consultation_pivot.sql"
         }
     },
     "completeness_cervical_list": {
-        "name": "MCH-033 | Registered Cervical Cancer Screening Visits with Consultation (List)",
+        "name": "MCH-034 | Registered Cervical Cancer Screening Visits with Consultation (List)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/Cervical_Registration_vs_Consultation_list.sql"
         }
     },
     "completeness_cervical_pivot": {
-        "name": "MCH-034 | Registered Cervical Cancer Screening Visits with Consultation (Pivot)",
+        "name": "MCH-035 | Registered Cervical Cancer Screening Visits with Consultation (Pivot)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/Cervical_Registration_vs_Consultation_pivot.sql"
         }
     },
     "completeness_hei_list": {
-        "name": "MCH-035 | Registered HEI Visits with HEI Consultation (List)",
+        "name": "MCH-036 | Registered HEI Visits with HEI Consultation (List)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/HEI_Registration_vs_Consultation_list.sql"
         }
     },
     "completeness_hei_pivot": {
-        "name": "MCH-036 | Registered HEI Visits with HEI Consultation (Pivot)",
+        "name": "MCH-037 | Registered HEI Visits with HEI Consultation (Pivot)",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/HEI_Registration_vs_Consultation_pivot.sql"
         }
     },
     "ANC_DQA_List": {
-        "name": "MCH-037 | ANC Data Quality Assessment",
+        "name": "MCH-038 | ANC Data Quality Assessment",
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/ANC_DQA.sql"
@@ -1387,6 +1401,20 @@
     "type": "MRSGeneric",
     "config": {
         "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/TB_ART_pivot.sql/"
+    }
+},
+"TB_Prev_List": {
+    "name": "TB-031 | TB Prevention (List)",
+    "type": "MRSGeneric",
+    "config": {
+        "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/TB_Prev.sql/"
+    }
+},
+"TX_TB_List": {
+    "name": "TB-032 | TX_TB (List)",
+    "type": "MRSGeneric",
+    "config": {
+        "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/egpaf/TX_TB.sql/"
     }
 },
 "LABORATORY_List": {
