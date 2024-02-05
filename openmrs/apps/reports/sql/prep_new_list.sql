@@ -1,4 +1,4 @@
-SELECT patientIdentifier , patientName, Age, Gender, age_group, 'Initiated' AS 'Program_Status',Entry_Point,Entry_Point_level_facility,Entry_Point_level_community,prep_group, Location
+SELECT patientIdentifier AS Patient_Identifier, patientName as Patient_Name, Age, Gender, age_group as Age_Group, 'Initiated' AS 'Program_Status',Entry_Point,Entry_Point_level_facility,Entry_Point_level_community,IFNULL(prep_group,'Other') as Prep_Group, Location
 	FROM
                 (select distinct patient.patient_id AS Id,
 									   patient_identifier.identifier AS patientIdentifier,
@@ -151,14 +151,14 @@ SELECT patientIdentifier , patientName, Age, Gender, age_group, 'Initiated' AS '
 								when o.value_coded = 5019 THEN 'Exchange sex for money' -- SW
 								when o.value_coded = 5020 THEN 'Currently Pays for sex' 
 								when o.value_coded = 5021 THEN 'MSM'
-								when o.value_coded = 5022 THEN 'Other' --'Transgender Individual'
+								when o.value_coded = 5022 THEN 'Transgender' --'Transgender Individual'
 								when o.value_coded = 5023 THEN 'Other' -- 'Individual Inject drugs'
 								when o.value_coded = 5025 THEN 'Discordant' -- "serodiscordant relationship and HIV-Positive partner partner's viral load is >=1000 unknown"
 								when o.value_coded = 5024 THEN 'Other' -- "serodiscordant relationship and HIV partner is not on ART or has been on for <12 months"
 								when o.value_coded = 5026 THEN 'Other' -- 'Has multiple Concurrent partners'
 								when o.value_coded = 5027 THEN 'Other' -- 'Individual belives their partner has multiple other Concurrent partners'
 								when o.value_coded = 5028 THEN 'Other' -- 'Individula At High Risk of being force to have sex'								
-								
+								else 'Other'
 							END as 'prep_group'
 
 							from obs o

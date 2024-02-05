@@ -18,12 +18,12 @@ FROM (
 						, HTS_STATUS_DRVD_ROWS.sort_order
 			FROM (
 
-					SELECT distinct Id, Patient_Identifier, Patient_Name, Age, Gender, age_group, HIV_Status, Visit, sort_order
+					SELECT Id, Patient_Identifier, Patient_Name, Age, Gender, age_group, HIV_Status, Visit, sort_order
 FROM (
 
-		(SELECT distinct Id, patientIdentifier AS "Patient_Identifier", patientName AS "Patient_Name", Age, Gender, age_group, HIV_Status,Visit, sort_order
+		(SELECT Id, patientIdentifier AS "Patient_Identifier", patientName AS "Patient_Name", Age, Gender, age_group, HIV_Status,Visit, sort_order
 		FROM
-						(select distinct patient.patient_id AS Id,
+						(select patient.patient_id AS Id,
 											   patient_identifier.identifier AS patientIdentifier,
 											   concat(person_name.given_name, ' ', person_name.family_name) AS patientName,
 											   floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age,
@@ -53,11 +53,7 @@ FROM (
 											    select distinct os.person_id 
 												from obs os
 											    where os.concept_id=4427 
-												AND os.obs_group_id in (
-												     select oss.obs_id 
-													 from obs oss 
-													 where oss.concept_id=4655
-													 )
+
 												AND value_coded=1738)
 							 
 							 
@@ -76,9 +72,9 @@ FROM (
 		)
 		UNION
 
-			(SELECT distinct Id,patientIdentifier AS "Patient_Identifier", patientName AS "Patient_Name", Age, Gender, age_group, HIV_Status,Visit, sort_order
+			(SELECT Id,patientIdentifier AS "Patient_Identifier", patientName AS "Patient_Name", Age, Gender, age_group, HIV_Status,Visit, sort_order
 		FROM
-						(select distinct patient.patient_id AS Id,
+						(select  patient.patient_id AS Id,
 											   patient_identifier.identifier AS patientIdentifier,
 											   concat(person_name.given_name, ' ', person_name.family_name) AS patientName,
 											   floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age,
@@ -134,9 +130,9 @@ FROM (
 		UNION
 		
 		
-		(SELECT distinct Id,patientIdentifier AS "Patient_Identifier", patientName AS "Patient_Name", Age, Gender, age_group, HIV_Status,Visit, sort_order
+		(SELECT  Id,patientIdentifier AS "Patient_Identifier", patientName AS "Patient_Name", Age, Gender, age_group, HIV_Status,Visit, sort_order
 		FROM
-						(select distinct patient.patient_id AS Id,
+						(select  patient.patient_id AS Id,
 											   patient_identifier.identifier AS patientIdentifier,
 											   concat(person_name.given_name, ' ', person_name.family_name) AS patientName,
 											   floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age,
@@ -191,7 +187,7 @@ FROM (
 		
 		UNION
 		
-		(SELECT distinct Id,patientIdentifier AS "Patient_Identifier", patientName AS "Patient_Name", Age, Gender, age_group, HIV_Status,Visit, sort_order
+		(SELECT Id,patientIdentifier AS "Patient_Identifier", patientName AS "Patient_Name", Age, Gender, age_group, HIV_Status,Visit, sort_order
 		FROM
 						(select distinct patient.patient_id AS Id,
 											   patient_identifier.identifier AS patientIdentifier,
@@ -289,14 +285,16 @@ FROM (
 						from obs o
 								 INNER JOIN patient ON o.person_id = patient.patient_id 
 								 AND patient.voided = 0 AND o.voided = 0
-								 AND o.obs_datetime BETWEEN CAST('#startDate#' AS DATE) AND CAST('#endDate#' AS DATE)
+								 AND CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+									AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 								 
 							 -- ANC FIRST VISIT
 								 AND o.person_id in (
 									select distinct os.person_id 
 									from obs os
 									where os.concept_id = 4658 and os.value_coded =  4659
-									AND os.obs_datetime BETWEEN CAST('#startDate#' AS DATE) AND CAST('#endDate#' AS DATE)
+									AND CAST(os.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+									AND CAST(os.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 									AND patient.voided = 0 AND o.voided = 0
 								 )
 								 -- HIV Pos						 
@@ -304,11 +302,7 @@ FROM (
 											    select distinct os.person_id 
 												from obs os
 											    where os.concept_id=4427 
-												AND os.obs_group_id in (
-												     select oss.obs_id 
-													 from obs oss 
-													 where oss.concept_id=4655
-													 )
+												
 												AND value_coded=1738)
 							 
 							 
@@ -343,14 +337,16 @@ FROM (
 						from obs o
 								 INNER JOIN patient ON o.person_id = patient.patient_id 
 								 AND patient.voided = 0 AND o.voided = 0
-								 AND o.obs_datetime BETWEEN CAST('#startDate#' AS DATE) AND CAST('#endDate#' AS DATE)
+								 AND CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+								AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 								 
 							 -- ANC FIRST VISIT
 								 AND o.person_id in (
 									select distinct os.person_id 
 									from obs os
 									where os.concept_id = 4658 and os.value_coded =  4659
-									AND os.obs_datetime BETWEEN CAST('#startDate#' AS DATE) AND CAST('#endDate#' AS DATE)
+									AND CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+									AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 									AND patient.voided = 0 AND o.voided = 0
 								 )
 								 -- HIV Neg						 
@@ -399,14 +395,16 @@ FROM (
 						from obs o
 								 INNER JOIN patient ON o.person_id = patient.patient_id 
 								 AND patient.voided = 0 AND o.voided = 0
-								 AND o.obs_datetime BETWEEN CAST('#startDate#' AS DATE) AND CAST('#endDate#' AS DATE)
+								 AND CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+									AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 								 
 							 -- ANC FIRST VISIT
 								 AND o.person_id in (
 									select distinct os.person_id 
 									from obs os
 									where os.concept_id = 4658 and os.value_coded =  4659
-									AND os.obs_datetime BETWEEN CAST('#startDate#' AS DATE) AND CAST('#endDate#' AS DATE)
+									AND CAST(os.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+									AND CAST(os.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 									AND patient.voided = 0 AND o.voided = 0
 								 )
 
@@ -415,7 +413,8 @@ FROM (
 									select distinct os.person_id
 									from obs os
 									where os.concept_id = 1740 and os.value_coded = 1738
-									AND os.obs_datetime BETWEEN CAST('#startDate#' AS DATE) AND CAST('#endDate#' AS DATE)
+									AND CAST(os.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+									AND CAST(os.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 									AND patient.voided = 0 AND o.voided = 0
 								 )
 							 
@@ -453,14 +452,16 @@ FROM (
 						from obs o
 								 INNER JOIN patient ON o.person_id = patient.patient_id 
 								 AND patient.voided = 0 AND o.voided = 0
-								 AND o.obs_datetime BETWEEN CAST('#startDate#' AS DATE) AND CAST('#endDate#' AS DATE)
+								 AND CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+									AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 								 
 							 -- ANC FIRST VISIT
 								 AND o.person_id in (
 									select distinct os.person_id 
 									from obs os
 									where os.concept_id = 4658 and os.value_coded =  4659
-									AND os.obs_datetime BETWEEN CAST('#startDate#' AS DATE) AND CAST('#endDate#' AS DATE)
+									AND CAST(os.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+									AND CAST(os.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 									AND patient.voided = 0 AND o.voided = 0
 								 )
 
@@ -469,7 +470,8 @@ FROM (
 									select distinct os.person_id
 									from obs os
 									where os.concept_id = 1740 and os.value_coded = 1016
-									AND os.obs_datetime BETWEEN CAST('#startDate#' AS DATE) AND CAST('#endDate#' AS DATE)
+									AND CAST(os.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+									AND CAST(os.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 									AND patient.voided = 0 AND o.voided = 0
 								 )
 							 
