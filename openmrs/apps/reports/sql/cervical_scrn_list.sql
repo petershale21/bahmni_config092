@@ -1,5 +1,5 @@
 
-(SELECT patientIdentifier AS "Patient_Identifier", patientName AS "Patient_Name", Age,DOB, Gender, Screening_Type,Screening_Status, VIA_Result, PapSmear_Result
+(SELECT patientIdentifier AS "Patient_Identifier", patientName AS "Patient_Name", Age,DOB, Gender, Screening_Type,Screening_Status, VIA_Result, PapSmear_Result,HIV_Status
     FROM
                 (select distinct patient.patient_id AS Id,
 									   patient_identifier.identifier AS patientIdentifier,
@@ -109,5 +109,23 @@ inner join
 
 )Screening
 on Screening.person_id = Cervical_Cancer_Screened.Id
+
+Left Join
+(
+    select o.person_id,
+    case
+    when o.value_coded = 1738 then 'Positive'
+    when o.value_coded = 1016 then 'Negative' 
+    when o.value_coded = 1739 then 'Unknown'
+    end as HIV_Status
+    from obs o 
+    where o.concept_id = 4521
+    and o.voided = 0
+    AND CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+    AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
+    Group by person_id
+
+)HIVStatus
+On Cervical_Cancer_Screened.Id = HIVStatus.person_id
 
 ORDER BY Cervical_Cancer_Screened.Age)
