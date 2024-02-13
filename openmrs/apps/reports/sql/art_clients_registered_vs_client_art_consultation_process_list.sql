@@ -37,18 +37,23 @@ FROM
 							floor(datediff(CAST('#endDate#' AS DATE), p.birthdate)/365) AS age,				
 							pi.identifier as identifier,
 							concat("",p.uuid) as uuid,
-							concept_id,
-							l.name as location_name
+							-- concept_id,
+							l.name as location_name,
+							v.visit_type_id,
+							v.date_started,
+							v.voided
 					FROM visit v
-							JOIN person_name pn on v.patient_id = pn.person_id and pn.voided=0
-							JOIN person p on p.person_id = v.patient_id
-							LEFT JOIN patient_identifier pi ON v.patient_id = pi.patient_id AND pi.identifier_type in (5,12)
-							JOIN patient_identifier_type pit on pi.identifier_type = pit.patient_identifier_type_id
-							JOIN encounter en on en.visit_id = v.visit_id and en.voided=0 and en.encounter_type = 2
-							JOIN visit_type vt on vt.visit_type_id = vt.visit_type_id and vt.visit_type_id in (10,19)
-							JOIN obs o on o.encounter_id=en.encounter_id
-							JOIN location l on v.location_id = l.location_id and l.retired=0
-					WHERE en.encounter_datetime >= CAST('#startDate#' AS DATE) and en.encounter_datetime <= CAST('#endDate#' AS DATE)) reg
+							INNER JOIN person_name pn on v.patient_id = pn.person_id and pn.voided=0
+							INNER JOIN person p on p.person_id = v.patient_id
+							LEFT JOIN patient_identifier pi ON v.patient_id = pi.patient_id 
+							iNNER JOIN patient_identifier_type pit on pi.identifier_type = pit.patient_identifier_type_id
+							INNER JOIN encounter en on en.visit_id = v.visit_id and en.voided=0 and en.encounter_type = 2
+							INNER JOIN obs o on o.encounter_id=en.encounter_id
+							iNNER JOIN location l on v.location_id = l.location_id and l.retired=0
+					WHERE v.date_started >= CAST('#startDate#' AS DATE) and v.date_started <= CAST('#endDate#' AS DATE)
+					and v.visit_type_id in (10,19)
+					and v.voided = 0
+) reg
 
 					LEFT JOIN 
 
@@ -64,7 +69,7 @@ FROM
 					FROM visit v
 							JOIN person_name pn on v.patient_id = pn.person_id and pn.voided=0
 							JOIN person p on p.person_id = v.patient_id
-							LEFT JOIN patient_identifier pi ON v.patient_id = pi.patient_id AND pi.identifier_type in (5,12)
+							LEFT JOIN patient_identifier pi ON v.patient_id = pi.patient_id 
 							JOIN patient_identifier_type pit on pi.identifier_type = pit.patient_identifier_type_id
 							JOIN encounter en on en.visit_id = v.visit_id and en.voided=0 and en.encounter_type = 1
 							JOIN visit_type vt on vt.visit_type_id = vt.visit_type_id and vt.visit_type_id in (10,19)
@@ -109,18 +114,23 @@ FROM
 							floor(datediff(CAST('#endDate#' AS DATE), p.birthdate)/365) AS age,				
 							pi.identifier as identifier,
 							concat("",p.uuid) as uuid,
-							concept_id,
-							l.name as location_name
+							-- concept_id,
+							l.name as location_name,
+							v.visit_type_id,
+							v.date_started,
+							v.voided
 					FROM visit v
-							JOIN person_name pn on v.patient_id = pn.person_id and pn.voided=0
-							JOIN person p on p.person_id = v.patient_id
-							LEFT JOIN patient_identifier pi ON v.patient_id = pi.patient_id AND pi.identifier_type in (5,12)
-							JOIN patient_identifier_type pit on pi.identifier_type = pit.patient_identifier_type_id
-							JOIN encounter en on en.visit_id = v.visit_id and en.voided=0 and en.encounter_type = 2
-							JOIN visit_type vt on vt.visit_type_id = vt.visit_type_id and vt.visit_type_id in (10,19)
-							JOIN obs o on o.encounter_id=en.encounter_id
-							JOIN location l on v.location_id = l.location_id and l.retired=0
-					WHERE en.encounter_datetime >= CAST('#startDate#' AS DATE) and en.encounter_datetime <= CAST('#endDate#' AS DATE)) reg
+							INNER JOIN person_name pn on v.patient_id = pn.person_id and pn.voided=0
+							INNER JOIN person p on p.person_id = v.patient_id
+							LEFT JOIN patient_identifier pi ON v.patient_id = pi.patient_id 
+							iNNER JOIN patient_identifier_type pit on pi.identifier_type = pit.patient_identifier_type_id 
+							INNER JOIN encounter en on en.visit_id = v.visit_id and en.voided=0 and en.encounter_type = 2
+							INNER JOIN obs o on o.encounter_id=en.encounter_id
+							iNNER JOIN location l on v.location_id = l.location_id and l.retired=0
+					WHERE v.date_started >= CAST('#startDate#' AS DATE) and v.date_started <= CAST('#endDate#' AS DATE)
+					and v.visit_type_id in (10,19)
+					and v.voided = 0
+) reg
 
 					LEFT JOIN 
 
@@ -136,8 +146,8 @@ FROM
 					FROM visit v
 							JOIN person_name pn on v.patient_id = pn.person_id and pn.voided=0
 							JOIN person p on p.person_id = v.patient_id
-							LEFT JOIN patient_identifier pi ON v.patient_id = pi.patient_id AND pi.identifier_type in (5,12)
-							JOIN patient_identifier_type pit on pi.identifier_type = pit.patient_identifier_type_id
+							LEFT JOIN patient_identifier pi ON v.patient_id = pi.patient_id 
+							JOIN patient_identifier_type pit on pi.identifier_type = pit.patient_identifier_type_id 
 							JOIN encounter en on en.visit_id = v.visit_id and en.voided=0 and en.encounter_type = 1
 							JOIN visit_type vt on vt.visit_type_id = vt.visit_type_id and vt.visit_type_id in (10,19)
 							JOIN obs o on o.encounter_id=en.encounter_id and o.concept_id in (3843, 4276) and o.voided =0
