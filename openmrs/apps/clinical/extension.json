@@ -167,8 +167,7 @@
         "label": "Viral Load",
         "order": 6,
         "requiredPrivilege": "app:clinical"
-    },
-
+    },    
     "bahmniClinicalPatientsSearchTBIntakeOrFollUpPatients": {
         "id": "bahmni.clinical.patients.search.TBIntakeOrFollUpPatients",
         "extensionPointId": "org.bahmni.patient.search",
@@ -182,7 +181,6 @@
         "order": 6,
         "requiredPrivilege": "app:clinical"
     },
-
 
     "bahmniClinicalPatientsSearchHTSOnly": {
         "id": "bahmni.clinical.patients.search.htsonlypatients",

@@ -1,5 +1,5 @@
 
-(SELECT patientIdentifier AS "Patient_Identifier", patientName AS "Patient_Name", Age,DOB, Gender, Screening_Status, Screening_Type, VIA_Result, PapSmear_Result
+(SELECT patientIdentifier AS "Patient_Identifier", patientName AS "Patient_Name", Age,DOB, Gender, Screening_Type,Screening_Status, VIA_Result, PapSmear_Result
     FROM
                 (select distinct patient.patient_id AS Id,
 									   patient_identifier.identifier AS patientIdentifier,
@@ -54,7 +54,7 @@ left outer join
            else ""
        end AS VIA_Result
        from obs os 
-       where os.concept_id = 327 and os.concept_id = 4511
+       where os.concept_id = 327
        and os.voided = 0
        AND CAST(os.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
        AND CAST(os.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
@@ -62,6 +62,28 @@ left outer join
 )via_result
 on via_result.person_id = Cervical_Cancer_Screened.Id
 
+left outer join 
+
+(
+        select os.person_id,
+       -- Results of Pap Smear Test
+       case
+           when os.value_coded = 324 then "Normal"
+           when os.value_coded = 4748 then "LSIL"
+           when os.value_coded = 4529 then "HSIL"
+           when os.value_coded = 4530 then "ASCUS"
+           when os.value_coded = 4531 then "ASCUS - H AGC AGUS"
+           when os.value_coded = 550 then "	Malignant Cells AIS"
+           else ""
+       end AS PapSmear_Result
+       from obs os 
+       where os.concept_id = 4532
+       and os.voided = 0
+       AND CAST(os.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+       AND CAST(os.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
+
+)pap_smear_result
+on pap_smear_result.person_id = Cervical_Cancer_Screened.Id
 left outer join 
 
 (select
@@ -88,30 +110,4 @@ inner join
 )Screening
 on Screening.person_id = Cervical_Cancer_Screened.Id
 
-left outer join 
-
-(
-        select os.person_id,
-       -- Results of Pap Smear Test
-       case
-           when os.value_coded = 324 then "Normal"
-           when os.value_coded = 4748 then "LSIL"
-           when os.value_coded = 4529 then "HSIL"
-           when os.value_coded = 4530 then "ASCUS"
-           when os.value_coded = 4531 then "ASCUS - H AGC AGUS"
-           when os.value_coded = 550 then "	Malignant Cells AIS"
-           else ""
-       end AS PapSmear_Result
-       from obs os 
-       where os.concept_id = 4532
-       and os.voided = 0
-       AND CAST(os.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
-       AND CAST(os.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
-
-)pap_smear_result
-on pap_smear_result.person_id = Cervical_Cancer_Screened.Id
-
 ORDER BY Cervical_Cancer_Screened.Age)
-
-
-

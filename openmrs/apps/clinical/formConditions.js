@@ -1521,6 +1521,29 @@ Bahmni.ConceptSet.FormConditions.rules = {
                          return conditions;
                  }
              },
+             'Type Of Lab Test' : function (formName, formFieldValues) {
+                var conditions = { show: [], hide: []};
+                var showTest = formFieldValues['Type Of Lab Test']
+
+                if (formName == 'Lab Test'){
+                        if (showTest == 'Tuberculosis'){
+                                conditions.show.push('Tuberculosis Lab Test');
+                                conditions.hide.push('Viral Load Lab Test');
+
+                        }
+                        else if (showTest == 'HIVTC, Lab Test, Viral Load'){
+                                conditions.hide.push('Tuberculosis Lab Test');
+                                conditions.show.push('Viral Load Lab Test');
+                        }
+                        else {
+                                conditions.hide.push('Tuberculosis Lab Test');
+                                conditions.hide.push('Viral Load Lab Test');
+
+                        }
+                        console.log(showTest);
+                }
+                return conditions;
+             },
 /*--- EDD generic autocalculation----*/
         'ANC, Last Normal Menstrual Period' : function (formName, formFieldValues) {
                 var conditions = { assignedValues: [], error: [] };
