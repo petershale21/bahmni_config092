@@ -106,6 +106,44 @@ Bahmni.ConceptSet.FormConditions.rules = {
                return conditions;
         },
 
+        /**** AUTOFILL SYSTOLIC VALUES */
+        'Systolic': function (formName, formFieldValues) {
+                var conditions = { assignedValues: [] , disable: [] };
+                if (formName == "ANC, ANC Program"|| formName == "Vitals"){
+                        conditions.assignedValues.push(
+                        { field: "Systolic",
+                        fieldValue :
+                        {
+                                isAutoFill: true,
+                                scopedEncounter:"CurrentVisit",
+                                isFilledOnRetrospectiveMode: false,
+                                enableDefaultValue:false,
+                                enableEditAfterAutoFill: false
+                        }
+                        });
+                }
+                return conditions;
+        },
+
+        /**** AUTOFILL DIASTOLIC VALUES */
+        'Diastolic': function (formName, formFieldValues) {
+                var conditions = { assignedValues: [] , disable: [] };
+                if (formName == "ANC, ANC Program"|| formName == "Vitals"){
+                        conditions.assignedValues.push(
+                        { field: "Diastolic",
+                        fieldValue :
+                        {
+                                isAutoFill: true,
+                                scopedEncounter:"CurrentVisit",
+                                isFilledOnRetrospectiveMode: false,
+                                enableDefaultValue:false,
+                                enableEditAfterAutoFill: false
+                        }
+                        });
+                }
+                return conditions;
+        },
+                
         /*** AUTOFILL MUAC VALUES ****/
 
         'IMAM, MUAC': function (formName, formFieldValues) {
@@ -125,44 +163,7 @@ Bahmni.ConceptSet.FormConditions.rules = {
                 }
                 return conditions;
         },
-         
-        /*** AUTOFILL Blood Pressure values VALUES ****
-         'Diastolic Data': function (formName, formFieldValues) {
-                var conditions = { assignedValues: [] , disable: [] };
-                if (formName == "ANC, ANC Program" || formName == "Vitals" || formName == "Blood Pressure"){
-                     conditions.assignedValues.push(
-                     { field: "Diastolic Data",
-                       fieldValue :
-                       {
-                          isAutoFill: true,
-                          scopedEncounter:"CurrentVisit",
-                          isFilledOnRetrospectiveMode: false,
-                          enableDefaultValue:false,
-                          enableEditAfterAutoFill: false
-                       }
-                     });
-                }
-                return conditions;
-         },
-         
-         'Systolic Data': function (formName, formFieldValues) {
-                var conditions = { assignedValues: [] , disable: [] };
-                if (formName == "ANC, ANC Program" || formName == "Vitals"){
-                     conditions.assignedValues.push(
-                     { field: "Systolic Data",
-                       fieldValue :
-                       {
-                          isAutoFill: true,
-                          scopedEncounter:"CurrentVisit",
-                          isFilledOnRetrospectiveMode: false,
-                          enableDefaultValue:false,
-                          enableEditAfterAutoFill: false
-                       }
-                     });
-                }
-                return conditions;
-         },
-***/
+        
         'HTC, Patient type': function (formName, formFieldValues) {
                 var conditionConcept = formFieldValues['HTC, Patient type'];
                 var conditions = { show: [], hide: [],   assignedValues: [] };
@@ -707,17 +708,20 @@ Bahmni.ConceptSet.FormConditions.rules = {
                         conditions.hide.push("ANC, Partner HIV Status");
                                 
                         if (AncVisits == "ANC, First Visit") {
+                                conditions.hide.push("ANC, Visit order Number");
                                 conditions.show.push("Lesotho Obstetric Record")
                                 conditions.show.push("ANC Register");
                                 conditions.hide.push("Subsequent HIV Test Results");
                         }
                         else if (AncVisits == "ANC, Subsequent Visit") {
+                                conditions.show.push("ANC, Visit order Number");
                                 conditions.show.push("ANC Register");
                                 conditions.hide.push("ANC, TT Doses Previous");
                                 conditions.hide.push("ANC From Lesotho");
                                 conditions.hide.push("Lesotho Obstetric Record");
                         }
                         else {
+                                conditions.hide.push("ANC, Visit order Number");
                                 conditions.hide.push("Lesotho Obstetric Record")
                                 conditions.hide.push("ANC Register");
                         }
@@ -1566,6 +1570,7 @@ Bahmni.ConceptSet.FormConditions.rules = {
                         }
                         if(LNMP) {
                                 conditions.assignedValues.push({ field: "ANC, Estimated Date of Delivery", fieldValue:EDDWithoutTime ,autocalculate:true});
+                                LORTracker = LNMP;
                         }
                 }
                 if (formName == "ANC, ANC Program"){

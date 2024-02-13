@@ -157,9 +157,6 @@
 			"PNC, Micro-Nutrient supplement" : {
 				"required": true
 			},
-			"Delivery Note, Delivery location" : {
-				"required": true
-			},
 			"Mode of Delivery" : {
 				"required": true
 			},
