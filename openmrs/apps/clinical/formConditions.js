@@ -1570,7 +1570,6 @@ Bahmni.ConceptSet.FormConditions.rules = {
                         }
                         if(LNMP) {
                                 conditions.assignedValues.push({ field: "ANC, Estimated Date of Delivery", fieldValue:EDDWithoutTime ,autocalculate:true});
-                                LORTracker = LNMP;
                         }
                 }
                 if (formName == "ANC, ANC Program"){
@@ -2037,6 +2036,7 @@ Bahmni.ConceptSet.FormConditions.rules = {
                         else if (!testedForHIV)    {
 
                           conditions.hide.push("Self_Test_Buddy");
+                          conditions.hide.push("Take Secondary Self Test");
                           conditions.hide.push("HTC, Post-test Counseling Set");
                           conditions.hide.push("Testing Eligibility, Time Last Test Done");
                           conditions.hide.push("HIVTC, TB Screened","HIV, Testing Strategies");
@@ -2233,6 +2233,7 @@ Bahmni.ConceptSet.FormConditions.rules = {
                                 conditions.hide.push("Testing Eligibility, Reinforced Prevention Counselling");
                                 conditions.hide.push("Offered prevention Counselling and or Linked to prevention services");
                                 conditions.hide.push("HTC, History of Previous Testing","HTC, Pre-test Counseling");
+                                conditions.hide.push("Testing Eligibility, Time Last Test Done");
 
 
                         }
@@ -2260,6 +2261,7 @@ Bahmni.ConceptSet.FormConditions.rules = {
 
                         if (onART == "Yes") {
                                 conditions.show.push("Testing Eligibility, Provided Adherence Counselling");
+                                conditions.show.push("Take Secondary Self Test");
                                 conditions.hide.push("Testing Eligibility, Counselled & linked to Treatment");
                                 conditions.hide.push("Testing Eligibility, Reinforced Prevention Counselling");
                                 conditions.hide.push("Offered prevention Counselling and or Linked to prevention services");
@@ -2275,6 +2277,25 @@ Bahmni.ConceptSet.FormConditions.rules = {
                 }
         },
 
+        'Take Secondary Self Test': function (formName, formFieldValues) {
+
+                if (formName == "HIV Testing and Counseling Intake Template"){
+                var takeSelfTest = formFieldValues['Take Secondary Self Test'];
+                var conditions =  {show: [], hide: [], assignedValues: []};
+
+                        if (takeSelfTest === "Yes"){
+                                conditions.show.push("HTC, Date Of Distribution","HTC, Distribution Mode","Self_Test_Buddy", "HTC, Kit Collected For","HTC, Key Pop","HTC, Tested for HIV in The Past 12 Months","HTC, HIVST Results");
+                                conditions.hide.push("HTC, Pre-test Counseling Set","HTC, HIV Test","HTC, Post-test Counseling Set");
+        
+                                conditions.hide.push("ART, Condoms Dispensed");
+                                conditions.hide.push("HIVTC, TB Screened");
+                                conditions.hide.push("HTS, Referral");
+                        }
+                }
+
+                return conditions;
+        },
+
         'Testing Eligibility, Time Last Test Done': function (formName, formFieldValues) {
                 if (formName == "HIV Testing and Counseling Intake Template") {
                         var within3months= formFieldValues['Testing Eligibility, Time Last Test Done'];
@@ -2283,7 +2304,7 @@ Bahmni.ConceptSet.FormConditions.rules = {
 
                         if (within3months == "Testing Eligibility, Within 3 Months") {
                                 conditions.show.push("Testing Eligibility, Reinforced Prevention Counselling");
-                                //conditions.hide.push("Testing Eligibility, Last 12 Months");
+                                conditions.show.push("Test For HIV");
                                 conditions.hide.push("Offered prevention Counselling and or Linked to prevention services");
                         }
 
@@ -2369,8 +2390,8 @@ Bahmni.ConceptSet.FormConditions.rules = {
         conditions.show.push("HTSIDX, Duration since last test");
 
         // Hide conditions if the contact has prior tests and the client knows their status
-        conditions.hide.push("HTSIDX,Tested");
-        conditions.hide.push("HTSIDX, IF No, why");
+        conditions.show.push("HTSIDX,Tested");
+        conditions.show.push("HTSIDX, IF No, why");
         conditions.hide.push("HTSIDX,Date partner/child tested");
         conditions.hide.push("HTSIDX,Partner/ Child Test Result");
         conditions.hide.push("HTSIDX,Linked to care and treatment");
