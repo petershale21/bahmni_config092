@@ -1320,13 +1320,25 @@ Bahmni.ConceptSet.FormConditions.rules = {
                 var conditionConcept = formFieldValues['Transfer Out to another site'];
                 var conditions = { show: [], hide: [] };
 
+              if(formName == "Tuberculosis Followup Template" || formName == "TB, Transfer out"){
+               
+                if (conditionConcept == "Yes") {
+                        conditions.show.push("HIVTC, Transferred out to");
+                } else {
+                       conditions.hide.push("HIVTC, Transferred out to");
+                 }
+                
+            }
+            
+            if(formName == "HIV Treatment and Care Progress Template"){
                 if (conditionConcept == "Yes") {
                         conditions.show.push("HIVTC, Transferred out");
                         
                 } else {
                         conditions.hide.push("HIVTC, Transferred out");
                 }
-                return conditions;
+            }
+            return conditions;
         },
 
         // Hide WHO staging is T-Staging is selected -- Shale
