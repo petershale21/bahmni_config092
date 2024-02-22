@@ -21,8 +21,8 @@ FROM
                             from obs ob
                             -- TB Start Date
                             where ob.concept_id = 2237
-                            and ob.value_datetime >= CAST('#startDate#'AS DATE)
-                            and ob.value_datetime <= CAST('#endDate#'AS DATE)
+                            and cast(ob.value_datetime as date) >= CAST('#startDate#'AS DATE)
+                            and cast(ob.value_datetime as date) <= CAST('#endDate#'AS DATE)
                             and ob.voided = 0
                         )
                     AND o.person_id in 
@@ -34,8 +34,8 @@ FROM
                                             select distinct person_id
                                                 from obs
                                                 where concept_id = 3785 and value_coded = 1034
-                                                and obs_datetime >= CAST('#startDate#'AS DATE)
-                                                and obs_datetime <= CAST('#endDate#'AS DATE)
+                                                and cast(obs_datetime as date) >= CAST('#startDate#'AS DATE)
+                                                and cast(obs_datetime as date) <= CAST('#endDate#'AS DATE)
                                             )
                         )
 
@@ -80,8 +80,8 @@ FROM
                             from obs ob
                             -- TB Start Date
                             where ob.concept_id = 2237
-                            and ob.value_datetime >= CAST('#startDate#'AS DATE)
-                            and ob.value_datetime <= CAST('#endDate#'AS DATE) 
+                            and cast(ob.value_datetime as date) >= CAST('#startDate#'AS DATE)
+                            and cast(ob.value_datetime as date) <= CAST('#endDate#'AS DATE)
                         )
                     AND o.person_id in 
                         (
@@ -92,8 +92,8 @@ FROM
                                             select distinct person_id
                                                 from obs
                                                 where concept_id = 3785 and value_coded = 1084
-                                                and ob.value_datetime >= CAST('#startDate#'AS DATE)
-                                                and ob.value_datetime <= CAST('#endDate#'AS DATE)
+                                                and cast(ob.value_datetime as date) >= CAST('#startDate#'AS DATE)
+                                                and cast(ob.value_datetime as date) <= CAST('#endDate#'AS DATE)
                                             )
                         )
 
@@ -140,8 +140,8 @@ FROM
                             from obs ob
                             -- TB Start Date
                             where ob.concept_id = 2237
-                            and ob.value_datetime >= CAST('#startDate#'AS DATE)
-                            and ob.value_datetime <= CAST('#endDate#'AS DATE) 
+                            and cast(ob.value_datetime as date) >= CAST('#startDate#'AS DATE)
+                            and cast(ob.value_datetime as date) <= CAST('#endDate#'AS DATE) 
                         )
                     AND o.person_id in 
                         (
@@ -152,8 +152,8 @@ FROM
                                             select distinct person_id
                                                 from obs
                                                 where concept_id = 3785 and value_coded = 3786
-                                                and ob.value_datetime >= CAST('#startDate#'AS DATE)
-                                                and ob.value_datetime <= CAST('#endDate#'AS DATE)
+                                                and cast(ob.value_datetime as date) >= CAST('#startDate#'AS DATE)
+                                                and cast(ob.value_datetime as date) <= CAST('#endDate#'AS DATE)
                                             )
                         )
 
@@ -164,8 +164,8 @@ FROM
                         from obs os
                             -- Client must not be a transfer in
                         where os.concept_id = 3772 and os.value_coded = 3786
-                        AND os.obs_datetime >= CAST('#startDate#' AS DATE)
-                        and os.obs_datetime <= CAST('#endDate#'AS DATE)
+                        AND cast(os.obs_datetime as date) >= CAST('#startDate#' AS DATE)
+                        and cast(os.obs_datetime as date) <= CAST('#endDate#'AS DATE)
                         AND patient.voided = 0 AND os.voided = 0
                         )
                     
@@ -200,8 +200,8 @@ FROM
                             from obs ob
                             -- TB Start Date
                             where ob.concept_id = 2237
-                            and ob.value_datetime >= CAST('#startDate#'AS DATE)
-                            and ob.value_datetime <= CAST('#endDate#'AS DATE) 
+                            and cast(ob.value_datetime as date) >= CAST('#startDate#'AS DATE)
+                            and cast(ob.value_datetime as date) <= CAST('#endDate#'AS DATE) 
                         )
                     AND o.person_id in 
                         (
@@ -212,8 +212,8 @@ FROM
                                             select distinct person_id
                                                 from obs
                                                 where concept_id = 3785 and value_coded = 1037
-                                                and ob.value_datetime >= CAST('#startDate#'AS DATE)
-                                                and ob.value_datetime <= CAST('#endDate#'AS DATE)
+                                                and cast(ob.value_datetime as date) >= CAST('#startDate#'AS DATE)
+                                                and cast(ob.value_datetime as date) <= CAST('#endDate#'AS DATE)
                                             )
                         )
 
@@ -224,8 +224,8 @@ FROM
                         from obs os
                             -- Client must not be a transfer in
                         where os.concept_id = 3772 and os.value_coded = 1037
-                        AND os.obs_datetime >= CAST('#startDate#' AS DATE)
-                        and os.obs_datetime <= CAST('#endDate#'AS DATE)
+                        AND cast(os.obs_datetime as date) >= CAST('#startDate#' AS DATE)
+                        and cast(os.obs_datetime as date) <= CAST('#endDate#'AS DATE)
                         -- AND (os.obs_datetime BETWEEN CAST('#startDate#' AS DATE) AND CAST('#endDate#' AS DATE))
                         AND patient.voided = 0 AND os.voided = 0
                         )
@@ -291,8 +291,8 @@ left outer join
 				select oss.person_id, MAX(oss.obs_datetime) as max_observation
 				from obs oss
 				where oss.concept_id = 4666 and oss.voided=0
-				and oss.obs_datetime >= cast('#startDate#' as date)
-				and oss.obs_datetime <= cast('#endDate#' as date)
+				AND cast(oss.obs_datetime as date) >= CAST('#startDate#' AS DATE)
+                and cast(oss.obs_datetime as date) <= CAST('#endDate#'AS DATE)
 				group by oss.person_id
 				)latest 
 			on latest.person_id = o.person_id
@@ -365,63 +365,101 @@ on on_art.Person_id = TB_HISTORY.Id
 left outer JOIN
 
 (
-    Select person_id, TB_Diagnosis
-    FROM(
-    (select distinct o.person_id, "Pulmonary Bacteriologic" as "TB_Diagnosis" 
-    FROM obs o
-    -- Bacteriologically confirmed Genotypic test results and Phenotypic test results
-    where o.concept_id in (3814, 3815) 
-    and o.obs_datetime >= CAST('#startDate#' AS DATE)
-    and o.obs_datetime <= CAST('#endDate#' AS DATE)
-    and o.voided = 0
-    and o.person_id in (
-        select ob.person_id 
+    Select Id, TB_Diagnosis
+    FROM 
+    (
+    
+        select distinct Id, "Pulmonary Bacteriologic" as "TB_Diagnosis" 
+            FROM
+            (
+                select distinct Id, "Pulmonary Bacteriologic" as "TB_Diagnosis" 
+    FROM
+    (
+        -- Bacteriologically confirmed Genotypic test results and Phenotypic test results
+          select distinct person_id as Id
+            From obs o 
+            where o.concept_id in (3814, 3815, 4153) 
+            and cast(o.obs_datetime as date) >= CAST('#startDate#' AS DATE)
+            and cast(o.obs_datetime as date) <= CAST('#endDate#'AS DATE)
+            and o.voided = 0
+        
+        -- MTB not Detected
+        and o.person_id in
+                                (
+                                    select distinct o.person_id
+                                    from obs o
+                                    inner join
+                                            (
+                                            select oss.person_id as Id, MAX(oss.obs_datetime) as max_observation,
+                                            SUBSTRING(MAX(CONCAT(oss.obs_datetime, oss.value_coded)), 20) as examination_timing
+                                            from obs oss
+                                            where oss.concept_id in (3814,3815)
+                                            and cast(oss.obs_datetime as date) <= cast('#endDate#' as date)
+                                            group by oss.person_id
+                                            )latest
+                                        on latest.Id = o.person_id
+                                        where o.concept_id in (3787,3805,3840) 
+                                        and o.value_coded in (3816,3817,3718, 1738, 3828,3829,3830, 3831, 3832,3833,3834, 3835,3836, 3837,3838,3839)
+                                        and o.voided=0
+                                        and cast(o.obs_datetime as date) = cast(max_observation as date)
+                                    
+                                )
+
+    ) As Pulmonary_Bacteriologic
+    
+    inner join (
+        select ob.person_id as pId
         FROM obs ob
         -- Pulmonary TB
         where ob.concept_id = 3788 and ob.value_coded = 1018
-        and ob.obs_datetime >= CAST('#startDate#' AS DATE)
-        and ob.obs_datetime <= CAST('#endDate#' AS DATE)
+        AND cast(ob.obs_datetime as date) >= CAST('#startDate#' AS DATE)
+        and cast(ob.obs_datetime as date) <= CAST('#endDate#'AS DATE)
         and ob.voided = 0
-        )
-    or o.person_id in (
-        select ob.person_id
-        FROM obs ob
-        -- Pulmonary TB, Bacteriologically Confirmed
-        where ob.concept_id = 2236 and ob.value_coded = 2234
-        and ob.obs_datetime >= CAST('#startDate#' AS DATE)
-        and ob.obs_datetime <= CAST('#endDate#' AS DATE)
-        and ob.voided = 0
-         )
+        ) as Pulmonary
+    on Pulmonary_Bacteriologic.Id = Pulmonary.pId
 
-    ) 
+) As Pulmonary_Bacteriologic
 
     UNION 
 
-    (select distinct o.person_id, "Pulmonary Clinical" as "TB_Diagnosis" 
-    FROM obs o
-    -- Clinical Diagnosis X-Ray
-    where o.concept_id = 4673 and o.value_coded = 4171
-    and o.obs_datetime >= CAST('#startDate#' AS DATE)
-    and o.obs_datetime <= CAST('#endDate#' AS DATE)
-    and o.voided = 0
-    and o.person_id in (
-        select ob.person_id 
-        FROM obs ob
-        -- Pulmonary TB
-        where ob.concept_id = 3788 and ob.value_coded = 1018
-        and ob.obs_datetime >= CAST('#startDate#' AS DATE)
-        and ob.obs_datetime <= CAST('#endDate#' AS DATE)
-        and ob.voided = 0
-        )
-    or o.person_id in (
-        select ob.person_id 
-        FROM obs ob
-        -- Pulmonary TB, Clinically Diagnosed
-        where ob.concept_id = 2236 and ob.value_coded = 2235
-        and ob.obs_datetime >= CAST('#startDate#' AS DATE)
-        and ob.obs_datetime <= CAST('#endDate#' AS DATE)
-        and ob.voided = 0
-         )
+    (
+      select distinct Id, "Pulmonary Clinical" as "TB_Diagnosis" 
+    FROM 
+     -- Clinical Diagnosis X-Ray
+    (
+
+        Select distinct person_id as Id, max_observation, examination_timing,o.voided
+            from obs o
+            inner join
+                        (
+                            select oss.person_id as Id, MAX(oss.obs_datetime) as max_observation,
+                                SUBSTRING(MAX(CONCAT(oss.obs_datetime, oss.obs_id)), 20) as examination_timing
+                                from obs oss
+                                                    where oss.concept_id = 4153
+                                and cast(oss.obs_datetime as date) <= cast('#endDate#' as date)
+                                and oss.voided = 0
+                                group by oss.person_id
+                                
+                                )latest
+                            on latest.Id = o.person_id
+                            where o.concept_id = 4673 and o.value_coded = 4171
+                            and o.voided=0
+                            and cast(o.obs_datetime as date) = cast(max_observation as date)
+                            group by Id
+    )as XRay_Clients
+     
+     -- Site (Pulmonary)
+    inner join (
+                    select distinct ob.person_id as pId
+                        FROM obs ob
+                        -- Pulmonary TB
+                        where ob.concept_id = 3788 and ob.value_coded = 1018
+                        AND cast(ob.obs_datetime as date) >= CAST('#startDate#' AS DATE)
+                        and cast(ob.obs_datetime as date) <= CAST('#endDate#'AS DATE)
+                        and ob.voided = 0
+                        group by pId
+        ) As Pulmonary
+    on XRay_Clients.Id = Pulmonary.pId
 
     )
 
@@ -431,24 +469,25 @@ left outer JOIN
         FROM obs ob
         -- Extra Pulmonary TB
         where ob.concept_id = 3788 and ob.value_coded = 2233
-        and ob.obs_datetime >= CAST('#startDate#' AS DATE)
-        and ob.obs_datetime <= CAST('#endDate#' AS DATE)
+        AND cast(ob.obs_datetime as date) >= CAST('#startDate#' AS DATE)
+        and cast(ob.obs_datetime as date) <= CAST('#endDate#'AS DATE)
         and ob.voided = 0
         or ob.person_id in (
         select ob.person_id 
         FROM obs ob
         -- Extra Pulmonary TB in ART Intake
         where ob.concept_id = 2236 and ob.value_coded = 2233
-        and ob.obs_datetime >= CAST('#startDate#' AS DATE)
-        and ob.obs_datetime <= CAST('#endDate#' AS DATE)
+        AND cast(ob.obs_datetime as date) >= CAST('#startDate#' AS DATE)
+        and cast(ob.obs_datetime as date) <= CAST('#endDate#'AS DATE)
         and ob.voided = 0
          )
 
     )
 
 )diagnosis_type
+
 )diagnosis
-on diagnosis.person_id = TB_HISTORY.Id
+on diagnosis.Id = TB_HISTORY.Id
 Left outer JOIN
 (
     Select person_id, Prophylaxis_Provided
@@ -456,24 +495,24 @@ Left outer JOIN
         (select distinct o.person_id, "Provided Cotrim Prohylaxis" as "Prophylaxis_Provided" 
         FROM obs o
         where o.concept_id = 5415 and o.value_coded = 2330
-        and o.obs_datetime >= CAST('#startDate#' AS DATE)
-        and o.obs_datetime <= CAST('#endDate#' AS DATE)
+        AND cast(o.obs_datetime as date) >= CAST('#startDate#' AS DATE)
+        and cast(o.obs_datetime as date) <= CAST('#endDate#'AS DATE)
         and o.voided = 0
          )
         UNION
         (select distinct o.person_id, "Dapsone" as "Prophylaxis_Provided" 
         FROM obs o
         where o.concept_id = 5415 and o.value_coded = 4619
-        and o.obs_datetime >= CAST('#startDate#' AS DATE)
-        and o.obs_datetime <= CAST('#endDate#' AS DATE)
+        AND cast(o.obs_datetime as date) >= CAST('#startDate#' AS DATE)
+        and cast(o.obs_datetime as date) <= CAST('#endDate#'AS DATE)
         and o.voided = 0
          )
         UNION
         (select distinct o.person_id, "N/A" as "Prophylaxis_Provided" 
         FROM obs o
         where o.concept_id not in (5415)
-        and o.obs_datetime >= CAST('#startDate#' AS DATE)
-        and o.obs_datetime <= CAST('#endDate#' AS DATE)
+        AND cast(o.obs_datetime as date) >= CAST('#startDate#' AS DATE)
+        and cast(o.obs_datetime as date) <= CAST('#endDate#'AS DATE)
         and o.voided = 0
          )
     )Prophylaxis
