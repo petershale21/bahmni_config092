@@ -14,9 +14,7 @@ select distinct Patient_Identifier,
 				intake_regimen,
 				ART_Start,
 				Blood_drawn,
-				Results_received,
 				VL_result,
-				Patient_received_results,
 				TB_Status
 from obs o
 left outer join
@@ -849,25 +847,6 @@ else 'New Regimen' end as intake_regimen
 	)blood
 ON previous.Id = blood.person_id
 
--- date results received
-left outer join
-(select o.person_id,CAST(latest_results_date AS DATE) as Results_received
-from obs o 
-inner join 
-		(
-		 select oss.person_id, MAX(oss.obs_datetime) as max_observation,
-		 SUBSTRING(MAX(CONCAT(oss.obs_datetime, oss.value_datetime)), 20) as latest_results_date
-		 from obs oss
-		 where oss.concept_id = 4268 and oss.voided=0
-		 and oss.obs_datetime < cast('#endDate#' as date)
-		 group by oss.person_id
-		)latest 
-	on latest.person_id = o.person_id
-	where concept_id = 4268
-	and  o.obs_datetime = max_observation	
-	)results_rece
-ON previous.Id = results_rece.person_id
-
 -- results
 left outer join
 (SELECT distinct person_id, VL_result
@@ -938,24 +917,6 @@ inner join
 	)results
 ON previous.Id = results.person_id
 
--- date results given to patient
-left outer join
-(select o.person_id,CAST(value_datetime AS DATE) as Patient_received_results
-from obs o 
-inner join 
-		(
-		 select oss.person_id, MAX(oss.obs_datetime) as max_observation,
-		 SUBSTRING(MAX(CONCAT(oss.obs_datetime, oss.value_datetime)), 20) as latest_results_received_date
-		 from obs oss
-		 where oss.concept_id = 4274 and oss.voided=0
-		 and oss.obs_datetime < cast('#endDate#' as date)
-		 group by oss.person_id
-		)latest 
-	on latest.person_id = o.person_id
-	where concept_id = 4274
-	and  o.obs_datetime = max_observation	
-	)patients
-ON previous.Id = patients.person_id
 
 -- TB Screening
 left outer join
