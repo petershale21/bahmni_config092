@@ -1,4 +1,4 @@
-
+	
 (SELECT patientIdentifier AS "Patient_Identifier",ART_Number, File_Number, patientName AS "Patient_Name", Age,DOB, Gender, Screening_Type, VIA_Result, PapSmear_Result
     FROM
                 (select distinct patient.patient_id AS Id,
@@ -18,12 +18,19 @@
 						  AND patient.voided = 0 AND o.voided = 0
 						  -- AND o.person_id not in
                           inner join  (
-							select distinct os.person_id from obs os
-							where os.concept_id = 4521
-							AND os.value_coded = 1738
-                            and os.voided = 0
-                            AND CAST(os.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
-                            AND CAST(os.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
+							select distinct B.person_id
+							from obs B
+							inner join 
+							(select person_id, max(obs_datetime), SUBSTRING(MAX(CONCAT(obs_datetime, obs_id)), 20) AS observation_id
+							from obs where concept_id = 4511
+							AND CAST(obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+							AND CAST(obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
+							group by person_id) as A
+							on A.observation_id = B.obs_group_id
+							where concept_id = 4521 and value_coded = 1738
+							and A.observation_id = B.obs_group_id
+							and voided = 0	
+							group by B.person_id
 						 ) as hiv_pos
                          on hiv_pos.person_id = o.person_id
 					 
@@ -37,10 +44,10 @@
 						  AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
                    WHERE observed_age_group.report_group_name = 'Modified_Ages') AS Cervical_Cancer_Screened
 
-inner join 
+-- inner join 
+left outer join 
 (
-        select
-       os.person_id,
+        select distinct os.person_id,
        case
        -- Screening Type
            when os.value_coded = 4757 then "Cervical VIA Test"
@@ -60,8 +67,7 @@ on screening_type.person_id = Cervical_Cancer_Screened.Id
 left outer join 
 
 (
-        select
-       os.person_id,
+        select distinct os.person_id,
        -- Results of VIA Test
        case
            when os.value_coded = 328 then "VIA +ve"
@@ -81,8 +87,7 @@ on via_result.person_id = Cervical_Cancer_Screened.Id
 left outer join 
 
 (
-        select
-       os.person_id,
+        select distinct os.person_id,
        -- Results of Pap Smear Test
        case
            when os.value_coded = 324 then "Normal"
