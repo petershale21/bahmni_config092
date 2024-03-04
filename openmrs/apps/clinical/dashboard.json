@@ -98,7 +98,7 @@
                         "DISA, GeneXpert Result, MTB Result", 
                         "DISA, GeneXpert Result, Rifampicin", 
                         "DISA, VL Result Testdate",
-                        "DISA, Result Comments"
+                        "DISA, VL Result Comments"
                         ],
                    "numberOfVisits": "4",
                    "showHeader": true,
@@ -113,7 +113,7 @@
                         "DISA, GeneXpert Result, MTB Result" ,
                         "DISA, GeneXpert Result, Rifampicin", 
                         "DISA, VL Result Testdate",
-                        "DISA, Result Comments",
+                        "DISA, VL Result Comments",
                         "HIVTC, VL Pregnancy Status",
                         "HIVTC, VL Breastfeeding Status"
                         ],
