@@ -94,9 +94,11 @@
                         "eRegister Lab Order Number",
                         "DISA, VL Result [#/vol]", 
                         "DISA, VL Result [log#/vol]",
-                        "DISA, VL Result (low value)", 
+                        "DISA, VL Result (low value)",
+                        "DISA, GeneXpert Result, MTB Result", 
+                        "DISA, GeneXpert Result, Rifampicin", 
                         "DISA, VL Result Testdate",
-                        "DISA, VL Result Comments"
+                        "DISA, Result Comments"
                         ],
                    "numberOfVisits": "4",
                    "showHeader": true,
@@ -107,9 +109,11 @@
                         "eRegister Lab Order Number",
                         "DISA, VL Result [#/vol]", 
                         "DISA, VL Result [log#/vol]",
-                        "DISA, VL Result (low value)", 
+                        "DISA, VL Result (low value)",
+                        "DISA, GeneXpert Result, MTB Result" ,
+                        "DISA, GeneXpert Result, Rifampicin", 
                         "DISA, VL Result Testdate",
-                        "DISA, VL Result Comments",
+                        "DISA, Result Comments",
                         "HIVTC, VL Pregnancy Status",
                         "HIVTC, VL Breastfeeding Status"
                         ],
