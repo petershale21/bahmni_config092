@@ -43,5 +43,6 @@ select distinct
 						AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
                    WHERE observed_age_group.report_group_name = 'Modified_Ages' and cast(obs_datetime as date) <= CAST('#endDate#' AS DATE) and concept_id = 2254 
 				   and o.value_numeric >= 1000
+				   and o.obs_datetime BETWEEN DATE(DATE_ADD(CAST('#endDate#' AS DATE), INTERVAL -12 MONTH)) AND date_add(cast('#endDate#' as datetime), interval 1 day)
 				   Group  BY patientIdentifier 
 				   order by 2
