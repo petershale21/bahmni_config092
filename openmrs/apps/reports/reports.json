@@ -1473,5 +1473,33 @@
     "config": {
         "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/cervical_cancer_pivot.sql/"
     }
+},
+"ART.6_list": {
+    "name": "ART Clients with Viral Load Test Results (List)",
+    "type": "MRSGeneric",
+    "config": {
+        "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/ART6_list.sql/"
+    }
+},
+"ART.6_pivot": {
+    "name": "ART Clients with Viral Load Test Results (Pivot)",
+    "type": "MRSGeneric",
+    "config": {
+        "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/ART6_pivot.sql/"
+    }
+},
+"ART.8_list": {
+    "name": "Appropriate second VL test (List)",
+    "type": "MRSGeneric",
+    "config": {
+        "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/ART8_list.sql/"
+    }
+},
+"ART.13_list": {
+    "name": "ART Adherence Proxy (List)",
+    "type": "MRSGeneric",
+    "config": {
+        "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/ART13_list.sql/"
+    }
 }
 }
