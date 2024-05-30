@@ -172,7 +172,7 @@ AND Clients_Seen.Id not in (
 										select oss.person_id, MAX(oss.obs_datetime) as max_observation,
 										SUBSTRING(MAX(CONCAT(oss.obs_datetime, oss.value_coded)), 20) as examination_timing
 										from obs oss
-										where oss.concept_id = 3753
+										where oss.concept_id = 3753 
 										and cast(oss.obs_datetime as date) <= cast('#endDate#' as date)
 										group by oss.person_id
 										)latest
@@ -432,3 +432,6 @@ UNION
 						  AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
                    WHERE observed_age_group.report_group_name = 'Modified_Ages') AS Seen_Previous_ART_Clients
 ORDER BY Seen_Previous_ART_Clients.patientName)
+
+
+
