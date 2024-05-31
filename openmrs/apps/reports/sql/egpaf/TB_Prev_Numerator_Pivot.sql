@@ -49,7 +49,7 @@ FROM (
 															and ob.value_datetime <= CAST('#endDate#'AS DATE)
 															and ob.voided = 0
 														)
-														AND o.person_id in 
+														AND o.person_id not in 
 														(
 														-- Death
 																	select distinct p.person_id
@@ -171,7 +171,7 @@ FROM (
 															and ob.value_datetime <= CAST('#endDate#'AS DATE)
 															and ob.voided = 0
 														)
-														AND o.person_id in 
+														AND o.person_id not in 
 														(
 														-- Death
 																	select distinct p.person_id
