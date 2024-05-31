@@ -1,6 +1,6 @@
 SELECT distinct patientIdentifier,TB_Number, patientName, Age, age_group, Gender,consultation_date, HIV_Status, HIV_Management
  FROM (
-(Select distinct Id, TB_Number, patientIdentifier , patientName, Age, age_group,sort_order,age_group,sort_order, Gender, consultation_date
+(Select distinct Id, TB_Number, patientIdentifier , patientName, Age, age_group,sort_order,Gender, consultation_date
 		From(
 				select distinct patient.patient_id AS Id,
 						patient_identifier.identifier AS patientIdentifier,
