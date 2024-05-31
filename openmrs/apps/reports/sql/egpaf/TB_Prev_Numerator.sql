@@ -8,7 +8,7 @@ FROM
                         patient_identifier.identifier AS patientIdentifier,
                         pi2.identifier AS ART_Number,
                         concat(person_name.given_name, ' ', person_name.family_name) AS patientName,
-                        floor(datediff(CAST('2024-04-30' AS DATE), person.birthdate)/365) AS Age,
+                        floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age,
                         person.gender AS Gender,
                         observed_age_group.name AS age_group,
                         observed_age_group.sort_order AS sort_order
@@ -35,7 +35,7 @@ FROM
                                     -- TPT Completed on this period
                                     where ob.concept_id = 4821
                                     AND ob.value_datetime >= CAST('#startDate#' AS DATE)
-                                    and ob.value_datetime <= CAST('2024-04-30'AS DATE)
+                                    and ob.value_datetime <= CAST('#endDate#'AS DATE)
                                     and ob.voided = 0
                                 )
                                 AND o.person_id not in 
@@ -44,7 +44,7 @@ FROM
 											select distinct p.person_id
 											from person p
 											where dead = 1
-											and death_date <= CAST('2024-04-30' AS DATE)	
+											and death_date <= CAST('#endDate#' AS DATE)	
 											and voided = 0	
 						        )
                             INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
@@ -52,7 +52,7 @@ FROM
                             INNER JOIN patient_identifier ON patient_identifier.patient_id = person.person_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1
                             LEFT JOIN patient_identifier pi2 ON pi2.patient_id = person.person_id AND pi2.identifier_type in (5,12)
                             INNER JOIN reporting_age_group AS observed_age_group ON
-                            CAST('2024-04-30' AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
+                            CAST('#endDate#' AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
                             AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
                         WHERE observed_age_group.report_group_name = 'Modified_Ages') AS TPT_Clients
                 ORDER BY TPT_Clients.Age) As TB_Prev_Numerator
@@ -71,7 +71,7 @@ FROM
                                 group by person_id) as 6weeks_test
                             on 6weeks_test.person_id = o.person_id
                             where o.concept_id = 5401
-                            and cast(o.value_datetime as date) <= cast('2024-04-30' as date)
+                            and cast(o.value_datetime as date) <= cast('#endDate#' as date)
                             and cast(o.obs_datetime as date) = cast(max_observation as date)
                             and o.voided = 0
                             )TPT
@@ -93,7 +93,7 @@ FROM
                                 group by person_id) as 6weeks_test
                             on 6weeks_test.person_id = o.person_id
                             where o.concept_id = 4821
-                            and cast(o.value_datetime as date) <= cast('2024-04-30' as date)
+                            and cast(o.value_datetime as date) <= cast('#endDate#' as date)
                             and cast(o.obs_datetime as date) = cast(max_observation as date)
                             and o.voided = 0
                             )TPT

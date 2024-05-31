@@ -10,7 +10,7 @@ SELECT distinct patientIdentifier,TB_Number, patientName, Age, age_group, Gender
 						observed_age_group.name AS age_group,
 						person.gender AS Gender,
 						observed_age_group.sort_order AS sort_order,
-						o.obs_datetime as consultation_date
+						cast(o.obs_datetime as date) as consultation_date
 					from obs o
 					--  TB Clients 
 						INNER JOIN patient ON o.person_id = patient.patient_id 
