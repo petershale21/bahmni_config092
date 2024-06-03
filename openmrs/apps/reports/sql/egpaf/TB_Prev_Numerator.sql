@@ -1,4 +1,4 @@
-SELECT distinct Id, Patient_Identifier, ART_Number, Patient_Name, Age , Gender, TPT_Start_Date, TPT_Completion_Date
+SELECT distinct Patient_Identifier, ART_Number, Patient_Name, Age , Gender, TPT_Start_Date, TPT_Completion_Date
 FROM
     (
         (SELECT distinct Id, patientIdentifier AS "Patient_Identifier", ART_Number, patientName AS "Patient_Name", Age , Gender
@@ -38,7 +38,7 @@ FROM
                                     and ob.value_datetime <= CAST('#endDate#'AS DATE)
                                     and ob.voided = 0
                                 )
-                                AND o.person_id in 
+                                AND o.person_id not in 
                                 (
 								-- Death
 											select distinct p.person_id

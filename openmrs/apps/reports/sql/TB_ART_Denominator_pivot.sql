@@ -28,7 +28,7 @@ FROM
 						patient_identifier.identifier AS patientIdentifier,
 						pi2.identifier AS TB_Number,
 						concat(person_name.given_name, ' ', person_name.family_name) AS patientName,
-						floor(datediff(CAST('2024-03-31' AS DATE), person.birthdate)/365) AS Age,
+						floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age,
 						observed_age_group.name AS age_group,
 						person.gender AS Gender,
 						observed_age_group.sort_order AS sort_order,
@@ -43,12 +43,12 @@ FROM
 						LEFT JOIN patient_identifier pi2 ON pi2.patient_id = o.person_id AND pi2.identifier_type in (7)
 						AND o.voided=0
 						INNER JOIN reporting_age_group AS observed_age_group ON
-						CAST('2024-03-31' AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
+						CAST('#endDate#' AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
 						AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
 						WHERE observed_age_group.report_group_name = 'Modified_Ages'
 						AND o.concept_id  = 4666 and o.value_coded in (4323, 4324)
-						AND CAST(o.obs_datetime AS DATE) >= CAST('2024-03-01' AS DATE)
-						AND CAST(o.obs_datetime AS DATE) <= CAST('2024-03-31' AS DATE)
+						AND CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+						AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 						AND patient.voided = 0 AND o.voided = 0
 						Group by o.person_id) AS TB_TESTING
 )
@@ -71,7 +71,7 @@ from obs o
 		 SUBSTRING(MAX(CONCAT(oss.obs_datetime, oss.obs_id)), 20) as observation_id
 		 from obs oss
 		 where oss.concept_id = 4666 and oss.voided=0
-		 and cast(oss.obs_datetime as date) <= cast('2024-03-31' as date)
+		 and cast(oss.obs_datetime as date) <= cast('#endDate#' as date)
 		 group by oss.person_id
 		)latest
 	on latest.person_id = o.person_id
@@ -117,7 +117,7 @@ FROM
 						patient_identifier.identifier AS patientIdentifier,
 						pi2.identifier AS TB_Number,
 						concat(person_name.given_name, ' ', person_name.family_name) AS patientName,
-						floor(datediff(CAST('2024-03-31' AS DATE), person.birthdate)/365) AS Age,
+						floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age,
 						observed_age_group.name AS age_group,
 						person.gender AS Gender,
 						observed_age_group.sort_order AS sort_order,
@@ -131,12 +131,12 @@ FROM
 						LEFT JOIN patient_identifier pi2 ON pi2.patient_id = o.person_id AND pi2.identifier_type in (7)
 						AND o.voided=0
 						INNER JOIN reporting_age_group AS observed_age_group ON
-						CAST('2024-03-31' AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
+						CAST('#endDate#' AS DATE) BETWEEN (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.min_years YEAR), INTERVAL observed_age_group.min_days DAY))
 						AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
 						WHERE observed_age_group.report_group_name = 'Modified_Ages'
 						AND o.concept_id  = 4666 and o.value_coded in (4323, 4324)
-						AND CAST(o.obs_datetime AS DATE) >= CAST('2024-03-01' AS DATE)
-						AND CAST(o.obs_datetime AS DATE) <= CAST('2024-03-31' AS DATE)
+						AND CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+						AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 						AND patient.voided = 0 AND o.voided = 0
 						Group by o.person_id) AS TB_TESTING
 )
@@ -159,7 +159,7 @@ from obs o
 		 SUBSTRING(MAX(CONCAT(oss.obs_datetime, oss.obs_id)), 20) as observation_id
 		 from obs oss
 		 where oss.concept_id = 4666 and oss.voided=0
-		 and cast(oss.obs_datetime as date) <= cast('2024-03-31' as date)
+		 and cast(oss.obs_datetime as date) <= cast('#endDate#' as date)
 		 group by oss.person_id
 		)latest
 	on latest.person_id = o.person_id
