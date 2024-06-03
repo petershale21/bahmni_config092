@@ -25,145 +25,149 @@ Bahmni.ConceptSet.FormConditions.rules = {
                 var conditionConcept = formFieldValues['TB Transfer in'];
                 var conditions = { show: [], hide: [] };
 
-                 switch (conditionConcept) {
-                                                        case "Transfer In":
-                                                        case "Moved in":
-                                                                conditions.show.push("HIVTC, Transferred in from");
-                                                                conditions.hide.push("TB, Transferred In From Outside Country");
-                                                                conditions.hide.push("TB, Transferred In From Outside Facility");
-                                                                break;
+                switch (conditionConcept) {
+                        case "Transfer In":
+                        case "Moved in":
+                                conditions.show.push("HIVTC, Transferred in from");
+                                conditions.hide.push("TB, Transferred In From Outside Country");
+                                conditions.hide.push("TB, Transferred In From Outside Facility");
+                                break;
 
-                                                        case "Transfer in from outside Lesotho":
-                                                                conditions.hide.push("HIVTC, Transferred in from");
-                                                                conditions.show.push("TB, Transferred In From Outside Country");
-                                                                conditions.show.push("TB, Transferred In From Outside Facility");
-                                                                break;
-                                                        default:
-                                                                conditions.hide.push("HIVTC, Transferred in from");
-                                                                conditions.hide.push("TB, Transferred In From Outside Country");
-                                                                conditions.hide.push("TB, Transferred In From Outside Facility");
-                                                }
+                        case "Transfer in from outside Lesotho":
+                                conditions.hide.push("HIVTC, Transferred in from");
+                                conditions.show.push("TB, Transferred In From Outside Country");
+                                conditions.show.push("TB, Transferred In From Outside Facility");
+                                break;
+                        default:
+                                conditions.hide.push("HIVTC, Transferred in from");
+                                conditions.hide.push("TB, Transferred In From Outside Country");
+                                conditions.hide.push("TB, Transferred In From Outside Facility");
+                }
 
                 return conditions;
         },
-        'TB History of previous treatment' : function (formName, formFieldValues) {
-                    var conditionConcept = formFieldValues['TB History of previous treatment'];
-                    var conditions = { show: [], hide: [] };
-                    if (conditionConcept == "Other Answer"){
-                       conditions.show.push("TB History of previous treatment Specify");
-                    } else {
-                       conditions.hide.push("TB History of previous treatment Specify");
-                    }
-                    return conditions;
-         },
-        'Intervention(action taken)' : function (formName, formFieldValues) {
+        'TB History of previous treatment': function (formName, formFieldValues) {
+                var conditionConcept = formFieldValues['TB History of previous treatment'];
+                var conditions = { show: [], hide: [] };
+                if (conditionConcept == "Other Answer") {
+                        conditions.show.push("TB History of previous treatment Specify");
+                } else {
+                        conditions.hide.push("TB History of previous treatment Specify");
+                }
+                return conditions;
+        },
+        'Intervention(action taken)': function (formName, formFieldValues) {
                 var conditionConcept = formFieldValues['Intervention(action taken)'];
                 var conditions = { show: [], hide: [] };
 
-                if (conditionConcept == "Yes"){
-                    conditions.show.push("Intervention(action taken) Specify");
+                if (conditionConcept == "Yes") {
+                        conditions.show.push("Intervention(action taken) Specify");
                 } else {
-                     conditions.hide.push("Intervention(action taken) Specify");
+                        conditions.hide.push("Intervention(action taken) Specify");
                 }
 
                 return conditions;
         },
         /*** TB COMORBIDITY ***/
-        'TB Comorbidities, Clinical Status' : function (formName, formFieldValues) {
-               var conditionConcept = formFieldValues['TB Comorbidities, Clinical Status'];
-               var conditions = { show: [], hide: [] };
+        'TB Comorbidities, Clinical Status': function (formName, formFieldValues) {
+                var conditionConcept = formFieldValues['TB Comorbidities, Clinical Status'];
+                var conditions = { show: [], hide: [] };
 
-               if (conditionConcept){
-                  conditions.show.push("Drug");
-                  conditions.show.push("Dosage");
-               } else {
-                   conditions.hide.push("Drug");
-                   conditions.hide.push("Dosage");
-               }
+                if (conditionConcept) {
+                        conditions.show.push("Drug");
+                        conditions.show.push("Dosage");
+                } else {
+                        conditions.hide.push("Drug");
+                        conditions.hide.push("Dosage");
+                }
 
-               return conditions;
+                return conditions;
         },
         /**** AUTOFILL WEIGHT VALUES */
         'WEIGHT': function (formName, formFieldValues) {
-               var conditions = { assignedValues: [] , disable: [] };
-               if (formName == "ANC, ANC Program" || formName == "HIV Treatment and Care Progress Template" || formName == "Vitals"){
-                    conditions.assignedValues.push(
-                    { field: "WEIGHT",
-                      fieldValue :
-                      {
-                         isAutoFill: true,
-                         scopedEncounter:"CurrentVisit",
-                         isFilledOnRetrospectiveMode: false,
-                         enableDefaultValue:false,
-                         enableEditAfterAutoFill: false
-                      }
-                    });
-               }
-               return conditions;
+                var conditions = { assignedValues: [], disable: [] };
+                if (formName == "ANC, ANC Program" || formName == "HIV Treatment and Care Progress Template" || formName == "Vitals") {
+                        conditions.assignedValues.push(
+                                {
+                                        field: "WEIGHT",
+                                        fieldValue:
+                                        {
+                                                isAutoFill: true,
+                                                scopedEncounter: "CurrentVisit",
+                                                isFilledOnRetrospectiveMode: false,
+                                                enableDefaultValue: false,
+                                                enableEditAfterAutoFill: false
+                                        }
+                                });
+                }
+                return conditions;
         },
 
         /**** AUTOFILL SYSTOLIC VALUES */
         'Systolic': function (formName, formFieldValues) {
-                var conditions = { assignedValues: [] , disable: [] };
-                if (formName == "ANC, ANC Program"|| formName == "Vitals"){
+                var conditions = { assignedValues: [], disable: [] };
+                if (formName == "ANC, ANC Program" || formName == "Vitals") {
                         conditions.assignedValues.push(
-                        { field: "Systolic",
-                        fieldValue :
-                        {
-                                isAutoFill: true,
-                                scopedEncounter:"CurrentVisit",
-                                isFilledOnRetrospectiveMode: false,
-                                enableDefaultValue:false,
-                                enableEditAfterAutoFill: false
-                        }
-                        });
+                                {
+                                        field: "Systolic",
+                                        fieldValue:
+                                        {
+                                                isAutoFill: true,
+                                                scopedEncounter: "CurrentVisit",
+                                                isFilledOnRetrospectiveMode: false,
+                                                enableDefaultValue: false,
+                                                enableEditAfterAutoFill: false
+                                        }
+                                });
                 }
                 return conditions;
         },
 
         /**** AUTOFILL DIASTOLIC VALUES */
         'Diastolic': function (formName, formFieldValues) {
-                var conditions = { assignedValues: [] , disable: [] };
-                if (formName == "ANC, ANC Program"|| formName == "Vitals"){
+                var conditions = { assignedValues: [], disable: [] };
+                if (formName == "ANC, ANC Program" || formName == "Vitals") {
                         conditions.assignedValues.push(
-                        { field: "Diastolic",
-                        fieldValue :
-                        {
-                                isAutoFill: true,
-                                scopedEncounter:"CurrentVisit",
-                                isFilledOnRetrospectiveMode: false,
-                                enableDefaultValue:false,
-                                enableEditAfterAutoFill: false
-                        }
-                        });
+                                {
+                                        field: "Diastolic",
+                                        fieldValue:
+                                        {
+                                                isAutoFill: true,
+                                                scopedEncounter: "CurrentVisit",
+                                                isFilledOnRetrospectiveMode: false,
+                                                enableDefaultValue: false,
+                                                enableEditAfterAutoFill: false
+                                        }
+                                });
                 }
                 return conditions;
         },
-                
+
         /*** AUTOFILL MUAC VALUES ****/
 
         'IMAM, MUAC': function (formName, formFieldValues) {
-                var conditions = { assignedValues: [] , disable: [] };
-                if (formName == "ANC, ANC Program"){
-                     conditions.assignedValues.push(
-                     { field: "IMAM, MUAC",
-                       fieldValue :
-                       {
-                          isAutoFill: true,
-                          scopedEncounter:"CurrentVisit",
-                          isFilledOnRetrospectiveMode: false,
-                          enableDefaultValue:false,
-                          enableEditAfterAutoFill: false
-                       }
-                     });
+                var conditions = { assignedValues: [], disable: [] };
+                if (formName == "ANC, ANC Program") {
+                        conditions.assignedValues.push(
+                                {
+                                        field: "IMAM, MUAC",
+                                        fieldValue:
+                                        {
+                                                isAutoFill: true,
+                                                scopedEncounter: "CurrentVisit",
+                                                isFilledOnRetrospectiveMode: false,
+                                                enableDefaultValue: false,
+                                                enableEditAfterAutoFill: false
+                                        }
+                                });
                 }
                 return conditions;
         },
-        
+
         'HTC, Patient type': function (formName, formFieldValues) {
                 var conditionConcept = formFieldValues['HTC, Patient type'];
-                var conditions = { show: [], hide: [],   assignedValues: [] };
-                if (conditionConcept == undefined){
+                var conditions = { show: [], hide: [], assignedValues: [] };
+                if (conditionConcept == undefined) {
                         conditions.hide.push("HEIGHT");
                         conditions.hide.push("WEIGHT");
                         conditions.hide.push("TB Status");
@@ -171,37 +175,37 @@ Bahmni.ConceptSet.FormConditions.rules = {
                         conditions.hide.push("Diastolic Data");
                         conditions.hide.push("IMAM, MUAC");
 
-                }else if (conditionConcept == "HTC, Patient") {
-                        conditions.assignedValues.push( {
+                } else if (conditionConcept == "HTC, Patient") {
+                        conditions.assignedValues.push({
                                 field: "HEIGHT",
-                                fieldValue : {
+                                fieldValue: {
                                         isAutoFill: true,
-                                        scopedEncounter:"latestvisit",
+                                        scopedEncounter: "latestvisit",
                                         isFilledOnRetrospectiveMode: true,
-                                        enableDefaultValue:false,
+                                        enableDefaultValue: false,
                                         enableEditAfterAutoFill: true
-                                        }
-                                });
+                                }
+                        });
 
                         conditions.show.push("HEIGHT");
                         conditions.show.push("WEIGHT");
-                        conditions.assignedValues.push( {
+                        conditions.assignedValues.push({
                                 field: "WEIGHT",
-                                fieldValue : {
+                                fieldValue: {
                                         isAutoFill: true,
-                                        scopedEncounter:"latestvisit",
+                                        scopedEncounter: "latestvisit",
                                         isFilledOnRetrospectiveMode: true,
-                                        enableDefaultValue:true,
+                                        enableDefaultValue: true,
                                         enableEditAfterAutoFill: true
-                                        }
-                                });
+                                }
+                        });
                         conditions.show.push("TB Status");
                         conditions.show.push("Systolic Data");
                         conditions.show.push("Diastolic Data");
                         conditions.show.push("IMAM, MUAC");
 
 
-                } else if(conditionConcept == "HTC, Buddy") {
+                } else if (conditionConcept == "HTC, Buddy") {
                         conditions.hide.push("HEIGHT");
                         conditions.hide.push("WEIGHT");
                         conditions.hide.push("TB Status");
@@ -311,7 +315,7 @@ Bahmni.ConceptSet.FormConditions.rules = {
                 var DeliveryPlace = formFieldValues['Delivery Note, Delivery location'];
 
                 if ((formName == "PostNatal Care Register") || (formName == "Delivery Information") || (formName == "Lesotho Obstetric Record")) {
-                        var conditions = { assignedValues: [],show: [], hide: [] };
+                        var conditions = { assignedValues: [], show: [], hide: [] };
 
                         if ((DeliveryPlace == "Institutional Delivery") || (DeliveryPlace == "Home Delivery")) {
                                 conditions.show.push("Mode of Delivery");
@@ -319,18 +323,18 @@ Bahmni.ConceptSet.FormConditions.rules = {
                                 conditions.hide.push("Mode of Delivery");
                         }
                 }
-                if ((formName == "PostNatal Care Register") || (formName == "Delivery Information") ) {
+                if ((formName == "PostNatal Care Register") || (formName == "Delivery Information")) {
 
                         conditions.assignedValues.push({
                                 field: "Delivery Note, Delivery location",
                                 fieldValue: {
-                                    isAutoFill: true,
-                                    scopedEncounter: "latestvisit",
-                                    isFilledOnRetrospectiveMode: true,
-                                    enableDefaultValue: true,
-                                    enableEditAfterAutoFill: true
+                                        isAutoFill: true,
+                                        scopedEncounter: "latestvisit",
+                                        isFilledOnRetrospectiveMode: true,
+                                        enableDefaultValue: true,
+                                        enableEditAfterAutoFill: true
                                 }
-                            });
+                        });
 
                 }
 
@@ -344,40 +348,40 @@ Bahmni.ConceptSet.FormConditions.rules = {
 
                 conditions.assignedValues.push({
                         field: "ANC, Gravida",
-                        fieldValue:{
-                                isAutoFill:true,
-                                scopedEncounter:"latestvisit",
-                                isFilledOnRetrospectiveMode:true,
+                        fieldValue: {
+                                isAutoFill: true,
+                                scopedEncounter: "latestvisit",
+                                isFilledOnRetrospectiveMode: true,
                                 enableDefaultValue: true,
                                 enableEditAfterAutoFill: true
                         }
-                });                
-               
-                if (formName == "ANC, Obstetric History"){
-                        
+                });
+
+                if (formName == "ANC, Obstetric History") {
+
                         if (ANCGravida > "1") {
                                 conditions.show.push("ANC, Parity");
                                 conditions.show.push("ANC, History of Past Pregnancies");
                         }
-                
+
                         else {
                                 conditions.hide.push("ANC, Parity");
                                 conditions.hide.push("ANC, Alive");
                                 conditions.hide.push("ANC, Number of Miscarriages");
                                 conditions.hide.push("ANC, History of Past Pregnancies");
-                                
-                        }                        
+
+                        }
                 }
-                if (formName == "ANC, Examinations"){
+                if (formName == "ANC, Examinations") {
                         if (ANCGravida > "1") {
                                 conditions.show.push("ANC, Number of Miscarriages");
                                 conditions.show.push("ANC, Parity");
                         }
-                
+
                         else {
 
                                 conditions.hide.push("ANC, Parity");
-                                conditions.hide.push("ANC, Number of Miscarriages");                
+                                conditions.hide.push("ANC, Number of Miscarriages");
                         }
                 }
                 return conditions;
@@ -392,10 +396,10 @@ Bahmni.ConceptSet.FormConditions.rules = {
 
                 conditions.assignedValues.push({
                         field: "ANC, Parity",
-                        fieldValue:{
-                                isAutoFill:true,
-                                scopedEncounter:"latestvisit",
-                                isFilledOnRetrospectiveMode:true,
+                        fieldValue: {
+                                isAutoFill: true,
+                                scopedEncounter: "latestvisit",
+                                isFilledOnRetrospectiveMode: true,
                                 enableDefaultValue: true,
                                 enableEditAfterAutoFill: true
                         }
@@ -410,12 +414,12 @@ Bahmni.ConceptSet.FormConditions.rules = {
                         else if (ANCParity < ANCGravida1) {
                                 conditions.enable.push("ANC, Alive");
                         }
-                        else{
+                        else {
                                 conditions.disable.push("ANC, Alive");
                                 conditions.hide.push("ANC, Alive");
                         }
                 }
-                if (formName == "ANC, Examinations"){
+                if (formName == "ANC, Examinations") {
                         if (ANCParity >= ANCGravida1) {
                                 alert("Parity should be less than Gravida");
                                 conditions.disable.push("ANC, Number of Miscarriages");
@@ -423,7 +427,7 @@ Bahmni.ConceptSet.FormConditions.rules = {
                         else if (ANCParity < ANCGravida1) {
                                 conditions.enable.push("ANC, Number of Miscarriages");
                         }
-                        else{
+                        else {
                                 conditions.disable.push("ANC, Number of Miscarriages");
                                 conditions.hide.push("ANC, Number of Miscarriages");
                         }
@@ -432,24 +436,24 @@ Bahmni.ConceptSet.FormConditions.rules = {
 
         },
 
-        'ANC, Alive': function(formName, formFieldValues){
+        'ANC, Alive': function (formName, formFieldValues) {
                 var ANCAlive = formFieldValues['ANC, Alive'];
                 var ANCParity = formFieldValues['ANC, Parity'];
                 var conditions = { show: [], hide: [], enable: [], disable: [], assignedValues: [] };
-                if(formName == "ANC, Obstetric History"){
-                        
-                        if(ANCAlive < ANCParity){ 
+                if (formName == "ANC, Obstetric History") {
+
+                        if (ANCAlive < ANCParity) {
                                 conditions.show.push("ANC, Number of Miscarriages");
                                 conditions.enable.push("ANC, Number of Miscarriages");
                         }
-                        else if(ANCAlive > ANCParity){
-                                alert("Parity should be more or equal to alive")
-                                conditions.hide.push("ANC, Number of Miscarriages");
-                        } 
-                        else{
+                        else if (ANCAlive > ANCParity) {
+                                alert("Parity should be more or equal to alive");
                                 conditions.hide.push("ANC, Number of Miscarriages");
                         }
-                }return conditions;
+                        else {
+                                conditions.hide.push("ANC, Number of Miscarriages");
+                        }
+                } return conditions;
 
         },
 
@@ -496,10 +500,10 @@ Bahmni.ConceptSet.FormConditions.rules = {
 
                 conditions.assignedValues.push({
                         field: "ANC, Number of Miscarriages",
-                        fieldValue:{
-                                isAutoFill:true,
-                                scopedEncounter:"latestvisit",
-                                isFilledOnRetrospectiveMode:true,
+                        fieldValue: {
+                                isAutoFill: true,
+                                scopedEncounter: "latestvisit",
+                                isFilledOnRetrospectiveMode: true,
                                 enableDefaultValue: true,
                                 enableEditAfterAutoFill: true,
                                 autocalculate: true
@@ -547,9 +551,9 @@ Bahmni.ConceptSet.FormConditions.rules = {
                 var conditions = { show: [], hide: [] };
 
                 if (anySurgery == "Yes") {
-			conditions.show.push("ANC, Type of Surgery");
-		} else if (!anySurgery || anySurgery != "Yes") {
-			conditions.hide.push("ANC, Type of Surgery");
+                        conditions.show.push("ANC, Type of Surgery");
+                } else if (!anySurgery || anySurgery != "Yes") {
+                        conditions.hide.push("ANC, Type of Surgery");
                 }
                 return conditions;
         },
@@ -618,14 +622,14 @@ Bahmni.ConceptSet.FormConditions.rules = {
                                 conditions.hide.push("ANC, Syphilis Screening Treatment");
                         }
                 }
-                 if ( (formName == "LD, Syphillis Screening") || (formName == "Labour and Delivery Register")){
+                if ((formName == "LD, Syphillis Screening") || (formName == "Labour and Delivery Register")) {
 
-                         if (SyphilisScreening == "Not Done" || SyphilisScreening == "undefined"){
-                                   conditions.show.push("LD, Screened at Maternity");
-                         } else {
-                                   conditions.hide.push("LD, Screened at Maternity");
-                         }
-                 }
+                        if (SyphilisScreening == "Not Done" || SyphilisScreening == "undefined") {
+                                conditions.show.push("LD, Screened at Maternity");
+                        } else {
+                                conditions.hide.push("LD, Screened at Maternity");
+                        }
+                }
                 return conditions;
         },
 
@@ -672,7 +676,7 @@ Bahmni.ConceptSet.FormConditions.rules = {
                         if (TestedInPNC == "Positive") {
                                 conditions.show.push("PMTCT, WHO clinical staging")
                                 conditions.show.push("PNC, On ART Treatment");
-                        } 
+                        }
                         else {
                                 conditions.hide.push("PMTCT, WHO clinical staging")
                                 conditions.hide.push("PNC, On ART Treatment");
@@ -702,7 +706,7 @@ Bahmni.ConceptSet.FormConditions.rules = {
                         conditions.hide.push("HIV Prophylaxis/Treatment");
                         conditions.hide.push("HIVTC, Viral Load Monitoring Template");
                         conditions.hide.push("ANC, Partner HIV Status");
-                                
+
                         if (AncVisits == "ANC, First Visit") {
                                 conditions.hide.push("ANC, Visit order Number");
                                 conditions.show.push("Lesotho Obstetric Record")
@@ -721,25 +725,25 @@ Bahmni.ConceptSet.FormConditions.rules = {
                                 conditions.hide.push("Lesotho Obstetric Record")
                                 conditions.hide.push("ANC Register");
                         }
-                        
+
                 }
                 return conditions;
 
         },
-        
-        'ANC, Initiated on ART': function(formName, formFieldValues){
-                var initiation = formFieldValues['ANC, Initiated on ART'];
-                var conditions = { show: [], hide: [], disable: []};
 
-                if (formName == 'HIV Prophylaxis/Treatment'){
-                        if((initiation == "Already on ART") || (initiation == "ANC, Initiated on ART during pregnancy")){
+        'ANC, Initiated on ART': function (formName, formFieldValues) {
+                var initiation = formFieldValues['ANC, Initiated on ART'];
+                var conditions = { show: [], hide: [], disable: [] };
+
+                if (formName == 'HIV Prophylaxis/Treatment') {
+                        if ((initiation == "Already on ART") || (initiation == "ANC, Initiated on ART during pregnancy")) {
                                 conditions.show.push("PMTCT, ART start date");
                                 conditions.show.push("HIVTC, ART Regimen");
                                 conditions.show.push("HIV, Program ID");
                                 conditions.show.push("PMTCT, WHO clinical staging");
                                 conditions.show.push("HIVTC, Viral Load Monitoring Template");
                         }
-                        else{
+                        else {
                                 conditions.hide.push("PMTCT, ART start date");
                                 conditions.hide.push("HIVTC, ART Regimen");
                                 conditions.hide.push("HIV, Program ID");
@@ -750,35 +754,35 @@ Bahmni.ConceptSet.FormConditions.rules = {
                 return conditions;
         },
 
-        'ANC, HIV Test Result':function(formName, formFieldValues){
-                var conditions = { show: [], hide: [], disable: [], enable: []};
+        'ANC, HIV Test Result': function (formName, formFieldValues) {
+                var conditions = { show: [], hide: [], disable: [], enable: [] };
                 var result = formFieldValues['ANC, HIV Test Result'];
 
-                if (formName == 'ANC, Initial Test during this pregnancy'){
-                        if((result == "Positive")||(result == "Negative")){
+                if (formName == 'ANC, Initial Test during this pregnancy') {
+                        if ((result == "Positive") || (result == "Negative")) {
                                 conditions.hide.push("ANC, HIV Result Received");
                                 conditions.show.push("ANC, HIV Result Received");
                         }
-                        else{
+                        else {
                                 conditions.hide.push("ANC, HIV Result Received");
                                 conditions.hide.push("HIV Prophylaxis/Treatment");
                         }
-                }return conditions;
+                } return conditions;
         },
 
-        'ANC, HIV Result Received':function(formName, formFieldValues){
-                var conditions = { show: [], hide: [], disable: [], enable: []};
+        'ANC, HIV Result Received': function (formName, formFieldValues) {
+                var conditions = { show: [], hide: [], disable: [], enable: [] };
                 var result_recieved = formFieldValues['ANC, HIV Result Received'];
                 var result = formFieldValues['ANC, HIV Test Result'];
 
-                if (formName == 'ANC, Initial Test during this pregnancy'){
-                        if(!result_recieved){
+                if (formName == 'ANC, Initial Test during this pregnancy') {
+                        if (!result_recieved) {
                                 conditions.hide.push("Subsequent HIV Test Results");
                         }
-                        if(result_recieved == "Yes"){
+                        if (result_recieved == "Yes") {
                                 conditions.show.push("HIV Prophylaxis/Treatment");
-                                
-                                if(result == "Positive"){
+
+                                if (result == "Positive") {
                                         conditions.show.push("ANC, Initiated on ART");
                                         conditions.hide.push("ANC, Initiated in Prep");
                                         conditions.hide.push("PMTCT, ART start date");
@@ -788,7 +792,7 @@ Bahmni.ConceptSet.FormConditions.rules = {
                                         conditions.hide.push("Subsequent HIV Test Results");
                                         conditions.hide.push("HIVTC, Viral Load Monitoring Template");
                                 }
-                                else if(result == "Negative"){
+                                else if (result == "Negative") {
                                         conditions.hide.push("EIM, Cotrimoxazole given");
                                         conditions.hide.push("ANC, Initiated on ART");
                                         conditions.show.push("Subsequent HIV Test Results");
@@ -800,7 +804,7 @@ Bahmni.ConceptSet.FormConditions.rules = {
                                         conditions.hide.push("HIVTC, Viral Load Monitoring Template");
                                 }
                         }
-                        else{
+                        else {
                                 conditions.hide.push("HIV Prophylaxis/Treatment");
                         }
                 }
@@ -843,7 +847,7 @@ Bahmni.ConceptSet.FormConditions.rules = {
 
 
 
-/*--------------------------------CERVICAL CANCER SCREENING----------------------------------------------------------*/
+        /*--------------------------------CERVICAL CANCER SCREENING----------------------------------------------------------*/
 
         'Cervical Cancer Screening': function (formName, formFieldValues) {
                 var CancerScreened = formFieldValues['Cervical Cancer Screening'];
@@ -905,34 +909,34 @@ Bahmni.ConceptSet.FormConditions.rules = {
                 var conditions = { show: [], hide: [] };
 
 
-             if (formName == "Cervical Cancer Screening Register") {
+                if (formName == "Cervical Cancer Screening Register") {
 
-                  if (CancerAssessment == "Cervical VIA Test") {
-                     conditions.show.push("VIA Test");
-                     conditions.hide.push("Results of Pap Smear");
+                        if (CancerAssessment == "Cervical VIA Test") {
+                                conditions.show.push("VIA Test");
+                                conditions.hide.push("Results of Pap Smear");
 
-                   }
-                else if (CancerAssessment == "Pap Smear") {
-                     conditions.show.push("Results of Pap Smear");
-                     conditions.hide.push("VIA Test");
+                        }
+                        else if (CancerAssessment == "Pap Smear") {
+                                conditions.show.push("Results of Pap Smear");
+                                conditions.hide.push("VIA Test");
 
-                }
+                        }
 
-                else if (CancerAssessment == "HPV Test") {
-                  conditions.hide.push("Results of Pap Smear");
-                  conditions.hide.push("VIA Test");
+                        else if (CancerAssessment == "HPV Test") {
+                                conditions.hide.push("Results of Pap Smear");
+                                conditions.hide.push("VIA Test");
 
-                 }
+                        }
 
-                 else if (CancerAssessment == "Both") {
-                    conditions.show.push("Results of Pap Smear");
-                    conditions.show.push("VIA Test");
-                }
+                        else if (CancerAssessment == "Both") {
+                                conditions.show.push("Results of Pap Smear");
+                                conditions.show.push("VIA Test");
+                        }
 
-                else {
-                        conditions.hide.push("VIA Test");
-                        conditions.hide.push("Results of Pap Smear");
-                }
+                        else {
+                                conditions.hide.push("VIA Test");
+                                conditions.hide.push("Results of Pap Smear");
+                        }
                 }
                 return conditions;
         },
@@ -944,7 +948,7 @@ Bahmni.ConceptSet.FormConditions.rules = {
                 if (formName == "Cervical Cancer Screening Register") {
 
 
-                        if ( CancerPitcOffered == "Yes") {
+                        if (CancerPitcOffered == "Yes") {
                                 conditions.show.push("PITC Results");
                         }
 
@@ -1199,19 +1203,19 @@ Bahmni.ConceptSet.FormConditions.rules = {
                 }
         },
 
-        'Is Client Visitor': function(formName, formFieldValues){
+        'Is Client Visitor': function (formName, formFieldValues) {
                 var conditionConcept = formFieldValues['Is Client Visitor'];
-                var conditions = { show:[], hide:[]};
+                var conditions = { show: [], hide: [] };
 
-                if(formName == 'HIV Treatment and Care Progress Template'){
-                    if (conditionConcept == 'True'){
-                        conditions.show.push('HIVTC, Transferred in from');
-                    }
-                    else {
-                        conditions.hide.push('HIVTC, Transferred in from');
-                    }
+                if (formName == 'HIV Treatment and Care Progress Template') {
+                        if (conditionConcept == 'True') {
+                                conditions.show.push('HIVTC, Transferred in from');
+                        }
+                        else {
+                                conditions.hide.push('HIVTC, Transferred in from');
+                        }
                 }
-            return conditions;
+                return conditions;
         },
 
         'TB Status': function (formName, formFieldValues) {
@@ -1221,8 +1225,16 @@ Bahmni.ConceptSet.FormConditions.rules = {
 
                 if (conditionConcept == "Suspected / Probable") {
                         conditions.show.push("TB Suspect signs");
+                        if ((formName == "VMMC, Medical history") || (formName == "VMMC - Intake")) {
+                                conditions.show.push("VMMC, Referred to TB Clinic");
+
+                        }
                 } else {
                         conditions.hide.push("TB Suspect signs");
+                        if ((formName == "VMMC, Medical history") || (formName == "VMMC - Intake")) {
+                                conditions.hide.push("VMMC, Referred to TB Clinic");
+
+                        }
                 }
                 return conditions;
         },
@@ -1232,31 +1244,31 @@ Bahmni.ConceptSet.FormConditions.rules = {
                 if (formName == "HIV Prevention, Care, and Treatment") {
                         if (status == "Positive") {
                                 conditions.hide.push("Tested in PNC");
-                        } 
+                        }
                         else {
                                 conditions.show.push("Tested in PNC");
                         }
                 }
-                
-                if (formName == "ANC, ANC Program"){
-                    conditions.assignedValues.push({
-                        field: "PNC, HIV Status Known Before Visit",
-                        fieldValue: {
-                            isAutoFill: true,
-                            scopedEncounter: "latestvisit",
-                            isFilledOnRetrospectiveMode: true,
-                            enableDefaultValue:true,
-                            enableEditAfterAutoFill: true
-                        }
-                    });
+
+                if (formName == "ANC, ANC Program") {
+                        conditions.assignedValues.push({
+                                field: "PNC, HIV Status Known Before Visit",
+                                fieldValue: {
+                                        isAutoFill: true,
+                                        scopedEncounter: "latestvisit",
+                                        isFilledOnRetrospectiveMode: true,
+                                        enableDefaultValue: true,
+                                        enableEditAfterAutoFill: true
+                                }
+                        });
 
 
                 }
-    
 
-                if(formName == 'ANC HIV Testing Services'){
 
-                        if(status == "Positive"){
+                if (formName == 'ANC HIV Testing Services') {
+
+                        if (status == "Positive") {
                                 conditions.show.push("HIV Prophylaxis/Treatment");
                                 conditions.hide.push("ANC, Initiated in Prep");
                                 conditions.hide.push("PMTCT, ART start date");
@@ -1270,7 +1282,7 @@ Bahmni.ConceptSet.FormConditions.rules = {
                                 conditions.hide.push("Subsequent HIV Test Results");
                                 conditions.show.push("HIVTC, Viral Load Monitoring Template");
                         }
-                        else if((status == "Negative")||(status == "Unknown")){
+                        else if ((status == "Negative") || (status == "Unknown")) {
                                 conditions.show.push("ANC, Initial Test during this pregnancy");
                                 conditions.hide.push("ANC, HIV Test Result");
                                 conditions.hide.push("ANC, HIV Result Received");
@@ -1278,37 +1290,57 @@ Bahmni.ConceptSet.FormConditions.rules = {
                                 conditions.hide.push("HIV Prophylaxis/Treatment");
                                 conditions.hide.push("HIVTC, Viral Load Monitoring Template");
                         }
-                        else{
+                        else {
                                 conditions.hide.push("ANC, Initial Test during this pregnancy");
                         }
                 }
-                
+
+                if ((formName == 'VMMC, HIV Screening and Testing') || (formName == "VMMC - Intake")) {
+                        if (status == "Positive") {
+                                conditions.show.push("Already on ART");
+                                conditions.hide.push("VMMC, Accepted HIV test");
+                                conditions.hide.push("VMMC, Reason");
+                        } else if (status == "Negative") {
+                                conditions.hide.push("Already on ART");
+                                conditions.hide.push("VMMC, Accepted HIV test");
+                                conditions.hide.push("VMMC, Reason");
+                        } else if (status == "Unknown") {
+                                conditions.hide.push("Already on ART");
+                                conditions.show.push("VMMC, Accepted HIV test");
+                                conditions.hide.push("VMMC, Reason");
+                        } else {
+                                conditions.hide.push("Already on ART");
+                                conditions.hide.push("VMMC, Accepted HIV test");
+                                conditions.hide.push("VMMC, Reason");
+                        }
+                }
+
                 return conditions;
         },
-        'Blood Group': function(formName, formFieldValues) {
-            var conditions = { assignedValues: [], disable: [] };
-            if (formName == "ANC, ANC Program") {
-                conditions.assignedValues.push({
-                    field: "Blood Group",
-                    fieldValue: {
-                        isAutoFill: true,
-                        scopedEncounter: "latestvisit",
-                        isFilledOnRetrospectiveMode: true,
-                        enableDefaultValue: true,
-                        enableEditAfterAutoFill: true,
-                    }
-                });
-            }
-            return conditions;
+        'Blood Group': function (formName, formFieldValues) {
+                var conditions = { assignedValues: [], disable: [] };
+                if (formName == "ANC, ANC Program") {
+                        conditions.assignedValues.push({
+                                field: "Blood Group",
+                                fieldValue: {
+                                        isAutoFill: true,
+                                        scopedEncounter: "latestvisit",
+                                        isFilledOnRetrospectiveMode: true,
+                                        enableDefaultValue: true,
+                                        enableEditAfterAutoFill: true,
+                                }
+                        });
+                }
+                return conditions;
         },
-        'ANC, TT Doses Previous': function(formName, formFieldValues) {
-            var conditions = { hide: [] };
-            if (formName == "ANC, ANC Program" && visitTypeTracker == "ANC, Subsequent Visit"){
-                conditions.hide.push("ANC, TT Doses Previous");
-            }
-            return conditions;
+        'ANC, TT Doses Previous': function (formName, formFieldValues) {
+                var conditions = { hide: [] };
+                if (formName == "ANC, ANC Program" && visitTypeTracker == "ANC, Subsequent Visit") {
+                        conditions.hide.push("ANC, TT Doses Previous");
+                }
+                return conditions;
         },
-        
+
 
         /*---------------------HIV Care and Treatment-------------------*/
 
@@ -1316,32 +1348,32 @@ Bahmni.ConceptSet.FormConditions.rules = {
                 var conditionConcept = formFieldValues['Transfer Out to another site'];
                 var conditions = { show: [], hide: [] };
 
-              if(formName == "Tuberculosis Followup Template" || formName == "TB, Transfer out"){
-               
-                if (conditionConcept == "Yes") {
-                        conditions.show.push("HIVTC, Transferred out to");
-                } else {
-                       conditions.hide.push("HIVTC, Transferred out to");
-                 }
-                
-            }
-            
-            if(formName == "HIV Treatment and Care Progress Template"){
-                if (conditionConcept == "Yes") {
-                        conditions.show.push("HIVTC, Transferred out");
-                        
-                } else {
-                        conditions.hide.push("HIVTC, Transferred out");
+                if (formName == "Tuberculosis Followup Template" || formName == "TB, Transfer out") {
+
+                        if (conditionConcept == "Yes") {
+                                conditions.show.push("HIVTC, Transferred out to");
+                        } else {
+                                conditions.hide.push("HIVTC, Transferred out to");
+                        }
+
                 }
-            }
-            return conditions;
+
+                if (formName == "HIV Treatment and Care Progress Template") {
+                        if (conditionConcept == "Yes") {
+                                conditions.show.push("HIVTC, Transferred out");
+
+                        } else {
+                                conditions.hide.push("HIVTC, Transferred out");
+                        }
+                }
+                return conditions;
         },
 
         // Hide WHO staging is T-Staging is selected -- Shale
-        'HIVTC, Treatment Staging': function(formName, formFieldValues){
+        'HIVTC, Treatment Staging': function (formName, formFieldValues) {
                 var conditionConcept = formFieldValues['HIVTC, Treatment Staging'];
-                var conditions = { show: [], hide: []};
-                if(conditionConcept) {
+                var conditions = { show: [], hide: [] };
+                if (conditionConcept) {
                         conditions.hide.push("HIVTC, HIV care WHO Staging");
                 }
                 else {
@@ -1360,126 +1392,76 @@ Bahmni.ConceptSet.FormConditions.rules = {
                 conditions.disable.push("HIVTC, ART Regimen");
 
 
-                if (conditionConcept == "ART patient" ) {
+                if (conditionConcept == "ART patient") {
 
                         if ((patientGender == "M") || (patientAge < 12 || patientAge > 50)) {
-                       conditions.hide.push("HTC, Pregnancy Status");
-                       }
-                       else {
-                       conditions.show.push("HTC, Pregnancy Status");
-                       }
-
-                       //conditions.show.push("HTC, Pregnancy Status");
-                       conditions.show.push("Function");
-                       conditions.show.push("HIVTC, HIV care WHO Staging");
-                       conditions.show.push("HIVTC, Treatment Staging");
-                       conditions.show.push("TB Status");
-                       conditions.show.push("TB Suspect signs");
-                       conditions.show.push("Sexually Transmitted Infection");
-                       conditions.show.push("Potential Side Effects");
-                       conditions.show.push("OI, Opportunistic infections");
-                       conditions.show.push("Refer or Consult");
-                       conditions.show.push("Number of days hospitalised");
-
-               }
-               else {
-
-                       conditions.hide.push("HTC, Pregnancy Status");
-                       conditions.hide.push("Function");
-                       conditions.hide.push("HIVTC, HIV care WHO Staging");
-                       conditions.hide.push("HIVTC, Treatment Staging");
-                       conditions.hide.push("TB Status");
-                       conditions.hide.push("TB Suspect signs");
-                       conditions.hide.push("Sexually Transmitted Infection");
-                       conditions.hide.push("Potential Side Effects");
-                       conditions.hide.push("OI, Opportunistic infections");
-                       conditions.hide.push("Refer or Consult");
-                       conditions.hide.push("Number of days hospitalised");
+                                conditions.hide.push("HTC, Pregnancy Status");
                         }
+                        else {
+                                conditions.show.push("HTC, Pregnancy Status");
+                        }
+
+                        //conditions.show.push("HTC, Pregnancy Status");
+                        conditions.show.push("Function");
+                        conditions.show.push("HIVTC, HIV care WHO Staging");
+                        conditions.show.push("HIVTC, Treatment Staging");
+                        conditions.show.push("TB Status");
+                        conditions.show.push("TB Suspect signs");
+                        conditions.show.push("Sexually Transmitted Infection");
+                        conditions.show.push("Potential Side Effects");
+                        conditions.show.push("OI, Opportunistic infections");
+                        conditions.show.push("Refer or Consult");
+                        conditions.show.push("Number of days hospitalised");
+
+                }
+                else {
+
+                        conditions.hide.push("HTC, Pregnancy Status");
+                        conditions.hide.push("Function");
+                        conditions.hide.push("HIVTC, HIV care WHO Staging");
+                        conditions.hide.push("HIVTC, Treatment Staging");
+                        conditions.hide.push("TB Status");
+                        conditions.hide.push("TB Suspect signs");
+                        conditions.hide.push("Sexually Transmitted Infection");
+                        conditions.hide.push("Potential Side Effects");
+                        conditions.hide.push("OI, Opportunistic infections");
+                        conditions.hide.push("Refer or Consult");
+                        conditions.hide.push("Number of days hospitalised");
+                }
 
                 return conditions;
         },
 
 
-    /*--- ARV Drug days and drug supply duration generic autocalculations---- */
-    'ART, Follow-up date' : function (formName, formFieldValues) {
-        if(formName=="HIVTC, Patient Register") {
-                 var followUpDate = formFieldValues['ART, Follow-up date'];
-                 var conditions = { assignedValues: [], error: [] };
-                 var dateUtil = Bahmni.Common.Util.DateUtil;
-                                 var retrospectiveDate = $.cookie(Bahmni.Common.Constants.retrospectiveEntryEncounterDateCookieName);
+        /*--- ARV Drug days and drug supply duration generic autocalculations---- */
+        'ART, Follow-up date': function (formName, formFieldValues) {
+                if (formName == "HIVTC, Patient Register") {
+                        var followUpDate = formFieldValues['ART, Follow-up date'];
+                        var conditions = { assignedValues: [], error: [] };
+                        var dateUtil = Bahmni.Common.Util.DateUtil;
+                        var retrospectiveDate = $.cookie(Bahmni.Common.Constants.retrospectiveEntryEncounterDateCookieName);
 
-                 if(followUpDate) {
-                         var daysDispesed;
+                        if (followUpDate) {
+                                var daysDispesed;
 
-                         if(!retrospectiveDate) {
-                                daysDispensed = dateUtil.diffInDaysRegardlessOfTime(dateUtil.now(), followUpDate);
-                         } else {
-                                daysDispensed = dateUtil.diffInDaysRegardlessOfTime(dateUtil.parse(retrospectiveDate.substr(1, 10)), followUpDate);
-                         }
+                                if (!retrospectiveDate) {
+                                        daysDispensed = dateUtil.diffInDaysRegardlessOfTime(dateUtil.now(), followUpDate);
+                                } else {
+                                        daysDispensed = dateUtil.diffInDaysRegardlessOfTime(dateUtil.parse(retrospectiveDate.substr(1, 10)), followUpDate);
+                                }
 
-                         // if(daysDispensed <= 0) {
-                                 // conditions.error.push("Invalid input for Follow-up Date, must be a date in the future. Please correct.");
-                                 // conditions.assignedValues.push({ field: "ARV drugs No. of days dispensed", fieldValue: daysDispensed });
-                         // } else {
-                                 var drugSupplyPeriod = "";
-
-                                 if(daysDispensed >= 10 && daysDispensed < 21) {
-                                         // Providing 3 days slack from 2 weeks, in case of weekends or other reasons
-                                         drugSupplyPeriod = "HIVTC, Two weeks supply";
-                                 } else if (daysDispensed >= 28  && daysDispensed < 56) {
-                                         drugSupplyPeriod = "HIVTC, One month supply";
-                                 } else if (daysDispensed >= 56 && daysDispensed < 84 ) {
-                                         drugSupplyPeriod = "HIVTC, Two months supply";
-                                 } else if (daysDispensed >= 84 && daysDispensed < 112) {
-                                         drugSupplyPeriod = "HIVTC, Three months supply";
-                                 } else if (daysDispensed >= 112 && daysDispensed < 140) {
-                                         drugSupplyPeriod = "HIVTC, Four months supply";
-                                 } else if (daysDispensed >= 140 && daysDispensed < 168) {
-                                         drugSupplyPeriod = "HIVTC, Five months supply";
-                                 } else if (daysDispensed >= 168 && daysDispensed < 196) {
-                                         drugSupplyPeriod = "HIVTC, Six months supply";
-                                 } else if (daysDispensed >= 196) {
-                                         drugSupplyPeriod = "HIVTC, Seven+ months supply";
-                                 } else {
-                                        // No action
-                                 }
-                                  
-                                 conditions.assignedValues.push({ field: "ARV drugs No. of days dispensed", fieldValue: daysDispensed, autocalculate:true });
-                                 conditions.assignedValues.push({ field: "HIVTC, ARV drugs supply duration", fieldValue: drugSupplyPeriod, autocalculate:true });
-                                 
-                         // }
-                 }
-                 return conditions;
-         }
-         else if(formName=="PrEP , Follow Up Template")
-         {
-                var followUpDate = formFieldValues['ART, Follow-up date'];
-                var conditions = { assignedValues: [], error: [] };
-                var dateUtil = Bahmni.Common.Util.DateUtil;
-                                var retrospectiveDate = $.cookie(Bahmni.Common.Constants.retrospectiveEntryEncounterDateCookieName);
-
-                if(followUpDate) {
-                        var daysDispesed;
-
-                        if(!retrospectiveDate) {
-                               daysDispensed = dateUtil.diffInDaysRegardlessOfTime(dateUtil.now(), followUpDate);
-                        } else {
-                               daysDispensed = dateUtil.diffInDaysRegardlessOfTime(dateUtil.parse(retrospectiveDate.substr(1, 10)), followUpDate);
-                        }
-
-                        // if(daysDispensed <= 0) {
+                                // if(daysDispensed <= 0) {
                                 // conditions.error.push("Invalid input for Follow-up Date, must be a date in the future. Please correct.");
                                 // conditions.assignedValues.push({ field: "ARV drugs No. of days dispensed", fieldValue: daysDispensed });
-                        // } else {
+                                // } else {
                                 var drugSupplyPeriod = "";
 
-                                if(daysDispensed >= 10 && daysDispensed < 21) {
+                                if (daysDispensed >= 10 && daysDispensed < 21) {
                                         // Providing 3 days slack from 2 weeks, in case of weekends or other reasons
                                         drugSupplyPeriod = "HIVTC, Two weeks supply";
-                                } else if (daysDispensed >= 28  && daysDispensed < 56) {
+                                } else if (daysDispensed >= 28 && daysDispensed < 56) {
                                         drugSupplyPeriod = "HIVTC, One month supply";
-                                } else if (daysDispensed >= 56 && daysDispensed < 84 ) {
+                                } else if (daysDispensed >= 56 && daysDispensed < 84) {
                                         drugSupplyPeriod = "HIVTC, Two months supply";
                                 } else if (daysDispensed >= 84 && daysDispensed < 112) {
                                         drugSupplyPeriod = "HIVTC, Three months supply";
@@ -1492,54 +1474,103 @@ Bahmni.ConceptSet.FormConditions.rules = {
                                 } else if (daysDispensed >= 196) {
                                         drugSupplyPeriod = "HIVTC, Seven+ months supply";
                                 } else {
-                                       // No action
+                                        // No action
                                 }
-                                 
 
-                                conditions.assignedValues.push({ field: "PrEP drugs supply duration", fieldValue: drugSupplyPeriod, autocalculate:true });
-                                conditions.assignedValues.push({ field: "ARV drugs No. of days dispensed", fieldValue: daysDispensed, autocalculate:true });
-                               
-                                
-                        // }
+                                conditions.assignedValues.push({ field: "ARV drugs No. of days dispensed", fieldValue: daysDispensed, autocalculate: true });
+                                conditions.assignedValues.push({ field: "HIVTC, ARV drugs supply duration", fieldValue: drugSupplyPeriod, autocalculate: true });
+
+                                // }
+                        }
+                        return conditions;
                 }
-                return conditions;
+                else if (formName == "PrEP , Follow Up Template") {
+                        var followUpDate = formFieldValues['ART, Follow-up date'];
+                        var conditions = { assignedValues: [], error: [] };
+                        var dateUtil = Bahmni.Common.Util.DateUtil;
+                        var retrospectiveDate = $.cookie(Bahmni.Common.Constants.retrospectiveEntryEncounterDateCookieName);
 
-         }
-     },
-/*--- TB number of days dispensed generic autocalculation----*/
-           'TB, Next appointment/refill date' : function (formName, formFieldValues) {
-                if(formName=="Tuberculosis Followup Template") {
-                         var followUpDate = formFieldValues['TB, Next appointment/refill date'];
-                         var conditions = { assignedValues: [], error: [] };
-                         var dateUtil = Bahmni.Common.Util.DateUtil;
-                                         var retrospectiveDate = $.cookie(Bahmni.Common.Constants.retrospectiveEntryEncounterDateCookieName);
+                        if (followUpDate) {
+                                var daysDispesed;
 
-                         if(followUpDate) {
-                                 var daysDispesed;
-
-                                 if(!retrospectiveDate) {
+                                if (!retrospectiveDate) {
                                         daysDispensed = dateUtil.diffInDaysRegardlessOfTime(dateUtil.now(), followUpDate);
-                                 } else {
+                                } else {
                                         daysDispensed = dateUtil.diffInDaysRegardlessOfTime(dateUtil.parse(retrospectiveDate.substr(1, 10)), followUpDate);
-                                 }
+                                }
 
-                                         conditions.assignedValues.push({ field: "ARV drugs No. of days dispensed", fieldValue: daysDispensed,autocalculate:true });
+                                // if(daysDispensed <= 0) {
+                                // conditions.error.push("Invalid input for Follow-up Date, must be a date in the future. Please correct.");
+                                // conditions.assignedValues.push({ field: "ARV drugs No. of days dispensed", fieldValue: daysDispensed });
+                                // } else {
+                                var drugSupplyPeriod = "";
 
-                         }
-                         return conditions;
-                 }
-             },
-             'Type Of Lab Test' : function (formName, formFieldValues) {
-                var conditions = { show: [], hide: []};
+                                if (daysDispensed >= 10 && daysDispensed < 21) {
+                                        // Providing 3 days slack from 2 weeks, in case of weekends or other reasons
+                                        drugSupplyPeriod = "HIVTC, Two weeks supply";
+                                } else if (daysDispensed >= 28 && daysDispensed < 56) {
+                                        drugSupplyPeriod = "HIVTC, One month supply";
+                                } else if (daysDispensed >= 56 && daysDispensed < 84) {
+                                        drugSupplyPeriod = "HIVTC, Two months supply";
+                                } else if (daysDispensed >= 84 && daysDispensed < 112) {
+                                        drugSupplyPeriod = "HIVTC, Three months supply";
+                                } else if (daysDispensed >= 112 && daysDispensed < 140) {
+                                        drugSupplyPeriod = "HIVTC, Four months supply";
+                                } else if (daysDispensed >= 140 && daysDispensed < 168) {
+                                        drugSupplyPeriod = "HIVTC, Five months supply";
+                                } else if (daysDispensed >= 168 && daysDispensed < 196) {
+                                        drugSupplyPeriod = "HIVTC, Six months supply";
+                                } else if (daysDispensed >= 196) {
+                                        drugSupplyPeriod = "HIVTC, Seven+ months supply";
+                                } else {
+                                        // No action
+                                }
+
+
+                                conditions.assignedValues.push({ field: "PrEP drugs supply duration", fieldValue: drugSupplyPeriod, autocalculate: true });
+                                conditions.assignedValues.push({ field: "ARV drugs No. of days dispensed", fieldValue: daysDispensed, autocalculate: true });
+
+
+                                // }
+                        }
+                        return conditions;
+
+                }
+        },
+        /*--- TB number of days dispensed generic autocalculation----*/
+        'TB, Next appointment/refill date': function (formName, formFieldValues) {
+                if (formName == "Tuberculosis Followup Template") {
+                        var followUpDate = formFieldValues['TB, Next appointment/refill date'];
+                        var conditions = { assignedValues: [], error: [] };
+                        var dateUtil = Bahmni.Common.Util.DateUtil;
+                        var retrospectiveDate = $.cookie(Bahmni.Common.Constants.retrospectiveEntryEncounterDateCookieName);
+
+                        if (followUpDate) {
+                                var daysDispesed;
+
+                                if (!retrospectiveDate) {
+                                        daysDispensed = dateUtil.diffInDaysRegardlessOfTime(dateUtil.now(), followUpDate);
+                                } else {
+                                        daysDispensed = dateUtil.diffInDaysRegardlessOfTime(dateUtil.parse(retrospectiveDate.substr(1, 10)), followUpDate);
+                                }
+
+                                conditions.assignedValues.push({ field: "ARV drugs No. of days dispensed", fieldValue: daysDispensed, autocalculate: true });
+
+                        }
+                        return conditions;
+                }
+        },
+        'Type Of Lab Test': function (formName, formFieldValues) {
+                var conditions = { show: [], hide: [] };
                 var showTest = formFieldValues['Type Of Lab Test']
 
-                if (formName == 'Lab Test'){
-                        if (showTest == 'Tuberculosis'){
+                if (formName == 'Lab Test') {
+                        if (showTest == 'Tuberculosis') {
                                 conditions.show.push('Tuberculosis Lab Test');
                                 conditions.hide.push('Viral Load Lab Test');
 
                         }
-                        else if (showTest == 'HIVTC, Lab Test, Viral Load'){
+                        else if (showTest == 'HIVTC, Lab Test, Viral Load') {
                                 conditions.hide.push('Tuberculosis Lab Test');
                                 conditions.show.push('Viral Load Lab Test');
                         }
@@ -1551,67 +1582,67 @@ Bahmni.ConceptSet.FormConditions.rules = {
                         console.log(showTest);
                 }
                 return conditions;
-             },
-/*--- EDD generic autocalculation----*/
-        'ANC, Last Normal Menstrual Period' : function (formName, formFieldValues) {
+        },
+        /*--- EDD generic autocalculation----*/
+        'ANC, Last Normal Menstrual Period': function (formName, formFieldValues) {
                 var conditions = { assignedValues: [], error: [] };
                 var LNMP = formFieldValues['ANC, Last Normal Menstrual Period'];
                 var dateUtil = Bahmni.Common.Util.DateUtil;
 
-                if(formName=="ANC, Obstetric History" || formName=="ANC, Examinations") {
+                if (formName == "ANC, Obstetric History" || formName == "ANC, Examinations") {
 
                         var LNMPDate = new Date(LNMP);
-                        var EDDWithTime = dateUtil.addDays(LNMPDate,280);
+                        var EDDWithTime = dateUtil.addDays(LNMPDate, 280);
                         var EDDWithoutTime = dateUtil.getDateWithoutTime(EDDWithTime);
                         var AncVisits = formFieldValues["ANC, Visit Types"];
-                        if (AncVisits == "Subsquent Visit"){
+                        if (AncVisits == "Subsquent Visit") {
                                 conditions.assignedValues.push({
                                         field: "ANC, Parity",
-                                        fieldValue:{
-                                                isAutoFill:true,
-                                                scopedEncounter:"latestvisit",
-                                                isFilledOnRetrospectiveMode:true,
+                                        fieldValue: {
+                                                isAutoFill: true,
+                                                scopedEncounter: "latestvisit",
+                                                isFilledOnRetrospectiveMode: true,
                                                 enableDefaultValue: true,
                                                 enableEditAfterAutoFill: true
                                         }
                                 });
                         }
-                        if(LNMP) {
-                                conditions.assignedValues.push({ field: "ANC, Estimated Date of Delivery", fieldValue:EDDWithoutTime ,autocalculate:true});
+                        if (LNMP) {
+                                conditions.assignedValues.push({ field: "ANC, Estimated Date of Delivery", fieldValue: EDDWithoutTime, autocalculate: true });
                         }
                 }
-                if (formName == "ANC, ANC Program"){
-                    conditions.assignedValues.push({
-                        field: "ANC, Last Normal Menstrual Period",
-                        fieldValue: {
-                            isAutoFill: true,
-                            scopedEncounter: "latestvisit",
-                            isFilledOnRetrospectiveMode: true,
-                            enableDefaultValue: true,
-                            enableEditAfterAutoFill: true
-                        }
-                    });
-    
+                if (formName == "ANC, ANC Program") {
+                        conditions.assignedValues.push({
+                                field: "ANC, Last Normal Menstrual Period",
+                                fieldValue: {
+                                        isAutoFill: true,
+                                        scopedEncounter: "latestvisit",
+                                        isFilledOnRetrospectiveMode: true,
+                                        enableDefaultValue: true,
+                                        enableEditAfterAutoFill: true
+                                }
+                        });
+
                 }
                 return conditions;
-     },
-        'ANC, Estimated Date of Delivery' : function (formName, formFieldValues) {
-            var conditions = { assignedValues: [], disable: [] };
-            var conditionConcept;
-            if (formName == "ANC, ANC Program") {
-                conditions.assignedValues.push({
-                    field: "ANC, Estimated Date of Delivery",
-                    fieldValue: {
-                        isAutoFill: true,
-                        scopedEncounter: "latestvisit",
-                        isFilledOnRetrospectiveMode: true,
-                        enableDefaultValue: true,
-                        enableEditAfterAutoFill: true
-                    }
-                });
+        },
+        'ANC, Estimated Date of Delivery': function (formName, formFieldValues) {
+                var conditions = { assignedValues: [], disable: [] };
+                var conditionConcept;
+                if (formName == "ANC, ANC Program") {
+                        conditions.assignedValues.push({
+                                field: "ANC, Estimated Date of Delivery",
+                                fieldValue: {
+                                        isAutoFill: true,
+                                        scopedEncounter: "latestvisit",
+                                        isFilledOnRetrospectiveMode: true,
+                                        enableDefaultValue: true,
+                                        enableEditAfterAutoFill: true
+                                }
+                        });
 
-            }
-            return conditions;
+                }
+                return conditions;
         },
 
         'HIVTC, Enhanced adherence counseling done': function (formName, formFieldValues) {
@@ -1626,9 +1657,9 @@ Bahmni.ConceptSet.FormConditions.rules = {
                 return conditions;
         },
 
-       'HIVTC, HIV care IPT started': function (formName, formFieldValues) {
+        'HIVTC, HIV care IPT started': function (formName, formFieldValues) {
                 var conditionConcept = formFieldValues['HIVTC, HIV care IPT started'];
-                var conditions = { assignedValues: [],show: [], hide: [] };
+                var conditions = { assignedValues: [], show: [], hide: [] };
 
                 if (conditionConcept == "Treatment complete") {
                         conditions.show.push("HIVTC, TPT completion Date");
@@ -1645,18 +1676,18 @@ Bahmni.ConceptSet.FormConditions.rules = {
                         conditions.hide.push("HIVTC, TPT completion Date");
                 }
 
-                if (formName == "HIVTC, Patient Register" || formName=="HIV Treatment and Care Progress Template" ) {
+                if (formName == "HIVTC, Patient Register" || formName == "HIV Treatment and Care Progress Template") {
                         conditions.assignedValues.push({
-                            field: "HIVTC, HIV care IPT started",
-                            fieldValue: {
-                                isAutoFill: true,
-                                scopedEncounter: "latestvisit",
-                                isFilledOnRetrospectiveMode: true,
-                                enableDefaultValue: true,
-                                enableEditAfterAutoFill: true
-                            }
+                                field: "HIVTC, HIV care IPT started",
+                                fieldValue: {
+                                        isAutoFill: true,
+                                        scopedEncounter: "latestvisit",
+                                        isFilledOnRetrospectiveMode: true,
+                                        enableDefaultValue: true,
+                                        enableEditAfterAutoFill: true
+                                }
                         });
-                   }
+                }
                 return conditions;
         },
 
@@ -1793,10 +1824,10 @@ Bahmni.ConceptSet.FormConditions.rules = {
                         var determineResult = formFieldValues['HTC, Initial HIV Test Determine'];
                         var conditions = { show: [], hide: [] };
 
-                       if (determineResult == "Positive") {
+                        if (determineResult == "Positive") {
                                 conditions.show.push("HTC, Initial HIV Test Unigold Confirmatory")
                         }
-                        else  {
+                        else {
                                 conditions.hide.push("HTC, Initial HIV Test Unigold Confirmatory")
                                 conditions.hide.push("HTC, Repeat HIV Test Determine")
                                 conditions.hide.push("HTC, Repeat Unigold Test")
@@ -2000,12 +2031,12 @@ Bahmni.ConceptSet.FormConditions.rules = {
 
 
         'Testing Eligibility, Tested For HIV': function (formName, formFieldValues) {
-                if ( formName == "HIV Testing and Counseling Intake Template") {
-                        var testedForHIV= formFieldValues['Testing Eligibility, Tested For HIV'];
+                if (formName == "HIV Testing and Counseling Intake Template") {
+                        var testedForHIV = formFieldValues['Testing Eligibility, Tested For HIV'];
                         var conditions = { show: [], hide: [], enable: [], disable: [] };
 
 
-                        if (testedForHIV == "No"){
+                        if (testedForHIV == "No") {
                                 conditions.show.push("Test For HIV");
 
                                 //conditions.hide.push("HTC, HIV Test");
@@ -2024,39 +2055,39 @@ Bahmni.ConceptSet.FormConditions.rules = {
 
 
                         }
-                        if (testedForHIV == "Yes"){
-                          conditions.show.push("Testing Eligibility, Last Test Results");
+                        if (testedForHIV == "Yes") {
+                                conditions.show.push("Testing Eligibility, Last Test Results");
 
-                          //conditions.hide.push("HTC, Post-test Counseling Set");
+                                //conditions.hide.push("HTC, Post-test Counseling Set");
 
-                          conditions.hide.push("ART, Condoms Dispensed");
-                          conditions.hide.push("HIVTC, TB Screened");
-                          conditions.hide.push("HTS, Referral");
-                          conditions.hide.push("Testing Eligibility, Provided Adherence Counselling");
-                          conditions.hide.push("Testing Eligibility, Counselled & linked to Treatment");
+                                conditions.hide.push("ART, Condoms Dispensed");
+                                conditions.hide.push("HIVTC, TB Screened");
+                                conditions.hide.push("HTS, Referral");
+                                conditions.hide.push("Testing Eligibility, Provided Adherence Counselling");
+                                conditions.hide.push("Testing Eligibility, Counselled & linked to Treatment");
 
-                          conditions.hide.push("Testing Eligibility, Reinforced Prevention Counselling");
+                                conditions.hide.push("Testing Eligibility, Reinforced Prevention Counselling");
 
-                          conditions.hide.push("Offered prevention Counselling and or Linked to prevention services");
+                                conditions.hide.push("Offered prevention Counselling and or Linked to prevention services");
 
 
                         }
-                        else if (!testedForHIV)    {
+                        else if (!testedForHIV) {
 
-                          conditions.hide.push("Self_Test_Buddy");
-                          conditions.hide.push("Take Secondary Self Test");
-                          conditions.hide.push("HTC, Post-test Counseling Set");
-                          conditions.hide.push("Testing Eligibility, Time Last Test Done");
-                          conditions.hide.push("HIVTC, TB Screened","HIV, Testing Strategies");
-                          conditions.hide.push("HTS, Referral");
-                          conditions.hide.push("Testing Eligibility, Provided Adherence Counselling","Testing Eligibility, Last Test Results");
-                          conditions.hide.push("Testing Eligibility, Counselled & linked to Treatment");
-                          conditions.hide.push("Testing Eligibility, On ART Treatment");
-                          conditions.hide.push("Testing Eligibility, Reinforced Prevention Counselling");
-                          conditions.hide.push("Testing Eligibility, Last 12 Months");
-                          conditions.hide.push("Offered prevention Counselling and or Linked to prevention services");
-                          conditions.hide.push("Test For HIV","HTC, Pre-test Counseling Set");
-                          conditions.hide.push("ART, Condoms Dispensed","HTC, Date Of Distribution","HTC, Distribution channel","HTC, Distribution channel","HTC, Distribution Mode","HTC, Kit Collected For","HTC, Key Pop","HTC, Tested for HIV in The Past 12 Months","HTC, HIVST Results");
+                                conditions.hide.push("Self_Test_Buddy");
+                                conditions.hide.push("Take Secondary Self Test");
+                                conditions.hide.push("HTC, Post-test Counseling Set");
+                                conditions.hide.push("Testing Eligibility, Time Last Test Done");
+                                conditions.hide.push("HIVTC, TB Screened", "HIV, Testing Strategies");
+                                conditions.hide.push("HTS, Referral");
+                                conditions.hide.push("Testing Eligibility, Provided Adherence Counselling", "Testing Eligibility, Last Test Results");
+                                conditions.hide.push("Testing Eligibility, Counselled & linked to Treatment");
+                                conditions.hide.push("Testing Eligibility, On ART Treatment");
+                                conditions.hide.push("Testing Eligibility, Reinforced Prevention Counselling");
+                                conditions.hide.push("Testing Eligibility, Last 12 Months");
+                                conditions.hide.push("Offered prevention Counselling and or Linked to prevention services");
+                                conditions.hide.push("Test For HIV", "HTC, Pre-test Counseling Set");
+                                conditions.hide.push("ART, Condoms Dispensed", "HTC, Date Of Distribution", "HTC, Distribution channel", "HTC, Distribution channel", "HTC, Distribution Mode", "HTC, Kit Collected For", "HTC, Key Pop", "HTC, Tested for HIV in The Past 12 Months", "HTC, HIVST Results");
 
                         }
 
@@ -2066,40 +2097,40 @@ Bahmni.ConceptSet.FormConditions.rules = {
         },
         'Test For HIV': function (formName, formFieldValues) {
                 if (formName == "HIV Testing and Counseling Intake Template") {
-                        var test= formFieldValues['Test For HIV'];
+                        var test = formFieldValues['Test For HIV'];
                         var conditions = { show: [], hide: [], enable: [], disable: [] };
 
 
                         if (test == "Yes") {
-                          conditions.show.push("HIV, Testing Strategies");
+                                conditions.show.push("HIV, Testing Strategies");
 
 
 
-                          conditions.hide.push("ART, Condoms Dispensed");
-                          conditions.hide.push("HIVTC, TB Screened");
-                          conditions.hide.push("HTS, Referral");
-                          conditions.hide.push("Testing Eligibility, On ART Treatment");
-                          conditions.hide.push("Testing Eligibility, Provided Adherence Counselling");
-                          conditions.hide.push("Testing Eligibility, Counselled & linked to Treatment");
-                          conditions.hide.push("Testing Eligibility, Reinforced Prevention Counselling");
-                          conditions.hide.push("Offered prevention Counselling and or Linked to prevention services");
+                                conditions.hide.push("ART, Condoms Dispensed");
+                                conditions.hide.push("HIVTC, TB Screened");
+                                conditions.hide.push("HTS, Referral");
+                                conditions.hide.push("Testing Eligibility, On ART Treatment");
+                                conditions.hide.push("Testing Eligibility, Provided Adherence Counselling");
+                                conditions.hide.push("Testing Eligibility, Counselled & linked to Treatment");
+                                conditions.hide.push("Testing Eligibility, Reinforced Prevention Counselling");
+                                conditions.hide.push("Offered prevention Counselling and or Linked to prevention services");
                         }
 
-                       else if (test == "No" || test == "Declined" || !test){
-                          conditions.hide.push("HIV, Testing Strategies");
+                        else if (test == "No" || test == "Declined" || !test) {
+                                conditions.hide.push("HIV, Testing Strategies");
 
 
-                          conditions.hide.push("HTC, HIV Test");
-                          conditions.hide.push("Self_Test_Buddy");
-                          conditions.hide.push("HIVTC, TB Screened");
-                          conditions.hide.push("HTS, Referral");
-                          conditions.hide.push("Testing Eligibility, Provided Adherence Counselling");
-                          conditions.hide.push("Testing Eligibility, Counselled & linked to Treatment");
-                          conditions.hide.push("Testing Eligibility, Reinforced Prevention Counselling");
-                          conditions.hide.push("Offered prevention Counselling and or Linked to prevention services");
-                          conditions.hide.push("Testing Eligibility, On ART Treatment");
-                          conditions.hide.push("Offered prevention Counselling and or Linked to prevention services");
-                          conditions.hide.push("ART, Condoms Dispensed","HTC, Date Of Distribution","HTC, Distribution channel","HTC, Distribution channel","HTC, Distribution Mode","HTC, Kit Collected For","HTC, Key Pop","HTC, Tested for HIV in The Past 12 Months","HTC, HIVST Results");
+                                conditions.hide.push("HTC, HIV Test");
+                                conditions.hide.push("Self_Test_Buddy");
+                                conditions.hide.push("HIVTC, TB Screened");
+                                conditions.hide.push("HTS, Referral");
+                                conditions.hide.push("Testing Eligibility, Provided Adherence Counselling");
+                                conditions.hide.push("Testing Eligibility, Counselled & linked to Treatment");
+                                conditions.hide.push("Testing Eligibility, Reinforced Prevention Counselling");
+                                conditions.hide.push("Offered prevention Counselling and or Linked to prevention services");
+                                conditions.hide.push("Testing Eligibility, On ART Treatment");
+                                conditions.hide.push("Offered prevention Counselling and or Linked to prevention services");
+                                conditions.hide.push("ART, Condoms Dispensed", "HTC, Date Of Distribution", "HTC, Distribution channel", "HTC, Distribution channel", "HTC, Distribution Mode", "HTC, Kit Collected For", "HTC, Key Pop", "HTC, Tested for HIV in The Past 12 Months", "HTC, HIVST Results");
                         }
 
 
@@ -2108,66 +2139,66 @@ Bahmni.ConceptSet.FormConditions.rules = {
 
         },
 
-       'HIV, Testing Strategies': function (formName, formFieldValues) {
+        'HIV, Testing Strategies': function (formName, formFieldValues) {
                 var testingStrategy = formFieldValues['HIV, Testing Strategies'];
 
                 if (formName == "HIV Testing and Counseling Intake Template") {
-                       var conditions = { show: [], hide: [] };
-                       conditions.hide.push("Self_Test_Buddy");
-                       conditions.hide.push("HTC, Kit Collected For");
+                        var conditions = { show: [], hide: [] };
+                        conditions.hide.push("Self_Test_Buddy");
+                        conditions.hide.push("HTC, Kit Collected For");
 
-                  if (testingStrategy.includes('HIVTC, Rapid Test') && !testingStrategy.includes('HIVTC, Self Test')){
+                        if (testingStrategy.includes('HIVTC, Rapid Test') && !testingStrategy.includes('HIVTC, Self Test')) {
 
-                          conditions.show.push("HTC, Pre-test Counseling Set","HTC, HIV Test","HTC, Post-test Counseling Set");
+                                conditions.show.push("HTC, Pre-test Counseling Set", "HTC, HIV Test", "HTC, Post-test Counseling Set");
 
-                          conditions.show.push("ART, Condoms Dispensed");
-                          conditions.show.push("HIVTC, TB Screened");
-                          conditions.show.push("HTS, Referral");
-                          conditions.hide.push("Testing Eligibility, Provided Adherence Counselling");
-                          conditions.hide.push("Testing Eligibility, Counselled & linked to Treatment");
-                          conditions.hide.push("Testing Eligibility, Reinforced Prevention Counselling");
-                          conditions.hide.push("Offered prevention Counselling and or Linked to prevention services");
-                          conditions.hide.push("Testing Eligibility, On ART Treatment");
-                          conditions.hide.push("Offered prevention Counselling and or Linked to prevention services");
-                          conditions.hide.push("HTC, Date Of Distribution");
-                          conditions.hide.push("HTC, Distribution channel");
-                          conditions.hide.push("HTC, Distribution Mode");
-                          conditions.hide.push("HTC, Kit Collected For");
-                          conditions.hide.push("Self_Test_Buddy");
-                          conditions.hide.push("HTC, Key Pop");
-                          conditions.hide.push("HTC, Tested for HIV in The Past 12 Months");
-                          conditions.hide.push("HTC, HIVST Results");
+                                conditions.show.push("ART, Condoms Dispensed");
+                                conditions.show.push("HIVTC, TB Screened");
+                                conditions.show.push("HTS, Referral");
+                                conditions.hide.push("Testing Eligibility, Provided Adherence Counselling");
+                                conditions.hide.push("Testing Eligibility, Counselled & linked to Treatment");
+                                conditions.hide.push("Testing Eligibility, Reinforced Prevention Counselling");
+                                conditions.hide.push("Offered prevention Counselling and or Linked to prevention services");
+                                conditions.hide.push("Testing Eligibility, On ART Treatment");
+                                conditions.hide.push("Offered prevention Counselling and or Linked to prevention services");
+                                conditions.hide.push("HTC, Date Of Distribution");
+                                conditions.hide.push("HTC, Distribution channel");
+                                conditions.hide.push("HTC, Distribution Mode");
+                                conditions.hide.push("HTC, Kit Collected For");
+                                conditions.hide.push("Self_Test_Buddy");
+                                conditions.hide.push("HTC, Key Pop");
+                                conditions.hide.push("HTC, Tested for HIV in The Past 12 Months");
+                                conditions.hide.push("HTC, HIVST Results");
                         }
-                else if (testingStrategy.includes('HIVTC, Self Test') && !testingStrategy.includes('HIVTC, Rapid Test')) {
-                        conditions.show.push("HTC, Date Of Distribution","HTC, Distribution Mode","Self_Test_Buddy", "HTC, Kit Collected For","HTC, Key Pop","HTC, Tested for HIV in The Past 12 Months","HTC, HIVST Results");
-                        conditions.hide.push("HTC, Pre-test Counseling Set","HTC, HIV Test","HTC, Post-test Counseling Set");
+                        else if (testingStrategy.includes('HIVTC, Self Test') && !testingStrategy.includes('HIVTC, Rapid Test')) {
+                                conditions.show.push("HTC, Date Of Distribution", "HTC, Distribution Mode", "Self_Test_Buddy", "HTC, Kit Collected For", "HTC, Key Pop", "HTC, Tested for HIV in The Past 12 Months", "HTC, HIVST Results");
+                                conditions.hide.push("HTC, Pre-test Counseling Set", "HTC, HIV Test", "HTC, Post-test Counseling Set");
 
-                        conditions.hide.push("ART, Condoms Dispensed");
-                        conditions.hide.push("HIVTC, TB Screened");
-                        conditions.hide.push("HTS, Referral");
+                                conditions.hide.push("ART, Condoms Dispensed");
+                                conditions.hide.push("HIVTC, TB Screened");
+                                conditions.hide.push("HTS, Referral");
                         }
 
-                 if (testingStrategy.includes('HIVTC, Self Test') && testingStrategy.includes('HIVTC, Rapid Test')){
+                        if (testingStrategy.includes('HIVTC, Self Test') && testingStrategy.includes('HIVTC, Rapid Test')) {
 
-                  conditions.show.push("HTC, Date Of Distribution","HTC, Distribution Mode", "Self_Test_Buddy", "HTC, Kit Collected For","HTC, Key Pop","HTC, Tested for HIV in The Past 12 Months","HTC, HIVST Results");
-                  conditions.show.push("HTC, Pre-test Counseling Set","HTC, Post-test Counseling Set");
-                  conditions.show.push("HTC, HIV Test","ART, Condoms Dispensed","HIVTC, TB Screened","HTS, Referral");
+                                conditions.show.push("HTC, Date Of Distribution", "HTC, Distribution Mode", "Self_Test_Buddy", "HTC, Kit Collected For", "HTC, Key Pop", "HTC, Tested for HIV in The Past 12 Months", "HTC, HIVST Results");
+                                conditions.show.push("HTC, Pre-test Counseling Set", "HTC, Post-test Counseling Set");
+                                conditions.show.push("HTC, HIV Test", "ART, Condoms Dispensed", "HIVTC, TB Screened", "HTS, Referral");
 
-                }
-                if (!testingStrategy.includes('HIVTC, Self Test') && !testingStrategy.includes('HIVTC, Rapid Test')){
-                  conditions.hide.push("HTC, Date Of Distribution");
-                  conditions.hide.push("HTC, Distribution channel");
-                  conditions.hide.push("HTC, Distribution Mode");
-                  conditions.hide.push("HTC, Kit Collected For");
-                  conditions.hide.push("Self_Test_Buddy");
-                  conditions.hide.push("HTC, Key Pop");
-                  conditions.hide.push("HTC, Tested for HIV in The Past 12 Months");
-                  conditions.hide.push("HTC, HIVST Results");
-                  conditions.hide.push("HTC, Pre-test Counseling Set","HTC, Post-test Counseling Set");
-                  conditions.hide.push("ART, Condoms Dispensed");
-                  conditions.hide.push("HIVTC, TB Screened");
-                  conditions.hide.push("HTS, Referral");
-                }
+                        }
+                        if (!testingStrategy.includes('HIVTC, Self Test') && !testingStrategy.includes('HIVTC, Rapid Test')) {
+                                conditions.hide.push("HTC, Date Of Distribution");
+                                conditions.hide.push("HTC, Distribution channel");
+                                conditions.hide.push("HTC, Distribution Mode");
+                                conditions.hide.push("HTC, Kit Collected For");
+                                conditions.hide.push("Self_Test_Buddy");
+                                conditions.hide.push("HTC, Key Pop");
+                                conditions.hide.push("HTC, Tested for HIV in The Past 12 Months");
+                                conditions.hide.push("HTC, HIVST Results");
+                                conditions.hide.push("HTC, Pre-test Counseling Set", "HTC, Post-test Counseling Set");
+                                conditions.hide.push("ART, Condoms Dispensed");
+                                conditions.hide.push("HIVTC, TB Screened");
+                                conditions.hide.push("HTS, Referral");
+                        }
 
 
                 }
@@ -2205,7 +2236,7 @@ Bahmni.ConceptSet.FormConditions.rules = {
                 var conditionConcept = formFieldValues['HTC, Distribution Mode'];
                 var conditions = { show: [], hide: [] };
                 conditionConcept = conditionConcept.sort();
-                
+
 
                 if (JSON.stringify(conditionConcept) === JSON.stringify(['HTC, Secondary', 'HTC, Secondary'])) {
                         conditions.show.push("Self_Test_Buddy");
@@ -2213,13 +2244,13 @@ Bahmni.ConceptSet.FormConditions.rules = {
                         conditions.hide.push("HTC, HIVST Results");
 
 
-                }else if(JSON.stringify(conditionConcept) === JSON.stringify(['HTC, Primary', 'HTC, Primary','HTC, Secondary', 'HTC, Secondary'])){
+                } else if (JSON.stringify(conditionConcept) === JSON.stringify(['HTC, Primary', 'HTC, Primary', 'HTC, Secondary', 'HTC, Secondary'])) {
                         conditions.show.push("Self_Test_Buddy");
                         conditions.show.push("HTC, Kit Collected For");
                         conditions.show.push("HTC, HIVST Results");
 
 
-                }else if(JSON.stringify(conditionConcept) === JSON.stringify(['HTC, Primary', 'HTC, Primary']) || JSON.stringify(conditionConcept) === JSON.stringify([])){
+                } else if (JSON.stringify(conditionConcept) === JSON.stringify(['HTC, Primary', 'HTC, Primary']) || JSON.stringify(conditionConcept) === JSON.stringify([])) {
                         conditions.hide.push("Self_Test_Buddy");
                         conditions.hide.push("HTC, Kit Collected For");
 
@@ -2229,8 +2260,8 @@ Bahmni.ConceptSet.FormConditions.rules = {
 
 
         'Testing Eligibility, Last Test Results': function (formName, formFieldValues) {
-                if ( formName == "HIV Testing and Counseling Intake Template") {
-                        var lastTest= formFieldValues['Testing Eligibility, Last Test Results'];
+                if (formName == "HIV Testing and Counseling Intake Template") {
+                        var lastTest = formFieldValues['Testing Eligibility, Last Test Results'];
                         var conditions = { show: [], hide: [], enable: [], disable: [] };
 
 
@@ -2240,7 +2271,7 @@ Bahmni.ConceptSet.FormConditions.rules = {
                                 conditions.hide.push("Testing Eligibility, Counselled & linked to Treatment");
                                 conditions.hide.push("Testing Eligibility, Reinforced Prevention Counselling");
                                 conditions.hide.push("Offered prevention Counselling and or Linked to prevention services");
-                                conditions.hide.push("HTC, History of Previous Testing","HTC, Pre-test Counseling");
+                                conditions.hide.push("HTC, History of Previous Testing", "HTC, Pre-test Counseling");
                                 conditions.hide.push("Testing Eligibility, Time Last Test Done");
 
 
@@ -2263,7 +2294,7 @@ Bahmni.ConceptSet.FormConditions.rules = {
 
         'Testing Eligibility, On ART Treatment': function (formName, formFieldValues) {
                 if (formName == "HIV Testing and Counseling Intake Template") {
-                        var onART= formFieldValues['Testing Eligibility, On ART Treatment'];
+                        var onART = formFieldValues['Testing Eligibility, On ART Treatment'];
                         var conditions = { show: [], hide: [], enable: [], disable: [] };
 
 
@@ -2275,7 +2306,7 @@ Bahmni.ConceptSet.FormConditions.rules = {
                                 conditions.hide.push("Offered prevention Counselling and or Linked to prevention services");
                         }
 
-                        if (onART=="No"){
+                        if (onART == "No") {
                                 conditions.show.push("Testing Eligibility, Counselled & linked to Treatment");
                                 conditions.hide.push("Testing Eligibility, Provided Adherence Counselling");
                                 conditions.hide.push("Testing Eligibility, Reinforced Prevention Counselling");
@@ -2287,14 +2318,14 @@ Bahmni.ConceptSet.FormConditions.rules = {
 
         'Take Secondary Self Test': function (formName, formFieldValues) {
 
-                if (formName == "HIV Testing and Counseling Intake Template"){
-                var takeSelfTest = formFieldValues['Take Secondary Self Test'];
-                var conditions =  {show: [], hide: [], assignedValues: []};
+                if (formName == "HIV Testing and Counseling Intake Template") {
+                        var takeSelfTest = formFieldValues['Take Secondary Self Test'];
+                        var conditions = { show: [], hide: [], assignedValues: [] };
 
-                        if (takeSelfTest === "Yes"){
-                                conditions.show.push("HTC, Date Of Distribution","HTC, Distribution Mode","Self_Test_Buddy", "HTC, Kit Collected For","HTC, Key Pop","HTC, Tested for HIV in The Past 12 Months","HTC, HIVST Results");
-                                conditions.hide.push("HTC, Pre-test Counseling Set","HTC, HIV Test","HTC, Post-test Counseling Set");
-        
+                        if (takeSelfTest === "Yes") {
+                                conditions.show.push("HTC, Date Of Distribution", "HTC, Distribution Mode", "Self_Test_Buddy", "HTC, Kit Collected For", "HTC, Key Pop", "HTC, Tested for HIV in The Past 12 Months", "HTC, HIVST Results");
+                                conditions.hide.push("HTC, Pre-test Counseling Set", "HTC, HIV Test", "HTC, Post-test Counseling Set");
+
                                 conditions.hide.push("ART, Condoms Dispensed");
                                 conditions.hide.push("HIVTC, TB Screened");
                                 conditions.hide.push("HTS, Referral");
@@ -2306,7 +2337,7 @@ Bahmni.ConceptSet.FormConditions.rules = {
 
         'Testing Eligibility, Time Last Test Done': function (formName, formFieldValues) {
                 if (formName == "HIV Testing and Counseling Intake Template") {
-                        var within3months= formFieldValues['Testing Eligibility, Time Last Test Done'];
+                        var within3months = formFieldValues['Testing Eligibility, Time Last Test Done'];
                         var conditions = { show: [], hide: [], enable: [], disable: [] };
 
 
@@ -2317,9 +2348,9 @@ Bahmni.ConceptSet.FormConditions.rules = {
                         }
 
                         if (within3months == "Testing Eligibility, More than 3 Months") {
-                              conditions.show.push("Testing Eligibility, Last 12 Months");
-                              conditions.hide.push("Testing Eligibility, Reinforced Prevention Counselling");
-                              conditions.hide.push("Offered prevention Counselling and or Linked to prevention services");
+                                conditions.show.push("Testing Eligibility, Last 12 Months");
+                                conditions.hide.push("Testing Eligibility, Reinforced Prevention Counselling");
+                                conditions.hide.push("Offered prevention Counselling and or Linked to prevention services");
 
                         }
 
@@ -2330,17 +2361,17 @@ Bahmni.ConceptSet.FormConditions.rules = {
 
         'Testing Eligibility, Last 12 Months': function (formName, formFieldValues) {
                 if (formName == "HIV Testing and Counseling Intake Template") {
-                        var months= formFieldValues['Testing Eligibility, Last 12 Months'];
+                        var months = formFieldValues['Testing Eligibility, Last 12 Months'];
                         var conditions = { show: [], hide: [], enable: [], disable: [] };
 
                         if (months == "Had sex with more than 1 sexual partner" ||
-                            months == "Had unprotected sex with HIV+ partner" ||
-                            months == "Had unprotected sex with partner of unknown HIV status" ||
-                            months == "Had /currently have genital sores and/ or discharge" ||
-                            months == "None") {
+                                months == "Had unprotected sex with HIV+ partner" ||
+                                months == "Had unprotected sex with partner of unknown HIV status" ||
+                                months == "Had /currently have genital sores and/ or discharge" ||
+                                months == "None") {
 
-                              conditions.show.push("Test For HIV");
-                              conditions.hide.push("Offered prevention Counselling and or Linked to prevention services")
+                                conditions.show.push("Test For HIV");
+                                conditions.hide.push("Offered prevention Counselling and or Linked to prevention services")
 
                         }
 
@@ -2350,498 +2381,498 @@ Bahmni.ConceptSet.FormConditions.rules = {
                 }
 
         },
-/*
-       ------------------------------------------------------
-                        Contact index tracing formConditions
-       -------------------------------------------------------
- */
+        /*
+               ------------------------------------------------------
+                                Contact index tracing formConditions
+               -------------------------------------------------------
+         */
 
-'HTSIDX, Index accepted Index Testing Service' : function (formName, formFieldValues) {
-    var acceptedIndexing = formFieldValues['HTSIDX, Index accepted Index Testing Service'];
+        'HTSIDX, Index accepted Index Testing Service': function (formName, formFieldValues) {
+                var acceptedIndexing = formFieldValues['HTSIDX, Index accepted Index Testing Service'];
 
-    var conditions = {show: [], hide: [], enable: [], disable: []};
+                var conditions = { show: [], hide: [], enable: [], disable: [] };
 
-    if (acceptedIndexing == "Yes"){
-        conditions.show.push("HTSIDX, Index UIC");
-        conditions.show.push("HTSIDX, Index Contact Information");
+                if (acceptedIndexing == "Yes") {
+                        conditions.show.push("HTSIDX, Index UIC");
+                        conditions.show.push("HTSIDX, Index Contact Information");
 
-        // Show prior tests conditikons
-        conditions.hide.push("HTSIDX, Prior Test Result");
-        conditions.hide.push("HTSIDX, Duration since last test");
+                        // Show prior tests conditikons
+                        conditions.hide.push("HTSIDX, Prior Test Result");
+                        conditions.hide.push("HTSIDX, Duration since last test");
 
 
-        // Hide conditions if the contact has prior tests and the client knows their status
-        conditions.hide.push("HTSIDX,Tested");
-        conditions.hide.push("HTSIDX, IF No, why");
-        conditions.hide.push("HTSIDX,Date partner/child tested");
-        conditions.hide.push("HTSIDX,Partner/ Child Test Result");
-        conditions.hide.push("HTSIDX,Linked to care and treatment");
-        conditions.hide.push("HTSIDX,Partner/Child's PRE/ART Number");
-        conditions.hide.push("HTSIDX,Referral to Prevention");
+                        // Hide conditions if the contact has prior tests and the client knows their status
+                        conditions.hide.push("HTSIDX,Tested");
+                        conditions.hide.push("HTSIDX, IF No, why");
+                        conditions.hide.push("HTSIDX,Date partner/child tested");
+                        conditions.hide.push("HTSIDX,Partner/ Child Test Result");
+                        conditions.hide.push("HTSIDX,Linked to care and treatment");
+                        conditions.hide.push("HTSIDX,Partner/Child's PRE/ART Number");
+                        conditions.hide.push("HTSIDX,Referral to Prevention");
 
-    }else {
-        conditions.hide.push("HTSIDX, Index UIC");
-        conditions.hide.push("HTSIDX, Index Contact Information");
-    }
-    return conditions;
-},
-
-'HTSIDX, Prior Tested Before Status' : function (formName, formFieldValues) {
-    var pirorTest = formFieldValues['HTSIDX, Prior Tested Before Status'];
-
-    var conditions = {show: [], hide: [], enable: [], disable: []};
-
-    if (pirorTest == "Yes"){
-        var positive_priorTest = formFieldValues['HTSIDX, Prior Test Result'];
-        // Show prior tests conditikons
-        conditions.show.push("HTSIDX, Prior Test Result");
-        conditions.show.push("HTSIDX, Duration since last test");
-
-        // Hide conditions if the contact has prior tests and the client knows their status
-        conditions.show.push("HTSIDX,Tested");
-        conditions.show.push("HTSIDX, IF No, why");
-        conditions.hide.push("HTSIDX,Date partner/child tested");
-        conditions.hide.push("HTSIDX,Partner/ Child Test Result");
-        conditions.hide.push("HTSIDX,Linked to care and treatment");
-        conditions.hide.push("HTSIDX,Partner/Child's PRE/ART Number");
-        conditions.show.push("HTSIDX,Referral to Prevention");
-
-    }else if (pirorTest == "No"){
-
-        //Hide prior tests conditikons if the
-        conditions.hide.push("HTSIDX, Prior Test Result");
-        conditions.hide.push("HTSIDX, Duration since last test");
-
-        // Show conditions if the contact has no prior tests and the client knows their status
-        conditions.show.push("HTSIDX,Tested");
-        conditions.show.push("HTSIDX, IF No, why");
-        conditions.hide.push("HTSIDX,Date partner/child tested");
-        conditions.show.push("HTSIDX,Partner/ Child Test Result");
-        conditions.show.push("HTSIDX,Linked to care and treatment");
-        conditions.show.push("HTSIDX,Partner/Child's PRE/ART Number");
-        conditions.show.push("HTSIDX,Referral to Prevention");
-    }  else{
-
-        // Show prior tests conditikons
-        conditions.hide.push("HTSIDX, Prior Test Result");
-        conditions.hide.push("HTSIDX, Duration since last test");
-
-        // Hide conditions if the contact has prior tests and the client knows their status
-        conditions.hide.push("HTSIDX,Tested");
-        conditions.hide.push("HTSIDX, IF No, why");
-        conditions.hide.push("HTSIDX,Date partner/child tested");
-        conditions.hide.push("HTSIDX,Partner/ Child Test Result");
-        conditions.hide.push("HTSIDX,Linked to care and treatment");
-        conditions.hide.push("HTSIDX,Partner/Child's PRE/ART Number");
-        conditions.hide.push("HTSIDX,Referral to Prevention");
-    }
-    return conditions;
-},
-
-'HTSIDX,Tested' : function (formName, formFieldValues) {
-    var tested = formFieldValues['HTSIDX,Tested'];
-
-    var conditions = {show: [], hide: [], enable: [], disable: []};
-
-    if (tested == "Yes"){
-        conditions.show.push("HTSIDX,Partner/ Child Test Result");
-        conditions.show.push("HTSIDX,Linked to care and treatment");
-        conditions.show.push("HTSIDX,Partner/Child's PRE/ART Number");
-
-        conditions.hide.push("HTSIDX, IF No, why");
-        conditions.hide.push("HTSIDX,Date partner/child tested");
-        conditions.show.push("HTSIDX,Referral to Prevention");
-
-    } else if(tested == "No"){
-
-        conditions.show.push("HTSIDX, IF No, why");
-        conditions.hide.push("HTSIDX,Partner/ Child Test Result");
-        conditions.hide.push("HTSIDX,Linked to care and treatment");
-        conditions.hide.push("HTSIDX,Partner/Child's PRE/ART Number");
-
-        conditions.show.push("HTSIDX,Referral to Prevention");
-    } else {
-
-        // Did the client test during their visit to the facility
-        conditions.hide.push("HTSIDX,Partner/ Child Test Result");
-        conditions.hide.push("HTSIDX,Linked to care and treatment");
-        conditions.hide.push("HTSIDX,Partner/Child's PRE/ART Number");
-    }
-    return conditions;
-},
-  /* Auto populate forms in PNC,REGISTER form */
-
-  'Delivery date and time': function(formName, formFieldValues) {
-        var conditions = { assignedValues: [], disable: [] };
-
-        if (formName == "PostNatal Care Register" || formName == "Delivery Information") {
-            conditions.assignedValues.push({
-                field: "Delivery date and time",
-                fieldValue: {
-                    isAutoFill: true,
-                    scopedEncounter: "latestvisit",
-                    isFilledOnRetrospectiveMode: true,
-                    enableDefaultValue: true,
-                    enableEditAfterAutoFill: true
+                } else {
+                        conditions.hide.push("HTSIDX, Index UIC");
+                        conditions.hide.push("HTSIDX, Index Contact Information");
                 }
-            });
-        }
-        return conditions;
-    },
+                return conditions;
+        },
 
-    'Mode of Delivery': function(formName, formFieldValues) {
-        var conditions = { assignedValues: [], disable: [] };
-        var conditionConcept;
-        if (formName == "PostNatal Care Register" || formName == "Delivery Information") {
-            conditions.assignedValues.push({
-                field: "Mode of Delivery",
-                fieldValue: {
-                    isAutoFill: true,
-                    scopedEncounter: "latestvisit",
-                    isFilledOnRetrospectiveMode: true,
-                    enableDefaultValue: true,
-                    enableEditAfterAutoFill: true
+        'HTSIDX, Prior Tested Before Status': function (formName, formFieldValues) {
+                var pirorTest = formFieldValues['HTSIDX, Prior Tested Before Status'];
+
+                var conditions = { show: [], hide: [], enable: [], disable: [] };
+
+                if (pirorTest == "Yes") {
+                        var positive_priorTest = formFieldValues['HTSIDX, Prior Test Result'];
+                        // Show prior tests conditikons
+                        conditions.show.push("HTSIDX, Prior Test Result");
+                        conditions.show.push("HTSIDX, Duration since last test");
+
+                        // Hide conditions if the contact has prior tests and the client knows their status
+                        conditions.show.push("HTSIDX,Tested");
+                        conditions.show.push("HTSIDX, IF No, why");
+                        conditions.hide.push("HTSIDX,Date partner/child tested");
+                        conditions.hide.push("HTSIDX,Partner/ Child Test Result");
+                        conditions.hide.push("HTSIDX,Linked to care and treatment");
+                        conditions.hide.push("HTSIDX,Partner/Child's PRE/ART Number");
+                        conditions.show.push("HTSIDX,Referral to Prevention");
+
+                } else if (pirorTest == "No") {
+
+                        //Hide prior tests conditikons if the
+                        conditions.hide.push("HTSIDX, Prior Test Result");
+                        conditions.hide.push("HTSIDX, Duration since last test");
+
+                        // Show conditions if the contact has no prior tests and the client knows their status
+                        conditions.show.push("HTSIDX,Tested");
+                        conditions.show.push("HTSIDX, IF No, why");
+                        conditions.hide.push("HTSIDX,Date partner/child tested");
+                        conditions.show.push("HTSIDX,Partner/ Child Test Result");
+                        conditions.show.push("HTSIDX,Linked to care and treatment");
+                        conditions.show.push("HTSIDX,Partner/Child's PRE/ART Number");
+                        conditions.show.push("HTSIDX,Referral to Prevention");
+                } else {
+
+                        // Show prior tests conditikons
+                        conditions.hide.push("HTSIDX, Prior Test Result");
+                        conditions.hide.push("HTSIDX, Duration since last test");
+
+                        // Hide conditions if the contact has prior tests and the client knows their status
+                        conditions.hide.push("HTSIDX,Tested");
+                        conditions.hide.push("HTSIDX, IF No, why");
+                        conditions.hide.push("HTSIDX,Date partner/child tested");
+                        conditions.hide.push("HTSIDX,Partner/ Child Test Result");
+                        conditions.hide.push("HTSIDX,Linked to care and treatment");
+                        conditions.hide.push("HTSIDX,Partner/Child's PRE/ART Number");
+                        conditions.hide.push("HTSIDX,Referral to Prevention");
                 }
-            });
-        }
-        return conditions;
-    },
-    //Autofill TPT completed date - Litsitso Masoebe and Kgomotjo Seipobi
-    'HIVTC, TPT completion Date': function(formName, formFieldValues) {
-        var conditions = { assignedValues: [], disable: [] };
-        var conditionConcept;
-        if (formName == "HIVTC, Patient Register" || formName=="HIV Treatment and Care Progress Template" ) {
-            conditions.assignedValues.push({
-                field: "HIVTC, TPT completion Date",
-                fieldValue: {
-                    isAutoFill: true,
-                    scopedEncounter: "latestvisit",
-                    isFilledOnRetrospectiveMode: true,
-                    enableDefaultValue: true,
-                    enableEditAfterAutoFill: true
+                return conditions;
+        },
+
+        'HTSIDX,Tested': function (formName, formFieldValues) {
+                var tested = formFieldValues['HTSIDX,Tested'];
+
+                var conditions = { show: [], hide: [], enable: [], disable: [] };
+
+                if (tested == "Yes") {
+                        conditions.show.push("HTSIDX,Partner/ Child Test Result");
+                        conditions.show.push("HTSIDX,Linked to care and treatment");
+                        conditions.show.push("HTSIDX,Partner/Child's PRE/ART Number");
+
+                        conditions.hide.push("HTSIDX, IF No, why");
+                        conditions.hide.push("HTSIDX,Date partner/child tested");
+                        conditions.show.push("HTSIDX,Referral to Prevention");
+
+                } else if (tested == "No") {
+
+                        conditions.show.push("HTSIDX, IF No, why");
+                        conditions.hide.push("HTSIDX,Partner/ Child Test Result");
+                        conditions.hide.push("HTSIDX,Linked to care and treatment");
+                        conditions.hide.push("HTSIDX,Partner/Child's PRE/ART Number");
+
+                        conditions.show.push("HTSIDX,Referral to Prevention");
+                } else {
+
+                        // Did the client test during their visit to the facility
+                        conditions.hide.push("HTSIDX,Partner/ Child Test Result");
+                        conditions.hide.push("HTSIDX,Linked to care and treatment");
+                        conditions.hide.push("HTSIDX,Partner/Child's PRE/ART Number");
                 }
-            });
+                return conditions;
+        },
+        /* Auto populate forms in PNC,REGISTER form */
 
-        }
-        return conditions;
-    },
-    'PrEP ,Entry Point Mode': function (formName, formFieldValues, patient) {
-        var EntryMode= formFieldValues['PrEP ,Entry Point Mode'];
+        'Delivery date and time': function (formName, formFieldValues) {
+                var conditions = { assignedValues: [], disable: [] };
 
-        if ((formName == "PrEP , Intake Template") || (formName == "PrEP ,Entry point")) {
-                var conditions = { show: [], hide: [] };
-                
-                
-                if (EntryMode == "PrEP Community Entry Point") {
-                        conditions.show.push("PrEP  Entry Point  Community");
-                        conditions.hide.push("PrEP , Health Facility")
+                if (formName == "PostNatal Care Register" || formName == "Delivery Information") {
+                        conditions.assignedValues.push({
+                                field: "Delivery date and time",
+                                fieldValue: {
+                                        isAutoFill: true,
+                                        scopedEncounter: "latestvisit",
+                                        isFilledOnRetrospectiveMode: true,
+                                        enableDefaultValue: true,
+                                        enableEditAfterAutoFill: true
+                                }
+                        });
+                }
+                return conditions;
+        },
 
-                } else if (EntryMode == "PrEP Health Facility Entry Point") {
-                        conditions.show.push("PrEP , Health Facility");
-                        conditions.hide.push("PrEP  Entry Point  Community");
-                        
-
-
-                }else{
-
-                        conditions.hide.push("PrEP , Health Facility")
-                        conditions.hide.push("PrEP  Entry Point  Community");
+        'Mode of Delivery': function (formName, formFieldValues) {
+                var conditions = { assignedValues: [], disable: [] };
+                var conditionConcept;
+                if (formName == "PostNatal Care Register" || formName == "Delivery Information") {
+                        conditions.assignedValues.push({
+                                field: "Mode of Delivery",
+                                fieldValue: {
+                                        isAutoFill: true,
+                                        scopedEncounter: "latestvisit",
+                                        isFilledOnRetrospectiveMode: true,
+                                        enableDefaultValue: true,
+                                        enableEditAfterAutoFill: true
+                                }
+                        });
+                }
+                return conditions;
+        },
+        //Autofill TPT completed date - Litsitso Masoebe and Kgomotjo Seipobi
+        'HIVTC, TPT completion Date': function (formName, formFieldValues) {
+                var conditions = { assignedValues: [], disable: [] };
+                var conditionConcept;
+                if (formName == "HIVTC, Patient Register" || formName == "HIV Treatment and Care Progress Template") {
+                        conditions.assignedValues.push({
+                                field: "HIVTC, TPT completion Date",
+                                fieldValue: {
+                                        isAutoFill: true,
+                                        scopedEncounter: "latestvisit",
+                                        isFilledOnRetrospectiveMode: true,
+                                        enableDefaultValue: true,
+                                        enableEditAfterAutoFill: true
+                                }
+                        });
 
                 }
-        }
-        return conditions;
-},
-'PrEP, Indication for stopping PrEP': function (formName, formFieldValues) {
-        var EntryMode= formFieldValues['PrEP, Indication for stopping PrEP'];
+                return conditions;
+        },
+        'PrEP ,Entry Point Mode': function (formName, formFieldValues, patient) {
+                var EntryMode = formFieldValues['PrEP ,Entry Point Mode'];
 
-        if ((formName == "PrEP , Follow Up Template") || (formName == "PrEP ,Stopping PrEP")) {
-                var conditions = { show: [], hide: [] };
+                if ((formName == "PrEP , Intake Template") || (formName == "PrEP ,Entry point")) {
+                        var conditions = { show: [], hide: [] };
 
-                if (EntryMode == "PrEP Stopped Due To New HIV status") {
-                        conditions.show.push("PrEP stopped due to new HIV infection")
 
-                }else{
-                        conditions.hide.push("PrEP stopped due to new HIV infection")
+                        if (EntryMode == "PrEP Community Entry Point") {
+                                conditions.show.push("PrEP  Entry Point  Community");
+                                conditions.hide.push("PrEP , Health Facility")
+
+                        } else if (EntryMode == "PrEP Health Facility Entry Point") {
+                                conditions.show.push("PrEP , Health Facility");
+                                conditions.hide.push("PrEP  Entry Point  Community");
+
+
+
+                        } else {
+
+                                conditions.hide.push("PrEP , Health Facility")
+                                conditions.hide.push("PrEP  Entry Point  Community");
+
+                        }
                 }
-               
-        }
+                return conditions;
+        },
+        'PrEP, Indication for stopping PrEP': function (formName, formFieldValues) {
+                var EntryMode = formFieldValues['PrEP, Indication for stopping PrEP'];
 
-        return conditions;
-},
+                if ((formName == "PrEP , Follow Up Template") || (formName == "PrEP ,Stopping PrEP")) {
+                        var conditions = { show: [], hide: [] };
 
-'PrEP , Pregnancy Test': function (formName, formFieldValues,patient) {
-        var EntryMode= formFieldValues['PrEP , Pregnancy Test'];
-        var patientGender = patient['gender'];
+                        if (EntryMode == "PrEP Stopped Due To New HIV status") {
+                                conditions.show.push("PrEP stopped due to new HIV infection")
 
-        if ((formName == "PrEP , Intake Template") || (formName == "PrEP ,Other Tests")) {
-                var conditions = { show: [], hide: [] };
+                        } else {
+                                conditions.hide.push("PrEP stopped due to new HIV infection")
+                        }
 
-                if (EntryMode && patientGender=="F" ) {
-                        conditions.show.push("PrEP , Pregnancy Status")
-                        
-
-                }else{
-                        
-                        conditions.hide.push("PrEP , Pregnancy Status")
-                        
-                        
                 }
-        }
-        return conditions;
-     },
-     
+
+                return conditions;
+        },
+
+        'PrEP , Pregnancy Test': function (formName, formFieldValues, patient) {
+                var EntryMode = formFieldValues['PrEP , Pregnancy Test'];
+                var patientGender = patient['gender'];
+
+                if ((formName == "PrEP , Intake Template") || (formName == "PrEP ,Other Tests")) {
+                        var conditions = { show: [], hide: [] };
+
+                        if (EntryMode && patientGender == "F") {
+                                conditions.show.push("PrEP , Pregnancy Status")
 
 
+                        } else {
+
+                                conditions.hide.push("PrEP , Pregnancy Status")
 
 
-     'PrEP, STI Screening OrTreatment': function (formName, formFieldValues) {
-        var EntryMode= formFieldValues['PrEP, STI Screening OrTreatment'];
-        var conditions = { show: [], hide: [] };
-
-
-
-        if ((formName == "PrEP , Follow Up Template") || (formName == "PrEP, STI Screening and Treatment")) {
-             
-
-                if (EntryMode =="PrEP , Treatment" ) {
-                        conditions.show.push("PrEP, STI Treatment");
-                        conditions.hide.push("PrEP, STI Screening");
-
-                        
-
-                }else if(EntryMode=="PrEP , Screening") {
-
-                        conditions.show.push("PrEP, STI Screening");
-                        conditions.hide.push("PrEP, STI Treatment");
-                        
-                        
-                }else {
-                        conditions.hide.push("PrEP, STI Treatment");
-                        conditions.hide.push("PrEP, STI Screening")
-          
+                        }
                 }
-        }
-        return conditions;
-     },
-     
- 
-'PrEP ,Entry Point Mode' : function (formName, formFieldValues) {
-        
-        var conditionConcept = formFieldValues['PrEP ,Entry Point Mode'];    
-        var conditions = {show: [], hide: [], assignedValues: []};
+                return conditions;
+        },
 
-        conditions.hide.push("PrEP Entry Point Community")
-        conditions.hide.push("PrEP , Health Facility");
-        
-        
-        
 
-       if (conditionConcept == "PrEP Community Entry Point"){
-           
 
-           conditions.show.push("PrEP Entry Point Community");
-            
-           conditions.hide.push("PrEP , Facilty Outreach");
-            
-       }
-       else {
 
-               
-               conditions.hide.push("PrEP Community Program");
-               conditions.show.push("PrEP , Facilty Outreach");
-                
-        }
-        return conditions;
-    },    
-  
-    'PrEP ,Entry Point Mode': function (formName, formFieldValues) {
-        var EntryMode= formFieldValues['PrEP ,Entry Point Mode'];
 
-        if ((formName == "PrEP , Intake Template") || (formName == "PrEP ,Entry point")) {
+        'PrEP, STI Screening OrTreatment': function (formName, formFieldValues) {
+                var EntryMode = formFieldValues['PrEP, STI Screening OrTreatment'];
                 var conditions = { show: [], hide: [] };
 
-                if (EntryMode == "PrEP Community Entry Point") {
-                        conditions.show.push("PrEP  Entry Point  Community");
-                        conditions.hide.push("PrEP , Health Facility");
-
-                } else if (EntryMode == "PrEP Health Facility Entry Point") {
-                        conditions.show.push("PrEP , Health Facility");
-                        conditions.hide.push("PrEP  Entry Point  Community");
 
 
-                }else{
+                if ((formName == "PrEP , Follow Up Template") || (formName == "PrEP, STI Screening and Treatment")) {
 
-                        conditions.hide.push("PrEP , Health Facility")
-                        conditions.hide.push("PrEP  Entry Point  Community");
+
+                        if (EntryMode == "PrEP , Treatment") {
+                                conditions.show.push("PrEP, STI Treatment");
+                                conditions.hide.push("PrEP, STI Screening");
+
+
+
+                        } else if (EntryMode == "PrEP , Screening") {
+
+                                conditions.show.push("PrEP, STI Screening");
+                                conditions.hide.push("PrEP, STI Treatment");
+
+
+                        } else {
+                                conditions.hide.push("PrEP, STI Treatment");
+                                conditions.hide.push("PrEP, STI Screening")
+
+                        }
+                }
+                return conditions;
+        },
+
+
+        'PrEP ,Entry Point Mode': function (formName, formFieldValues) {
+
+                var conditionConcept = formFieldValues['PrEP ,Entry Point Mode'];
+                var conditions = { show: [], hide: [], assignedValues: [] };
+
+                conditions.hide.push("PrEP Entry Point Community")
+                conditions.hide.push("PrEP , Health Facility");
+
+
+
+
+                if (conditionConcept == "PrEP Community Entry Point") {
+
+
+                        conditions.show.push("PrEP Entry Point Community");
+
+                        conditions.hide.push("PrEP , Facilty Outreach");
 
                 }
-        }
-        return conditions;
-},
+                else {
 
 
-'PrEP , Stopping PrEP Confirmation': function (formName, formFieldValues) {
-        var conditionConcept = formFieldValues['PrEP , Stopping PrEP Confirmation'];
-        var conditions = { show: [], hide: [] };
-          
-               // conditions.hide.push("PrEP ,Stopping PrEP");
+                        conditions.hide.push("PrEP Community Program");
+                        conditions.show.push("PrEP , Facilty Outreach");
+
+                }
+                return conditions;
+        },
+
+        'PrEP ,Entry Point Mode': function (formName, formFieldValues) {
+                var EntryMode = formFieldValues['PrEP ,Entry Point Mode'];
+
+                if ((formName == "PrEP , Intake Template") || (formName == "PrEP ,Entry point")) {
+                        var conditions = { show: [], hide: [] };
+
+                        if (EntryMode == "PrEP Community Entry Point") {
+                                conditions.show.push("PrEP  Entry Point  Community");
+                                conditions.hide.push("PrEP , Health Facility");
+
+                        } else if (EntryMode == "PrEP Health Facility Entry Point") {
+                                conditions.show.push("PrEP , Health Facility");
+                                conditions.hide.push("PrEP  Entry Point  Community");
+
+
+                        } else {
+
+                                conditions.hide.push("PrEP , Health Facility")
+                                conditions.hide.push("PrEP  Entry Point  Community");
+
+                        }
+                }
+                return conditions;
+        },
+
+
+        'PrEP , Stopping PrEP Confirmation': function (formName, formFieldValues) {
+                var conditionConcept = formFieldValues['PrEP , Stopping PrEP Confirmation'];
+                var conditions = { show: [], hide: [] };
+
+                // conditions.hide.push("PrEP ,Stopping PrEP");
 
                 if (conditionConcept) {
                         conditions.show.push("PrEP ,Stopping PrEP")
-                        
+
                 }
                 else {
                         conditions.hide.push("PrEP ,Stopping PrEP");
-                        
+
                 }
-        
-        return conditions;
-},
+
+                return conditions;
+        },
 
 
-'PrEP, Transfer Inn': function (formName, formFieldValues) {
-        var conditionConcept = formFieldValues['PrEP, Transfer Inn'];
-        var conditions = { show: [], hide: [] };
-          
+        'PrEP, Transfer Inn': function (formName, formFieldValues) {
+                var conditionConcept = formFieldValues['PrEP, Transfer Inn'];
+                var conditions = { show: [], hide: [] };
 
-        if (conditionConcept == "Yes") {
-                conditions.show.push("PrEP, Transferred in");
-                
-        } else {
-                conditions.hide.push("PrEP, Transferred in");
-        }
-        return conditions;
-        
 
-},
+                if (conditionConcept == "Yes") {
+                        conditions.show.push("PrEP, Transferred in");
 
-'PrEP, Transfer Out Question': function (formName, formFieldValues) {
-        var conditionConcept = formFieldValues['PrEP, Transfer Out Question'];
-        var conditions = { show: [], hide: [] };
+                } else {
+                        conditions.hide.push("PrEP, Transferred in");
+                }
+                return conditions;
 
-        if (conditionConcept == "Yes") {
-                conditions.show.push("PrEP, Transferred out");
-                
-        } else {
-                conditions.hide.push("PrEP, Transferred out");
-        }
-        return conditions;
-},
- 
-    /////////////////////////////////////////////////////////////////
+
+        },
+
+        'PrEP, Transfer Out Question': function (formName, formFieldValues) {
+                var conditionConcept = formFieldValues['PrEP, Transfer Out Question'];
+                var conditions = { show: [], hide: [] };
+
+                if (conditionConcept == "Yes") {
+                        conditions.show.push("PrEP, Transferred out");
+
+                } else {
+                        conditions.hide.push("PrEP, Transferred out");
+                }
+                return conditions;
+        },
+
+        /////////////////////////////////////////////////////////////////
         //LABOUR AND DELIVERY REGISTER
         //MALFORMATIONS
-        'LD, Visible malformations Present': function(formName, formFieldValues) {
+        'LD, Visible malformations Present': function (formName, formFieldValues) {
                 var conditions = { show: [], hide: [] };
                 var conditionConcept = formFieldValues['LD, Visible malformations Present'];
 
-                if (conditionConcept){
+                if (conditionConcept) {
                         conditions.show.push("LD, Visible malformations Description");
                 } else {
-                     conditions.hide.push("LD, Visible malformations Description");
-                 }
+                        conditions.hide.push("LD, Visible malformations Description");
+                }
 
                 return conditions;
-            },
-            //FEEDING OPTIONS AT BIRTH
-             'LD, Feeding Options at birth': function(formName, formFieldValues) {
-                        var conditions = { show: [], hide: [] };
-                        var conditionConcept = formFieldValues['LD, Feeding Options at birth'];
+        },
+        //FEEDING OPTIONS AT BIRTH
+        'LD, Feeding Options at birth': function (formName, formFieldValues) {
+                var conditions = { show: [], hide: [] };
+                var conditionConcept = formFieldValues['LD, Feeding Options at birth'];
 
-                        if (conditionConcept == "Birth, Exclusive Breastfeeding" || conditionConcept == "Birth, Mixed Feeding"){
-                                conditions.show.push("LD, Breast-feeding Initiation");
-                        } else {
-                             conditions.hide.push("LD, Breast-feeding Initiation");
-                         }
+                if (conditionConcept == "Birth, Exclusive Breastfeeding" || conditionConcept == "Birth, Mixed Feeding") {
+                        conditions.show.push("LD, Breast-feeding Initiation");
+                } else {
+                        conditions.hide.push("LD, Breast-feeding Initiation");
+                }
 
-                        return conditions;
-              },
-             'ANC, Partner HIV Status' : function(formName, formFieldValues){
-                   var conditions = { show: [], hide: [] };
-                   if( (formName == "LD,  HIV Status at Maternity") || (formName == "Labour and Delivery Register")){
+                return conditions;
+        },
+        'ANC, Partner HIV Status': function (formName, formFieldValues) {
+                var conditions = { show: [], hide: [] };
+                if ((formName == "LD,  HIV Status at Maternity") || (formName == "Labour and Delivery Register")) {
                         var conditionConcept = formFieldValues["ANC, Partner HIV Status"];
 
-                        if( (conditionConcept == "Positive") || (conditionConcept == "Known Positive") || (conditionConcept == "undefined") ){
-                              conditions.hide.push("LD, Maternity");
+                        if ((conditionConcept == "Positive") || (conditionConcept == "Known Positive") || (conditionConcept == "undefined")) {
+                                conditions.hide.push("LD, Maternity");
                         } else {
-                              conditions.show.push("LD, Maternity");
+                                conditions.show.push("LD, Maternity");
                         }
-                   }
+                }
 
-                   return conditions;
-             },
-             'ANC, HIV Test Done' : function(formName, formFieldValues) {
-                    var conditions = { show: [], hide: [], assignedValues: [], disable: [] };
-                    var conditionConcept = formFieldValues["ANC, HIV Test Done"];
-                    if(formName == "LD, Maternity"){
-                        if(conditionConcept == "Yes") {
-                              conditions.assignedValues.push({ field: "LD, HIV Test Results", fieldValue: "", autocalculate:true});
+                return conditions;
+        },
+        'ANC, HIV Test Done': function (formName, formFieldValues) {
+                var conditions = { show: [], hide: [], assignedValues: [], disable: [] };
+                var conditionConcept = formFieldValues["ANC, HIV Test Done"];
+                if (formName == "LD, Maternity") {
+                        if (conditionConcept == "Yes") {
+                                conditions.assignedValues.push({ field: "LD, HIV Test Results", fieldValue: "", autocalculate: true });
                         }
-                        if(conditionConcept == "No" || conditionConcept == "Declined") {
-                              conditions.assignedValues.push({ field: "LD, HIV Test Results", fieldValue: "Unknown", autocalculate:true});
+                        if (conditionConcept == "No" || conditionConcept == "Declined") {
+                                conditions.assignedValues.push({ field: "LD, HIV Test Results", fieldValue: "Unknown", autocalculate: true });
                         }
-                        if(conditionConcept == "Not Applicable") {
-                            conditions.assignedValues.push({ field: "LD, HIV Test Results", fieldValue: "Not Applicable", autocalculate:true});
+                        if (conditionConcept == "Not Applicable") {
+                                conditions.assignedValues.push({ field: "LD, HIV Test Results", fieldValue: "Not Applicable", autocalculate: true });
                         }
-                    }
-                    if(formName == "ANC, Initial Test during this pregnancy"){
-                        if(conditionConcept == "Yes"){
+                }
+                if (formName == "ANC, Initial Test during this pregnancy") {
+                        if (conditionConcept == "Yes") {
                                 conditions.show.push("ANC, HIV Test Result");
                         }
-                        else{
+                        else {
                                 conditions.hide.push("ANC, HIV Test Result");
                         }
-                    }
-                    return conditions;
-             },
-             'LD, Postpartum HIV Test' : function (formName, formFieldValues){
-                 var conditions = { show: [], hide: [], assignedValues: [], disable: [] };
-                 if( (formName == "LD, Maternal Morbidity and Mortality") || (formName == "Labour and Delivery Register")){
-                 var conditionConcept = formFieldValues["LD, Postpartum HIV Test"];
-                     if(conditionConcept == "Yes"){
-                         conditions.show.push("LD, Postpartum HIV Test Results");
-                     } else {
-                          conditions.hide.push("LD, Postpartum HIV Test Results");
-                     }
-                 }
-                 return conditions;
-             },
-             'LD, Postpartum HIV Test Results' : function(formName, formFieldValues){
-                  var conditions = { show: [], hide: [], assignedValues: []};
-                  var postPartumHIVTestResults = formFieldValues["LD, Postpartum HIV Test Results"];
-
-                  if( (postPartumHIVTestResults == "Negative") || (postPartumHIVTestResults == "Positive")){
-                        conditions.show.push("LD, Postpartum ART Initiation");
-                        if(postPartumHIVTestResults == "Negative"){
-                           conditions.assignedValues.push({ field: "LD, Postpartum ART Initiation", fieldValue: "Not Applicable", autocalculate:true});
-                        } else {
-                           conditions.assignedValues.push({ field: "LD, Postpartum ART Initiation", fieldValue: "", autocalculate:true});
-                        }
-                  } else {
-                         conditions.hide.push("LD, Postpartum ART Initiation");
-                  }
-                   return conditions;
-             },
-             'LD, ART Received at ANC' : function(formName, formFieldValues){
-                 var conditions = { show: [], hide: [], assignedValues: [] };
-                 var conditionConcept = formFieldValues["LD, ART Received at ANC"];
-
-                 if(conditionConcept == "Yes"){
-                    conditions.assignedValues.push({ field: "LD, ART initiated during labour", fieldValue: "Already on ART", autocalculate:true});
-                 } else if(conditionConcept == "Not Applicable"){
-                    conditions.assignedValues.push({ field: "LD, ART initiated during labour", fieldValue: "Not Applicable", autocalculate:true});
-                 } else {
-                    conditions.assignedValues.push({ field: "LD, ART initiated during labour", fieldValue: "", autocalculate:true});
-                 }
+                }
                 return conditions;
-             },
-             ///////////////END OF LABOUR AND DELIVERY REGISTER CONDITIONS////////////////
+        },
+        'LD, Postpartum HIV Test': function (formName, formFieldValues) {
+                var conditions = { show: [], hide: [], assignedValues: [], disable: [] };
+                if ((formName == "LD, Maternal Morbidity and Mortality") || (formName == "Labour and Delivery Register")) {
+                        var conditionConcept = formFieldValues["LD, Postpartum HIV Test"];
+                        if (conditionConcept == "Yes") {
+                                conditions.show.push("LD, Postpartum HIV Test Results");
+                        } else {
+                                conditions.hide.push("LD, Postpartum HIV Test Results");
+                        }
+                }
+                return conditions;
+        },
+        'LD, Postpartum HIV Test Results': function (formName, formFieldValues) {
+                var conditions = { show: [], hide: [], assignedValues: [] };
+                var postPartumHIVTestResults = formFieldValues["LD, Postpartum HIV Test Results"];
 
-             ///////////////MDR-TB////////////////
-             'MDR Forms': function (formName, formFieldValues) {
+                if ((postPartumHIVTestResults == "Negative") || (postPartumHIVTestResults == "Positive")) {
+                        conditions.show.push("LD, Postpartum ART Initiation");
+                        if (postPartumHIVTestResults == "Negative") {
+                                conditions.assignedValues.push({ field: "LD, Postpartum ART Initiation", fieldValue: "Not Applicable", autocalculate: true });
+                        } else {
+                                conditions.assignedValues.push({ field: "LD, Postpartum ART Initiation", fieldValue: "", autocalculate: true });
+                        }
+                } else {
+                        conditions.hide.push("LD, Postpartum ART Initiation");
+                }
+                return conditions;
+        },
+        'LD, ART Received at ANC': function (formName, formFieldValues) {
+                var conditions = { show: [], hide: [], assignedValues: [] };
+                var conditionConcept = formFieldValues["LD, ART Received at ANC"];
+
+                if (conditionConcept == "Yes") {
+                        conditions.assignedValues.push({ field: "LD, ART initiated during labour", fieldValue: "Already on ART", autocalculate: true });
+                } else if (conditionConcept == "Not Applicable") {
+                        conditions.assignedValues.push({ field: "LD, ART initiated during labour", fieldValue: "Not Applicable", autocalculate: true });
+                } else {
+                        conditions.assignedValues.push({ field: "LD, ART initiated during labour", fieldValue: "", autocalculate: true });
+                }
+                return conditions;
+        },
+        ///////////////END OF LABOUR AND DELIVERY REGISTER CONDITIONS////////////////
+
+        ///////////////MDR-TB////////////////
+        'MDR Forms': function (formName, formFieldValues) {
                 var mdrForm = formFieldValues['MDR Forms'];
-                var conditions = {show: [], hide: []};
-                switch (mdrForm){
+                var conditions = { show: [], hide: [] };
+                switch (mdrForm) {
                         case "MDR Baseline Form":
                                 conditions.show.push("MDR-TB, Baseline Assessment"); //show
                                 conditions.hide.push("MDR-TB, PHQ9");
@@ -2916,6 +2947,159 @@ Bahmni.ConceptSet.FormConditions.rules = {
                                 conditions.hide.push("MDR-TB, Outcome");
                 }
                 return conditions;
-             }
+        },
         ///////////////END of MDR-TB////////////////
+        ////////////////////////////////////////////
+        // VMMC TOOLS
+        'VMMC, Post-MC Follow up Visits': function (formName, formFieldValues) {
+                var conditionConcept = formFieldValues['VMMC, Post-MC Follow up Visits'];
+                var conditions = { show: [], hide: [], assignedValues: [] };
+
+                switch (conditionConcept) {
+                        case "ANC, First Visit":
+                        case "VMMC, Second Visit":
+                                conditions.show.push("VMMC,Follow up visit after surgical MC");
+                                conditions.hide.push("VMMC, Third follow up visit after surgical MC (Day 42)");
+                                conditions.hide.push("VMMC, AE Type");
+                                break;
+                        case "VMMC, Third Visit":
+                                conditions.hide.push("VMMC,Follow up visit after surgical MC");
+                                conditions.show.push("VMMC, Third follow up visit after surgical MC (Day 42)");
+                                conditions.hide.push("VMMC, AE Type");
+                                break;
+                        default:
+                                conditions.hide.push("VMMC,Follow up visit after surgical MC");
+                                conditions.hide.push("VMMC, Third follow up visit after surgical MC (Day 42)");
+
+                }
+                return conditions;
+        },
+        'VMMC, Does Client have any AEs': function (formName, formFieldValues) {
+                var conditionConcept = formFieldValues['VMMC, Does Client have any AEs'];
+                var conditions = { show: [], hide: [] };
+
+                if (formName == "VMMC,Follow up visit after surgical MC") {
+                        if (conditionConcept) {
+                                conditions.show.push("VMMC, AE Type");
+                        } else {
+                                conditions.hide.push("VMMC, AE Type");
+                        }
+
+                }
+                return conditions;
+        },
+        'VMMC, Referred by': function (formName, formFieldValues) {
+                var conditionConcept = formFieldValues['VMMC, Referred by'];
+                var conditions = { show: [], hide: [] };
+                if (conditionConcept == "PNC, Other") {
+                        conditions.show.push("HTC, Specify");
+                } else {
+                        conditions.hide.push("HTC, Specify");
+                }
+                return conditions;
+        },
+        'VMMC, Any medications?': function (formName, formFieldValues) {
+                var conditionConcept = formFieldValues['VMMC, Any medications?'];
+                var conditions = { show: [], hide: [] };
+
+                if (conditionConcept) {
+                        conditions.show.push("HTC, Specify");
+                } else {
+                        conditions.hide.push("HTC, Specify");
+                }
+                return conditions;
+        },
+        'VMMC, Complaints': function (formName, formFieldValues) {
+                var conditionConcept = formFieldValues['VMMC, Complaints'];
+                var conditions = { show: [], hide: [] };
+                if (conditionConcept.includes("PNC, Other")) {
+                        conditions.show.push("HTC, Specify");
+                } else {
+                        conditions.hide.push("HTC, Specify");
+                }
+                return conditions;
+        },
+        'VMMC, Have you ever experienced spontaneous and prolonged nose bleeds?': function (formName, formFieldValues) {
+                var conditionConcept = formFieldValues['VMMC, Have you ever experienced spontaneous and prolonged nose bleeds?'];
+                var conditions = { show: [], hide: [] };
+                if (conditionConcept) {
+                        conditions.show.push("VMMC, Spontaneous and prolonged nose bleeds");
+                } else {
+                        conditions.hide.push("VMMC, Spontaneous and prolonged nose bleeds");
+                }
+                return conditions;
+        },
+        'VMMC, Any complications related to that surgery?': function (formName, formFieldValues) {
+
+                var conditionConcept = formFieldValues['VMMC, Any complications related to that surgery?'];
+                var conditions = { show: [], hide: [] };
+                if (conditionConcept) {
+                        conditions.show.push("VMMC, Complications related to surgery");
+                } else {
+                        conditions.hide.push("VMMC, Complications related to surgery");
+                }
+                return conditions;
+        },
+        'VMMC, Penile examination Findings': function (formName, formFieldValues) {
+
+                var conditionConcept = formFieldValues['VMMC, Penile examination Findings'];
+                var conditions = { show: [], hide: [] };
+                if (conditionConcept.includes("PNC, Other")) {
+                        conditions.show.push("Other, specify");
+                } else {
+                        conditions.hide.push("Other, specify");
+                }
+                return conditions;
+        },
+        'Is the client medically cleared for MC?': function (formName, formFieldValues) {
+
+                var conditionConcept = formFieldValues['Is the client medically cleared for MC?'];
+                var conditions = { show: [], hide: [] };
+
+                if (conditionConcept == undefined) {
+                        conditions.hide.push("Reason if not cleared");
+                }
+                if (conditionConcept) {
+                        conditions.hide.push("Reason if not cleared");
+                }
+                if (!conditionConcept) {
+                        conditions.show.push("Reason if not cleared");
+                }
+                return conditions;
+        },
+        'VMMC, Informed consent signed': function (formName, formFieldValues) {
+                var conditionConcept = formFieldValues['VMMC, Informed consent signed'];
+                var conditions = { show: [], hide: [] };
+                if (conditionConcept) {
+                        conditions.show.push("VMMC, Relationship");
+                } else {
+                        conditions.hide.push("VMMC, Relationship");
+                }
+                return conditions;
+        },
+        'Method of Surgery': function (formName, formFieldValues) {
+                var conditionConcept = formFieldValues['Method of Surgery'];
+                var conditions = { show: [], hide: [] };
+                if (conditionConcept == "Device") {
+                        conditions.show.push("Device used");
+                } else {
+                        conditions.hide.push("Device used");
+                }
+                return conditions;
+        },
+        'VMMC, Accepted HIV test': function (formName, formFieldValues) {
+                var conditionConcept = formFieldValues['VMMC, Accepted HIV test'];
+                var conditions = { show: [], hide: [] };
+                
+                if(conditionConcept == undefined){
+                        conditions.hide.push("VMMC, Reason");
+                } else if (conditionConcept) {
+                        conditions.hide.push("VMMC, Reason");
+                } else {
+                        conditions.show.push("VMMC, Reason");
+                }
+
+                return conditions;
+        }
+
 };
