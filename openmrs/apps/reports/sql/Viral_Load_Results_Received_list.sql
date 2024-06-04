@@ -39,7 +39,7 @@ FROM
 
 left outer join
 
-(Select pId, result.order_id, Results, cast(obs_datetime as date) as result_date
+(Select pId, result.order_id as order_id, Results, cast(obs_datetime as date) as result_date
     From
       (
         select oss.person_id as pId, concat(oss.value_numeric, " ", "copies/ml")  as Results, order_id, oss.obs_datetime
@@ -47,7 +47,7 @@ left outer join
             where oss.concept_id = 5485
             and oss.voided=0
             and cast(oss.obs_datetime as date) >= cast('#startDate#' as date)
-            group by oss.person_id
+            -- group by oss.person_id
 
     UNION
 
@@ -56,13 +56,13 @@ left outer join
             where oss.concept_id = 5489
             and oss.voided=0
             and cast(oss.obs_datetime as date)  >= cast('#startDate#' as date)
-            group by oss.person_id
+            -- group by oss.person_id
 
       )result
-      )VL_result
-	  on lab_order.order_id = VL_result.order_id
+)VL_result
+      on lab_order.order_id = VL_result.order_id
 
 )lab_orders	
 on VL_results.order_id = lab_orders.orders_id
-order by 7, 8
+order by 2, 7, 8
 

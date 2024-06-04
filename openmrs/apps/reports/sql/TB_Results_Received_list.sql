@@ -21,7 +21,7 @@ From
                     AND (DATE_ADD(DATE_ADD(person.birthdate, INTERVAL observed_age_group.max_years YEAR), INTERVAL observed_age_group.max_days DAY))
                     AND o.concept_id in (6072,6068)
 					WHERE observed_age_group.report_group_name = 'Modified_Ages'
-					AND CAST(o.obs_datetime AS DATE) >= CAST('#endDate#' AS DATE)
+					AND CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
 					AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)) as tb_results
 
 Left Outer Join
@@ -48,8 +48,8 @@ left outer join
 	end AS GeneXpert_Results
 	from obs o
 	where o.concept_id = 6072 and o.voided = 0
-	and o.obs_datetime >= CAST('#endDate#' AS DATE)
-	Group by o.person_id
+	and o.obs_datetime >= CAST('#startDate#' AS DATE)
+	-- Group by o.person_id
 	)
 	UNION
 	(
@@ -61,8 +61,8 @@ left outer join
 	end AS GeneXpert_Results
 	from obs o
 	where o.concept_id = 6068 and o.voided = 0
-	and o.obs_datetime >= CAST('#endDate#' AS DATE)
-	Group by o.person_id
+	and o.obs_datetime >= CAST('#startDate#' AS DATE)
+	-- Group by o.person_id
 	)
 	)Result
 )geneXpert_result

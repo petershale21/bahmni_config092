@@ -1,8 +1,9 @@
 SELECT Total_Aggregated_TB.AgeGroup
 		, Total_Aggregated_TB.Male_VL_Tests
 		, Total_Aggregated_TB.Female_VL_Tests
-		, Total_Aggregated_TB.Male_Results_Received
-		, Total_Aggregated_TB.Female_Results_Received
+		-- , Total_Aggregated_TB.Male_Results_Received
+		-- , Total_Aggregated_TB.Female_Results_Received
+		, Total_Aggregated_TB.Total
 
 FROM
 
@@ -10,8 +11,8 @@ FROM
 	(SELECT TB_DETAILS.age_group AS 'AgeGroup'
 			, IF(TB_DETAILS.Id IS NULL, 0, SUM(IF(TB_DETAILS.Test = 'Done' AND TB_DETAILS.Gender = 'M', 1, 0))) AS Male_VL_Tests
 			, IF(TB_DETAILS.Id IS NULL, 0, SUM(IF(TB_DETAILS.Test = 'Done' AND TB_DETAILS.Gender = 'F', 1, 0))) AS Female_VL_Tests
-			, IF(TB_DETAILS.Id IS NULL, 0, SUM(IF(TB_DETAILS.received = 'Received' AND TB_DETAILS.Gender = 'M', 1, 0))) AS Male_Results_Received
-			, IF(TB_DETAILS.Id IS NULL, 0, SUM(IF(TB_DETAILS.received = 'Received' AND TB_DETAILS.Gender = 'F', 1, 0))) AS Female_Results_Received
+			-- , IF(TB_DETAILS.Id IS NULL, 0, SUM(IF(TB_DETAILS.received = 'Received' AND TB_DETAILS.Gender = 'M', 1, 0))) AS Male_Results_Received
+			-- , IF(TB_DETAILS.Id IS NULL, 0, SUM(IF(TB_DETAILS.received = 'Received' AND TB_DETAILS.Gender = 'F', 1, 0))) AS Female_Results_Received
             , IF(TB_DETAILS.Id IS NULL, 0, SUM(1)) as 'Total'
 			, TB_DETAILS.sort_order
 			
@@ -53,7 +54,7 @@ Left Outer Join
 FROM
 (select person_id, cast(obs_datetime as date)as max_observation, SUBSTRING(CONCAT(obs_datetime, obs_id), 20) AS observation_id, order_id, value_text  as Lab_Order_Number
         from obs where concept_id = 5498 -- Lab order number
-	and cast(obs_datetime as date) >= cast('#startDate#' as date)
+		and cast(obs_datetime as date) >= cast('#startDate#' as date)
         and cast(obs_datetime as date) <= cast('#endDate#' as date)
         and voided = 0
         -- group by person_id
@@ -107,8 +108,8 @@ UNION ALL
 (SELECT 'Total' AS AgeGroup
 		, IF(Totals.Id IS NULL, 0, SUM(IF(Totals.Test = 'Done' AND Totals.Gender = 'M', 1, 0))) AS 'Male_VL_Tests'
 		, IF(Totals.Id IS NULL, 0, SUM(IF(Totals.Test = 'Done' AND Totals.Gender = 'F', 1, 0))) AS 'Female_VL_Tests'
-		, IF(Totals.Id IS NULL, 0, SUM(IF(Totals.received = 'Received' AND Totals.Gender = 'M', 1, 0))) AS 'Male_Results_Received'
-		, IF(Totals.Id IS NULL, 0, SUM(IF(Totals.received = 'Received' AND Totals.Gender = 'F', 1, 0))) AS 'Female_Results_Received'
+		-- , IF(Totals.Id IS NULL, 0, SUM(IF(Totals.received = 'Received' AND Totals.Gender = 'M', 1, 0))) AS 'Male_Results_Received'
+		-- , IF(Totals.Id IS NULL, 0, SUM(IF(Totals.received = 'Received' AND Totals.Gender = 'F', 1, 0))) AS 'Female_Results_Received'
         , IF(Totals.Id IS NULL, 0, SUM(1)) as 'Total'
 		, 99 AS 'sort_order'
 		
@@ -161,7 +162,7 @@ Left Outer Join
 FROM
 (select person_id, cast(obs_datetime as date)as max_observation, SUBSTRING(CONCAT(obs_datetime, obs_id), 20) AS observation_id, order_id, value_text  as Lab_Order_Number
         from obs where concept_id = 5498 -- Lab order number
-	and cast(obs_datetime as date) >= cast('#startDate#' as date)
+		and cast(obs_datetime as date) >= cast('#startDate#' as date)
         and cast(obs_datetime as date) <= cast('#endDate#' as date)
         and voided = 0
         -- group by person_id

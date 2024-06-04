@@ -70,7 +70,7 @@ left outer join
 	from obs o
 	where o.concept_id = 6072 and o.voided = 0
 	and o.obs_datetime >= CAST('#startDate#' AS DATE)
-	Group by o.person_id
+	-- Group by o.person_id
 	)
 	UNION
 	(
@@ -83,7 +83,7 @@ left outer join
 	from obs o
 	where o.concept_id = 6068 and o.voided = 0
 	and o.obs_datetime >= CAST('#startDate#' AS DATE)
-	Group by o.person_id
+	-- Group by o.person_id
 	)
 	)Result
 )geneXpert_result
@@ -174,7 +174,7 @@ left outer join
 	from obs o
 	where o.concept_id = 6072 and o.voided = 0
 	and o.obs_datetime >= CAST('#startDate#' AS DATE)
-	Group by o.person_id
+	-- Group by o.person_id
 	)
 	UNION
 	(
@@ -187,7 +187,7 @@ left outer join
 	from obs o
 	where o.concept_id = 6068 and o.voided = 0
 	and o.obs_datetime >= CAST('#startDate#' AS DATE)
-	Group by o.person_id
+	-- Group by o.person_id
 	)
 	)Result
 )geneXpert_result

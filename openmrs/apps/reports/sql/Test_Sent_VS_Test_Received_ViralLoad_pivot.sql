@@ -1,8 +1,10 @@
 SELECT Total_Aggregated_VL.AgeGroup
 		, Total_Aggregated_VL.Male_VL_Tests
 		, Total_Aggregated_VL.Female_VL_Tests
-		, Total_Aggregated_VL.Male_Results_Received
-		, Total_Aggregated_VL.Female_Results_Received
+        , Total_Aggregated_VL. Total
+		-- , Total_Aggregated_VL.Male_Results_Received
+		-- , Total_Aggregated_VL.Female_Results_Received
+        
 
 FROM
 
@@ -10,8 +12,8 @@ FROM
 	(SELECT VL_DETAILS.age_group AS 'AgeGroup'
 			, IF(VL_DETAILS.Id IS NULL, 0, SUM(IF(VL_DETAILS.Test = 'Done' AND VL_DETAILS.Gender = 'M', 1, 0))) AS Male_VL_Tests
 			, IF(VL_DETAILS.Id IS NULL, 0, SUM(IF(VL_DETAILS.Test = 'Done' AND VL_DETAILS.Gender = 'F', 1, 0))) AS Female_VL_Tests
-			, IF(VL_DETAILS.Id IS NULL, 0, SUM(IF(VL_DETAILS.received = 'Received' AND VL_DETAILS.Gender = 'M', 1, 0))) AS Male_Results_Received
-			, IF(VL_DETAILS.Id IS NULL, 0, SUM(IF(VL_DETAILS.received = 'Received' AND VL_DETAILS.Gender = 'F', 1, 0))) AS Female_Results_Received
+			-- , IF(VL_DETAILS.Id IS NULL, 0, SUM(IF(VL_DETAILS.received = 'Received' AND VL_DETAILS.Gender = 'M', 1, 0))) AS Male_Results_Received
+			-- , IF(VL_DETAILS.Id IS NULL, 0, SUM(IF(VL_DETAILS.received = 'Received' AND VL_DETAILS.Gender = 'F', 1, 0))) AS Female_Results_Received
             , IF(VL_DETAILS.Id IS NULL, 0, SUM(1)) as 'Total'
 			, VL_DETAILS.sort_order
 			
@@ -57,7 +59,7 @@ Left Outer Join
             where oss.concept_id = 5485
             and oss.voided=0
             and cast(oss.obs_datetime as date) <= cast('#endDate#' as date)
-            group by oss.person_id
+            -- group by oss.person_id
 
     UNION
 
@@ -66,7 +68,7 @@ Left Outer Join
             where oss.concept_id = 5489
             and oss.voided=0
             and cast(oss.obs_datetime as date)  <= cast('#endDate#' as date)
-            group by oss.person_id
+            -- group by oss.person_id
 
       ) As received_results
     
@@ -87,8 +89,8 @@ UNION ALL
 (SELECT 'Total' AS AgeGroup
 		, IF(Totals.Id IS NULL, 0, SUM(IF(Totals.Test = 'Done' AND Totals.Gender = 'M', 1, 0))) AS 'Male_VL_Tests'
 		, IF(Totals.Id IS NULL, 0, SUM(IF(Totals.Test = 'Done' AND Totals.Gender = 'F', 1, 0))) AS 'Female_VL_Tests'
-		, IF(Totals.Id IS NULL, 0, SUM(IF(Totals.received = 'Received' AND Totals.Gender = 'M', 1, 0))) AS 'Male_Results_Received'
-		, IF(Totals.Id IS NULL, 0, SUM(IF(Totals.received = 'Received' AND Totals.Gender = 'F', 1, 0))) AS 'Female_Results_Received'
+		-- , IF(Totals.Id IS NULL, 0, SUM(IF(Totals.received = 'Received' AND Totals.Gender = 'M', 1, 0))) AS 'Male_Results_Received'
+		-- , IF(Totals.Id IS NULL, 0, SUM(IF(Totals.received = 'Received' AND Totals.Gender = 'F', 1, 0))) AS 'Female_Results_Received'
         , IF(Totals.Id IS NULL, 0, SUM(1)) as 'Total'
 		, 99 AS 'sort_order'
 		
@@ -145,7 +147,7 @@ Left Outer Join
             and oss.voided=0
             and cast(oss.obs_datetime as date)  >= cast('#startDate#' as date)
             and cast(oss.obs_datetime as date) <= cast('#endDate#' as date)
-            group by oss.person_id
+            -- group by oss.person_id
 
     UNION
 
@@ -155,7 +157,7 @@ Left Outer Join
             and oss.voided=0
             and cast(oss.obs_datetime as date)  >= cast('#startDate#' as date)
             and cast(oss.obs_datetime as date)  <= cast('#endDate#' as date)
-            group by oss.person_id
+           -- group by oss.person_id
 
       ) As received_results
     

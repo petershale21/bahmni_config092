@@ -65,7 +65,7 @@ left outer join
             where oss.concept_id = 5485
             and oss.voided=0
             and cast(oss.obs_datetime as date) >= cast('#startDate#' as date)
-            group by oss.person_id
+            -- group by oss.person_id
 
     UNION
 
@@ -74,7 +74,7 @@ left outer join
             where oss.concept_id = 5489
             and oss.voided=0
             and cast(oss.obs_datetime as date)  >= cast('#startDate#' as date)
-            group by oss.person_id
+            -- group by oss.person_id
 
       )result
       )VL_result
@@ -160,7 +160,7 @@ left outer join
             where oss.concept_id = 5485
             and oss.voided=0
             and cast(oss.obs_datetime as date) >= cast('#startDate#' as date)
-            group by oss.person_id
+            -- group by oss.person_id
 
     UNION
 
@@ -169,7 +169,7 @@ left outer join
             where oss.concept_id = 5489
             and oss.voided=0
             and cast(oss.obs_datetime as date)  >= cast('#startDate#' as date)
-            group by oss.person_id
+            -- group by oss.person_id
 
       )result
       )VL_result
