@@ -1504,49 +1504,77 @@
     }
 },
 "LABORATORY_List": {
-    "name": "LAB-001 | Viral Load Lab Report (List)",
+    "name": "LAB-001 | Viral Load Lab Tests Sent Report (List)",
     "type": "MRSGeneric",
     "config": {
         "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/Test_Sent_VS_Received_ViralLoad.sql/"
     }
 },
 "LABORATORY_Pivot": {
-    "name": "LAB-002 | Viral Load Lab Report (Pivot)",
+    "name": "LAB-002 | Viral Load Lab Tests Sent Report  (Pivot)",
     "type": "MRSGeneric",
     "config": {
         "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/Test_Sent_VS_Test_Received_ViralLoad_pivot.sql/"
     }
 },
+"LABORATORY_Results_List": {
+    "name": "LAB-003 | Viral Load Lab Results Received Report (List)",
+    "type": "MRSGeneric",
+    "config": {
+        "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/Viral_Load_Results_Received_list.sql/"
+    }
+},
+"LABORATORY_Results_Pivot": {
+    "name": "LAB-004 | Viral Load Lab Results Received Report (Pivot)",
+    "type": "MRSGeneric",
+    "config": {
+        "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/Viral_Load_Results_Received_pivot.sql/"
+    }
+},
 "LABORATORY_TB_List": {
-    "name": "LAB-003 | TB Lab Report (List)",
+    "name": "LAB-005 | TB Lab Tests Sent Report (List)",
     "type": "MRSGeneric",
     "config": {
         "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/Test_Sent_VS_Received_TB_list.sql/"
     }
 },
 "LABORATORY_TB_Pivot": {
-    "name": "LAB-004 | TB Lab Report (Pivot)",
+    "name": "LAB-006 | TB Lab Tests Sent Report (Pivot)",
     "type": "MRSGeneric",
     "config": {
         "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/Test_Sent_VS_Received_TB_pivot.sql/"
     }
 },
+"LABORATORY_TB_Results_List": {
+    "name": "LAB-007 | TB Lab Tests Sent Report (List)",
+    "type": "MRSGeneric",
+    "config": {
+        "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/TB_Results_Received_list.sql/"
+    }
+},
+"LABORATORY_TB_Results_Pivot": {
+    "name": "LAB-008 | TB Lab Tests Sent Report (Pivot)",
+    "type": "MRSGeneric",
+    "config": {
+        "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/TB_Results_Received_pivot.sql/"
+    }
+},
 "LABORATORY_Shipping_List": {
-    "name": "LAB-005 | Lab Shipping List",
+    "name": "LAB-009 | Lab Shipping List",
     "type": "MRSGeneric",
     "config": {
         "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/shippinglist.sql/"
     }
 },
 "HIV_POC_Viral_Load": {
-    "name": "LAB-006 | HIV POC (List)",
+    "name": "LAB-010 | HIV POC (List)",
     "type": "MRSGeneric",
     "config": {
         "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/hiv_poc.sql/"
     }
 },
 "HIV_POC_Viral_Load_pivot": {
-    "name": "LAB-007 | HIV POC (Pivot)",
+    "name": "LAB-011 | HIV POC (Pivot)",
     "type": "MRSGeneric",
     "config": {
         "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/hiv_poc_pivot.sql/"

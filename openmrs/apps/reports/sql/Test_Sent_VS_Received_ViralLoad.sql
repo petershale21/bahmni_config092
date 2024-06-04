@@ -51,7 +51,7 @@ left outer join
             where oss.concept_id = 5485
             and oss.voided=0
             and cast(oss.obs_datetime as date) >= cast('#startDate#' as date)
-            group by oss.person_id
+            -- group by oss.person_id
 
     UNION
 
@@ -60,7 +60,7 @@ left outer join
             where oss.concept_id = 5489
             and oss.voided=0
             and cast(oss.obs_datetime as date)  >= cast('#startDate#' as date)
-            group by oss.person_id
+            -- group by oss.person_id
 
       )result
       )VL_result
@@ -117,7 +117,7 @@ Left Outer Join
 FROM
 (select person_id, cast(obs_datetime as date)as max_observation, SUBSTRING(CONCAT(obs_datetime, obs_id), 20) AS observation_id, order_id, value_text  as Lab_Order_Number
         from obs where concept_id = 5498 -- Lab order number
-		and cast(obs_datetime as date) >= cast('#startDate#' as date)
+	and cast(obs_datetime as date) >= cast('#startDate#' as date)
         and cast(obs_datetime as date) <= cast('#endDate#' as date)
         and voided = 0
         -- group by person_id
@@ -133,7 +133,7 @@ left outer join
             where oss.concept_id = 5485
             and oss.voided=0
             and cast(oss.obs_datetime as date) >= cast('#startDate#' as date)
-            group by oss.person_id
+            -- group by oss.person_id
 
     UNION
 
@@ -142,7 +142,7 @@ left outer join
             where oss.concept_id = 5489
             and oss.voided=0
             and cast(oss.obs_datetime as date)  >= cast('#startDate#' as date)
-            group by oss.person_id
+            -- group by oss.person_id
 
       )result
       )VL_result
