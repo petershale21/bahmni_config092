@@ -1556,7 +1556,7 @@
     "name": "LAB-008 | TB Lab Tests Sent Report (Pivot)",
     "type": "MRSGeneric",
     "config": {
-        "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/TB_Results_Received_list.pivot/"
+        "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/TB_Results_Received_pivot.sql/"
     }
 },
 "LABORATORY_Shipping_List": {
