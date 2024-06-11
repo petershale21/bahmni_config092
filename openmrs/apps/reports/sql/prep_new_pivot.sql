@@ -3,25 +3,25 @@
 
 SELECT PREP_TOTALS_COLS_ROWS.AgeGroup
 		, PREP_TOTALS_COLS_ROWS.Gender
-		, PREP_TOTALS_COLS_ROWS.Initiated
 		, PREP_TOTALS_COLS_ROWS.SW
 		, PREP_TOTALS_COLS_ROWS.MSM
+		, PREP_TOTALS_COLS_ROWS.Transgender
 		, PREP_TOTALS_COLS_ROWS.Other
-		, PREP_TOTALS_COLS_ROWS.Total
+		, PREP_TOTALS_COLS_ROWS.Total_Initiated
 
 FROM (
 
 			(SELECT PREP_STATUS_DRVD_ROWS.age_group AS 'AgeGroup'
 					, PREP_STATUS_DRVD_ROWS.Gender
-						, IF(PREP_STATUS_DRVD_ROWS.Id IS NULL, 0, SUM(IF(PREP_STATUS_DRVD_ROWS.Initiated = 'Initiated' ,1 ,0))) AS Initiated
 						, IF(PREP_STATUS_DRVD_ROWS.Id IS NULL, 0, SUM(IF(PREP_STATUS_DRVD_ROWS.prep_group = 'SW',1 , 0))) AS SW
-						, IF(PREP_STATUS_DRVD_ROWS.Id IS NULL, 0, SUM(IF(PREP_STATUS_DRVD_ROWS.prep_group = 'MSM',1 , 0))) AS MSM				
+						, IF(PREP_STATUS_DRVD_ROWS.Id IS NULL, 0, SUM(IF(PREP_STATUS_DRVD_ROWS.prep_group = 'MSM',1 , 0))) AS MSM
+						, IF(PREP_STATUS_DRVD_ROWS.Id IS NULL, 0, SUM(IF(PREP_STATUS_DRVD_ROWS.prep_group = 'Transgender',1 , 0))) AS Transgender				
 						, IF(PREP_STATUS_DRVD_ROWS.Id IS NULL, 0, SUM(IF(PREP_STATUS_DRVD_ROWS.prep_group = 'Other',1 , 0))) AS Other
-						, IF(PREP_STATUS_DRVD_ROWS.Id IS NULL, 0, SUM(IF(PREP_STATUS_DRVD_ROWS.Initiated = 'Initiated', 1, 0))) as 'Total'
+						, IF(PREP_STATUS_DRVD_ROWS.Id IS NULL, 0, SUM(IF(PREP_STATUS_DRVD_ROWS.Initiated = 'Initiated', 1, 0))) as 'Total_Initiated'
 						, PREP_STATUS_DRVD_ROWS.sort_order
 			FROM (
 
-			SELECT distinct Id, patientIdentifier , patientName, Age, Gender, age_group, 'Initiated' AS 'Initiated',Entry_Point,Entry_Point_level_facility,Entry_Point_level_community,prep_group,sort_order, Location
+			SELECT distinct Id, patientIdentifier , patientName, Age, Gender, age_group, 'Initiated' AS 'Initiated',Entry_Point,Entry_Point_level_facility,Entry_Point_level_community,ifnull(prep_group,'other') as prep_group,sort_order, Location
 	FROM
                 (select distinct patient.patient_id AS Id,
 									   patient_identifier.identifier AS patientIdentifier,
@@ -173,14 +173,14 @@ FROM (
 								when o.value_coded = 5019 THEN 'Exchange sex for money' -- SW
 								when o.value_coded = 5020 THEN 'Currently Pays for sex' 
 								when o.value_coded = 5021 THEN 'MSM'
-								when o.value_coded = 5022 THEN 'Other' --'Transgender Individual'
+								when o.value_coded = 5022 THEN 'Transgender' --'Transgender Individual'
 								when o.value_coded = 5023 THEN 'Other' -- 'Individual Inject drugs'
 								when o.value_coded = 5025 THEN 'Discordant' -- "serodiscordant relationship and HIV-Positive partner partner's viral load is >=1000 unknown"
 								when o.value_coded = 5024 THEN 'Other' -- "serodiscordant relationship and HIV partner is not on ART or has been on for <12 months"
 								when o.value_coded = 5026 THEN 'Other' -- 'Has multiple Concurrent partners'
 								when o.value_coded = 5027 THEN 'Other' -- 'Individual belives their partner has multiple other Concurrent partners'
 								when o.value_coded = 5028 THEN 'Other' -- 'Individula At High Risk of being force to have sex'								
-								
+								else 'Other'
 							END as 'prep_group'
 
 							from obs o
@@ -219,14 +219,14 @@ FROM (
 
 			(SELECT 'Total' AS 'AgeGroup'
 					, 'All' AS 'Gender'
-					, IF(PREP_STATUS_DRVD_COLS.Id IS NULL, 0, SUM(IF(PREP_STATUS_DRVD_COLS.Initiated = 'Initiated',1 , 0))) AS Initiated
 					, IF(PREP_STATUS_DRVD_COLS.Id IS NULL, 0, SUM(IF(PREP_STATUS_DRVD_COLS.prep_group = 'SW',1 , 0))) AS SW
-					, IF(PREP_STATUS_DRVD_COLS.Id IS NULL, 0, SUM(IF(PREP_STATUS_DRVD_COLS.prep_group = 'MSM',1 , 0))) AS MSM				
+					, IF(PREP_STATUS_DRVD_COLS.Id IS NULL, 0, SUM(IF(PREP_STATUS_DRVD_COLS.prep_group = 'MSM',1 , 0))) AS MSM	
+					, IF(PREP_STATUS_DRVD_COLS.Id IS NULL, 0, SUM(IF(PREP_STATUS_DRVD_COLS.prep_group = 'Transgender',1 , 0))) AS Transgender			
 					, IF(PREP_STATUS_DRVD_COLS.Id IS NULL, 0, SUM(IF(PREP_STATUS_DRVD_COLS.prep_group = 'Other',1 , 0))) AS Other
-					, IF(PREP_STATUS_DRVD_COLS.Id IS NULL, 0, SUM(IF(PREP_STATUS_DRVD_COLS.Initiated = 'Initiated', 1, 0))) as 'Total'
+					, IF(PREP_STATUS_DRVD_COLS.Id IS NULL, 0, SUM(IF(PREP_STATUS_DRVD_COLS.Initiated = 'Initiated', 1, 0))) as 'Total_Initiated'
 					, 99 AS sort_order
 		FROM (
-				SELECT distinct Id, patientIdentifier , patientName, Age, Gender, age_group, 'Initiated' AS 'Initiated',Entry_Point,Entry_Point_level_facility,Entry_Point_level_community,prep_group,sort_order, Location
+				SELECT distinct Id, patientIdentifier , patientName, Age, Gender, age_group, 'Initiated' AS 'Initiated',Entry_Point,Entry_Point_level_facility,Entry_Point_level_community,ifnull(prep_group, 'Other') as prep_group, sort_order, Location
 					FROM
                 (select distinct patient.patient_id AS Id,
 									   patient_identifier.identifier AS patientIdentifier,
@@ -379,14 +379,14 @@ FROM (
 								when o.value_coded = 5019 THEN 'Exchange sex for money' -- SW
 								when o.value_coded = 5020 THEN 'Currently Pays for sex' 
 								when o.value_coded = 5021 THEN 'MSM'
-								when o.value_coded = 5022 THEN 'Other' --'Transgender Individual'
+								when o.value_coded = 5022 THEN 'Transgender' --'Transgender Individual'
 								when o.value_coded = 5023 THEN 'Other' -- 'Individual Inject drugs'
 								when o.value_coded = 5025 THEN 'Discordant' -- "serodiscordant relationship and HIV-Positive partner partner's viral load is >=1000 unknown"
 								when o.value_coded = 5024 THEN 'Other' -- "serodiscordant relationship and HIV partner is not on ART or has been on for <12 months"
 								when o.value_coded = 5026 THEN 'Other' -- 'Has multiple Concurrent partners'
 								when o.value_coded = 5027 THEN 'Other' -- 'Individual belives their partner has multiple other Concurrent partners'
 								when o.value_coded = 5028 THEN 'Other' -- 'Individula At High Risk of being force to have sex'								
-								
+								else 'Other'
 							END as 'prep_group'
 
 							from obs o

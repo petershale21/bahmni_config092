@@ -157,9 +157,6 @@
 			"PNC, Micro-Nutrient supplement" : {
 				"required": true
 			},
-			"Delivery Note, Delivery location" : {
-				"required": true
-			},
 			"Mode of Delivery" : {
 				"required": true
 			},
@@ -651,8 +648,58 @@
 			},
 			"Testing Eligibility, Last 12 Months":
 			{
-				"musltiselect": true
+				"multiSelect": true
+			},
+			"VMMC, Post-MC Follow up Visits" : {
+				"required": true
+			},
+			"VMMC, Condition" : {
+				"required": true
+			},
+			"VMMC, Does Client have any AEs" : {
+				"required": true
+			},
+			"VMMC, Mode" : {
+				"required": true
+			},
+			"VMMC, Referred by" : {
+				"required": true
+			},
+			"Already on ART" : {
+				"required": true
+			},
+			"VMMC, Accepted HIV test" : {
+				"required": true
+			},
+			"VMMC, Reason" : {
+				"required": true
+			},
+			"VMMC, Referred to TB Clinic" : {
+				"required": true
+			},
+			"VMMC, Complaints" : {
+				"multiSelect": true
+			},
+			"VMMC, Penile examination Findings" : {
+				"multiSelect": true
+			},
+			"VMMC, Consent" : {
+				"required": true
+			},
+			"VMMC, Informed consent signed" : {
+				"required": true
+			},
+			"Method of Surgery": {
+				"required": true
+			},
+			"Reason if not cleared": {
+				"required": true
+			},
+			"Device used": {
+				"required": true
 			}
+			
+			
 		},
 		"visitPage": {
 			"observationDisplay": {

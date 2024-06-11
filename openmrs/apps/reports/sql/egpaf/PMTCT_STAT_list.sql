@@ -31,12 +31,7 @@ FROM (
 							 AND o.person_id in (
 											    select distinct os.person_id 
 												from obs os
-											    where os.concept_id=4427 
-												AND os.obs_group_id in (
-												     select oss.obs_id 
-													 from obs oss 
-													 where oss.concept_id=4655
-													 )
+											    where os.concept_id=4427
 												AND value_coded=1738)
 							 
 							 
@@ -86,11 +81,6 @@ FROM (
 											    select distinct os.person_id 
 												from obs os
 											    where os.concept_id=4427 
-												AND os.obs_group_id in (
-												     select oss.obs_id 
-													 from obs oss 
-													 where oss.concept_id=4655
-													 )
 												AND value_coded=1016)
 							 
 							 
