@@ -2371,7 +2371,7 @@ Bahmni.ConceptSet.FormConditions.rules = {
                         else{
                           conditions.hide.push("Testing Eligibility, Last 12 Months");
                           conditions.hide.push("Testing Eligibility, Reinforced Prevention Counselling");
-                          conditions.hide.push("Test For HIV");
+                          //conditions.hide.push("Test For HIV");
                           conditions.hide.push("Offered prevention Counselling and or Linked to prevention services");
                         }
                         return conditions;
