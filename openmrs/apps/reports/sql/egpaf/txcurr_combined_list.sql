@@ -165,22 +165,20 @@ AND Clients_Seen.Id not in
 					)
 AND Clients_Seen.Id not in (
 					-- Visitors
-								select o.person_id
-								from obs o
-								inner join
-										(
-										select oss.person_id, MAX(oss.obs_datetime) as max_observation,
-										SUBSTRING(MAX(CONCAT(oss.obs_datetime, oss.value_coded)), 20) as examination_timing
-										from obs oss
-										where oss.concept_id = 3753 
-										and cast(oss.obs_datetime as date) <= cast('#endDate#' as date)
-										group by oss.person_id
-										)latest
-									on latest.person_id = o.person_id
-									where concept_id = 5416
-									and o.value_coded =1 and o.voided=0
-									and  cast(o.obs_datetime as date) = cast(max_observation as date)
+							select distinct os.person_id from obs os
+							where os.concept_id = 5416
+							AND os.value_coded = 1 and os.voided = 0
+							AND CAST(os.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+							AND CAST(os.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 						)
+AND Clients_Seen.Id not in (
+		select distinct p.person_id as Id
+		from person p
+		where dead = 1
+		and death_date <= CAST('#endDate#' AS DATE)	
+		and voided = 0
+
+)
 
 ORDER BY Clients_Seen.patientName)
 
@@ -275,21 +273,14 @@ FROM
 
 		and active_clients.person_id not in(
 									-- Visitors
-								select o.person_id
-								from obs o
-								inner join
-										(
-										select oss.person_id, MAX(oss.obs_datetime) as max_observation,
-										SUBSTRING(MAX(CONCAT(oss.obs_datetime, oss.value_coded)), 20) as examination_timing
-										from obs oss
-										where oss.concept_id = 3753 
-										and cast(oss.obs_datetime as date) <= cast('#endDate#' as date)
-										group by oss.person_id
-										)latest
-									on latest.person_id = o.person_id
-									where concept_id = 5416
-									and o.value_coded =1 and o.voided=0
-									and  cast(o.obs_datetime as date) = cast(max_observation as date)
+							select person_id 
+							FROM
+								(select person_id, max(obs_datetime), SUBSTRING(MAX(CONCAT(obs_datetime, obs_id)), 20) AS observation_id
+								from obs where concept_id = 5416 
+								and value_coded = 1 and voided = 0
+								and cast(obs_datetime as date) <= cast('#endDate#' as date)
+								and voided = 0
+								group by person_id)visitor
 							)				 
 						 )
 						 -- end
@@ -405,21 +396,14 @@ UNION
 						 )
 		and active_clients.person_id not in (
 									-- Visitors
-								select o.person_id
-								from obs o
-								inner join
-										(
-										select oss.person_id, MAX(oss.obs_datetime) as max_observation,
-										SUBSTRING(MAX(CONCAT(oss.obs_datetime, oss.value_coded)), 20) as examination_timing
-										from obs oss
-										where oss.concept_id = 3753 
-										and cast(oss.obs_datetime as date) <= cast('#endDate#' as date)
-										group by oss.person_id
-										)latest
-									on latest.person_id = o.person_id
-									where concept_id = 5416
-									and o.value_coded =1 and o.voided=0
-									and  cast(o.obs_datetime as date) = cast(max_observation as date)
+							select person_id 
+							FROM
+								(select person_id, max(obs_datetime), SUBSTRING(MAX(CONCAT(obs_datetime, obs_id)), 20) AS observation_id
+								from obs where concept_id = 5416 
+								and value_coded = 1 and voided = 0
+								and cast(obs_datetime as date) <= cast('#endDate#' as date)
+								and voided = 0
+								group by person_id)visitor
 						 )
 						 )
 						 -- end
