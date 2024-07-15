@@ -359,6 +359,18 @@
       "label": "Cervical Cancer Screening",
       "order": 9,
       "requiredPrivilege": "app:clinical"
+  },"bahmniClinicalPatientsSearchCAG": {
+      "id": "bahmni.clinical.patients.search.CAG",
+      "extensionPointId": "org.bahmni.patient.search",
+      "type": "config",
+      "extensionParams": {
+              "searchHandler": "emrapi.sqlSearch.cag",
+              "translationKey": "MODULE_LABEL_CAG",
+              "forwardUrl": "#/default/patient/{{patientUuid}}/dashboard"
+      },
+      "label": "CAG",
+      "order": 9,
+      "requiredPrivilege": "app:clinical"
   },
   
   "bahmniClinicalPatientsSearchEAC": {
