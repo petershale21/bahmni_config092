@@ -34,7 +34,7 @@ FROM (
 						SELECT Id, patientIdentifier AS "Patient Identifier", patientName AS "Patient Name", Age, Gender, age_group, Outcome, sort_order
 						FROM
 						(
-								(SELECT Id, patientIdentifier, patientName, Age, Gender, age_group, 'DIED' AS Outcome, sort_order
+								(SELECT Id, PatientIdentifier, patientName, Age, Gender, age_group, 'DIED' AS Outcome, sort_order
 			FROM
 							(select obs_ml_clients.person_id AS Id,
 												   patient_identifier.identifier AS patientIdentifier,
@@ -59,16 +59,7 @@ FROM (
 															 group by p.person_id
 															 having datediff(CAST(DATE_ADD(CAST('#startDate#' AS DATE), INTERVAL -1 DAY) AS DATE), latest_follow_up) < 29) as On_ART_Beginning_Quarter
 												 )
-												 AND o.person_id in (
-													select person_id
-													from 
-														(select oss.person_id, MAX(oss.obs_datetime) as max_observation, SUBSTRING(MAX(CONCAT(oss.obs_datetime, oss.value_datetime)), 20) AS latest_follow_up
-														 from obs oss
-														 inner join person p on oss.person_id=p.person_id and oss.concept_id = 3752 and oss.voided=0
-														 and oss.obs_datetime <= cast('#endDate#' as DATE)
-														 group by p.person_id
-														 having datediff(CAST('#endDate#' AS DATE), latest_follow_up) > 28) as Missed_Greater_Than_28Days
-												 )
+				
 												 INNER JOIN patient_identifier ON patient_identifier.patient_id = patient.patient_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1
 										group by patient.patient_id
 										UNION
@@ -77,16 +68,7 @@ FROM (
 												 INNER JOIN patient ON o.person_id = patient.patient_id
 												 AND patient.voided = 0 AND o.voided = 0
 												 AND o.concept_id = 2249 and cast(o.value_datetime as date) >= cast('#startDate#' as DATE) and cast(o.value_datetime as date) <= cast('#endDate#' as DATE)
-												 AND o.person_id in (
-													select person_id
-													from 
-														(select oss.person_id, MAX(oss.obs_datetime) as max_observation, SUBSTRING(MAX(CONCAT(oss.obs_datetime, oss.value_datetime)), 20) AS latest_follow_up
-														 from obs oss
-														 inner join person p on oss.person_id=p.person_id and oss.concept_id = 3752 and oss.voided=0
-														 and oss.obs_datetime <= cast('#endDate#' as DATE)
-														 group by p.person_id
-														 having datediff(CAST('#endDate#' AS DATE), latest_follow_up) > 28) as Missed_Greater_Than_28Days
-												 )
+												
 												 INNER JOIN patient_identifier ON patient_identifier.patient_id = patient.patient_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1
 										group by patient.patient_id
 								) as obs_ml_clients
@@ -100,7 +82,8 @@ FROM (
 									 AND obs_ml_clients.person_id in (
 											select person_id 
 											from person 
-											where death_date <= CAST('#endDate#' AS DATE)
+											where cast(death_date as date) >= CAST('#startDate#' AS DATE)
+                                            and cast(death_date as date) <= CAST('#endDate#' AS DATE)
 											and dead = 1
 									 )
 									 AND obs_ml_clients.person_id not in (
@@ -111,6 +94,7 @@ FROM (
 											AND CAST(os.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
 											AND CAST(os.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 									 )
+
 							    GROUP BY obs_ml_clients.person_id
 							   ) AS TxMLClients
 							  ORDER BY TxMLClients.Age)
@@ -635,7 +619,7 @@ FROM (
 						SELECT Id, patientIdentifier AS "Patient Identifier", patientName AS "Patient Name", Age, Gender, age_group, Outcome, sort_order
 						FROM
 						(
-								(SELECT Id, patientIdentifier, patientName, Age, Gender, age_group, 'DIED' AS Outcome, sort_order
+								(SELECT Id, PatientIdentifier, patientName, Age, Gender, age_group, 'DIED' AS Outcome, sort_order
 			FROM
 							(select obs_ml_clients.person_id AS Id,
 												   patient_identifier.identifier AS patientIdentifier,
@@ -660,16 +644,7 @@ FROM (
 															 group by p.person_id
 															 having datediff(CAST(DATE_ADD(CAST('#startDate#' AS DATE), INTERVAL -1 DAY) AS DATE), latest_follow_up) < 29) as On_ART_Beginning_Quarter
 												 )
-												 AND o.person_id in (
-													select person_id
-													from 
-														(select oss.person_id, MAX(oss.obs_datetime) as max_observation, SUBSTRING(MAX(CONCAT(oss.obs_datetime, oss.value_datetime)), 20) AS latest_follow_up
-														 from obs oss
-														 inner join person p on oss.person_id=p.person_id and oss.concept_id = 3752 and oss.voided=0
-														 and oss.obs_datetime <= cast('#endDate#' as DATE)
-														 group by p.person_id
-														 having datediff(CAST('#endDate#' AS DATE), latest_follow_up) > 28) as Missed_Greater_Than_28Days
-												 )
+				
 												 INNER JOIN patient_identifier ON patient_identifier.patient_id = patient.patient_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1
 										group by patient.patient_id
 										UNION
@@ -678,16 +653,7 @@ FROM (
 												 INNER JOIN patient ON o.person_id = patient.patient_id
 												 AND patient.voided = 0 AND o.voided = 0
 												 AND o.concept_id = 2249 and cast(o.value_datetime as date) >= cast('#startDate#' as DATE) and cast(o.value_datetime as date) <= cast('#endDate#' as DATE)
-												 AND o.person_id in (
-													select person_id
-													from 
-														(select oss.person_id, MAX(oss.obs_datetime) as max_observation, SUBSTRING(MAX(CONCAT(oss.obs_datetime, oss.value_datetime)), 20) AS latest_follow_up
-														 from obs oss
-														 inner join person p on oss.person_id=p.person_id and oss.concept_id = 3752 and oss.voided=0
-														 and oss.obs_datetime <= cast('#endDate#' as DATE)
-														 group by p.person_id
-														 having datediff(CAST('#endDate#' AS DATE), latest_follow_up) > 28) as Missed_Greater_Than_28Days
-												 )
+												
 												 INNER JOIN patient_identifier ON patient_identifier.patient_id = patient.patient_id AND patient_identifier.identifier_type = 3 AND patient_identifier.preferred=1
 										group by patient.patient_id
 								) as obs_ml_clients
@@ -701,7 +667,8 @@ FROM (
 									 AND obs_ml_clients.person_id in (
 											select person_id 
 											from person 
-											where death_date <= CAST('#endDate#' AS DATE)
+											where cast(death_date as date) >= CAST('#startDate#' AS DATE)
+                                            and cast(death_date as date) <= CAST('#endDate#' AS DATE)
 											and dead = 1
 									 )
 									 AND obs_ml_clients.person_id not in (
@@ -712,6 +679,7 @@ FROM (
 											AND CAST(os.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
 											AND CAST(os.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 									 )
+
 							    GROUP BY obs_ml_clients.person_id
 							   ) AS TxMLClients
 							  ORDER BY TxMLClients.Age)

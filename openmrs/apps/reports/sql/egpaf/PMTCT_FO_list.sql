@@ -1,6 +1,6 @@
 Select distinct Patient_Identifier, Patient_Name,age_group as Age_Group,Age,Gender,Outcome_Type, concat(Age_at_test, " months") as Age_at_test
 from
-(SELECT distinct Id, patientIdentifier AS Patient_Identifier, patientName AS Patient_Name, Age , Gender, age_group, Outcome_Type
+(SELECT distinct Id, patientIdentifier AS Patient_Identifier, patientName AS Patient_Name, Age , Gender, age_group
 							 
 	FROM
 
@@ -10,35 +10,28 @@ from
 							floor(datediff(CAST('#endDate#' AS DATE), person.birthdate)/365) AS Age,
 							person.gender AS Gender,
 							observed_age_group.name AS age_group,
-							observed_age_group.sort_order AS sort_order,
-							case
-							when o.value_coded = 1738 then "Positive"
-							when o.value_coded = 1016 then "Negative"
-							when o.value_coded = 4220 then "Indeterminate"
-							else "N/A"
-							end as Outcome_Type
+							observed_age_group.sort_order AS sort_order
+							
 
 			from obs o
 					-- HIV EXPOSED INFANTS
 						INNER JOIN patient ON o.person_id = patient.patient_id 
-						AND o.concept_id = 4578
+						AND o.concept_id = 996
 						AND o.person_id in (
 							select os.person_id
 							from obs os
-							where os.concept_id = 4558
-							AND CAST(os.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+							where os.concept_id = 4558 -- HEI Register
 							AND CAST(os.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 						)
 						AND o.person_id in (
 							select os.person_id 
 							from obs os
-							where os.concept_id = 4587 and os.value_numeric >= 18
-							AND CAST(os.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+							where os.concept_id = 4587 and os.value_numeric >= 18 -- Age at Test
 							AND CAST(os.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 						)
 						AND patient.voided = 0 AND o.voided = 0
-						AND CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
-						AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
+						AND CAST(o.value_datetime AS DATE) >= CAST('#startDate#' AS DATE)
+						AND CAST(o.value_datetime AS DATE) <= CAST('#endDate#' AS DATE)
 			
 						INNER JOIN person ON person.person_id = patient.patient_id AND person.voided = 0
 						INNER JOIN person_name ON person.person_id = person_name.person_id
@@ -55,10 +48,37 @@ Left Outer Join
 (
 	select distinct o.person_id, o.value_numeric as Age_at_test
 	from obs o 
-	where o.concept_id = 4587
-	AND CAST(o.obs_datetime AS DATE) >= CAST('#startDate#' AS DATE)
-	AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
+	inner join (
+				select oss.person_id, MAX(oss.obs_datetime) as max_observation,
+				SUBSTRING(MAX(CONCAT(oss.obs_datetime, oss.value_coded)), 20) as examination_timing, max(oss.encounter_id) as encounterId
+				from obs oss
+				where oss.concept_id = 4589
+				and cast(oss.obs_datetime as date) <= cast('#endDate#' as date)
+					group by oss.person_id
+			)latest
+			on latest.person_id = o.person_id
+			where o.concept_id = 4587
+			and o.voided=0
+			and cast(o.obs_datetime as date) = cast(max_observation as date)
 
 )as ageAtTest
 On final_outcome.Id = ageAtTest.person_id
+
+-- final outcome
+Left Outer Join
+(
+	select distinct o.person_id, 
+		case
+			when o.value_coded = 1738 then "Positive"
+			when o.value_coded = 1016 then "Negative"
+			when o.value_coded = 4220 then "Indeterminate"
+			else "N/A"
+			end as Outcome_Type
+	from obs o 
+	where o.concept_id = 4578
+	AND CAST(o.obs_datetime AS DATE) <= CAST('#endDate#' AS DATE)
+
+)as outcome
+On final_outcome.Id = outcome.person_id
 Group by final_outcome.Id
+
