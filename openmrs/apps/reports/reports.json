@@ -1171,6 +1171,13 @@
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/ANC_DQA.sql"
         }
     },
+    "PNC_DQA_List": {
+        "name": "MCH-040 | PNC Data Quality Assessment",
+        "type": "MRSGeneric",
+        "config": {
+            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/pnc_dqa.sql"
+        }
+    },
     "arv_list": {
         "name": "PHARM-001 | Pharmacy ARV Regimen",
         "type": "ERPGeneric",
