@@ -695,6 +695,13 @@
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/vmmc_list.sql"
         }
     },
+    "blood draw eligibility": {
+        "name": "ART-084 | Clients Eligible for Blood Draw (List)",
+        "type": "MRSGeneric",
+        "config": {
+            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/eligible_for_blood_draw.sql"
+        }
+    },
     "htsfinalhivstatusbyservicepointlist": {
         "name": "HTS-001 | HTS Final HIV Status (List)",
         "type": "MRSGeneric",
@@ -1176,6 +1183,13 @@
         "type": "MRSGeneric",
         "config": {
             "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/pnc_dqa.sql"
+        }
+    },
+    "FP_DQA_List": {
+        "name": "MCH-040 | Family Planning Data Quality Assessment",
+        "type": "MRSGeneric",
+        "config": {
+            "sqlPath": "/var/www/bahmni_config/openmrs/apps/reports/sql/fp_dqa.sql"
         }
     },
     "arv_list": {
